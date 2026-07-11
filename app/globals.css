@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+/*
+ * "Академична тетрадка" + Gumroad неo-бруталистичен стил:
+ * топла хартия, мастилени рамки (1.5px), твърди offset сенки, сериф заглавия.
+ * Токените стават Tailwind класове: bg-paper, text-ink, border-rule,
+ * text-plus (червено), text-minus (синьо), bg-hl (жълт маркер), shadow-hard.
+ */
+@theme {
+  --color-paper: #fbfaf6;
+  --color-surface: #ffffff;
+  --color-ink: #1b2430;
+  --color-muted: #5b6878;
+  --color-rule: #c9d2dc;
+  --color-plus: #c94a3d;
+  --color-minus: #2e6fd8;
+  --color-hl: #fff3d6;
+  --color-ok: #2f8f4e;
+
+  --font-sans: var(--font-rubik), ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-serif: Georgia, "Times New Roman", serif;
+
+  --shadow-hard: 4px 4px 0 var(--color-rule);
+  --shadow-hard-sm: 2px 2px 0 var(--color-rule);
+
+  /* Плавно "изникване" на вектори/означения в интерактивните фигури */
+  --animate-rise: rise 0.45s ease-out both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--color-ink);
+  font-size: 17px;
+  line-height: 1.65;
+  background-color: var(--color-paper);
+  /* Вместо квадратна мрежа: мек топъл отблясък в горната част на страницата */
+  background-image: radial-gradient(1100px 520px at 50% -140px, rgba(255, 235, 185, 0.55), transparent 70%);
+  background-repeat: no-repeat;
+}
+
+/* KaTeX display блоковете да не добавят излишни отстояния в контейнера си */
+.katex-display {
+  margin: 0;
+}

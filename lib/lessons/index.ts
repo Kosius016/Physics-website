@@ -1,0 +1,13 @@
+import type { Lesson } from "@/lib/types";
+import { lessonKinematikaDvizheniePodAgal } from "./kinematika-dvizhenie-pod-agal";
+
+/** Регистър на всички уроци. Нов урок = нов файл + ред тук. */
+const lessons: Lesson[] = [lessonKinematikaDvizheniePodAgal];
+
+export function getAllLessons(): Lesson[] {
+  return lessons;
+}
+
+export function getLesson(topicSlug: string, slug: string): Lesson | undefined {
+  return lessons.find((l) => l.topicSlug === topicSlug && l.slug === slug);
+}

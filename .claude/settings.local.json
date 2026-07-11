@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(npm install --no-audit --no-fund)",
+      "Bash(npm --version)",
+      "Read(//c/Program Files/**)",
+      "PowerShell(winget --version)",
+      "PowerShell(winget install --id OpenJS.NodeJS.LTS --silent --accept-package-agreements --accept-source-agreements)"
+    ]
+  }
+}
