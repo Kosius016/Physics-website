@@ -90,7 +90,7 @@ export default function RightHandRule() {
             setRevealed(false);
           }}
         >
-          Обърни посоката на тока ⇅
+          Обърнете посоката на тока ⇅
         </button>
       </div>
 

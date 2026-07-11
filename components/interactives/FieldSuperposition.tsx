@@ -191,7 +191,7 @@ export default function FieldSuperposition() {
       {revealed && (
         <div className="mt-4 flex justify-end">
           <button className={BTN_PRI} onClick={next}>
-            {caseIdx + 1 < CASES.length ? "Следващ случай →" : "Започни отначало ↻"}
+            {caseIdx + 1 < CASES.length ? "Следващ случай →" : "Отначало ↻"}
           </button>
         </div>
       )}
