@@ -3,6 +3,7 @@ import Formula from "@/components/Formula";
 import LessonNav from "@/components/LessonNav";
 import RichText from "@/components/RichText";
 import Section from "@/components/Section";
+import DeterminantDerivation from "@/components/interactives/DeterminantDerivation";
 import DeterminantArea from "@/components/interactives/DeterminantArea";
 import DeterminantProblemSet from "@/components/interactives/DeterminantProblemSet";
 import PredictionQuestion from "@/components/interactives/PredictionQuestion";
@@ -19,11 +20,12 @@ export const metadata = {
 const SECTION_NAV = [
   { id: "why", n: "§1", label: "Идеята" },
   { id: "area", n: "§2", label: "Площта" },
-  { id: "compute", n: "§3", label: "Смятане" },
-  { id: "zero", n: "§4", label: "det = 0" },
-  { id: "applications", n: "§5", label: "Приложения" },
-  { id: "problems", n: "§6", label: "Задачи" },
-  { id: "recap", n: "§7", label: "Обобщение" },
+  { id: "derive", n: "§3", label: "Извеждане" },
+  { id: "compute", n: "§4", label: "Смятане" },
+  { id: "zero", n: "§5", label: "det = 0" },
+  { id: "applications", n: "§6", label: "Приложения" },
+  { id: "problems", n: "§7", label: "Задачи" },
+  { id: "recap", n: "§8", label: "Обобщение" },
 ] as const;
 
 /**
@@ -140,15 +142,71 @@ export default function DeterminantsLessonPage() {
           </TeacherNote>
         </Section>
 
-        {/* §3 Смятане */}
-        <Section id="compute" n="§3" title="Формулата: откъде идва ad − bc">
+        {/* §3 Геометрично извеждане */}
+        <Section id="derive" n="§3" title="Геометрично извеждане на ad − bc">
           <div className="space-y-3">
             <p className="text-ink/90">
-              Образът на единичния квадрат е успоредникът върху колоните (a, c) и (b, d). Площта му
-              се смята с проста геометрия (голям правоъгълник минус триъгълниците наоколо) и
-              резултатът е:
+              Нека колоните на матрицата са <RichText text="$\vec u=(a,c)$" /> и{" "}
+              <RichText text="$\vec v=(b,d)$" />. Те образуват успоредника, чиято знакова площ
+              търсим. Вместо да помним формула, ще го <strong>изправим със срязване</strong>.
             </p>
-            <Formula latex={String.raw`\det\begin{pmatrix} a & b \\ c & d \end{pmatrix} = ad - bc`} />
+          </div>
+
+          <div className="my-5">
+            <DeterminantDerivation />
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <p className="mb-2 text-[12px] font-bold uppercase tracking-[.15em] text-minus">Стъпка 1 · Изправяме основата</p>
+              <p className="mb-3 text-ink/90">
+                При <RichText text="$a\neq0$" /> прилагаме срязването
+                <RichText text="$\ (x,y)\mapsto(x,\,y-\frac ca x)$" />. То мести хоризонталните
+                слоеве настрани, без да променя площта. Първата колона става хоризонтална:
+              </p>
+              <Formula latex={String.raw`\vec u=(a,c)\ \longmapsto\ \vec u'=(a,0)`} />
+            </div>
+
+            <div>
+              <p className="mb-2 text-[12px] font-bold uppercase tracking-[.15em] text-minus">Стъпка 2 · Намираме височината</p>
+              <p className="mb-3 text-ink/90">
+                Същото срязване изпраща втората колона в
+                <RichText text="$\vec v'=(b,\,d-\frac ca b)$" />. Следователно изправеният
+                успоредник има основа <RichText text="$a$" /> и знакова височина
+                <RichText text="$d-\frac{bc}{a}$" />.
+              </p>
+              <Formula latex={String.raw`S_{\text{знакова}}=a\left(d-\frac{bc}{a}\right)`} />
+            </div>
+
+            <div>
+              <p className="mb-2 text-[12px] font-bold uppercase tracking-[.15em] text-minus">Стъпка 3 · Опростяваме</p>
+              <Formula latex={String.raw`\boxed{\det\begin{pmatrix}a&b\\c&d\end{pmatrix}=ad-bc}`} />
+              <p className="mt-3 text-ink/90">
+                Ако резултатът е отрицателен, геометричната площ е <RichText text="$|ad-bc|$" />,
+                а минусът казва, че ориентацията е обърната. При <RichText text="$a=0$" /> можем да
+                разменим колоните, да повторим аргумента и да отчетем смяната на знака.
+              </p>
+            </div>
+          </div>
+          <TeacherNote>
+            <p>
+              Извеждането е умишлено чрез срязване, защото ученикът вече е видял в §2, че то пази
+              площта. За числения пример на фигурата: u=(3,1), v=(1,2); след срязването основата е
+              3, височината 2−1/3=5/3 и площта е 5. Проверка: 3·2−1·1=5. Така буквеният запис има
+              видим геометричен механизъм.
+            </p>
+          </TeacherNote>
+        </Section>
+
+        {/* §4 Смятане */}
+        <Section id="compute" n="§4" title="Смятане и свойства">
+          <div className="space-y-3">
+            <p className="text-ink/90">
+              За матрица 2×2 вече не учим правилото наизуст: <strong>ad</strong> е площта, която би
+              останала без кръстосаното накланяне, а <strong>bc</strong> е корекцията от него.
+              Например:
+            </p>
+            <Formula latex={String.raw`\det\begin{pmatrix}3&1\\1&2\end{pmatrix}=3\cdot2-1\cdot1=5`} />
             <p className="text-ink/90">
               За 3×3 детерминантата е <strong>обем</strong> на образа на единичното кубче и се
               разгъва по първия ред — три детерминанти 2×2 с редуващи се знаци:
@@ -173,16 +231,15 @@ export default function DeterminantsLessonPage() {
           </div>
           <TeacherNote>
             <p>
-              Изведете ad − bc геометрично поне веднъж (правоъгълник (a+b)×(c+d) минус парчетата) —
-              10 минути, които превръщат формулата от заклинание в чертеж. det(AB) = detA·detB е
-              безплатен от гледна точка на площи, но изглежда като магия от гледна точка на
-              алгебра — попитайте ученика кое обяснение предпочита.
+              Преди 3×3 дайте три бързи 2×2 примера: положителен, отрицателен и нулев. Искайте
+              първо геометрично предсказание (площ, ориентация, смачкване), после числото.
+              det(AB)=detA·detB е естествено от гледна точка на последователни разтягания на площ.
             </p>
           </TeacherNote>
         </Section>
 
-        {/* §4 det = 0 */}
-        <Section id="zero" n="§4" title="det = 0: смачкване без връщане">
+        {/* §5 det = 0 */}
+        <Section id="zero" n="§5" title="det = 0: смачкване без връщане">
           <div className="space-y-3">
             <p className="text-ink/90">
               Бутонът „Смачкай до det = 0“ в §2 показа какво значи изродена матрица: целият квадрат
@@ -191,10 +248,10 @@ export default function DeterminantsLessonPage() {
             </p>
             <Formula latex={String.raw`\det M \neq 0 \;\Longleftrightarrow\; M^{-1}\ \text{съществува} \;\Longleftrightarrow\; M\vec{x}=\vec{b}\ \text{има точно едно решение}`} />
             <p className="text-ink/90">
-              Това е и целият смисъл на проверката „det ≠ 0“ преди решаване на система: системата{" "}
-              <RichText text="$M\vec{x}=\vec{b}$" /> пита „кой вход дава изход b?“ — въпрос с
-              еднозначен отговор само ако машината не е слепила различни входове. Обратната матрица
-              в 2D дори се записва директно с детерминантата:
+              В предишния урок прочетохме <RichText text="$M\vec{x}=\vec{b}$" /> като „кой вход x
+              машината M е превърнала в измерения изход b?“. Сега виждаме точния тест: отговорът е
+              единствен само ако машината не е слепила различни входове. Тогава обратната матрица
+              съществува и в 2D се записва:
             </p>
             <Formula latex={String.raw`M^{-1} = \frac{1}{ad-bc}\begin{pmatrix} d & -b \\ -c & a \end{pmatrix}`} />
             <p className="text-ink/90">
@@ -212,8 +269,8 @@ export default function DeterminantsLessonPage() {
           </TeacherNote>
         </Section>
 
-        {/* §5 Приложения */}
-        <Section id="applications" n="§5" title="Къде работи детерминантата">
+        {/* §6 Приложения */}
+        <Section id="applications" n="§6" title="Къде работи детерминантата">
           <div className="space-y-4">
             {[
               {
@@ -247,8 +304,8 @@ export default function DeterminantsLessonPage() {
           </div>
         </Section>
 
-        {/* §6 Задачи */}
-        <Section id="problems" n="§6" title="Задачи с водено решение">
+        {/* §7 Задачи */}
+        <Section id="problems" n="§7" title="Задачи с водено решение">
           <div className="space-y-3">
             <p className="text-ink/90">
               Четири задачи от четири различни индустрии — всяка започва с геометричните въпроси и
@@ -260,8 +317,8 @@ export default function DeterminantsLessonPage() {
           </div>
         </Section>
 
-        {/* §7 Обобщение */}
-        <Section id="recap" n="§7" title="Обобщение">
+        {/* §8 Обобщение */}
+        <Section id="recap" n="§8" title="Обобщение">
           <div className="rounded-[10px] border-[1.5px] border-ink bg-surface px-5 py-4 shadow-hard">
             <ul className="list-disc space-y-2 pl-5 text-[15.5px] leading-relaxed text-ink/90">
               <li>
@@ -269,6 +326,10 @@ export default function DeterminantsLessonPage() {
                 обем): една матрица → едно число за „агресивността“ ѝ.
               </li>
               <li>|det| = коефициент на площ; знакът = ориентация (минус ⇔ огледално обръщане).</li>
+              <li>
+                В 2D формулата <RichText text="$ad-bc$" /> идва от срязване, което изправя едната
+                колона, без да променя площта: основа × знакова височина.
+              </li>
               <li>
                 Срязване и ротация: det = 1 — формата се мени, площта никога.
               </li>

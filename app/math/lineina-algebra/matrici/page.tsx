@@ -21,10 +21,11 @@ const SECTION_NAV = [
   { id: "why", n: "§1", label: "Защо матрици" },
   { id: "playground", n: "§2", label: "Игрището" },
   { id: "columns", n: "§3", label: "Колоните" },
-  { id: "composition", n: "§4", label: "Композиция" },
-  { id: "applications", n: "§5", label: "Приложения" },
-  { id: "problems", n: "§6", label: "Задачи" },
-  { id: "recap", n: "§7", label: "Обобщение" },
+  { id: "systems", n: "§4", label: "Системи" },
+  { id: "composition", n: "§5", label: "Композиция" },
+  { id: "applications", n: "§6", label: "Приложения" },
+  { id: "problems", n: "§7", label: "Задачи" },
+  { id: "recap", n: "§8", label: "Обобщение" },
 ] as const;
 
 /**
@@ -175,8 +176,61 @@ export default function MatricesLessonPage() {
           </TeacherNote>
         </Section>
 
-        {/* §4 Композиция */}
-        <Section id="composition" n="§4" title="Умножение = едно действие след друго">
+        {/* §4 Системи и обратимост */}
+        <Section id="systems" n="§4" title="Матрицата като система: от изхода обратно към входа">
+          <div className="space-y-3">
+            <p className="text-ink/90">
+              Досега задавахме входен вектор <RichText text="$\vec{x}$" /> и матрицата произвеждаше
+              изход <RichText text="$\vec{b}$" />. Това е <strong>правата задача</strong>:
+            </p>
+            <Formula latex={String.raw`M\vec{x}=\vec{b}`} />
+            <p className="text-ink/90">
+              В практиката често знаем точно обратното. Два сензора са отчели стойностите в
+              <RichText text="$\vec b$" />, а ние търсим неизвестните физични величини в
+              <RichText text="$\vec x$" />. Например:
+            </p>
+            <Formula latex={String.raw`\begin{pmatrix}2&1\\1&1\end{pmatrix}\begin{pmatrix}x\\y\end{pmatrix}=\begin{pmatrix}5\\3\end{pmatrix}\quad\Longleftrightarrow\quad\begin{cases}2x+y=5\\x+y=3\end{cases}`} />
+            <p className="text-ink/90">
+              Матрицата не добавя нова магия — тя <strong>събира цялата система в един запис</strong>.
+              Изваждането на второто уравнение от първото дава <RichText text="$x=2$" />, после
+              <RichText text="$y=1$" />. Тоест търсим кой вход е бил изпратен в изхода
+              <RichText text="$\vec b=(5,3)$" />.
+            </p>
+          </div>
+
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            {[
+              { tag: "Вход", value: "x = (2, 1)", text: "неизвестните величини" },
+              { tag: "Машина", value: "M = [2 1; 1 1]", text: "как входовете се смесват" },
+              { tag: "Изход", value: "b = (5, 3)", text: "измерените резултати" },
+            ].map((item) => (
+              <div key={item.tag} className="rounded-[10px] border-[1.5px] border-ink bg-surface px-4 py-3 shadow-hard-sm">
+                <p className="text-[10.5px] font-bold uppercase tracking-[.15em] text-minus">{item.tag}</p>
+                <p className="mt-1 font-mono text-[14px] font-bold text-ink">{item.value}</p>
+                <p className="mt-1 text-[12.5px] leading-relaxed text-muted">{item.text}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-5 rounded-r-lg border-l-4 border-plus bg-hl px-4 py-3 text-[15.5px] leading-relaxed">
+            <strong className="text-ink">Обратима матрица</strong> означава точно това: от всеки
+            допустим изход можем да възстановим един-единствен вход. Обратното действие се означава
+            с <RichText text="$M^{-1}$" /> и тогава <RichText text="$\vec x=M^{-1}\vec b$" />. Ако
+            матрицата е смачкала равнината в права, различни входове са дали един и същ изход и
+            възстановяването е невъзможно. Следващият урок ще даде точния тест кога това се случва.
+          </div>
+          <TeacherNote>
+            <p>
+              Не въвеждайте обратната матрица първо като формула. Използвайте езика „undo бутон“:
+              завъртането и мащабирането могат да се отменят, проекцията не може — тя е изтрила
+              информация. Едва след това напишете M⁻¹. Проверка: ученикът трябва да може да прочете
+              Mx=b с думи: „кой вход x машината M е превърнала в измерения изход b?“
+            </p>
+          </TeacherNote>
+        </Section>
+
+        {/* §5 Композиция */}
+        <Section id="composition" n="§5" title="Умножение = едно действие след друго">
           <div className="space-y-3">
             <p className="text-ink/90">
               Защо умножението на матрици е дефинирано по този странен начин „ред по колона“?
@@ -203,13 +257,13 @@ export default function MatricesLessonPage() {
           </TeacherNote>
         </Section>
 
-        {/* §5 Приложения */}
-        <Section id="applications" n="§5" title="Къде работят матриците">
+        {/* §6 Приложения */}
+        <Section id="applications" n="§6" title="Къде работят матриците">
           <div className="space-y-4">
             {[
               {
                 tag: "Игри и компютърна графика",
-                text: "Всеки кадър видеокартата умножава милиони върхове по матрици: ротация, мащаб, перспектива. „Model–View–Projection“ е просто произведение на три матрици — композицията от §4 в индустриален мащаб.",
+                text: "Всеки кадър видеокартата умножава милиони върхове по матрици: ротация, мащаб, перспектива. „Model–View–Projection“ е просто произведение на три матрици — композицията от §5 в индустриален мащаб.",
               },
               {
                 tag: "Аеро и роботика",
@@ -238,8 +292,8 @@ export default function MatricesLessonPage() {
           </div>
         </Section>
 
-        {/* §6 Задачи */}
-        <Section id="problems" n="§6" title="Задачи с водено решение">
+        {/* §7 Задачи */}
+        <Section id="problems" n="§7" title="Задачи с водено решение">
           <div className="space-y-3">
             <p className="text-ink/90">
               Всяка задача е от практиката и следва реда на главата: първо двата геометрични
@@ -252,8 +306,8 @@ export default function MatricesLessonPage() {
           </div>
         </Section>
 
-        {/* §7 Обобщение */}
-        <Section id="recap" n="§7" title="Обобщение">
+        {/* §8 Обобщение */}
+        <Section id="recap" n="§8" title="Обобщение">
           <div className="rounded-[10px] border-[1.5px] border-ink bg-surface px-5 py-4 shadow-hard">
             <ul className="list-disc space-y-2 pl-5 text-[15.5px] leading-relaxed text-ink/90">
               <li>
@@ -267,6 +321,14 @@ export default function MatricesLessonPage() {
               <li>
                 Умножение матрица–вектор: <RichText text="$x$" /> части от î′ плюс{" "}
                 <RichText text="$y$" /> части от ĵ′.
+              </li>
+              <li>
+                <RichText text="$M\vec x=\vec b$" /> е система от линейни уравнения в компактен
+                вид: правата задача намира изхода b, обратната търси неизвестния вход x.
+              </li>
+              <li>
+                Обратимост означава, че входът може да се възстанови еднозначно. Проекцията губи
+                информация и няма „undo“ матрица.
               </li>
               <li>
                 Умножение матрица–матрица = композиция на действия; редът има значение (S·R значи
