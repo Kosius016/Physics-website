@@ -32,7 +32,9 @@ export function TeacherModeToggle() {
   const { on, toggle } = useTeacherMode();
   return (
     <button
+      type="button"
       onClick={toggle}
+      aria-pressed={on}
       title="Показва методически бележки за преподавателя"
       className={
         on
@@ -40,7 +42,8 @@ export function TeacherModeToggle() {
           : "shrink-0 cursor-pointer rounded-full border-[1.5px] border-ink bg-surface px-3 py-1 text-[12.5px] font-semibold text-ink transition-colors hover:bg-hl"
       }
     >
-      {on ? "✓ Режим преподавател" : "Режим преподавател"}
+      <span className="sm:hidden">{on ? "✓ Учител" : "Учител"}</span>
+      <span className="hidden sm:inline">{on ? "✓ Режим преподавател" : "Режим преподавател"}</span>
     </button>
   );
 }

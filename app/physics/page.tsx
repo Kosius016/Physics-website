@@ -4,6 +4,11 @@ export const metadata = {
   title: "Уроци · STEM Платформа",
 };
 
-export default function PhysicsIndexPage() {
-  return <CourseBrowser />;
+export default async function PhysicsIndexPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ level?: string }>;
+}) {
+  const { level } = await searchParams;
+  return <CourseBrowser initialLevel={level === "university" ? "Университетско" : "11. клас"} />;
 }

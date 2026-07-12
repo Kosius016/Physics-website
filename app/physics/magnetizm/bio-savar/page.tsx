@@ -2,6 +2,7 @@ import Formula from "@/components/Formula";
 import LessonNav from "@/components/LessonNav";
 import RichText from "@/components/RichText";
 import Section from "@/components/Section";
+import Link from "next/link";
 import BioSavartProblemSet from "@/components/interactives/BioSavartProblemSet";
 import FieldSuperposition from "@/components/interactives/FieldSuperposition";
 import FiniteWireAngles from "@/components/interactives/FiniteWireAngles";
@@ -40,9 +41,15 @@ export default function BioSavartLessonPage() {
       <main className="mx-auto max-w-3xl px-5 pb-24">
         {/* Заглавие */}
         <header className="pt-11 pb-2">
-          <span className="text-[12px] font-semibold uppercase tracking-[0.22em] text-muted">
-            Физика · Електромагнетизъм
-          </span>
+          <nav aria-label="Път до урока" className="flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.22em] text-muted">
+            <Link href="/physics" className="rounded-sm transition-colors hover:text-minus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-minus">
+              Физика
+            </Link>
+            <span aria-hidden="true">·</span>
+            <Link href="/physics?level=university#magnetism" className="rounded-sm transition-colors hover:text-minus focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-minus">
+              Магнетизъм
+            </Link>
+          </nav>
           <h1 className="mt-2 mb-2 font-serif text-[clamp(34px,7vw,48px)] leading-[1.08] font-bold text-ink">
             Законът на Био-Савар: геометрията зад формулата
           </h1>

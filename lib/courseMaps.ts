@@ -46,14 +46,24 @@ const physics11: CourseSection[] = [
 
 const physicsUni: CourseSection[] = [
   {
-    title: "Електричество и магнетизъм",
+    title: "Електричество",
     lessons: [
       {
         number: "1.1",
+        title: "Електростатичен потенциал",
+        href: "/physics/elektrichestvo/potencial",
+      },
+    ],
+  },
+  {
+    title: "Магнетизъм",
+    lessons: [
+      {
+        number: "2.1",
         title: "Закон на Био-Савар — геометрията зад формулата",
         href: "/physics/magnetizm/bio-savar",
       },
-      { number: "1.2", title: "Закон на Ампер" },
+      { number: "2.2", title: "Закон на Ампер" },
     ],
   },
 ];

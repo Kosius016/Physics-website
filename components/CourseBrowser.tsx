@@ -36,9 +36,9 @@ function Pill({
 /**
  * Филтри предмет/ниво + course map: раздели с номерирани списъци от уроци.
  */
-export default function CourseBrowser() {
+export default function CourseBrowser({ initialLevel = "11. клас" }: { initialLevel?: Level }) {
   const [subject, setSubject] = useState<Subject>("Физика");
-  const [level, setLevel] = useState<Level>("11. клас");
+  const [level, setLevel] = useState<Level>(initialLevel);
 
   const sections = getCourseMap(subject, level);
 
@@ -72,7 +72,11 @@ export default function CourseBrowser() {
           </div>
         ) : (
           sections.map((section, si) => (
-            <section key={section.title} className="mb-10">
+            <section
+              key={section.title}
+              id={section.title === "Електричество" ? "electricity" : section.title === "Магнетизъм" ? "magnetism" : undefined}
+              className="mb-10 scroll-mt-24"
+            >
               <h2 className="mb-4 border-b-2 border-ink pb-1.5 font-serif text-[24px] font-bold text-ink">
                 <span className="mr-2 align-[0.15em] text-[0.65em] tracking-[0.1em] text-muted">
                   §{si + 1}

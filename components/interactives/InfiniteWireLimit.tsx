@@ -95,7 +95,10 @@ export default function InfiniteWireLimit() {
   const pxu = Math.max(2, Math.min(MAX_PXU, MAX_HALF_PX / halfUnits));
   const halfPx = halfUnits * pxu;
   const aPx = pxu;
-  const zoomedOut = pxu < MAX_PXU - 0.5;
+  // Фиксирана „световна“ решетка през 5a. Тя се свива заедно с камерата:
+  // в началото проводникът е по-къс от една клетка, а при L/a → 200
+  // пресича десетки клетки. Така отдалечаването се усеща визуално.
+  const worldGrid = Array.from({ length: 81 }, (_, i) => (i - 40) * 5);
 
   const p = { x: WIRE_X + aPx, y: CY };
   const topY = CY - halfPx;
@@ -185,6 +188,42 @@ export default function InfiniteWireLimit() {
       <svg viewBox={`0 0 ${W} ${H}`} className={STAGE_CLASS + " select-none"}>
         <rect width={W} height={H} fill={STAGE_BG} />
 
+        {/* Фон в реални единици a — мащабира се с „камерата“ */}
+        <g aria-hidden="true">
+          {worldGrid.map((u) => {
+            const screenX = WIRE_X + u * pxu;
+            if (screenX < 0 || screenX > W) return null;
+            const major = u % 25 === 0;
+            return (
+              <line
+                key={`gx-${u}`}
+                x1={screenX}
+                y1={0}
+                x2={screenX}
+                y2={H}
+                stroke={major ? "rgba(95,168,245,0.14)" : "rgba(255,255,255,0.045)"}
+                strokeWidth={major ? 1.2 : 1}
+              />
+            );
+          })}
+          {worldGrid.map((u) => {
+            const screenY = CY + u * pxu;
+            if (screenY < 0 || screenY > H) return null;
+            const major = u % 25 === 0;
+            return (
+              <line
+                key={`gy-${u}`}
+                x1={0}
+                y1={screenY}
+                x2={W}
+                y2={screenY}
+                stroke={major ? "rgba(95,168,245,0.14)" : "rgba(255,255,255,0.045)"}
+                strokeWidth={major ? 1.2 : 1}
+              />
+            );
+          })}
+        </g>
+
         <line x1={WIRE_X} y1={topY} x2={WIRE_X} y2={botY} stroke={C.wire} strokeWidth={Math.max(2, Math.min(4, pxu / 12))} />
         <Arrow x1={WIRE_X} y1={CY + 16} x2={WIRE_X} y2={CY - 16} color={C.warn} width={2.5} />
         <circle cx={WIRE_X} cy={topY} r={5} fill={C.wire} />
@@ -229,11 +268,6 @@ export default function InfiniteWireLimit() {
         {sinSum > 1.998 && (
           <text x={W - 24} y={82} fill={C.ok} fontSize={14.5} fontWeight={700} textAnchor="end" className="animate-rise">
             практически на границата 2
-          </text>
-        )}
-        {zoomedOut && (
-          <text x={16} y={H - 16} fill={C.faint} fontSize={12.5}>
-            изгледът се отдалечава: краищата остават видими, a става нищожно спрямо L
           </text>
         )}
       </svg>
