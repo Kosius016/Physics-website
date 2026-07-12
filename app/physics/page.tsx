@@ -7,8 +7,13 @@ export const metadata = {
 export default async function PhysicsIndexPage({
   searchParams,
 }: {
-  searchParams: Promise<{ level?: string }>;
+  searchParams: Promise<{ level?: string; subject?: string }>;
 }) {
-  const { level } = await searchParams;
-  return <CourseBrowser initialLevel={level === "university" ? "Университетско" : "11. клас"} />;
+  const { level, subject } = await searchParams;
+  return (
+    <CourseBrowser
+      initialLevel={level === "university" ? "Университетско" : "11. клас"}
+      initialSubject={subject === "math" ? "Математика" : "Физика"}
+    />
+  );
 }

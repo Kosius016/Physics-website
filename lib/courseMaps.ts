@@ -68,10 +68,32 @@ const physicsUni: CourseSection[] = [
   },
 ];
 
+const mathUni: CourseSection[] = [
+  {
+    title: "Линейна алгебра",
+    lessons: [
+      {
+        number: "1.1",
+        title: "Матрици — езикът на трансформациите",
+        href: "/math/lineina-algebra/matrici",
+      },
+      {
+        number: "1.2",
+        title: "Детерминанти — площта на трансформацията",
+        href: "/math/lineina-algebra/determinanti",
+      },
+      { number: "1.3", title: "Векторно и смесено произведение" },
+    ],
+  },
+];
+
 const courseMaps: Partial<Record<Subject, Partial<Record<Level, CourseSection[]>>>> = {
   Физика: {
     "11. клас": physics11,
     Университетско: physicsUni,
+  },
+  Математика: {
+    Университетско: mathUni,
   },
 };
 
