@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Formula from "@/components/Formula";
 import RichText from "@/components/RichText";
+import SvgTex from "./SvgTex";
 import { Arrow, AngleArc, BTN_PRI, BTN_SEC, C, PANEL_CLASS, STAGE_BG, STAGE_CLASS } from "./svg";
 
 /**
@@ -24,6 +25,17 @@ const MAX_HALF_PX = 160; // проводникът винаги се събир�
 const MAX_PXU = 140; // максимален мащаб (px за едно разстояние a)
 const X_MIN = 0.5; // L/a минимум
 const X_MAX = 200; // L/a максимум
+
+function angleLabelPoint(cx: number, cy: number, a1: number, a2: number, r: number) {
+  let d = a2 - a1;
+  while (d > Math.PI) d -= 2 * Math.PI;
+  while (d < -Math.PI) d += 2 * Math.PI;
+  const mid = a1 + d / 2;
+  return {
+    x: Math.max(WIRE_X + 20, Math.min(W - 20, cx + (r + 14) * Math.cos(mid))),
+    y: Math.max(18, Math.min(H - 18, cy + (r + 14) * Math.sin(mid))),
+  };
+}
 
 // Графиката
 const GW = 640;
@@ -109,19 +121,34 @@ export default function InfiniteWireLimit() {
   const al = 90 - th;
   const sinSum = 2 * sin1;
   const isTheta = mode === "theta";
+  // Когато проводникът практически е безкраен, геометричният маркер се
+  // сгъстява около проводника. Между 65° и 75° го скриваме плавно, а
+  // числената стойност остава винаги достъпна в readout лентата.
+  const angleOpacity = Math.max(0, Math.min(1, (75 - th) / 10));
 
   const dirR1 = Math.atan2(topY - p.y, WIRE_X - p.x);
   const dirR2 = Math.atan2(botY - p.y, WIRE_X - p.x);
 
+  // При отдалечаването a може да стане само няколко пиксела. Запазваме
+  // четим маркер, но го преместваме надясно, така че дъгите да не пресичат проводника.
+  const angleOuterR = Math.min(64, Math.max(30, aPx * 0.72));
+  const angleInnerR = Math.min(46, Math.max(18, angleOuterR - 18));
+  const angleCx = Math.max(p.x, WIRE_X + angleOuterR + 10);
+  const angleShifted = angleCx > p.x + 0.5;
+  const theta1Label = angleLabelPoint(angleCx, p.y, Math.PI, dirR1, angleInnerR);
+  const theta2Label = angleLabelPoint(angleCx, p.y, Math.PI, dirR2, angleOuterR);
+  const alpha1Label = angleLabelPoint(angleCx, p.y, -Math.PI / 2, dirR1, angleInnerR);
+  const alpha2Label = angleLabelPoint(angleCx, p.y, Math.PI / 2, dirR2, angleOuterR);
+
   const readout: { label: string; value: string }[] = [
-    { label: "L / a", value: x >= X_MAX * 0.99 ? "200 (→ ∞)" : x.toFixed(1) },
+    { label: "$L/a$", value: x >= X_MAX * 0.99 ? "$200\\;(\\to\\infty)$" : `$${x.toFixed(1)}$` },
     isTheta
-      ? { label: "θ₁ = θ₂ → 90°", value: th.toFixed(2) + "°" }
-      : { label: "α₁ = α₂ → 0°", value: al.toFixed(2) + "°" },
+      ? { label: "$\\theta_1=\\theta_2\\to90^\\circ$", value: `$${th.toFixed(2)}^\\circ$` }
+      : { label: "$\\alpha_1=\\alpha_2\\to0^\\circ$", value: `$${al.toFixed(2)}^\\circ$` },
     isTheta
-      ? { label: "sin θ₁ + sin θ₂ → 2", value: sinSum.toFixed(4) }
-      : { label: "cos α₁ + cos α₂ → 2", value: sinSum.toFixed(4) },
-    { label: "B(L) / B∞", value: (100 * sin1).toFixed(2) + " %" },
+      ? { label: "$\\sin\\theta_1+\\sin\\theta_2\\to2$", value: `$${sinSum.toFixed(4)}$` }
+      : { label: "$\\cos\\alpha_1+\\cos\\alpha_2\\to2$", value: `$${sinSum.toFixed(4)}$` },
+    { label: "$B(L)/B_\\infty$", value: `$${(100 * sin1).toFixed(2)}\\,\\%$` },
   ];
 
   // Графиката: крива + маркер
@@ -142,8 +169,8 @@ export default function InfiniteWireLimit() {
             htmlFor="infwire-length"
             className="mb-1 flex items-baseline justify-between text-[13.5px] font-medium text-muted"
           >
-            <span>Дължина спрямо разстоянието: L / a</span>
-            <span className="font-bold tabular-nums text-minus">{x.toFixed(1)}</span>
+            <span>Дължина спрямо разстоянието: <RichText text="$L/a$" /></span>
+            <span className="font-bold tabular-nums text-minus"><RichText text={`$${x.toFixed(1)}$`} /></span>
           </label>
           <input
             id="infwire-length"
@@ -201,7 +228,8 @@ export default function InfiniteWireLimit() {
                 y1={0}
                 x2={screenX}
                 y2={H}
-                stroke={major ? "rgba(95,168,245,0.14)" : "rgba(255,255,255,0.045)"}
+                stroke={major ? C.minus : C.wire}
+                opacity={major ? 0.14 : 0.035}
                 strokeWidth={major ? 1.2 : 1}
               />
             );
@@ -217,7 +245,8 @@ export default function InfiniteWireLimit() {
                 y1={screenY}
                 x2={W}
                 y2={screenY}
-                stroke={major ? "rgba(95,168,245,0.14)" : "rgba(255,255,255,0.045)"}
+                stroke={major ? C.minus : C.wire}
+                opacity={major ? 0.14 : 0.035}
                 strokeWidth={major ? 1.2 : 1}
               />
             );
@@ -228,74 +257,76 @@ export default function InfiniteWireLimit() {
         <Arrow x1={WIRE_X} y1={CY + 16} x2={WIRE_X} y2={CY - 16} color={C.warn} width={2.5} />
         <circle cx={WIRE_X} cy={topY} r={5} fill={C.wire} />
         <circle cx={WIRE_X} cy={botY} r={5} fill={C.wire} />
-        <text x={WIRE_X - 28} y={topY + 5} fill={C.mut} fontSize={13}>1</text>
-        <text x={WIRE_X - 28} y={botY + 5} fill={C.mut} fontSize={13}>2</text>
-        <text x={WIRE_X - 30} y={CY - Math.min(halfPx, MAX_HALF_PX) / 2} fill={C.mut} fontSize={12.5} textAnchor="end">
-          L = {x.toFixed(0)}·a
-        </text>
+        <text x={WIRE_X - 40} y={topY + 4} fill={C.mut} fontSize={13} textAnchor="middle">1</text>
+        <text x={WIRE_X - 40} y={botY + 4} fill={C.mut} fontSize={13} textAnchor="middle">2</text>
 
         {/* Перпендикулярното разстояние a — свива се визуално при отдалечаване */}
         <line x1={WIRE_X} y1={p.y} x2={p.x} y2={p.y} stroke={C.mut} strokeWidth={1.6} strokeDasharray="5 4" />
-        <text x={p.x + 12} y={p.y + 22} fill={C.mut} fontSize={13} fontWeight={600}>
-          a
-        </text>
+        <SvgTex x={p.x + 12} y={p.y + 20} tex="a" color={C.mut} width={28} />
 
         {/* r-векторите и двата ъгъла — винаги и двата видими */}
-        <Arrow x1={p.x} y1={p.y} x2={WIRE_X} y2={topY} color={C.minus} width={2} label="r₁" labelDx={-24} labelDy={-2} />
-        <Arrow x1={p.x} y1={p.y} x2={WIRE_X} y2={botY} color={C.minus} width={2} label="r₂" labelDx={-24} labelDy={12} />
-        {isTheta ? (
-          <g>
-            <AngleArc cx={p.x} cy={p.y} a1={Math.PI} a2={dirR1} r={46} color={C.plus} label={`θ₁=${th.toFixed(1)}°`} />
-            <AngleArc cx={p.x} cy={p.y} a1={Math.PI} a2={dirR2} r={64} color={C.plus} label={`θ₂=${th.toFixed(1)}°`} />
-          </g>
-        ) : (
-          <g>
-            <line x1={p.x} y1={Math.max(topY, 25)} x2={p.x} y2={Math.min(botY, H - 25)} stroke={C.faint} strokeWidth={1.3} strokeDasharray="3 5" />
-            <AngleArc cx={p.x} cy={p.y} a1={-Math.PI / 2} a2={dirR1} r={46} color={C.ok} label={`α₁=${al.toFixed(1)}°`} />
-            <AngleArc cx={p.x} cy={p.y} a1={Math.PI / 2} a2={dirR2} r={64} color={C.ok} label={`α₂=${al.toFixed(1)}°`} />
-          </g>
-        )}
+        <Arrow x1={p.x} y1={p.y} x2={WIRE_X} y2={topY} color={C.minus} width={2} texLabel="r_1" texLabelDy={-2} />
+        <Arrow x1={p.x} y1={p.y} x2={WIRE_X} y2={botY} color={C.minus} width={2} texLabel="r_2" texLabelDy={8} />
+        <g
+          opacity={angleOpacity}
+          aria-hidden={angleOpacity === 0}
+          style={{ transition: "opacity 180ms ease-out" }}
+        >
+          {angleShifted && (
+            <line x1={p.x} y1={p.y} x2={angleCx} y2={p.y} stroke={C.faint} strokeWidth={1.3} strokeDasharray="3 4" />
+          )}
+          {isTheta ? (
+            <g>
+              <AngleArc cx={angleCx} cy={p.y} a1={Math.PI} a2={dirR1} r={angleInnerR} color={C.plus} />
+              <AngleArc cx={angleCx} cy={p.y} a1={Math.PI} a2={dirR2} r={angleOuterR} color={C.plus} />
+              <SvgTex x={theta1Label.x} y={theta1Label.y} tex="\theta_1" color={C.plus} fontSize={12.5} width={46} anchor="middle" />
+              <SvgTex x={theta2Label.x} y={theta2Label.y} tex="\theta_2" color={C.plus} fontSize={12.5} width={46} anchor="middle" />
+            </g>
+          ) : (
+            <g>
+              <line
+                x1={angleCx}
+                y1={Math.max(25, Math.min(topY, p.y - angleOuterR - 6))}
+                x2={angleCx}
+                y2={Math.min(H - 25, Math.max(botY, p.y + angleOuterR + 6))}
+                stroke={C.faint}
+                strokeWidth={1.3}
+                strokeDasharray="3 5"
+              />
+              <AngleArc cx={angleCx} cy={p.y} a1={-Math.PI / 2} a2={dirR1} r={angleInnerR} color={C.ok} />
+              <AngleArc cx={angleCx} cy={p.y} a1={Math.PI / 2} a2={dirR2} r={angleOuterR} color={C.ok} />
+              <SvgTex x={alpha1Label.x} y={alpha1Label.y} tex="\alpha_1" color={C.ok} fontSize={12.5} width={46} anchor="middle" />
+              <SvgTex x={alpha2Label.x} y={alpha2Label.y} tex="\alpha_2" color={C.ok} fontSize={12.5} width={46} anchor="middle" />
+            </g>
+          )}
+        </g>
 
         <circle cx={p.x} cy={p.y} r={6} fill={C.wire} />
-        <text x={p.x + 12} y={p.y - 8} fill={C.wire} fontSize={14} fontWeight={700}>
-          P
-        </text>
-
-        {/* Числото, което се наблюдава */}
-        <text x={W - 24} y={54} fill={sinSum > 1.998 ? C.ok : C.warn} fontSize={24} fontWeight={700} textAnchor="end" fontFamily="Georgia, serif">
-          {isTheta ? "sinθ₁+sinθ₂" : "cosα₁+cosα₂"} = {sinSum.toFixed(4)}
-        </text>
-        {sinSum > 1.998 && (
-          <text x={W - 24} y={82} fill={C.ok} fontSize={14.5} fontWeight={700} textAnchor="end" className="animate-rise">
-            практически на границата 2
-          </text>
-        )}
+        <SvgTex x={p.x + 12} y={p.y - 10} tex="P" color={C.wire} width={30} />
       </svg>
 
       {/* Живи стойности */}
       <dl className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-[10px] border-[1.5px] border-ink bg-rule sm:grid-cols-4">
         {readout.map((r) => (
           <div key={r.label} className="bg-surface px-3 py-2.5">
-            <dt className="text-[10.5px] font-bold uppercase tracking-wide text-muted">{r.label}</dt>
-            <dd className="mt-0.5 text-[15px] font-bold tabular-nums text-minus">{r.value}</dd>
+            <dt className="text-[10.5px] font-bold tracking-wide text-muted"><RichText text={r.label} /></dt>
+            <dd className="mt-0.5 text-[15px] font-bold tabular-nums text-minus"><RichText text={r.value} /></dd>
           </div>
         ))}
       </dl>
 
       {/* Графиката на предела */}
       <p className="mt-5 mb-2 text-[14px] text-muted">
-        Отношението <strong className="text-ink">B(L)/B∞</strong> като функция от{" "}
-        <strong className="text-ink">L/a</strong> — кривата се приближава към 1, без да го достига при
-        крайно L. Това е смисълът на думата <strong className="text-ink">граница</strong>:
+        <RichText text="Отношението $B(L)/B_\infty$ като функция от $L/a$ — кривата се приближава към $1$, без да го достига при крайно $L$. Това е смисълът на думата **граница**:" />
       </p>
       <svg viewBox={`0 0 ${GW} ${GH}`} className={STAGE_CLASS + " select-none"}>
         <rect width={GW} height={GH} fill={STAGE_BG} />
         {/* мрежа и оси */}
         {[0, 0.25, 0.5, 0.75].map((v) => (
-          <line key={v} x1={GPL} y1={gy(v)} x2={GW - GPR} y2={gy(v)} stroke="rgba(255,255,255,0.08)" strokeWidth={1} />
+          <line key={v} x1={GPL} y1={gy(v)} x2={GW - GPR} y2={gy(v)} stroke={C.wire} opacity={0.08} strokeWidth={1} />
         ))}
         {[10, 20, 30].map((v) => (
-          <line key={v} x1={gx(v)} y1={GPT} x2={gx(v)} y2={GH - GPB} stroke="rgba(255,255,255,0.08)" strokeWidth={1} />
+          <line key={v} x1={gx(v)} y1={GPT} x2={gx(v)} y2={GH - GPB} stroke={C.wire} opacity={0.08} strokeWidth={1} />
         ))}
         <line x1={GPL} y1={GH - GPB} x2={GW - GPR} y2={GH - GPB} stroke={C.mut} strokeWidth={1.5} />
         <line x1={GPL} y1={GPT} x2={GPL} y2={GH - GPB} stroke={C.mut} strokeWidth={1.5} />
@@ -309,31 +340,24 @@ export default function InfiniteWireLimit() {
             {v.toFixed(1)}
           </text>
         ))}
-        <text x={GW - GPR} y={GH - 8} fill={C.mut} fontSize={12.5} textAnchor="end">
-          L / a
-        </text>
-        <text x={16} y={GPT - 8} fill={C.mut} fontSize={12.5}>
-          B(L)/B∞
-        </text>
+        <SvgTex x={GW - GPR} y={GH - 12} tex="L/a" color={C.mut} fontSize={12.5} width={54} anchor="end" />
+        <SvgTex x={GPL + 4} y={GPT - 10} tex="B(L)/B_\infty" color={C.mut} fontSize={12.5} width={96} />
         {/* асимптотата — границата */}
         <line x1={GPL} y1={gy(1)} x2={GW - GPR} y2={gy(1)} stroke={C.ok} strokeWidth={1.5} strokeDasharray="7 5" />
-        <text x={GW - GPR - 6} y={gy(1) - 7} fill={C.ok} fontSize={12} fontWeight={700} textAnchor="end">
-          B∞ = μ₀I/2πa (граница)
-        </text>
+        <SvgTex x={GW - GPR - 6} y={gy(1) - 9} tex="B_\infty=\mu_0I/(2\pi a)" color={C.ok} fontSize={12} width={152} anchor="end" />
         {/* кривата */}
         <path d={curve} fill="none" stroke={C.minus} strokeWidth={2.5} />
         {/* маркерът на текущото L/a */}
         <line x1={gx(mx)} y1={GH - GPB} x2={gx(mx)} y2={gy(ratio(mx))} stroke={C.faint} strokeWidth={1.3} strokeDasharray="3 4" />
         <circle cx={gx(mx)} cy={gy(ratio(mx))} r={6} fill={C.warn} stroke={STAGE_BG} strokeWidth={2} />
-        <text
+        <SvgTex
           x={Math.min(gx(mx) + 10, GW - 120)}
           y={gy(ratio(mx)) + (ratio(mx) > 0.9 ? 22 : -10)}
-          fill={C.warn}
+          tex={`${(100 * sin1).toFixed(1)}\\,\\%`}
+          color={C.warn}
           fontSize={13}
-          fontWeight={700}
-        >
-          {(100 * sin1).toFixed(1)} %
-        </text>
+          width={78}
+        />
       </svg>
 
       {/* Извеждане — чак след наблюдението */}

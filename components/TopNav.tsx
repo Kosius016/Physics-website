@@ -1,12 +1,24 @@
-import Link from "next/link";
+"use client";
 
-const TABS = ["Уроци", "Задачи", "Материали", "Симулации", "Статии"] as const;
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const TABS: readonly { label: string; href?: string }[] = [
+  { label: "Уроци", href: "/physics" },
+  { label: "Задачи" },
+  { label: "Материали" },
+  { label: "Симулации" },
+  { label: "Практикум", href: "/praktikum" },
+  { label: "Статии" },
+];
 
 /**
  * Горна навигационна лента: лого вляво, табове за тип съдържание вдясно.
  * Засега функционира само "Уроци"; останалите табове са визуални placeholder-и.
  */
-export default function TopNav({ active = "Уроци" }: { active?: (typeof TABS)[number] }) {
+export default function TopNav() {
+  const pathname = usePathname();
+
   return (
     <header className="border-b-2 border-ink bg-surface">
       <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-6 px-5">
@@ -14,25 +26,30 @@ export default function TopNav({ active = "Уроци" }: { active?: (typeof TAB
           STEM <span className="text-plus">Платформа</span>
         </Link>
         <nav className="flex overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {TABS.map((tab) =>
-            tab === active ? (
+          {TABS.map((tab) => {
+            const active = tab.href === "/praktikum" ? pathname.startsWith("/praktikum") : tab.href === "/physics" && !pathname.startsWith("/praktikum");
+            return tab.href ? (
               <Link
-                key={tab}
-                href="/physics"
-                className="-mb-0.5 whitespace-nowrap border-b-[3px] border-plus px-3 py-4 text-[15px] font-bold text-ink"
+                key={tab.label}
+                href={tab.href}
+                className={
+                  active
+                    ? "-mb-0.5 whitespace-nowrap border-b-[3px] border-plus px-3 py-4 text-[15px] font-bold text-ink"
+                    : "-mb-0.5 whitespace-nowrap border-b-[3px] border-transparent px-3 py-4 text-[15px] font-semibold text-muted transition-colors hover:text-ink"
+                }
               >
-                {tab}
+                {tab.label}
               </Link>
             ) : (
               <span
-                key={tab}
+                key={tab.label}
                 className="-mb-0.5 cursor-default whitespace-nowrap border-b-[3px] border-transparent px-3 py-4 text-[15px] text-muted"
                 title="Секцията се подготвя"
               >
-                {tab}
+                {tab.label}
               </span>
-            ),
-          )}
+            );
+          })}
         </nav>
       </div>
     </header>

@@ -25,6 +25,7 @@
 
   /* Плавно "изникване" на вектори/означения в интерактивните фигури */
   --animate-rise: rise 0.45s ease-out both;
+  --animate-fadeout: fadeout 1.55s ease-out 0.35s both;
 
   @keyframes rise {
     from {
@@ -34,6 +35,16 @@
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeout {
+    0%,
+    30% {
+      opacity: 0.9;
+    }
+    100% {
+      opacity: 0.14;
     }
   }
 }

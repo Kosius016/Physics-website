@@ -1,6 +1,7 @@
-import { Arrow, C } from "./svg";
+import { Arrow, C, STAGE_BG } from "./svg";
 import { SvgMatrixScene, type Mat2 } from "./matrixCanvas";
 import type { GuidedProblemData } from "./GuidedProblem";
+import SvgTex from "./SvgTex";
 
 /**
  * Водени задачи за урока „Матрици — езикът на трансформациите“.
@@ -21,8 +22,8 @@ function basisArrows(m: Mat2, ox = 150, oy = 210, s = 42) {
   const [a, b, c, d] = m;
   return (
     <g className="animate-rise">
-      <Arrow x1={ox} y1={oy} x2={ox + a * s} y2={oy - c * s} color={C.plus} width={2.5} label="î′" />
-      <Arrow x1={ox} y1={oy} x2={ox + b * s} y2={oy - d * s} color={C.ok} width={2.5} label="ĵ′" />
+      <Arrow x1={ox} y1={oy} x2={ox + a * s} y2={oy - c * s} color={C.plus} width={2.5} texLabel={String.raw`\hat\imath'`} />
+      <Arrow x1={ox} y1={oy} x2={ox + b * s} y2={oy - d * s} color={C.ok} width={2.5} texLabel={String.raw`\hat\jmath'`} />
     </g>
   );
 }
@@ -35,19 +36,18 @@ export const matrixProblems: GuidedProblemData[] = [
     figure: (phase) => (
       <g>
         <SvgMatrixScene m={phase >= 2 ? ROT90 : I} sprite square={phase >= 1} />
-        {phase >= 1 && basisArrows(phase >= 2 ? ROT90 : I)}
-        {phase >= 1 && (
-          <text x={16} y={284} fill={C.mut} fontSize={12.5} className="animate-rise">
-            следете стрелките: колоните на матрицата са î′ и ĵ′
-          </text>
-        )}
+        {phase >= 1 && <g opacity={phase === 1 ? 1 : 0.3}>{basisArrows(phase >= 2 ? ROT90 : I)}</g>}
         {phase >= 3 && (
-          <text x={330} y={40} fill={C.ok} fontSize={15} fontWeight={700} fontFamily="ui-monospace, monospace" className="animate-rise">
-            M = [0 −1; 1 0]
-          </text>
+          <SvgTex x={458} y={40} tex="M=\begin{pmatrix}0&-1\\1&0\end{pmatrix}" color={C.ok} fontSize={14} width={176} anchor="end" className="animate-rise" />
         )}
       </g>
     ),
+    figureCaption: (phase) =>
+      phase >= 3
+        ? "Колоните $\hat\imath'$ и $\hat\jmath'$ определят цялата матрица на ротацията."
+        : phase >= 1
+          ? "Следете базисните стрелки: образите $\hat\imath'$ и $\hat\jmath'$ са колоните на матрицата."
+          : undefined,
     directionQuestion: {
       prompt: "Къде каца базисният вектор î = (1, 0) при завъртане на 90° обратно на часовниковата стрелка?",
       options: [
@@ -98,17 +98,21 @@ export const matrixProblems: GuidedProblemData[] = [
     figure: (phase) => (
       <g>
         <SvgMatrixScene m={phase >= 2 ? ROT45 : I} sprite={false} square={phase >= 1} checker={phase >= 2} />
-        {phase >= 1 && basisArrows(phase >= 2 ? ROT45 : I)}
+        {phase >= 1 && <g opacity={phase === 1 ? 1 : 0.3}>{basisArrows(phase >= 2 ? ROT45 : I)}</g>}
         {phase >= 2 && (
           <g className="animate-rise">
-            <circle cx={150 + 1.41 * 42} cy={210 - 1.41 * 42} r={6} fill={C.warn} stroke="#0e1420" strokeWidth={2} />
-            <text x={150 + 1.41 * 42 + 12} y={210 - 1.41 * 42 + 4} fill={C.warn} fontSize={13.5} fontWeight={700}>
-              (1.41, 1.41)
-            </text>
+            <circle cx={150 + 1.41 * 42} cy={210 - 1.41 * 42} r={6} fill={C.warn} stroke={STAGE_BG} strokeWidth={2} />
+            <SvgTex x={150 + 1.41 * 42 + 12} y={210 - 1.41 * 42 + 4} tex="(1.41,\,1.41)" color={C.warn} fontSize={13} width={86} />
           </g>
         )}
       </g>
     ),
+    figureCaption: (phase) =>
+      phase >= 2
+        ? "Ротацията премества $(2,0)$ в $(\sqrt2,\sqrt2)\approx(1.41,1.41)$, без да променя дължината."
+        : phase >= 1
+          ? "Колоните показват новите посоки на двете координатни оси."
+          : undefined,
     directionQuestion: {
       prompt: "Каква геометрична операция свързва координатите на сензора с тези на тялото?",
       options: [
@@ -168,7 +172,7 @@ export const matrixProblems: GuidedProblemData[] = [
       return (
         <g>
           <SvgMatrixScene m={m} square={phase >= 1} />
-          {phase >= 1 && basisArrows(m)}
+          {phase >= 1 && <g opacity={phase === 1 ? 1 : 0.3}>{basisArrows(m)}</g>}
           {cells.map(([cx, cy], i) => {
             const x0 = 0.3 + cx * px;
             const y0 = 0.2 + cy * px;
@@ -177,14 +181,15 @@ export const matrixProblems: GuidedProblemData[] = [
               .join(" ");
             return <polygon key={i} points={p} fill={C.wire} opacity={0.9} />;
           })}
-          {phase >= 2 && (
-            <text x={16} y={284} fill={C.mut} fontSize={12.5} className="animate-rise">
-              основата не мърда; колкото по-високо, толкова по-надясно
-            </text>
-          )}
         </g>
       );
     },
+    figureCaption: (phase) =>
+      phase >= 2
+        ? "Основата $y=0$ остава неподвижна; хоризонталното отместване расте пропорционално на $y$."
+        : phase >= 1
+          ? "Втората координата се запазва, а първата получава добавка $0.3y$."
+          : undefined,
     directionQuestion: {
       prompt: "Какво прави срязването с точките на буквата?",
       options: [
@@ -244,18 +249,14 @@ export const matrixProblems: GuidedProblemData[] = [
             </g>
           </g>
         )}
-        {phase >= 1 && (
-          <text x={16} y={26} fill={C.minus} fontSize={13} fontWeight={600} className="animate-rise">
-            плътно: R·F (първо F, после R)
-          </text>
-        )}
-        {phase >= 2 && (
-          <text x={16} y={46} fill={C.mut} fontSize={13} fontWeight={600} className="animate-rise">
-            бледо: F·R (обратният ред) — различно!
-          </text>
-        )}
       </g>
     ),
+    figureCaption: (phase) =>
+      phase >= 2
+        ? "Плътният образ е $RF$; бледият е $FR$. Различният резултат показва, че $RF\ne FR$."
+        : phase >= 1
+          ? "Плътният образ показва $RF$: първо $F$, после $R$."
+          : undefined,
     directionQuestion: {
       prompt: "Комутативно ли е умножението на матрици — все едно ли е в какъв ред прилагаме F и R?",
       options: [

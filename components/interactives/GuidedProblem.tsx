@@ -6,7 +6,7 @@ import RichText from "@/components/RichText";
 import type { RichTextString } from "@/lib/types";
 import PredictionQuestion, { type PredictionOption } from "./PredictionQuestion";
 import { TeacherNote } from "./TeacherMode";
-import { BTN_SEC, STAGE_CLASS } from "./svg";
+import { BTN_SEC, STAGE_BG, STAGE_CLASS } from "./svg";
 
 /**
  * Водена задача: интерактивна фигура + задължителният педагогически ред:
@@ -34,6 +34,8 @@ export interface GuidedProblemData {
   statement: RichTextString;
   /** Фигурата по фаза: 0 геометрия, 1 след Q1 (dB), 2 след Q2 (резултат), 3 след всички стъпки. */
   figure: (phase: number) => ReactNode;
+  /** Кратко обяснение под фигурата; прозата остава извън SVG сцената. */
+  figureCaption?: (phase: number) => RichTextString | undefined;
   /** viewBox височина на фигурата (ширината е винаги 480). */
   figureHeight?: number;
   directionQuestion: GuidedQuestion;
@@ -65,9 +67,14 @@ export default function GuidedProblem({ index, data }: { index: number; data: Gu
         viewBox={`0 0 480 ${data.figureHeight ?? 300}`}
         className={STAGE_CLASS + " mt-4 select-none"}
       >
-        <rect width={480} height={data.figureHeight ?? 300} fill="#0e1420" />
+        <rect width={480} height={data.figureHeight ?? 300} fill={STAGE_BG} />
         {data.figure(phase)}
       </svg>
+      {data.figureCaption?.(phase) && (
+        <p aria-live="polite" className="mt-2 text-[13.5px] leading-relaxed text-muted">
+          <RichText text={data.figureCaption(phase) ?? ""} />
+        </p>
+      )}
 
       {/* Подсказки */}
       {data.hints.length > 0 && (

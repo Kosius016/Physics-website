@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { C, STAGE_BG } from "./svg";
 
 type Charge = { x: number; y: number; q: 1 | -1 };
 
@@ -59,7 +60,7 @@ export function PotentialMap() {
     }
     charges.forEach((c) => {
       ctx.beginPath(); ctx.arc(c.x, c.y, 15, 0, Math.PI * 2);
-      ctx.fillStyle = c.q > 0 ? "#e8563f" : "#3d7be0"; ctx.fill();
+      ctx.fillStyle = c.q > 0 ? C.plus : C.minus; ctx.fill();
       ctx.strokeStyle = "white"; ctx.lineWidth = 2.5; ctx.stroke();
       ctx.fillStyle = "white"; ctx.font = "bold 18px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
       ctx.fillText(c.q > 0 ? "+" : "−", c.x, c.y + 1);
@@ -75,7 +76,7 @@ export function PotentialMap() {
   ]);
 
   return <div className="rounded-xl border-[1.5px] border-ink bg-surface p-3.5 shadow-hard">
-    <canvas ref={canvasRef} width={720} height={480} aria-label="Интерактивна карта на електростатичния потенциал" className="block aspect-[3/2] w-full touch-none rounded-lg border-[1.5px] border-ink bg-ink"
+    <canvas ref={canvasRef} width={720} height={480} aria-label="Интерактивна карта на електростатичния потенциал" className="block aspect-[3/2] w-full touch-none rounded-lg border-[1.5px] border-ink bg-ink [image-rendering:pixelated]"
       onPointerDown={(e) => { const p = canvasPoint(e.currentTarget, e); dragged.current = charges.findIndex((c) => Math.hypot(p.x - c.x, p.y - c.y) < 28); e.currentTarget.setPointerCapture(e.pointerId); }}
       onPointerMove={(e) => { if (dragged.current === null || dragged.current < 0) return; const p = canvasPoint(e.currentTarget, e); setCharges((old) => old.map((c, i) => i === dragged.current ? { ...c, x: Math.max(15, Math.min(705, p.x)), y: Math.max(15, Math.min(465, p.y)) } : c)); }}
       onPointerUp={() => { dragged.current = null; }} />
@@ -98,17 +99,17 @@ export function ChargedSphereGraph() {
   useEffect(() => {
     const ctx = canvasRef.current?.getContext("2d"); if (!ctx) return;
     const w = 720, h = 410, left = 58, right = 700, top = 22, bottom = 370, mid = 205;
-    ctx.fillStyle = "#0e1420"; ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = STAGE_BG; ctx.fillRect(0, 0, w, h);
     ctx.strokeStyle = "rgba(255,255,255,.14)"; ctx.lineWidth = 1;
     for (let i = 0; i <= 8; i++) { const x = left + (right-left)*i/8; ctx.beginPath(); ctx.moveTo(x,top); ctx.lineTo(x,bottom); ctx.stroke(); }
     ctx.strokeStyle = "rgba(255,255,255,.65)"; ctx.beginPath(); ctx.moveTo(left,mid); ctx.lineTo(right,mid); ctx.stroke();
     const X = (r: number) => left + (right-left)*r/100;
-    ctx.fillStyle = charge >= 0 ? "rgba(232,86,63,.16)" : "rgba(61,123,224,.16)"; ctx.fillRect(left, top, X(radius)-left, bottom-top);
+    ctx.fillStyle = charge >= 0 ? "rgba(255,118,84,.16)" : "rgba(89,173,255,.16)"; ctx.fillRect(left, top, X(radius)-left, bottom-top);
     ctx.setLineDash([5,4]); ctx.beginPath(); ctx.moveTo(X(radius),top); ctx.lineTo(X(radius),bottom); ctx.stroke(); ctx.setLineDash([]);
     const plot = (fn: (r:number)=>number, scale:number, color:string) => { ctx.strokeStyle=color; ctx.lineWidth=3; ctx.beginPath(); for(let r=1;r<=100;r+=.5){ const y=Math.max(top,Math.min(bottom,mid-fn(r)*scale)); r===1?ctx.moveTo(X(r),y):ctx.lineTo(X(r),y); } ctx.stroke(); };
-    plot((r) => r < radius ? 0 : charge*radius*radius/(r*r), 2.2, "#e8563f");
-    plot((r) => r < radius ? charge*radius : charge*radius*radius/r, .55, "#5fa8f5");
-    ctx.font="600 15px sans-serif"; ctx.fillStyle="#e8563f"; ctx.fillText("E(r)",625,48); ctx.fillStyle="#5fa8f5"; ctx.fillText("V(r)",625,70);
+    plot((r) => r < radius ? 0 : charge*radius*radius/(r*r), 2.2, C.plus);
+    plot((r) => r < radius ? charge*radius : charge*radius*radius/r, .55, C.minus);
+    ctx.font="600 15px sans-serif"; ctx.fillStyle=C.plus; ctx.fillText("E(r)",625,48); ctx.fillStyle=C.minus; ctx.fillText("V(r)",625,70);
     ctx.fillStyle="rgba(255,255,255,.8)"; ctx.font="13px sans-serif"; ctx.fillText("r = R",X(radius)+6,355); ctx.fillText("r →",670,225);
   }, [radius, charge]);
   return <div className="rounded-xl border-[1.5px] border-ink bg-surface p-3.5 shadow-hard">

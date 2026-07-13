@@ -1,7 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
+import RichText from "@/components/RichText";
 import PredictionQuestion from "./PredictionQuestion";
+import SvgTex from "./SvgTex";
 import { Arrow, BTN_SEC, C, CurrentSymbol, PANEL_CLASS, STAGE_BG, STAGE_CLASS, svgPoint } from "./svg";
 
 /**
@@ -28,7 +30,7 @@ function TopViewInset({ dirUp, dx }: { dirUp: boolean; dx: number }) {
   const tangentY = (dx > 0 ? -1 : 1) * (ccw ? 1 : -1); // -1 = нагоре в inset
   return (
     <g className="animate-rise">
-      <rect x={cx - 82} y={cy - 78} width={164} height={172} rx={8} fill="rgba(255,255,255,0.06)" stroke={C.faint} />
+      <rect x={cx - 82} y={cy - 78} width={164} height={172} rx={8} fill={C.wire} fillOpacity={0.06} stroke={C.faint} />
       <text x={cx} y={cy - 60} fill={C.mut} fontSize={11.5} fontWeight={700} textAnchor="middle">
         ИЗГЛЕД ОТГОРЕ
       </text>
@@ -41,10 +43,8 @@ function TopViewInset({ dirUp, dx }: { dirUp: boolean; dx: number }) {
       )}
       <CurrentSymbol x={cx} y={cy} out={dirUp} r={10} color={C.warn} />
       <circle cx={px} cy={cy} r={3.5} fill={C.wire} />
-      <text x={px + (dx > 0 ? 8 : -8)} y={cy + 4} fill={C.wire} fontSize={12} fontWeight={700} textAnchor={dx > 0 ? "start" : "end"}>
-        P
-      </text>
-      <Arrow x1={px} y1={cy} x2={px} y2={cy + tangentY * 34} color={C.ok} width={2.5} label="B" labelDx={dx > 0 ? 6 : -16} />
+      <SvgTex x={px + (dx > 0 ? 8 : -8)} y={cy} tex="P" color={C.wire} fontSize={12} width={24} anchor={dx > 0 ? "start" : "end"} />
+      <Arrow x1={px} y1={cy} x2={px} y2={cy + tangentY * 34} color={C.ok} width={2.5} texLabel="\vec B" texLabelDx={dx > 0 ? 8 : -8} texLabelWidth={48} />
       <text x={cx} y={cy + 78} fill={C.mut} fontSize={10.5} textAnchor="middle">
         ↑ в изгледа = ⊗ навътре в екрана
       </text>
@@ -80,8 +80,7 @@ export default function RightHandRule() {
     <div className={PANEL_CLASS}>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
         <p className="text-[14px] text-muted">
-          Преместете точката <strong className="text-ink">P</strong> около проводника и предскажете
-          посоката на полето.
+          <RichText text="Преместете точката $P$ около проводника и предскажете посоката на полето." />
         </p>
         <button
           className={BTN_SEC}
@@ -122,9 +121,7 @@ export default function RightHandRule() {
             width={3}
           />
         ))}
-        <text x={WIRE_X - 24} y={dirUp ? 38 : H - 26} fill={C.warn} fontSize={15} fontWeight={700}>
-          I
-        </text>
+        <SvgTex x={WIRE_X - 24} y={dirUp ? 34 : H - 30} tex="I" color={C.warn} width={24} anchor="end" />
 
         {/* Наблюдателната точка P (влачима) */}
         <g style={{ cursor: "grab" }}>
@@ -139,23 +136,27 @@ export default function RightHandRule() {
               </text>
             </>
           )}
-          <text x={p.x + 22} y={p.y + 5} fill={C.wire} fontSize={14} fontWeight={700}>
-            P
-          </text>
+          <SvgTex x={p.x + 22} y={p.y} tex="P" color={C.wire} width={28} />
         </g>
 
         {revealed && <TopViewInset dirUp={dirUp} dx={p.x - WIRE_X} />}
 
         {revealed && (
-          <text x={16} y={H - 16} fill={C.ok} fontSize={13.5} fontWeight={600} className="animate-rise">
-            B в P: {into ? "⊗ навътре в екрана" : "⊙ навън от екрана"}
-          </text>
+          <SvgTex
+            x={16}
+            y={H - 20}
+            tex={`\\vec B(P):\\ ${into ? "\\otimes" : "\\odot"}`}
+            color={C.ok}
+            fontSize={13.5}
+            width={110}
+            className="animate-rise"
+          />
         )}
       </svg>
 
       <div className="mt-4">
         <PredictionQuestion
-          prompt="Накъде сочи магнитното поле B в точка P?"
+          prompt="Накъде сочи магнитното поле $\vec B$ в точка $P$?"
           resetToken={`${dirUp}-${Math.round(p.x)}-${Math.round(p.y)}`}
           options={[
             { text: "⊙ Навън от екрана (към наблюдателя)", correct: !into },

@@ -63,7 +63,21 @@ const physicsUni: CourseSection[] = [
         title: "Закон на Био-Савар — геометрията зад формулата",
         href: "/physics/magnetizm/bio-savar",
       },
-      { number: "2.2", title: "Закон на Ампер" },
+      {
+        number: "2.2",
+        title: "Законът на Ампер — симетрия вместо интегриране",
+        href: "/physics/magnetizm/amper",
+      },
+      {
+        number: "2.3",
+        title: "Силата на Лоренц — как полето отклонява заряд",
+        href: "/physics/magnetizm/lorentz",
+      },
+      {
+        number: "2.4",
+        title: "Сила между два успоредни проводника",
+        href: "/physics/magnetizm/usporeni-provodnici",
+      },
     ],
   },
 ];

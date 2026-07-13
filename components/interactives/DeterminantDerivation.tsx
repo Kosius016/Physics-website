@@ -11,7 +11,7 @@ export default function DeterminantDerivation() {
     <div className="rounded-xl border-[1.5px] border-ink bg-surface p-4 shadow-hard">
       <svg viewBox="0 0 640 300" className={STAGE_CLASS + " select-none"} role="img" aria-label="Успоредник преди и след срязване, което запазва площта">
         <rect width="640" height="300" fill={STAGE_BG} />
-        <g stroke="rgba(255,255,255,.045)" strokeWidth="1">
+        <g stroke="rgba(242,239,245,.075)" strokeWidth="1">
           {grid.map((v) => <line key={`v-${v}`} x1={v} y1="0" x2={v} y2="300" />)}
           {grid.map((v) => <line key={`h-${v}`} x1="0" y1={v} x2="640" y2={v} />)}
         </g>

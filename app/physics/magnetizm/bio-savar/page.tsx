@@ -4,9 +4,12 @@ import RichText from "@/components/RichText";
 import Section from "@/components/Section";
 import Link from "next/link";
 import BioSavartProblemSet from "@/components/interactives/BioSavartProblemSet";
+import CircularArcField from "@/components/interactives/CircularArcField";
 import FieldSuperposition from "@/components/interactives/FieldSuperposition";
 import FiniteWireAngles from "@/components/interactives/FiniteWireAngles";
 import InfiniteWireLimit from "@/components/interactives/InfiniteWireLimit";
+import LoopAxisField from "@/components/interactives/LoopAxisField";
+import PredictionQuestion from "@/components/interactives/PredictionQuestion";
 import RightHandRule from "@/components/interactives/RightHandRule";
 import {
   TeacherModeProvider,
@@ -24,8 +27,10 @@ const SECTION_NAV = [
   { id: "superposition", n: "§3", label: "Суперпозиция" },
   { id: "angles", n: "§4", label: "Ъглите" },
   { id: "infinity", n: "§5", label: "Границата" },
-  { id: "problems", n: "§6", label: "Задачи" },
-  { id: "recap", n: "§7", label: "Обобщение" },
+  { id: "arc", n: "§6", label: "Дъга" },
+  { id: "loop-axis", n: "§7", label: "Ос на контур" },
+  { id: "problems", n: "§8", label: "Задачи" },
+  { id: "recap", n: "§9", label: "Обобщение" },
 ] as const;
 
 /**
@@ -54,7 +59,7 @@ export default function BioSavartLessonPage() {
             Законът на Био-Савар: геометрията зад формулата
           </h1>
           <p className="text-[17px] text-muted">
-            Интерактивна глава: посока на полето, суперпозиция, ъглите при краен проводник и
+            Интерактивна глава: посока и суперпозиция, дъга и кръгов контур, краен проводник и
             границата към безкраен
           </p>
         </header>
@@ -79,7 +84,7 @@ export default function BioSavartLessonPage() {
               </li>
               <li>
                 <strong>Колко е силен?</strong> Приносът отслабва с квадрата на разстоянието и
-                зависи от ъгъла, под който точката „вижда“ елемента (§4).
+                зависи от ъгъла между елемента ток и посоката към точката (§4).
               </li>
             </ul>
             <p className="text-ink/90">
@@ -93,7 +98,7 @@ export default function BioSavartLessonPage() {
           <div className="mt-5 rounded-r-lg border-l-4 border-plus bg-hl px-4 py-3 text-[15.5px] leading-relaxed">
             <strong className="text-ink">Подходът в тази глава:</strong> първо „защо“ (геометрията),
             после „колко“ (числата). За всяка конфигурация се задава един и същи ритуал от два
-            въпроса — <strong className="text-ink">накъде сочи всяко dB?</strong> и{" "}
+            въпроса — <strong className="text-ink">накъде сочи всяко <RichText text="$d\vec B$" />?</strong> и{" "}
             <strong className="text-ink">събират ли се, или се компенсират?</strong> — и чак тогава
             идва сметката.
           </div>
@@ -194,9 +199,9 @@ export default function BioSavartLessonPage() {
           <div className="space-y-3">
             <p className="text-ink/90">
               Формулата за краен прав проводник изглежда различно в различните учебници само защото
-              ъгълът се <strong>дефинира</strong> по два начина. Геометрията е обща: от точката P се
+              ъгълът се <strong>дефинира</strong> по два начина. Геометрията е обща: от точката <RichText text="$P$" /> се
               спуска <strong>перпендикуляр</strong> към правата на проводника (разстоянието{" "}
-              <RichText text="$a$" />) и се гледа под какви ъгли от P се виждат{" "}
+              <RichText text="$a$" />) и се гледа под какви ъгли от <RichText text="$P$" /> се виждат{" "}
               <strong>двата края</strong>. Интерактивът показва двете означения и връзката между
               тях.
             </p>
@@ -205,12 +210,12 @@ export default function BioSavartLessonPage() {
             <FiniteWireAngles />
           </div>
           <div className="mt-5 rounded-r-lg border-l-4 border-plus bg-hl px-4 py-3 text-[15.5px] leading-relaxed">
-            <strong className="text-ink">θ и α не са един и същи ъгъл.</strong> Това са{" "}
-            <strong className="text-ink">две различни дефиниции на допълнителни ъгли</strong>: θ се
-            брои от перпендикуляра, α — от направлението на проводника, и винаги{" "}
-            <strong className="text-ink">θ + α = 90°</strong>. Оттам{" "}
+            <strong className="text-ink"><RichText text="$\theta$ и $\alpha$ не са един и същи ъгъл." /></strong> Това са{" "}
+            <strong className="text-ink">две различни дефиниции на допълнителни ъгли</strong>: <RichText text="$\theta$" /> се
+            брои от перпендикуляра, <RichText text="$\alpha$" /> — от направлението на проводника, и винаги{" "}
+            <strong className="text-ink"><RichText text="$\theta+\alpha=90^\circ$" /></strong>. Оттам{" "}
             <RichText text="$\sin\theta = \cos\alpha$" /> — затова формулата „със синуси“ и формулата
-            „с косинуси“ дават едно и също число. Режимът „θ + α = 90°“ показва двата ъгъла как
+            „с косинуси“ дават едно и също число. Режимът <RichText text="$\theta+\alpha=90^\circ$" /> показва двата ъгъла как
             запълват правия ъгъл заедно.
           </div>
           <TeacherNote>
@@ -261,8 +266,84 @@ export default function BioSavartLessonPage() {
           </TeacherNote>
         </Section>
 
-        {/* §6 Задачи */}
-        <Section id="problems" n="§6" title="Задачи с водено решение">
+        {/* §6 Кръгова дъга */}
+        <Section id="arc" n="§6" title="Поле в центъра на кръгова дъга">
+          <div className="space-y-3">
+            <p className="text-ink/90">
+              С инструментите от §1–§5 вече могат да се „четат“ и криви проводници. Първата
+              класическа геометрия: кръгова дъга с радиус <RichText text="$a$" /> и две прави
+              радиални части, а точката на наблюдение <RichText text="$O$" /> е центърът.
+            </p>
+          </div>
+          <div className="mt-5 mb-5">
+            <PredictionQuestion
+              prompt="Преди сметката: кои части на проводника изобщо създават поле в центъра $O$?"
+              options={[
+                { text: "Само дъгата — по правите части $d\\vec s\\parallel\\hat r$ и приносът е нула", correct: true },
+                { text: "Целият проводник — всяко парче ток дава принос", correct: false },
+                { text: "Само правите части — те са най-близо до O", correct: false },
+              ]}
+              explanation="Правите части са радиални: за всеки техен елемент $d\vec s\parallel\hat r$, затова $d\vec s\times\hat r=0$ — същата логика като в Задача 2 от §8. Геометрията зачерква две трети от проводника, преди да сме написали интеграл."
+            />
+          </div>
+          <div className="my-5"><CircularArcField /></div>
+          <div className="space-y-3">
+            <p className="text-ink/90">
+              По дъгата всеки елемент е на едно и също разстояние <RichText text="$a$" />, перпендикулярен е на{" "}
+              <RichText text="$\hat r$" /> (<RichText text="$\sin90^\circ=1$" />) и всички приноси сочат в една посока —
+              събират се като числа. Интегралът се свежда до дължината на дъгата{" "}
+              <RichText text="$s=a\theta$" />:
+            </p>
+            <Formula latex={String.raw`dB=\frac{\mu_0I}{4\pi}\frac{ds}{a^2}`} />
+            <Formula latex={String.raw`B=\frac{\mu_0I}{4\pi a^2}\int_{\text{дъга}}ds=\frac{\mu_0I}{4\pi a^2}(a\theta)=\boxed{\frac{\mu_0I\theta}{4\pi a}}`} />
+          </div>
+          <div className="mt-5 rounded-r-lg border-l-4 border-plus bg-hl px-4 py-3 text-[15.5px] leading-relaxed">
+            Ъгълът <strong>трябва да е в радиани</strong>. При пълна окръжност{" "}
+            <RichText text="$\theta=2\pi$" /> се получава важният граничен случай{" "}
+            <RichText text="$B(O)=\mu_0I/(2a)$" />.
+          </div>
+          <TeacherNote>
+            <p>Преди формулата попитайте кои части на проводника могат да бъдат зачеркнати само по посока. След това използвайте стойностите <RichText text="$90^\circ$" />, <RichText text="$180^\circ$" /> и <RichText text="$360^\circ$" />: полето трябва да расте линейно с <RichText text="$\theta$" />, не с <RichText text="$\theta^2$" />.</p>
+          </TeacherNote>
+        </Section>
+
+        {/* §7 Ос на кръгов контур */}
+        <Section id="loop-axis" n="§7" title="Поле по оста на кръгов токов контур">
+          <div className="space-y-3">
+            <p className="text-ink/90">
+              Втората класическа геометрия: контур с радиус <RichText text="$a$" /> лежи в равнината <RichText text="$yz$" />, а точката <RichText text="$P$" /> е на
+              разстояние <RichText text="$x$" /> по оста. Всеки елемент е на едно и също разстояние{" "}
+              <RichText text="$r=\sqrt{a^2+x^2}$" /> от <RichText text="$P$" /> и е перпендикулярен на посоката към <RichText text="$P$" /> —
+              но приносите му са <strong>наклонени</strong> спрямо оста.
+            </p>
+          </div>
+          <div className="mt-5 mb-5">
+            <PredictionQuestion
+              prompt="Съберат ли се приносите на всички елементи от контура, кои компоненти на $d\vec B$ оцеляват?"
+              options={[
+                { text: "Само компонентите по оста — напречните се унищожават по двойки срещуположни елементи", correct: true },
+                { text: "Всички — полето е просто сумата от модулите", correct: false },
+                { text: "Само напречните — те са по-големи", correct: false },
+              ]}
+              explanation="Всеки елемент има „огледален” партньор от другата страна на контура: осевите им компоненти са еднакви и се събират, а напречните са противоположни и се съкращават — точно случаят „частично компенсиране” от §3, повторен по целия контур."
+            />
+          </div>
+          <div className="my-5"><LoopAxisField /></div>
+          <div className="space-y-4">
+            <Formula latex={String.raw`dB=\frac{\mu_0I}{4\pi}\frac{ds}{a^2+x^2},\qquad dB_x=dB\cos\alpha`} />
+            <Formula latex={String.raw`\cos\alpha=\frac{a}{\sqrt{a^2+x^2}},\qquad \oint ds=2\pi a`} />
+            <Formula latex={String.raw`\boxed{B_x(x)=\frac{\mu_0Ia^2}{2(a^2+x^2)^{3/2}}}`} />
+          </div>
+          <ul className="mt-5 list-disc space-y-2 pl-5 text-ink/90">
+            <li>В центъра <RichText text="$x=0$" />: <RichText text="$B=\mu_0I/(2a)$" /> — същият резултат като пълната дъга от §6.</li>
+            <li>Далеч от контура <RichText text="$x\gg a$" />: <RichText text="$B_x\approx\mu_0Ia^2/(2x^3)$" /> — полето намалява като <RichText text="$1/x^3$" />, характерно за дипол.</li>
+            <li>Посоката по цялата ос се определя с правилото на дясната ръка за токовия контур.</li>
+          </ul>
+          <TeacherNote><p>Това е магнитният аналог на електричното поле по оста на зареден пръстен, но при магнитния случай започваме с векторното произведение. Изисквайте ученикът да посочи коя компонента се унищожава, преди да интегрира.</p></TeacherNote>
+        </Section>
+
+        {/* §8 Задачи */}
+        <Section id="problems" n="§8" title="Задачи с водено решение">
           <div className="space-y-3">
             <p className="text-ink/90">
               Всяка задача следва реда от §1: първо въпросът за <strong>посоката</strong>, после за{" "}
@@ -275,8 +356,8 @@ export default function BioSavartLessonPage() {
           </div>
         </Section>
 
-        {/* §7 Обобщение */}
-        <Section id="recap" n="§7" title="Обобщение">
+        {/* §9 Обобщение */}
+        <Section id="recap" n="§9" title="Обобщение">
           <div className="rounded-[10px] border-[1.5px] border-ink bg-surface px-5 py-4 shadow-hard">
             <ul className="list-disc space-y-2 pl-5 text-[15.5px] leading-relaxed text-ink/90">
               <li>
@@ -294,18 +375,26 @@ export default function BioSavartLessonPage() {
                 нулев принос, без сметки.
               </li>
               <li>
-                При краен проводник ъглите се мерят към двата края: от перпендикуляра (θ, sin) или
-                от проводника (α, cos) — допълнителни ъгли, θ + α = 90°, една и съща физика.
+                Кръгова дъга с ъгъл <RichText text="$\theta$" /> дава в центъра
+                <RichText text="$B=\mu_0I\theta/(4\pi a)$" />; радиалните прави части дават нула.
+              </li>
+              <li>
+                По оста на кръгов контур напречните компоненти се унищожават и
+                <RichText text="$B_x=\mu_0Ia^2/[2(a^2+x^2)^{3/2}]$" />.
+              </li>
+              <li>
+                При краен проводник ъглите се мерят към двата края: от перпендикуляра (<RichText text="$\theta,\,\sin$" />) или
+                от проводника (<RichText text="$\alpha,\,\cos$" />) — допълнителни ъгли, <RichText text="$\theta+\alpha=90^\circ$" />, една и съща физика.
               </li>
               <li>
                 „Безкраен проводник“ е граница: при <RichText text="$L \gg a$" /> ъглите клонят към
-                90°, скобата — към 2, и{" "}
+                <RichText text="$90^\circ$" />, скобата — към 2, и{" "}
                 <RichText text="$B \to \frac{\mu_0 I}{4\pi a}\cdot 2 = \frac{\mu_0 I}{2\pi a}$" />.
               </li>
             </ul>
           </div>
           <p className="mt-5 text-ink/90">
-            <strong>Свързана тема:</strong> законът на Ампер — при конфигурации с висока симетрия той
+            <strong>Свързана тема:</strong>{" "}<Link href="/physics/magnetizm/amper" className="font-semibold text-minus hover:underline">законът на Ампер</Link> — при конфигурации с висока симетрия той
             заменя интегрирането по Био-Савар с един ред. Двата закона описват едно и също поле от
             две различни страни.
           </p>

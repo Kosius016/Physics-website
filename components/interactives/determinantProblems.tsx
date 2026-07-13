@@ -1,6 +1,7 @@
-import { Arrow, C } from "./svg";
+import { Arrow, C, STAGE_BG } from "./svg";
 import { SvgMatrixScene, type Mat2 } from "./matrixCanvas";
 import type { GuidedProblemData } from "./GuidedProblem";
+import SvgTex from "./SvgTex";
 
 /**
  * Водени задачи за урока „Детерминанти — площта на трансформацията“.
@@ -21,24 +22,23 @@ export const determinantProblems: GuidedProblemData[] = [
       return (
         <g>
           <SvgMatrixScene m={M} checker square ox={130} oy={230} s={34} />
-          {phase >= 1 && (
-            <text x={16} y={26} fill={C.minus} fontSize={13} fontWeight={600} className="animate-rise">
-              шахматната мрежа е единичният квадрат — следете колко се разтяга
-            </text>
-          )}
           {phase >= 2 && (
-            <text x={300} y={60} fill={C.warn} fontSize={14} fontWeight={700} className="animate-rise">
-              всяка клетка × |det M|
-            </text>
+            <SvgTex x={460} y={54} tex="A'=|\det M|A" color={C.warn} fontSize={14} width={132} anchor="end" className="animate-rise" />
           )}
           {phase >= 3 && (
-            <text x={300} y={84} fill={C.ok} fontSize={15} fontWeight={700} className="animate-rise">
-              площ ×5 → памет ×5
-            </text>
+            <SvgTex x={460} y={82} tex="A'=5A" color={C.ok} fontSize={15} width={72} anchor="end" className="animate-rise" />
           )}
         </g>
       );
     },
+    figureCaption: (phase) =>
+      phase >= 3
+        ? "Площта и необходимата текстурна памет нарастват $5$ пъти."
+        : phase >= 2
+          ? "Всяка клетка умножава площта си по $|\det M|$."
+          : phase >= 1
+            ? "Шахматната мрежа проследява как се преобразува единичният квадрат."
+            : undefined,
     directionQuestion: {
       prompt: "Какво прави M с равнината, съдейки по колоните ѝ (3, 1) и (1, 2)?",
       options: [
@@ -126,24 +126,23 @@ export const determinantProblems: GuidedProblemData[] = [
               />
             </g>
           )}
-          {phase >= 1 && (
-            <text x={280} y={40} fill={C.mut} fontSize={13} className="animate-rise">
-              еднакви Δr и Δθ — различна площ
-            </text>
-          )}
           {phase >= 2 && (
-            <text x={280} y={64} fill={C.warn} fontSize={14} fontWeight={700} className="animate-rise">
-              площ ∝ r (по-далеч = по-голяма)
-            </text>
+            <SvgTex x={460} y={56} tex="dA\propto r" color={C.warn} fontSize={14} width={82} anchor="end" className="animate-rise" />
           )}
           {phase >= 3 && (
-            <text x={280} y={88} fill={C.ok} fontSize={15} fontWeight={700} className="animate-rise">
-              dA = r · dr · dθ
-            </text>
+            <SvgTex x={460} y={84} tex="dA=r\,dr\,d\theta" color={C.ok} fontSize={15} width={126} anchor="end" className="animate-rise" />
           )}
         </g>
       );
     },
+    figureCaption: (phase) =>
+      phase >= 3
+        ? "Локалният коефициент за площ е $\det J=r$, следователно $dA=r\,dr\,d\theta$."
+        : phase >= 2
+          ? "При еднакви $dr$ и $d\theta$ по-далечната клетка има по-голяма площ."
+          : phase >= 1
+            ? "Оцветените клетки имат еднакви стъпки $dr$ и $d\theta$, но различни радиуси."
+            : undefined,
     directionQuestion: {
       prompt: "Клетките на полярната мрежа с еднакви стъпки Δr и Δθ — еднаква площ ли имат?",
       options: [
@@ -201,14 +200,7 @@ export const determinantProblems: GuidedProblemData[] = [
           <line x1={T(-0.3, 0)[0]} y1={T(-0.3, 0)[1]} x2={T(6.3, 0)[0]} y2={T(6.3, 0)[1]} stroke="rgba(255,255,255,0.35)" strokeWidth={1.5} />
           {/* права 1: 2x+3y=8 → y=(8-2x)/3, x∈[-0.2, 6.2] */}
           <line x1={T(-0.2, 2.8)[0]} y1={T(-0.2, 2.8)[1]} x2={T(6.2, -1.47)[0]} y2={T(6.2, -1.47)[1]} stroke={C.minus} strokeWidth={2.5} />
-          <text x={T(4.6, 0.1)[0]} y={T(4.6, 0.1)[1] - 12} fill={C.minus} fontSize={13} fontWeight={600}>
-            2x + 3y = 8
-          </text>
-          {phase >= 1 && phase < 2 && (
-            <text x={16} y={30} fill={C.plus} fontSize={13.5} fontWeight={700} className="animate-rise">
-              4x + 6y = 16 е СЪЩАТА права — легнала точно отгоре
-            </text>
-          )}
+          <SvgTex x={T(4.6, 0.1)[0]} y={T(4.6, 0.1)[1] - 12} tex="2x+3y=8" color={C.minus} fontSize={12.5} width={92} />
           {phase >= 1 && phase < 2 && (
             <line x1={T(-0.2, 2.8)[0]} y1={T(-0.2, 2.8)[1]} x2={T(6.2, -1.47)[0]} y2={T(6.2, -1.47)[1]} stroke={C.plus} strokeWidth={1.5} strokeDasharray="8 6" className="animate-rise" />
           )}
@@ -216,18 +208,20 @@ export const determinantProblems: GuidedProblemData[] = [
             <g className="animate-rise">
               {/* права 2': 4x+5y=14 → y=(14-4x)/5 */}
               <line x1={T(-0.2, 2.96)[0]} y1={T(-0.2, 2.96)[1]} x2={T(4.5, -0.8)[0]} y2={T(4.5, -0.8)[1]} stroke={C.warn} strokeWidth={2.5} />
-              <text x={T(3.4, 0.6)[0]} y={T(3.4, 0.6)[1] - 10} fill={C.warn} fontSize={13} fontWeight={600}>
-                4x + 5y = 14
-              </text>
-              <circle cx={T(1, 2)[0]} cy={T(1, 2)[1]} r={6} fill={C.ok} stroke="#0e1420" strokeWidth={2} />
-              <text x={T(1, 2)[0] + 12} y={T(1, 2)[1] - 8} fill={C.ok} fontSize={14} fontWeight={700}>
-                (1, 2)
-              </text>
+              <SvgTex x={T(3.4, 0.6)[0]} y={T(3.4, 0.6)[1] - 10} tex="4x+5y=14" color={C.warn} fontSize={12.5} width={102} />
+              <circle cx={T(1, 2)[0]} cy={T(1, 2)[1]} r={6} fill={C.ok} stroke={STAGE_BG} strokeWidth={2} />
+              <SvgTex x={T(1, 2)[0] + 12} y={T(1, 2)[1] - 8} tex="(1,2)" color={C.ok} fontSize={13} width={54} />
             </g>
           )}
         </g>
       );
     },
+    figureCaption: (phase) =>
+      phase >= 2
+        ? "Подмененият втори сензор дава независима права и еднозначно пресичане в $(1,2)$."
+        : phase >= 1
+          ? "Уравнението $4x+6y=16$ лежи върху същата права като $2x+3y=8$: няма нова информация."
+          : undefined,
     directionQuestion: {
       prompt: "Може ли първата двойка показания (2x+3y=8 и 4x+6y=16) да определи x и y еднозначно?",
       options: [
@@ -296,31 +290,31 @@ export const determinantProblems: GuidedProblemData[] = [
           <polygon points={pts([A, B, Cc])} fill={phase >= 2 ? "rgba(232,86,63,0.4)" : "none"} stroke={C.wire} strokeWidth={2} />
           {phase >= 1 && (
             <g className="animate-rise">
-              <Arrow x1={A[0]} y1={A[1]} x2={B[0]} y2={B[1]} color={C.plus} width={2.5} label="AB=(3,1)" labelDy={16} />
-              <Arrow x1={A[0]} y1={A[1]} x2={Cc[0]} y2={Cc[1]} color={C.ok} width={2.5} label="AC=(1,4)" labelDx={-84} labelDy={-6} />
+              <Arrow x1={A[0]} y1={A[1]} x2={B[0]} y2={B[1]} color={C.plus} width={2.5} texLabel="\vec{AB}=(3,1)" texLabelDy={16} texLabelWidth={104} />
+              <Arrow x1={A[0]} y1={A[1]} x2={Cc[0]} y2={Cc[1]} color={C.ok} width={2.5} texLabel="\vec{AC}=(1,4)" texLabelDx={-84} texLabelDy={-6} texLabelWidth={104} />
             </g>
           )}
           {[["A", A], ["B", B], ["C", Cc]].map(([lb, p]) => (
             <g key={lb as string}>
-              <circle cx={(p as [number, number])[0]} cy={(p as [number, number])[1]} r={5} fill={C.warn} stroke="#0e1420" strokeWidth={2} />
-              <text x={(p as [number, number])[0] + 9} y={(p as [number, number])[1] + 14} fill={C.warn} fontSize={13.5} fontWeight={700}>
-                {lb as string}
-              </text>
+              <circle cx={(p as [number, number])[0]} cy={(p as [number, number])[1]} r={5} fill={C.warn} stroke={STAGE_BG} strokeWidth={2} />
+              <SvgTex x={(p as [number, number])[0] + 9} y={(p as [number, number])[1] + 14} tex={lb as string} color={C.warn} fontSize={13} width={24} />
             </g>
           ))}
-          {phase >= 2 && (
-            <text x={300} y={40} fill={C.mut} fontSize={13} className="animate-rise">
-              успоредникът = |det| = 11; триъгълникът е половината
-            </text>
-          )}
+          {phase >= 2 && <SvgTex x={460} y={40} tex="S_{\parallel}=|\det|=11" color={C.mut} fontSize={13} width={134} anchor="end" className="animate-rise" />}
           {phase >= 3 && (
-            <text x={300} y={64} fill={C.ok} fontSize={15} fontWeight={700} className="animate-rise">
-              S = 5.5 (× 10⁴ m²)
-            </text>
+            <SvgTex x={460} y={66} tex="S_{\triangle}=5.5\times10^4\,\mathrm{m^2}" color={C.ok} fontSize={14} width={170} anchor="end" className="animate-rise" />
           )}
         </g>
       );
     },
+    figureCaption: (phase) =>
+      phase >= 3
+        ? "Триъгълникът е половината от успоредника: $S_\triangle=5.5\times10^4\,\mathrm{m^2}$."
+        : phase >= 2
+          ? "Успоредникът върху $\vec{AB}$ и $\vec{AC}$ има площ $|\det|=11$."
+          : phase >= 1
+            ? "Векторите $\vec{AB}=(3,1)$ и $\vec{AC}=(1,4)$ опъват успоредника."
+            : undefined,
     directionQuestion: {
       prompt: "Успоредникът, опънат върху векторите AB и AC, има площ |det|. Каква част от него е триъгълникът ABC?",
       options: [

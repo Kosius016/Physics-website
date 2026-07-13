@@ -2,6 +2,8 @@
 
 import { useRef, useState } from "react";
 import Formula from "@/components/Formula";
+import RichText from "@/components/RichText";
+import SvgTex from "./SvgTex";
 import { Arrow, AngleArc, C, PANEL_CLASS, STAGE_BG, STAGE_CLASS, svgPoint } from "./svg";
 
 /**
@@ -24,12 +26,23 @@ const HALF_L = 140;
 const A_TOP = { x: WIRE_X, y: CY - HALF_L }; // край 1 (горе)
 const A_BOT = { x: WIRE_X, y: CY + HALF_L }; // край 2 (долу)
 
+function angleLabelPoint(cx: number, cy: number, a1: number, a2: number, r: number) {
+  let d = a2 - a1;
+  while (d > Math.PI) d -= 2 * Math.PI;
+  while (d < -Math.PI) d += 2 * Math.PI;
+  const mid = a1 + d / 2;
+  return {
+    x: Math.max(WIRE_X + 20, Math.min(W - 20, cx + (r + 14) * Math.cos(mid))),
+    y: Math.max(18, Math.min(H - 18, cy + (r + 14) * Math.sin(mid))),
+  };
+}
+
 type Mode = "theta" | "alpha" | "both";
 
 const MODES: { key: Mode; label: string }[] = [
-  { key: "theta", label: "θ от перпендикуляра" },
-  { key: "alpha", label: "α от проводника" },
-  { key: "both", label: "θ + α = 90°" },
+  { key: "theta", label: "$\\theta$ от перпендикуляра" },
+  { key: "alpha", label: "$\\alpha$ от проводника" },
+  { key: "both", label: "$\\theta+\\alpha=90^\\circ$" },
 ];
 
 export default function FiniteWireAngles() {
@@ -66,34 +79,59 @@ export default function FiniteWireAngles() {
   const dirUp = -Math.PI / 2;
   const dirDown = Math.PI / 2;
 
+  // Дъгата не може да е по-голяма от отсечката от P до проводника.
+  // При P близо до ръб на сцената ограничаваме и вертикалния радиус.
+  const roomBeforeWire = a - 10;
+  const thetaOuterR = Math.min(60, roomBeforeWire);
+  const thetaInnerR = Math.min(44, Math.max(16, thetaOuterR - 14));
+  const alphaTopR = Math.max(12, Math.min(44, roomBeforeWire, p.y - 8));
+  const alphaBottomR = Math.max(12, Math.min(60, roomBeforeWire, H - p.y - 8));
+  const bothAlphaR = Math.max(12, Math.min(56, roomBeforeWire, p.y - 8));
+  const rightAngleSize = Math.max(10, Math.min(26, roomBeforeWire, p.y - 8));
+
+  const theta1Label = angleLabelPoint(p.x, p.y, dirPerp, dirR1, thetaInnerR);
+  const theta2Label = angleLabelPoint(p.x, p.y, dirPerp, dirR2, thetaOuterR);
+  const alpha1Label = angleLabelPoint(p.x, p.y, dirUp, dirR1, alphaTopR);
+  const alpha2Label = angleLabelPoint(p.x, p.y, dirDown, dirR2, alphaBottomR);
+  const bothFormulaOnRight = p.x < W - 180;
+  const bothFormulaOffset = Math.max(40, bothAlphaR + 14);
+  const bothFormulaY = p.y - bothFormulaOffset >= 18
+    ? p.y - bothFormulaOffset
+    : Math.min(H - 18, p.y + bothFormulaOffset);
+  // В комбинирания режим двете означения се раздалечават от свободната
+  // страна на P. Така не се наслагват едно върху друго при P отвъд края.
+  const bothLabelsOnRight = p.x < W - 100;
+  const bothLabelX = p.x + (bothLabelsOnRight ? 50 : -50);
+  const bothThetaLabelY = Math.min(H - 18, p.y + 17);
+  const bothAlphaLabelY = Math.max(18, p.y - 17);
+
   const readout: { label: string; value: string }[] =
     mode === "theta"
       ? [
-          { label: "a (перп. разст.)", value: (a / 40).toFixed(2) + " ед." },
-          { label: "θ₁", value: th1.toFixed(1) + "°" },
-          { label: "θ₂", value: th2.toFixed(1) + "°" },
-          { label: "sin θ₁ + sin θ₂", value: sinSum.toFixed(3) },
+          { label: "$a$ (перп. разст.)", value: `$${(a / 40).toFixed(2)}\\,\\text{ед.}$` },
+          { label: "$\\theta_1$", value: `$${th1.toFixed(1)}^\\circ$` },
+          { label: "$\\theta_2$", value: `$${th2.toFixed(1)}^\\circ$` },
+          { label: "$\\sin\\theta_1+\\sin\\theta_2$", value: `$${sinSum.toFixed(3)}$` },
         ]
       : mode === "alpha"
         ? [
-            { label: "a (перп. разст.)", value: (a / 40).toFixed(2) + " ед." },
-            { label: "α₁ = 90° − θ₁", value: (90 - th1).toFixed(1) + "°" },
-            { label: "α₂ = 90° − θ₂", value: (90 - th2).toFixed(1) + "°" },
-            { label: "cos α₁ + cos α₂", value: sinSum.toFixed(3) },
+            { label: "$a$ (перп. разст.)", value: `$${(a / 40).toFixed(2)}\\,\\text{ед.}$` },
+            { label: "$\\alpha_1=90^\\circ-\\theta_1$", value: `$${(90 - th1).toFixed(1)}^\\circ$` },
+            { label: "$\\alpha_2=90^\\circ-\\theta_2$", value: `$${(90 - th2).toFixed(1)}^\\circ$` },
+            { label: "$\\cos\\alpha_1+\\cos\\alpha_2$", value: `$${sinSum.toFixed(3)}$` },
           ]
         : [
-            { label: "θ₁", value: th1.toFixed(1) + "°" },
-            { label: "α₁", value: (90 - th1).toFixed(1) + "°" },
-            { label: "θ₁ + α₁", value: "90.0°" },
-            { label: "sin θ₁ = cos α₁", value: sin1.toFixed(3) },
+            { label: "$\\theta_1$", value: `$${th1.toFixed(1)}^\\circ$` },
+            { label: "$\\alpha_1$", value: `$${(90 - th1).toFixed(1)}^\\circ$` },
+            { label: "$\\theta_1+\\alpha_1$", value: "$90.0^\\circ$" },
+            { label: "$\\sin\\theta_1=\\cos\\alpha_1$", value: `$${sin1.toFixed(3)}$` },
           ];
 
   return (
     <div className={PANEL_CLASS}>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
         <p className="text-[14px] text-muted">
-          Преместете точката <strong className="text-ink">P</strong> — включително отвъд краищата на
-          проводника.
+          <RichText text="Преместете точката $P$ — включително отвъд краищата на проводника." />
         </p>
         <div className="flex flex-wrap gap-2">
           {MODES.map((m) => (
@@ -106,7 +144,7 @@ export default function FiniteWireAngles() {
               }
               onClick={() => setMode(m.key)}
             >
-              {m.label}
+              <RichText text={m.label} />
             </button>
           ))}
         </div>
@@ -130,13 +168,11 @@ export default function FiniteWireAngles() {
         {/* Проводникът (краен) с ток нагоре */}
         <line x1={WIRE_X} y1={A_TOP.y} x2={WIRE_X} y2={A_BOT.y} stroke={C.wire} strokeWidth={4} />
         <Arrow x1={WIRE_X} y1={CY + 16} x2={WIRE_X} y2={CY - 16} color={C.warn} width={3} />
-        <text x={WIRE_X - 26} y={CY + 5} fill={C.warn} fontSize={15} fontWeight={700}>
-          I
-        </text>
+        <SvgTex x={WIRE_X - 26} y={CY} tex="I" color={C.warn} width={22} anchor="end" />
         {[A_TOP, A_BOT].map((e, i) => (
           <g key={i}>
             <circle cx={e.x} cy={e.y} r={5} fill={C.wire} />
-            <text x={e.x - 28} y={e.y + 5} fill={C.mut} fontSize={13}>
+            <text x={e.x - 40} y={e.y + 4} fill={C.mut} fontSize={13} textAnchor="middle">
               {i === 0 ? "1" : "2"}
             </text>
           </g>
@@ -144,9 +180,7 @@ export default function FiniteWireAngles() {
 
         {/* Перпендикулярът от P към правата на проводника */}
         <line x1={WIRE_X} y1={p.y} x2={p.x} y2={p.y} stroke={C.mut} strokeWidth={1.6} strokeDasharray="6 5" />
-        <text x={(WIRE_X + p.x) / 2} y={p.y - 8} fill={C.mut} fontSize={13.5} fontWeight={600} textAnchor="middle">
-          a
-        </text>
+        <SvgTex x={(WIRE_X + p.x) / 2} y={p.y - 10} tex="a" color={C.mut} width={30} anchor="middle" />
         <path d={`M ${WIRE_X + 10} ${p.y} L ${WIRE_X + 10} ${p.y - 10} L ${WIRE_X} ${p.y - 10}`} fill="none" stroke={C.faint} strokeWidth={1.3} />
 
         {/* Помощна права, успоредна на проводника, през P (за α и за правия ъгъл) */}
@@ -155,53 +189,62 @@ export default function FiniteWireAngles() {
         )}
 
         {/* r-векторите към двата края */}
-        <Arrow x1={p.x} y1={p.y} x2={A_TOP.x} y2={A_TOP.y} color={C.minus} width={2.2} label="r₁" labelDx={-24} labelDy={-2} />
-        <Arrow x1={p.x} y1={p.y} x2={A_BOT.x} y2={A_BOT.y} color={C.minus} width={2.2} label="r₂" labelDx={-24} labelDy={12} />
+        <Arrow x1={p.x} y1={p.y} x2={A_TOP.x} y2={A_TOP.y} color={C.minus} width={2.2} texLabel="r_1" texLabelDy={-2} />
+        <Arrow x1={p.x} y1={p.y} x2={A_BOT.x} y2={A_BOT.y} color={C.minus} width={2.2} texLabel="r_2" texLabelDy={8} />
 
         {/* Дъгите на ъглите при P */}
         {mode === "theta" && (
           <g>
-            <AngleArc cx={p.x} cy={p.y} a1={dirPerp} a2={dirR1} r={44} color={C.plus} label={`θ₁=${th1.toFixed(0)}°`} />
-            <AngleArc cx={p.x} cy={p.y} a1={dirPerp} a2={dirR2} r={60} color={C.plus} label={`θ₂=${th2.toFixed(0)}°`} />
+            <AngleArc cx={p.x} cy={p.y} a1={dirPerp} a2={dirR1} r={thetaInnerR} color={C.plus} />
+            <AngleArc cx={p.x} cy={p.y} a1={dirPerp} a2={dirR2} r={thetaOuterR} color={C.plus} />
+            <SvgTex x={theta1Label.x} y={theta1Label.y} tex={String.raw`\theta_1`} color={C.plus} fontSize={12.5} width={46} anchor="middle" />
+            <SvgTex x={theta2Label.x} y={theta2Label.y} tex={String.raw`\theta_2`} color={C.plus} fontSize={12.5} width={46} anchor="middle" />
           </g>
         )}
         {mode === "alpha" && (
           <g>
-            <AngleArc cx={p.x} cy={p.y} a1={dirUp} a2={dirR1} r={44} color={C.ok} label={`α₁=${(90 - th1).toFixed(0)}°`} />
-            <AngleArc cx={p.x} cy={p.y} a1={dirDown} a2={dirR2} r={60} color={C.ok} label={`α₂=${(90 - th2).toFixed(0)}°`} />
+            <AngleArc cx={p.x} cy={p.y} a1={dirUp} a2={dirR1} r={alphaTopR} color={C.ok} />
+            <AngleArc cx={p.x} cy={p.y} a1={dirDown} a2={dirR2} r={alphaBottomR} color={C.ok} />
+            <SvgTex x={alpha1Label.x} y={alpha1Label.y} tex={String.raw`\alpha_1`} color={C.ok} fontSize={12.5} width={46} anchor="middle" />
+            <SvgTex x={alpha2Label.x} y={alpha2Label.y} tex={String.raw`\alpha_2`} color={C.ok} fontSize={12.5} width={46} anchor="middle" />
           </g>
         )}
         {mode === "both" && (
           <g>
             {/* Правият ъгъл между перпендикуляра и успоредната на проводника */}
             <path
-              d={`M ${p.x - 26} ${p.y} L ${p.x - 26} ${p.y - 26} L ${p.x} ${p.y - 26}`}
+              d={`M ${p.x - rightAngleSize} ${p.y} L ${p.x - rightAngleSize} ${p.y - rightAngleSize} L ${p.x} ${p.y - rightAngleSize}`}
               fill="none"
               stroke={C.mut}
               strokeWidth={1.5}
             />
             {/* θ₁ (от перпендикуляра до r₁) + α₁ (от r₁ до проводника) запълват 90° */}
-            <AngleArc cx={p.x} cy={p.y} a1={dirPerp} a2={dirR1} r={44} color={C.plus} label={`θ₁=${th1.toFixed(0)}°`} />
-            <AngleArc cx={p.x} cy={p.y} a1={dirR1} a2={dirUp} r={56} color={C.ok} label={`α₁=${(90 - th1).toFixed(0)}°`} />
-            <text x={p.x + 14} y={p.y - 44} fill={C.wire} fontSize={13} fontWeight={700}>
-              θ₁ + α₁ = 90°
-            </text>
+            <AngleArc cx={p.x} cy={p.y} a1={dirPerp} a2={dirR1} r={thetaInnerR} color={C.plus} />
+            <AngleArc cx={p.x} cy={p.y} a1={dirR1} a2={dirUp} r={bothAlphaR} color={C.ok} />
+            <SvgTex x={bothLabelX} y={bothThetaLabelY} tex={String.raw`\theta_1`} color={C.plus} fontSize={12.5} width={46} anchor="middle" />
+            <SvgTex x={bothLabelX} y={bothAlphaLabelY} tex={String.raw`\alpha_1`} color={C.ok} fontSize={12.5} width={46} anchor="middle" />
+            <SvgTex
+              x={bothFormulaOnRight ? p.x + 14 : p.x - 14}
+              y={bothFormulaY}
+              tex={String.raw`\theta_1+\alpha_1=90^\circ`}
+              color={C.wire}
+              width={150}
+              anchor={bothFormulaOnRight ? "start" : "end"}
+            />
           </g>
         )}
 
         {/* Точката P */}
         <circle cx={p.x} cy={p.y} r={7} fill={C.wire} style={{ cursor: "grab" }} />
-        <text x={p.x + 14} y={p.y + 5} fill={C.wire} fontSize={14} fontWeight={700}>
-          P
-        </text>
+        <SvgTex x={p.x + 14} y={p.y} tex="P" color={C.wire} width={30} />
       </svg>
 
       {/* Живи стойности */}
       <dl className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-[10px] border-[1.5px] border-ink bg-rule sm:grid-cols-4">
         {readout.map((r) => (
           <div key={r.label} className="bg-surface px-3 py-2.5">
-            <dt className="text-[10.5px] font-bold uppercase tracking-wide text-muted">{r.label}</dt>
-            <dd className="mt-0.5 text-[15px] font-bold tabular-nums text-minus">{r.value}</dd>
+            <dt className="text-[10.5px] font-bold tracking-wide text-muted"><RichText text={r.label} /></dt>
+            <dd className="mt-0.5 text-[15px] font-bold tabular-nums text-minus"><RichText text={r.value} /></dd>
           </div>
         ))}
       </dl>
@@ -220,29 +263,13 @@ export default function FiniteWireAngles() {
 
       <div className="mt-3 rounded-r-lg border-l-4 border-minus bg-hl px-4 py-2.5 text-[15px] leading-relaxed">
         {mode === "theta" && (
-          <>
-            <strong className="text-ink">θ се мери от перпендикуляра a към r-вектора.</strong> Затова
-            във формулата стои sin θ. Когато P се премести отвъд някой край, съответният ъгъл става{" "}
-            <strong className="text-ink">отрицателен</strong> и приносът му се изважда.
-          </>
+          <RichText text="**Посока на измерване:** $\theta$ се мери от перпендикуляра $a$ към $\vec r$. Затова във формулата стои $\sin\theta$. Когато $P$ се премести отвъд някой край, съответният ъгъл става **отрицателен** и приносът му се изважда." />
         )}
         {mode === "alpha" && (
-          <>
-            <strong className="text-ink">α се мери от направлението на проводника към r-вектора</strong>{" "}
-            (пунктираната успоредна права през P). Това е <strong className="text-ink">различен
-            ъгъл</strong> от θ — двата са <strong className="text-ink">допълнителни</strong>: θ + α =
-            90°. Затова sin θ = cos α и двете формули дават едно и също число — сумата в таблицата не
-            зависи от избора на означение.
-          </>
+          <RichText text="**Посока на измерване:** $\alpha$ се мери от направлението на проводника към $\vec r$ (пунктираната успоредна права през $P$). Това е **различен ъгъл** от $\theta$ — двата са **допълнителни**: $\theta+\alpha=90^\circ$. Затова $\sin\theta=\cos\alpha$ и двете формули дават едно и също число." />
         )}
         {mode === "both" && (
-          <>
-            <strong className="text-ink">Ето и двата ъгъла едновременно:</strong> перпендикулярът и
-            проводникът затварят прав ъгъл (маркиран при P), а r-векторът го разделя на θ (червено, от
-            перпендикуляра) и α (зелено, от проводника). Двете части винаги дават{" "}
-            <strong className="text-ink">θ + α = 90°</strong> — затова sin θ = cos α. Учебниците
-            избират едното означение, но физиката е една и съща.
-          </>
+          <RichText text="**Ето и двата ъгъла едновременно:** перпендикулярът и проводникът затварят прав ъгъл при $P$, а $\vec r$ го разделя на $\theta$ и $\alpha$. Двете части винаги дават $\theta+\alpha=90^\circ$, затова $\sin\theta=\cos\alpha$." />
         )}
       </div>
     </div>

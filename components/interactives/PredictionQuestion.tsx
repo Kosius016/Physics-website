@@ -37,7 +37,7 @@ export default function PredictionQuestion({
 
   return (
     <div>
-      <p className="mb-3 font-semibold text-ink">{prompt}</p>
+      <p className="mb-3 font-semibold text-ink"><RichText text={prompt} /></p>
       <div className="flex flex-col gap-2.5">
         {options.map((opt, oi) => {
           let cls = "rounded-[10px] border-[1.5px] px-4 py-2.5 text-left text-[15px] transition-all ";
@@ -61,7 +61,7 @@ export default function PredictionQuestion({
               }}
               className={cls}
             >
-              {opt.text}
+              <RichText text={opt.text} />
             </button>
           );
         })}

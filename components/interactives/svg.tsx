@@ -1,23 +1,26 @@
+import SvgTex from "./SvgTex";
+
 /**
  * Споделени помощници за интерактивните фигури (SVG върху тъмна сцена,
  * като canvas-а на съществуващите симулации). Цветовете са светлите
- * варианти на палитрата, четими върху #0e1420.
+ * варианти на палитрата, четими върху мек графитен фон.
  */
 
-export const STAGE_BG = "#0e1420";
+export const STAGE_BG = "#24212d";
 
 export const C = {
-  wire: "#e8edf2",
-  plus: "#e8563f", // червено (ток "+", dB₂, грешка)
-  minus: "#5fa8f5", // синьо (dB₁, r-вектори)
-  ok: "#4fc47e", // зелено (резултат, вярно)
-  warn: "#ffd34d", // жълто (акценти)
-  mut: "rgba(255,255,255,0.55)",
-  faint: "rgba(255,255,255,0.25)",
+  wire: "#f2eff5",
+  plus: "#ff7654", // топло оранжево-червено (плюс, грешка)
+  minus: "#59adff", // чисто студено синьо (минус, r-вектори)
+  ok: "#62d7a0", // меко зелено (резултат, вярно)
+  warn: "#ffd166", // топло жълто (акценти)
+  mut: "rgba(242,239,245,0.64)",
+  faint: "rgba(242,239,245,0.28)",
 } as const;
 
 /** Клас за <svg> сцена — както canvas-а на симулациите. */
-export const STAGE_CLASS = "block h-auto w-full rounded-[10px] border-[1.5px] border-ink";
+export const STAGE_CLASS =
+  "block h-auto w-full rounded-[10px] border-[1.5px] border-ink [image-rendering:pixelated]";
 
 /** Бял панел около интерактив — както секцията "Симулация". */
 export const PANEL_CLASS = "rounded-xl border-[1.5px] border-ink bg-surface p-4 shadow-hard";
@@ -38,8 +41,13 @@ export function Arrow({
   width = 2.5,
   dashed = false,
   label,
+  texLabel,
   labelDx = 8,
   labelDy = 4,
+  texLabelDx = 0,
+  texLabelDy = 0,
+  texLabelWidth = 96,
+  texLabelAnchor,
   animate = false,
 }: {
   x1: number;
@@ -50,16 +58,27 @@ export function Arrow({
   width?: number;
   dashed?: boolean;
   label?: string;
+  texLabel?: string;
   labelDx?: number;
   labelDy?: number;
+  texLabelDx?: number;
+  texLabelDy?: number;
+  texLabelWidth?: number;
+  texLabelAnchor?: "start" | "middle" | "end";
   animate?: boolean;
 }) {
+  const q = (v: number) => Math.round(v * 1_000_000) / 1_000_000;
   const ang = Math.atan2(y2 - y1, x2 - x1);
   const hl = 9;
-  const bx = x2 - hl * Math.cos(ang);
-  const by = y2 - hl * Math.sin(ang);
-  const wx = 4 * Math.sin(ang);
-  const wy = -4 * Math.cos(ang);
+  const bx = q(x2 - hl * Math.cos(ang));
+  const by = q(y2 - hl * Math.sin(ang));
+  const wx = q(4 * Math.sin(ang));
+  const wy = q(-4 * Math.cos(ang));
+  const labelCos = Math.cos(ang);
+  const labelSin = Math.sin(ang);
+  const texAnchor = texLabelAnchor ?? (labelCos < -0.2 ? "end" : labelCos > 0.2 ? "start" : "middle");
+  const texX = q(x2 + 14 * labelCos + texLabelDx);
+  const texY = q(y2 + 14 * labelSin + texLabelDy);
   return (
     <g className={animate ? "animate-rise" : undefined}>
       <line
@@ -72,10 +91,19 @@ export function Arrow({
         strokeDasharray={dashed ? "5 4" : undefined}
       />
       <polygon
-        points={`${x2},${y2} ${bx + wx},${by + wy} ${bx - wx},${by - wy}`}
+        points={`${q(x2)},${q(y2)} ${q(bx + wx)},${q(by + wy)} ${q(bx - wx)},${q(by - wy)}`}
         fill={color}
       />
-      {label && (
+      {texLabel ? (
+        <SvgTex
+          x={texX}
+          y={texY}
+          tex={texLabel}
+          color={color}
+          width={texLabelWidth}
+          anchor={texAnchor}
+        />
+      ) : label ? (
         <text
           x={x2 + labelDx}
           y={y2 + labelDy}
@@ -85,7 +113,7 @@ export function Arrow({
         >
           {label}
         </text>
-      )}
+      ) : null}
     </g>
   );
 }
@@ -98,6 +126,7 @@ export function CurrentSymbol({
   r = 13,
   color,
   label,
+  texLabel,
   animate = false,
 }: {
   x: number;
@@ -106,6 +135,7 @@ export function CurrentSymbol({
   r?: number;
   color: string;
   label?: string;
+  texLabel?: string;
   animate?: boolean;
 }) {
   const k = r * 0.55;
@@ -120,11 +150,13 @@ export function CurrentSymbol({
           <line x1={x - k} y1={y + k} x2={x + k} y2={y - k} />
         </g>
       )}
-      {label && (
+      {texLabel ? (
+        <SvgTex x={x + r + 6} y={y + 1} tex={texLabel} color={color} width={104} />
+      ) : label ? (
         <text x={x + r + 6} y={y + 4} fill={color} fontSize={13.5} fontWeight={700}>
           {label}
         </text>
-      )}
+      ) : null}
     </g>
   );
 }
@@ -138,6 +170,7 @@ export function AngleArc({
   r,
   color,
   label,
+  texLabel,
 }: {
   cx: number;
   cy: number;
@@ -146,6 +179,7 @@ export function AngleArc({
   r: number;
   color: string;
   label?: string;
+  texLabel?: string;
 }) {
   let d = a2 - a1;
   while (d > Math.PI) d -= 2 * Math.PI;
@@ -164,7 +198,17 @@ export function AngleArc({
         stroke={color}
         strokeWidth={1.8}
       />
-      {label && (
+      {texLabel ? (
+        <SvgTex
+          x={cx + (r + 15) * Math.cos(mid)}
+          y={cy + (r + 15) * Math.sin(mid)}
+          tex={texLabel}
+          color={color}
+          fontSize={12.5}
+          width={84}
+          anchor="middle"
+        />
+      ) : label ? (
         <text
           x={cx + (r + 15) * Math.cos(mid)}
           y={cy + (r + 15) * Math.sin(mid)}
@@ -176,7 +220,7 @@ export function AngleArc({
         >
           {label}
         </text>
-      )}
+      ) : null}
     </g>
   );
 }

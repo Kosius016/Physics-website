@@ -1,3 +1,5 @@
+import { C, STAGE_BG } from "./svg";
+
 /**
  * Споделено ядро за матричните интерактиви (уроци по линейна алгебра):
  * 2×2 матрици, рисуване на трансформирана сцена върху тъмен canvas
@@ -57,10 +59,10 @@ const SPRITE = [
   "....y....",
 ];
 const SPRITE_COLORS: Record<string, string> = {
-  w: "#e8edf2",
-  b: "#5fa8f5",
-  r: "#e8563f",
-  y: "#ffd34d",
+  w: C.wire,
+  b: C.minus,
+  r: C.plus,
+  y: C.warn,
 };
 const SPRITE_PX = 0.28; // размер на пиксел в световни единици
 const SPRITE_ORIGIN = { x: 0.45, y: 0.25 }; // долен ляв ъгъл на спрайта
@@ -118,11 +120,11 @@ export interface SceneOpts {
 
 /** Рисува цялата сцена за матрица M върху тъмния canvas. */
 export function drawMatrixScene(ctx: CanvasRenderingContext2D, M: Mat2, opts: SceneOpts) {
-  ctx.fillStyle = "#0e1420";
+  ctx.fillStyle = STAGE_BG;
   ctx.fillRect(0, 0, MC_W, MC_H);
 
   // Оригиналната решетка (бледа, статична)
-  ctx.strokeStyle = "rgba(255,255,255,0.05)";
+  ctx.strokeStyle = "rgba(242,239,245,0.075)";
   ctx.lineWidth = 1;
   for (let k = -GRID_RANGE; k <= GRID_RANGE; k++) {
     ctx.beginPath();
@@ -138,7 +140,7 @@ export function drawMatrixScene(ctx: CanvasRenderingContext2D, M: Mat2, opts: Sc
   // Трансформираната решетка (образът на квадратната мрежа)
   for (let k = -GRID_RANGE; k <= GRID_RANGE; k++) {
     const axis = k === 0;
-    ctx.strokeStyle = axis ? "rgba(95,168,245,0.65)" : "rgba(95,168,245,0.16)";
+    ctx.strokeStyle = axis ? "rgba(89,173,255,0.72)" : "rgba(89,173,255,0.21)";
     ctx.lineWidth = axis ? 1.8 : 1;
     ctx.beginPath();
     ctx.moveTo(...tx(M, k, -GRID_RANGE));
@@ -160,7 +162,7 @@ export function drawMatrixScene(ctx: CanvasRenderingContext2D, M: Mat2, opts: Sc
         const x1 = (i + 1) / n;
         const y1 = (j + 1) / n;
         poly(ctx, [tx(M, x0, y0), tx(M, x1, y0), tx(M, x1, y1), tx(M, x0, y1)]);
-        ctx.fillStyle = (i + j) % 2 === 0 ? "rgba(232,86,63,0.6)" : "rgba(95,168,245,0.6)";
+        ctx.fillStyle = (i + j) % 2 === 0 ? "rgba(255,118,84,0.66)" : "rgba(89,173,255,0.66)";
         ctx.fill();
       }
     }
@@ -190,7 +192,7 @@ export function drawMatrixScene(ctx: CanvasRenderingContext2D, M: Mat2, opts: Sc
   // Образът на единичния квадрат
   if (opts.squareOutline) {
     poly(ctx, [tx(M, 0, 0), tx(M, 1, 0), tx(M, 1, 1), tx(M, 0, 1)]);
-    ctx.strokeStyle = "#ffd34d";
+    ctx.strokeStyle = C.warn;
     ctx.lineWidth = 2;
     ctx.stroke();
   }
@@ -198,12 +200,12 @@ export function drawMatrixScene(ctx: CanvasRenderingContext2D, M: Mat2, opts: Sc
   // Базисните вектори
   if (opts.basis) {
     const o = tx(M, 0, 0);
-    arrow(ctx, o, tx(M, 1, 0), "#e8563f", "î′");
-    arrow(ctx, o, tx(M, 0, 1), "#4fc47e", "ĵ′");
+    arrow(ctx, o, tx(M, 1, 0), C.plus, "î′");
+    arrow(ctx, o, tx(M, 0, 1), C.ok, "ĵ′");
   }
 
   // Начало
-  ctx.fillStyle = "#e8edf2";
+  ctx.fillStyle = C.wire;
   ctx.beginPath();
   ctx.arc(OX, OY, 3, 0, 2 * Math.PI);
   ctx.fill();
@@ -248,7 +250,7 @@ export function SvgMatrixScene({
     <g>
       {grid &&
         Array.from({ length: 2 * R + 1 }, (_, i) => i - R).map((k) => (
-          <g key={k} stroke={k === 0 ? "rgba(95,168,245,0.55)" : "rgba(95,168,245,0.13)"} strokeWidth={k === 0 ? 1.6 : 1}>
+          <g key={k} stroke={k === 0 ? "rgba(89,173,255,0.7)" : "rgba(89,173,255,0.2)"} strokeWidth={k === 0 ? 1.6 : 1}>
             <line x1={T(k, -R)[0]} y1={T(k, -R)[1]} x2={T(k, R)[0]} y2={T(k, R)[1]} />
             <line x1={T(-R, k)[0]} y1={T(-R, k)[1]} x2={T(R, k)[0]} y2={T(R, k)[1]} />
           </g>
@@ -267,7 +269,7 @@ export function SvgMatrixScene({
             <polygon
               key={idx}
               points={pts(c4)}
-              fill={(i + j) % 2 === 0 ? "rgba(232,86,63,0.6)" : "rgba(95,168,245,0.6)"}
+              fill={(i + j) % 2 === 0 ? "rgba(255,118,84,0.66)" : "rgba(89,173,255,0.66)"}
             />
           );
         })}
@@ -293,11 +295,11 @@ export function SvgMatrixScene({
         <polygon
           points={pts([T(0, 0), T(1, 0), T(1, 1), T(0, 1)])}
           fill="none"
-          stroke="#ffd34d"
+          stroke={C.warn}
           strokeWidth={2}
         />
       )}
-      <circle cx={ox} cy={oy} r={2.5} fill="#e8edf2" />
+      <circle cx={ox} cy={oy} r={2.5} fill={C.wire} />
     </g>
   );
 }
