@@ -1,10 +1,11 @@
 import type { GuidedProblemData } from "./GuidedProblem";
 import { Arrow, C, CurrentSymbol, STAGE_BG } from "./svg";
+import SvgTex from "./SvgTex";
 
 const q = (v: number) => Math.round(v * 1000) / 1000;
 
 function Loop({ r, color = C.warn }: { r: number; color?: string }) {
-  return <circle cx="190" cy="150" r={r} fill="none" stroke={color} strokeWidth="2.5" strokeDasharray="7 5" />;
+  return <circle cx="240" cy="150" r={r} fill="none" stroke={color} strokeWidth="2.5" strokeDasharray="7 5" />;
 }
 
 export const ampereProblems: GuidedProblemData[] = [
@@ -12,14 +13,26 @@ export const ampereProblems: GuidedProblemData[] = [
     title: "Поле край силов кабел",
     statement: "**Силов кабел.** Прав дълъг проводник носи ток I = 400 A. Намерете магнитното поле на 5.0 m от него и сравнете с типичното земно поле (~50 μT).",
     figure: (phase) => <g>
-      <CurrentSymbol x={190} y={150} out r={18} color={C.plus} label="400 A" />
       <Loop r={92} />
-      {phase >= 1 && [0, 1, 2, 3].map((i) => { const a = i * Math.PI / 2; const x = 190 + 92 * Math.cos(a); const y = 150 + 92 * Math.sin(a); return <Arrow key={i} x1={q(x + 10 * Math.sin(a))} y1={q(y - 10 * Math.cos(a))} x2={q(x - 10 * Math.sin(a))} y2={q(y + 10 * Math.cos(a))} color={C.minus} width={2} />; })}
-      <line x1="190" y1="150" x2="282" y2="150" stroke={C.faint} strokeDasharray="5 4" />
-      <text x="236" y="140" fill={C.mut} fontSize="13">r = 5.0 m</text>
-      {phase >= 2 && <text x="330" y="95" fill={C.ok} fontSize="16" fontWeight="700">B = 16 μT</text>}
-      {phase >= 3 && <text x="330" y="122" fill={C.mut} fontSize="13">≈ 1/3 от земното поле</text>}
+      {phase >= 1 && [0, 1, 2, 3].map((i) => {
+        const a = i * Math.PI / 2;
+        const x = 240 + 92 * Math.cos(a);
+        const y = 150 + 92 * Math.sin(a);
+        return <Arrow key={i} x1={q(x + 12 * Math.sin(a))} y1={q(y - 12 * Math.cos(a))} x2={q(x - 12 * Math.sin(a))} y2={q(y + 12 * Math.cos(a))} color={C.minus} width={2.2} />;
+      })}
+      {phase >= 1 && <SvgTex x={348} y={82} tex="\vec B" color={C.minus} fontSize={13} width={30} />}
+      <line x1="240" y1="150" x2="332" y2="150" stroke={C.faint} strokeDasharray="5 4" />
+      <SvgTex x={286} y={142} tex="r" color={C.mut} fontSize={13} width={22} anchor="middle" />
+      <CurrentSymbol x={240} y={150} out r={18} color={C.plus} texLabel="I" />
     </g>,
+    figureCaption: (phase) =>
+      phase >= 3
+        ? String.raw`$B=16\,\mu\mathrm{T}$ — около една трета от земното поле. Осезаемо, но по-слабо от него.`
+        : phase >= 2
+          ? String.raw`Заместването дава $B=16\,\mu\mathrm{T}$ на $r=5{,}0\,\mathrm{m}$.`
+          : phase >= 1
+            ? String.raw`По центрирания кръг полето е тангенциално: $\vec B\parallel d\vec l$ навсякъде.`
+            : undefined,
     directionQuestion: {
       prompt: "При ток навън от екрана накъде обикаля магнитното поле?",
       options: [{ text: "Обратно на часовниковата стрелка", correct: true }, { text: "По часовниковата стрелка", correct: false }, { text: "Радиално навън", correct: false }],
@@ -42,18 +55,26 @@ export const ampereProblems: GuidedProblemData[] = [
     title: "Вътре в дебел проводник",
     statement: "**Дебел проводник.** Цилиндричен проводник с радиус R = 2 cm носи равномерно разпределен ток I = 10 A. Намерете B на r = 1 cm вътре в него.",
     figure: (phase) => <g>
-      <circle cx="190" cy="150" r="105" fill="rgba(255,118,84,.16)" stroke={C.plus} strokeWidth="2" />
-      {Array.from({ length: 21 }, (_, i) => { const a = i * 2.4; const rr = 18 + (i % 4) * 20; return <circle key={i} cx={q(190 + rr * Math.cos(a))} cy={q(150 + rr * Math.sin(a))} r="3" fill={C.plus} />; })}
+      <circle cx="240" cy="150" r="105" fill={C.plus} fillOpacity="0.14" stroke={C.plus} strokeWidth="2" />
+      {Array.from({ length: 21 }, (_, i) => { const a = i * 2.4; const rr = 18 + (i % 4) * 20; return <circle key={i} cx={q(240 + rr * Math.cos(a))} cy={q(150 + rr * Math.sin(a))} r="3" fill={C.plus} opacity={phase >= 1 && rr > 52 ? 0.35 : 1} />; })}
       <Loop r={52} />
-      <text x="190" y="36" textAnchor="middle" fill={C.mut} fontSize="13">R = 2 cm</text>
-      {phase >= 1 && <text x="320" y="95" fill={C.warn} fontSize="14" fontWeight="700">Iобхв = I·r²/R²</text>}
-      {phase >= 2 && <text x="320" y="124" fill={C.ok} fontSize="16" fontWeight="700">Iобхв = 2.5 A</text>}
-      {phase >= 3 && <text x="320" y="153" fill={C.minus} fontSize="16" fontWeight="700">B = 50 μT</text>}
+      <line x1="240" y1="150" x2="292" y2="150" stroke={C.faint} strokeDasharray="4 4" />
+      <SvgTex x={266} y={142} tex="r" color={C.warn} fontSize={13} width={22} anchor="middle" />
+      <line x1="240" y1="150" x2={q(240 + 105 * Math.cos(-0.9))} y2={q(150 + 105 * Math.sin(-0.9))} stroke={C.faint} strokeDasharray="4 4" />
+      <SvgTex x={q(240 + 62 * Math.cos(-0.9)) + 10} y={q(150 + 62 * Math.sin(-0.9))} tex="R" color={C.mut} fontSize={13} width={24} />
     </g>,
+    figureCaption: (phase) =>
+      phase >= 3
+        ? String.raw`$B=50\,\mu\mathrm{T}$. Вътре полето расте линейно: $B\propto r$ до повърхността, после спада като $1/r$.`
+        : phase >= 2
+          ? String.raw`$I_{\text{обхв}}=I\,r^2/R^2=2{,}5\,\mathrm{A}$ — само четвърт от тока.`
+          : phase >= 1
+            ? "Потъмнените точки са ток ИЗВЪН контура — той не участва. Контурът вижда само тока през своята площ."
+            : undefined,
     directionQuestion: {
       prompt: "Амперовият контур при r = R/2 обхваща ли целия ток?",
       options: [{ text: "Не — обхваща само тока през вътрешната площ πr²", correct: true }, { text: "Да — всеки контур вътре вижда целите 10 A", correct: false }, { text: "Не обхваща никакъв ток", correct: false }],
-      explanation: "Токът е разпределен по сечението. Контурът обхваща само проводниците/плътността вътре в своята площ.",
+      explanation: "Токът е разпределен по сечението. Контурът обхваща само плътността вътре в своята площ.",
     },
     additionQuestion: {
       prompt: "Как се изменя B с r вътре при равномерна токова плътност?",
@@ -72,11 +93,20 @@ export const ampereProblems: GuidedProblemData[] = [
     title: "Проектиране на електромагнит",
     statement: "**Електромагнит.** Дълъг соленоид има N = 800 навивки, L = 0.40 m и ток I = 1.2 A. Оценете полето вътре.",
     figure: (phase) => <g>
-      {Array.from({ length: 18 }, (_, i) => <ellipse key={i} cx={70 + i * 19} cy="150" rx="10" ry="65" fill="none" stroke={i % 2 ? C.plus : C.warn} strokeWidth="1.5" />)}
-      {phase >= 1 && [-24, 0, 24].map((dy) => <Arrow key={dy} x1={85} y1={150 + dy} x2={385} y2={150 + dy} color={C.minus} width={2.2} />)}
-      {phase >= 2 && <rect x="115" y="115" width="230" height="70" fill="none" stroke={C.ok} strokeDasharray="7 5" strokeWidth="2" />}
-      {phase >= 3 && <text x="240" y="245" fill={C.ok} fontSize="17" fontWeight="700" textAnchor="middle">B ≈ 3.02 mT</text>}
+      {Array.from({ length: 18 }, (_, i) => <ellipse key={i} cx={90 + i * 19} cy="150" rx="10" ry="65" fill="none" stroke={i % 2 ? C.plus : C.warn} strokeWidth="1.5" />)}
+      {phase >= 1 && [-24, 0, 24].map((dy) => <Arrow key={dy} x1={105} y1={150 + dy} x2={405} y2={150 + dy} color={C.minus} width={2.2} />)}
+      {phase >= 1 && <SvgTex x={415} y={130} tex="\vec B" color={C.minus} fontSize={13} width={30} />}
+      {phase >= 2 && <rect x="135" y="115" width="230" height="70" fill="none" stroke={C.ok} strokeDasharray="7 5" strokeWidth="2" />}
+      {phase >= 2 && <SvgTex x={250} y={205} tex="\ell" color={C.ok} fontSize={13} width={20} anchor="middle" />}
     </g>,
+    figureCaption: (phase) =>
+      phase >= 3
+        ? String.raw`$B\approx3{,}02\,\mathrm{mT}$ — около 60 пъти земното поле.`
+        : phase >= 2
+          ? String.raw`Правоъгълникът има една страна вътре и една отвън: $B\ell=\mu_0(n\ell)I$.`
+          : phase >= 1
+            ? "Вътре полето е почти равномерно и върви по оста на соленоида."
+            : undefined,
     directionQuestion: {
       prompt: "Къде полето на дълъг соленоид е приблизително равномерно?",
       options: [{ text: "Във вътрешността, далеч от краищата", correct: true }, { text: "Само извън намотката", correct: false }, { text: "Само върху всяка жица", correct: false }],
@@ -90,7 +120,7 @@ export const ampereProblems: GuidedProblemData[] = [
     hints: ["Първо n = N/L.", "μ₀ = 4π×10⁻⁷ T·m/A."],
     steps: [
       { text: "Изчисляваме броя навивки на метър.", latex: String.raw`n=\frac NL=\frac{800}{0.40}=2000\ \mathrm{m^{-1}}` },
-      { text: "Амперовият правоъгълник има една страна вътре и една отвън; външният принос е приблизително нула.", latex: String.raw`BL=\mu_0(nL)I\quad\Rightarrow\quad B=\mu_0nI` },
+      { text: "Амперовият правоъгълник има една страна вътре и една отвън; външният принос е приблизително нула.", latex: String.raw`B\ell=\mu_0(n\ell)I\quad\Rightarrow\quad B=\mu_0nI` },
       { text: "Заместването дава 3.02×10⁻³ T = 3.02 mT." },
     ],
     teacherNotes: ["Различавайте N (общ брой) от n=N/L (линейна гъстота).", "Формулата е приближение за дълъг соленоид; близо до краищата полето не е равномерно."],
@@ -99,13 +129,20 @@ export const ampereProblems: GuidedProblemData[] = [
     title: "Тороидален индуктор",
     statement: "**Тороид.** Намотка има N = 500 навивки и ток I = 0.8 A. Намерете B на радиус r = 12 cm в сърцевината.",
     figure: (phase) => <g>
-      <circle cx="190" cy="150" r="105" fill="rgba(89,173,255,.12)" stroke={C.minus} strokeWidth="2" />
-      <circle cx="190" cy="150" r="52" fill={STAGE_BG} stroke={C.minus} strokeWidth="2" />
-      {Array.from({ length: 20 }, (_, i) => { const a = i * Math.PI / 10; return <line key={i} x1={q(190 + 52 * Math.cos(a))} y1={q(150 + 52 * Math.sin(a))} x2={q(190 + 105 * Math.cos(a))} y2={q(150 + 105 * Math.sin(a))} stroke={i % 2 ? C.plus : C.warn} strokeWidth="1.5" />; })}
+      <circle cx="240" cy="150" r="105" fill={C.minus} fillOpacity="0.1" stroke={C.minus} strokeWidth="2" />
+      <circle cx="240" cy="150" r="52" fill={STAGE_BG} stroke={C.minus} strokeWidth="2" />
+      {Array.from({ length: 20 }, (_, i) => { const a = i * Math.PI / 10; return <line key={i} x1={q(240 + 52 * Math.cos(a))} y1={q(150 + 52 * Math.sin(a))} x2={q(240 + 105 * Math.cos(a))} y2={q(150 + 105 * Math.sin(a))} stroke={i % 2 ? C.plus : C.warn} strokeWidth="1.5" />; })}
       {phase >= 1 && <Loop r={78} color={C.ok} />}
-      {phase >= 2 && <text x="320" y="96" fill={C.warn} fontSize="14" fontWeight="700">Iобхв = N·I = 400 A</text>}
-      {phase >= 3 && <text x="320" y="126" fill={C.ok} fontSize="16" fontWeight="700">B = 0.667 mT</text>}
+      {phase >= 1 && <SvgTex x={q(240 + 78 * Math.cos(-0.62)) + 8} y={q(150 + 78 * Math.sin(-0.62)) - 6} tex="r" color={C.ok} fontSize={13} width={20} />}
     </g>,
+    figureCaption: (phase) =>
+      phase >= 3
+        ? String.raw`$B=0{,}667\,\mathrm{mT}$. В сърцевината $B\propto1/r$ — вътрешният ръб е по-силен от външния.`
+        : phase >= 2
+          ? String.raw`Контурът е пробит от всичките $N$ проводника: $I_{\text{обхв}}=NI=400\,\mathrm{A}$.`
+          : phase >= 1
+            ? "Полето следва концентрични окръжности в сърцевината — контурът повтаря симетрията."
+            : undefined,
     directionQuestion: {
       prompt: "Какъв амперов контур следва симетрията на тороида?",
       options: [{ text: "Кръг, концентричен с тороида", correct: true }, { text: "Права линия през центъра", correct: false }, { text: "Кръг около отделна навивка", correct: false }],
