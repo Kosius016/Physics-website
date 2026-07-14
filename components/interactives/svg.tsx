@@ -181,27 +181,28 @@ export function AngleArc({
   label?: string;
   texLabel?: string;
 }) {
+  const q = (v: number) => Math.round(v * 1_000_000) / 1_000_000;
   let d = a2 - a1;
   while (d > Math.PI) d -= 2 * Math.PI;
   while (d < -Math.PI) d += 2 * Math.PI;
   const sweep = d > 0 ? 1 : 0;
-  const x1 = cx + r * Math.cos(a1);
-  const y1 = cy + r * Math.sin(a1);
-  const x2 = cx + r * Math.cos(a2);
-  const y2 = cy + r * Math.sin(a2);
+  const x1 = q(cx + r * Math.cos(a1));
+  const y1 = q(cy + r * Math.sin(a1));
+  const x2 = q(cx + r * Math.cos(a2));
+  const y2 = q(cy + r * Math.sin(a2));
   const mid = a1 + d / 2;
   return (
     <g>
       <path
-        d={`M ${x1} ${y1} A ${r} ${r} 0 0 ${sweep} ${x2} ${y2}`}
+        d={`M ${x1} ${y1} A ${q(r)} ${q(r)} 0 0 ${sweep} ${x2} ${y2}`}
         fill="none"
         stroke={color}
         strokeWidth={1.8}
       />
       {texLabel ? (
         <SvgTex
-          x={cx + (r + 15) * Math.cos(mid)}
-          y={cy + (r + 15) * Math.sin(mid)}
+          x={q(cx + (r + 15) * Math.cos(mid))}
+          y={q(cy + (r + 15) * Math.sin(mid))}
           tex={texLabel}
           color={color}
           fontSize={12.5}
@@ -210,8 +211,8 @@ export function AngleArc({
         />
       ) : label ? (
         <text
-          x={cx + (r + 15) * Math.cos(mid)}
-          y={cy + (r + 15) * Math.sin(mid)}
+          x={q(cx + (r + 15) * Math.cos(mid))}
+          y={q(cy + (r + 15) * Math.sin(mid))}
           fill={color}
           fontSize={12.5}
           fontWeight={600}

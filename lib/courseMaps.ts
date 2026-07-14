@@ -96,7 +96,11 @@ const mathUni: CourseSection[] = [
         title: "Детерминанти — площта на трансформацията",
         href: "/math/lineina-algebra/determinanti",
       },
-      { number: "1.3", title: "Векторно и смесено произведение" },
+      {
+        number: "1.3",
+        title: "Векторно и смесено произведение",
+        href: "/math/lineina-algebra/vektorno-proizvedenie",
+      },
     ],
   },
 ];
