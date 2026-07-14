@@ -9,7 +9,7 @@ const TABS: readonly { label: string; href?: string }[] = [
   { label: "Материали" },
   { label: "Симулации" },
   { label: "Практикум", href: "/praktikum" },
-  { label: "Статии" },
+  { label: "Статии", href: "/statii" },
 ];
 
 /**
@@ -27,7 +27,12 @@ export default function TopNav() {
         </Link>
         <nav className="flex overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {TABS.map((tab) => {
-            const active = tab.href === "/praktikum" ? pathname.startsWith("/praktikum") : tab.href === "/physics" && !pathname.startsWith("/praktikum");
+            const active =
+              tab.href === "/physics"
+                ? !pathname.startsWith("/praktikum") && !pathname.startsWith("/statii")
+                : tab.href
+                  ? pathname.startsWith(tab.href)
+                  : false;
             return tab.href ? (
               <Link
                 key={tab.label}
