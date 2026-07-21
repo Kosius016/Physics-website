@@ -80,6 +80,16 @@ const physicsUni: CourseSection[] = [
       },
     ],
   },
+  {
+    title: "Електромагнитна индукция",
+    lessons: [
+      {
+        number: "3.1",
+        title: "Законът на Фарадей — индукция от променящ се поток",
+        href: "/physics/magnetizm/faraday",
+      },
+    ],
+  },
 ];
 
 const mathUni: CourseSection[] = [
