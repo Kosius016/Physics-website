@@ -1,10 +1,14 @@
 import Link from "next/link";
+import { Children } from "react";
 import Formula from "@/components/Formula";
 import LessonNav from "@/components/LessonNav";
 import RichText from "@/components/RichText";
 import Section from "@/components/Section";
 import FluxExplorer from "@/components/interactives/FluxExplorer";
 import GeneratorEMF from "@/components/interactives/GeneratorEMF";
+import ElectromagneticMachine3D from "@/components/interactives/ElectromagneticMachine3D";
+import FaradayDiagram, { type FaradayDiagramKind } from "@/components/interactives/FaradayDiagram";
+import { MagnetCoilLab, MagnetRingLab, SlidingRodLab } from "@/components/interactives/InductionLabs";
 import PredictionQuestion from "@/components/interactives/PredictionQuestion";
 import { TeacherModeProvider, TeacherModeToggle, TeacherNote } from "@/components/interactives/TeacherMode";
 
@@ -32,22 +36,75 @@ function Callout({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Example({ tag, title, children }: { tag: string; title: string; children: React.ReactNode }) {
+/**
+ * Визуалните блокове излизат от текстовата колона навътре в дясното поле на
+ * страницата, за да са едри на голям екран. Отстъпите са с ~80 px запас
+ * спрямо свободното поле при 1280 px и 1536 px, за да няма хоризонтален скрол.
+ */
+const BLEED = "xl:-mr-[11rem] 2xl:-mr-[19rem]";
+
+/** Самостоятелен интерактив/фигура на пълна ширина, изнесен в полето. */
+function Wide({ children }: { children: React.ReactNode }) {
+  return <div className={BLEED}>{children}</div>;
+}
+
+function Example({
+  tag,
+  title,
+  visual,
+  visualCaption,
+  children,
+}: {
+  tag: string;
+  title: string;
+  visual?: FaradayDiagramKind;
+  visualCaption?: string;
+  children: React.ReactNode;
+}) {
+  const parts = Children.toArray(children);
+
   return (
-    <div className="my-6 rounded-[10px] border-[1.5px] border-ink bg-surface px-5 py-4 shadow-hard">
+    <div className={`my-6 rounded-[10px] border-[1.5px] border-ink bg-surface px-5 py-4 shadow-hard ${visual ? BLEED : ""}`}>
       <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-minus">{tag}</p>
       <h3 className="mt-1 mb-3 font-serif text-[21px] font-bold text-ink">{title}</h3>
-      <div className="space-y-3 text-[16px] leading-relaxed text-ink/90">{children}</div>
+      {visual ? (
+        <>
+          <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_300px] md:items-start lg:grid-cols-[minmax(0,1fr)_400px] xl:grid-cols-[minmax(0,1fr)_460px] 2xl:grid-cols-[minmax(0,1fr)_580px]">
+            <div className="space-y-3 text-[16px] leading-relaxed text-ink/90">{parts[0]}</div>
+            <div className="order-first md:order-last">
+              <FaradayDiagram kind={visual} caption={visualCaption} />
+            </div>
+          </div>
+          <div className="mt-4 space-y-3 text-[16px] leading-relaxed text-ink/90">{parts.slice(1)}</div>
+        </>
+      ) : (
+        <div className="space-y-3 text-[16px] leading-relaxed text-ink/90">{children}</div>
+      )}
     </div>
   );
 }
 
-function AppBox({ title, children }: { title: string; children: React.ReactNode }) {
+function AppBox({
+  title,
+  visual,
+  visualCaption,
+  children,
+}: {
+  title: string;
+  visual: FaradayDiagramKind;
+  visualCaption?: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="my-5 rounded-[10px] border-[1.5px] border-rule bg-paper px-5 py-4">
-      <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-plus">Приложение</p>
-      <h3 className="mt-1 mb-2 font-serif text-[19px] font-bold text-ink">{title}</h3>
-      <div className="space-y-3 text-[15.5px] leading-relaxed text-ink/90">{children}</div>
+    <div className={`my-5 rounded-[10px] border-[1.5px] border-rule bg-paper px-5 py-4 ${BLEED}`}>
+      <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_310px] md:items-start lg:grid-cols-[minmax(0,1fr)_430px] xl:grid-cols-[minmax(0,1fr)_500px] 2xl:grid-cols-[minmax(0,1fr)_620px]">
+        <div>
+          <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-plus">Приложение</p>
+          <h3 className="mt-1 mb-2 font-serif text-[19px] font-bold text-ink">{title}</h3>
+          <div className="space-y-3 text-[15.5px] leading-relaxed text-ink/90">{children}</div>
+        </div>
+        <FaradayDiagram kind={visual} caption={visualCaption} />
+      </div>
     </div>
   );
 }
@@ -126,7 +183,8 @@ export default function FaradayLessonPage() {
             <p>
               Скаларното произведение отчита само съставката на полето,{" "}
               <strong>перпендикулярна на повърхнината</strong> — само тя „минава през“ контура. За
-              равномерно поле и плоска площ $A$ под ъгъл $\theta$ между $\vec B$ и нормалата:
+              равномерно поле и плоска площ <RichText text="$A$" /> под ъгъл{" "}
+              <RichText text="$\theta$" /> между <RichText text="$\vec B$" /> и нормалата:
             </p>
             <Formula latex={String.raw`\Phi_B=BA\cos\theta`} />
             <p>
@@ -137,9 +195,16 @@ export default function FaradayLessonPage() {
             </p>
           </div>
 
-          <div className="mt-6">
+          <div className={`mt-6 ${BLEED}`}>
             <FluxExplorer />
           </div>
+
+          <h3 className="mt-8 mb-3 font-serif text-[22px] font-bold text-ink">Живият опит на Фарадей</h3>
+          <p className="text-[16px] leading-relaxed text-ink/90">
+            Натиснете „Приближи“ или „Отдалечи“ и следете стрелката на галванометъра. Тя се отклонява
+            само докато магнитът се движи — посоката се обръща при обръщане на движението.
+          </p>
+          <Wide><MagnetCoilLab /></Wide>
 
           <h3 className="mt-8 mb-3 font-serif text-[22px] font-bold text-ink">Формулировка на закона</h3>
           <div className="space-y-4 text-[17px] leading-relaxed text-ink/90">
@@ -165,9 +230,9 @@ export default function FaradayLessonPage() {
             <p>Замествайки <RichText text="$\Phi_B=BA\cos\theta$" />, за един контур:</p>
             <Formula latex={String.raw`\mathcal{E}=-\frac{d}{dt}\big(BA\cos\theta\big)\qquad(31.3)`} />
             <ul className="list-disc space-y-1.5 pl-6">
-              <li>промяна на <strong>големината $B$</strong> (опитът с намотките);</li>
-              <li>промяна на <strong>площта $A$</strong> (плъзгащата пръчка в §2);</li>
-              <li>промяна на <strong>ъгъла $\theta$</strong> (генераторът в §5);</li>
+              <li>промяна на <strong>големината <RichText text="$B$" /></strong> (опитът с намотките);</li>
+              <li>промяна на <strong>площта <RichText text="$A$" /></strong> (плъзгащата пръчка в §2);</li>
+              <li>промяна на <strong>ъгъла <RichText text="$\theta$" /></strong> (генераторът в §5);</li>
               <li>всяка комбинация от трите.</li>
             </ul>
             <p>Обединяващата идея: няма значение <strong>как</strong> променяш потока — важно е че го променяш.</p>
@@ -182,15 +247,15 @@ export default function FaradayLessonPage() {
                 { text: "Преместване встрани, без завъртане, в равномерното поле", correct: true },
                 { text: "Изваждане на контура от полето", correct: false },
               ]}
-              explanation="В равномерно поле преместването встрани не мени нито $B$, нито $A$, нито $\theta$ — потокът е постоянен и ток няма. Смачкването мени $A$, въртенето мени $\theta$, изваждането намалява площта в полето — и трите дават ток."
+              explanation={String.raw`В равномерно поле преместването встрани не мени нито $B$, нито $A$, нито $\theta$ — потокът е постоянен и ток няма. Смачкването мени $A$, въртенето мени $\theta$, изваждането намалява площта в полето — и трите дават ток.`}
             />
           </div>
 
           <TeacherNote>
-            <p>Разигравайте всяка от опциите чрез $\Phi_B=BA\cos\theta$: питайте „кой от трите множителя се мени?“. Целта е ученикът да свикне да разлага потока, вместо да помни отговори наизуст.</p>
+            <p><RichText text="$\Phi_B=BA\cos\theta$" />: разигравайте всяка от опциите и питайте „кой от трите множителя се мени?“. Целта е ученикът да свикне да разлага потока, вместо да помни отговори наизуст.</p>
           </TeacherNote>
 
-          <AppBox title="Дефектнотокова защита (GFI)">
+          <AppBox title="Дефектнотокова защита (GFI)" visual="gfi" visualCaption="Двата еднакви противоположни тока взаимно унищожават потока. Утечката нарушава равновесието.">
             <p>
               През железен пръстен минават два проводника — единият носи тока към уреда, другият го
               връща. Около пръстена е навита сензорна намотка.
@@ -204,7 +269,7 @@ export default function FaradayLessonPage() {
             </p>
           </AppBox>
 
-          <AppBox title="Адаптер (пикъп) на електрическа китара">
+          <AppBox title="Адаптер (пикъп) на електрическа китара" visual="pickup" visualCaption="Струната не докосва намотката — движението ѝ променя магнитния поток и създава сигнал.">
             <p>
               Под всяка метална струна има намотка с постоянен магнит. Магнитът намагнитва парчето
               струна над него. Когато струната <strong>вибрира</strong>, намагнитеното парче се
@@ -213,7 +278,7 @@ export default function FaradayLessonPage() {
             </p>
           </AppBox>
 
-          <Example tag="Пример 31.1" title="Индуциране на ЕДН в намотка">
+          <Example tag="Пример 31.1" title="Индуциране на ЕДН в намотка" visual="coil-emf" visualCaption="Полето е перпендикулярно на всяка от 200-те квадратни навивки.">
             <p>
               Намотка от <RichText text="$N=200$" /> навивки, всяка квадрат със страна{" "}
               <RichText text="$d=0{,}18\ \mathrm{m}$" />. Перпендикулярно поле расте линейно от 0 до{" "}
@@ -235,7 +300,7 @@ export default function FaradayLessonPage() {
             </Callout>
           </Example>
 
-          <Example tag="Пример 31.2" title="Експоненциално намаляващо поле">
+          <Example tag="Пример 31.2" title="Експоненциално намаляващо поле" visual="exponential" visualCaption="И полето, и модулът на ЕДН затихват експоненциално.">
             <p>
               Един контур с площ <RichText text="$A$" /> е в перпендикулярно поле{" "}
               <RichText text="$B=B_{\max}e^{-\alpha t}$" />. Мени се само <RichText text="$B$" />, но
@@ -304,6 +369,13 @@ export default function FaradayLessonPage() {
             </p>
           </div>
 
+          <Wide><SlidingRodLab /></Wide>
+
+          <TeacherNote title="Диагностични въпроси за плъзгащата пръчка">
+            <p><strong>Преди да пуснете симулацията:</strong> „Кой множител във <RichText text="$\Phi_B=B\ell x$" /> се мени и защо?“</p>
+            <p className="mt-2"><strong>Честа грешка:</strong> учениците казват, че всяко движение в поле поражда ток. Нека спрат пръчката в средата: полето остава, но <RichText text="$d\Phi_B/dt=0$" />, следователно ток няма.</p>
+          </TeacherNote>
+
           <h3 className="mt-8 mb-3 font-serif text-[22px] font-bold text-ink">Откъде идва енергията</h3>
           <div className="space-y-4 text-[17px] leading-relaxed text-ink/90">
             <p>
@@ -327,11 +399,11 @@ export default function FaradayLessonPage() {
                 { text: "$4F$ и $2P$", correct: false },
                 { text: "$4F$ и $4P$", correct: false },
               ]}
-              explanation="Силата $F_B\propto v$ → удвоява се ($2F$). Мощността $P\propto v^2$ → учетворява се ($4P$). Логично: $P=Fv$, а тук и $F$, и $v$ се удвояват, значи $2\times2=4$."
+              explanation={String.raw`Силата $F_B\propto v$ → удвоява се ($2F$). Мощността $P\propto v^2$ → учетворява се ($4P$). Логично: $P=Fv$, а тук и $F$, и $v$ се удвояват, значи $2\times2=4$.`}
             />
           </div>
 
-          <Example tag="Пример 31.3" title="Свободно движеща се пръчка">
+          <Example tag="Пример 31.3" title="Свободно движеща се пръчка" visual="sliding-rod" visualCaption="Токът през подвижната пръчка създава сила, насочена срещу скоростта.">
             <p>
               Пръчка с маса <RichText text="$m$" /> се движи без триене по релси в поле{" "}
               <RichText text="$B$" />, пусната с начална скорост <RichText text="$v_i$" /> при{" "}
@@ -358,7 +430,7 @@ export default function FaradayLessonPage() {
             </Callout>
           </Example>
 
-          <Example tag="Пример 31.4" title="Въртяща се проводяща пръчка">
+          <Example tag="Пример 31.4" title="Въртяща се проводяща пръчка" visual="rotating-rod" visualCaption="Колкото по-далеч е точката от оста, толкова по-голяма е нейната линейна скорост.">
             <p>
               Пръчка с дължина <RichText text="$\ell$" /> се върти с ъглова скорост{" "}
               <RichText text="$\omega$" /> около единия си край в перпендикулярно поле. Различните ѝ
@@ -405,6 +477,13 @@ export default function FaradayLessonPage() {
             </ol>
           </div>
 
+          <Wide><MagnetRingLab /></Wide>
+
+          <TeacherNote title="Диагностични въпроси за закона на Ленц">
+            <p>Попитайте първо: „Какво се променя — посоката на полето или големината на потока?“ Едва след това: „Какво поле трябва да създаде пръстенът?“</p>
+            <p className="mt-2"><strong>Честа грешка:</strong> „Ленц казва, че системата винаги отблъсква.“ Не — при отдалечаване пръстенът привлича магнита, защото се противопоставя на <em>намаляването</em> на потока.</p>
+          </TeacherNote>
+
           <h3 className="mt-8 mb-3 font-serif text-[22px] font-bold text-ink">Защо е точно така: запазване на енергията</h3>
           <div className="space-y-4 text-[17px] leading-relaxed text-ink/90">
             <p>
@@ -430,7 +509,7 @@ export default function FaradayLessonPage() {
             />
           </div>
 
-          <Example tag="Концептуален пример 31.6" title="Контур, минаващ през полева област">
+          <Example tag="Концептуален пример 31.6" title="Контур, минаващ през полева област" visual="field-region" visualCaption="ЕДН има само при влизане и излизане — когато припокритата площ се изменя.">
             <p>
               Правоъгълен контур (страни <RichText text="$\ell$" /> и <RichText text="$w$" />) се
               движи с постоянна скорост <RichText text="$v$" /> надясно през област с поле навътре в
@@ -480,7 +559,7 @@ export default function FaradayLessonPage() {
               За индуцираното поле <RichText text="$\oint\vec E\cdot d\vec l\neq0$" />, докато за
               всяко електростатично поле този интеграл е нула. Затова индуцираното поле не може
               глобално да се опише с обикновен потенциал. Освен това <strong>то съществува и там,
-              където самото $\vec B$ е нула</strong> — стига да „обхваща“ променящ се поток.
+              където самото <RichText text="$\vec B$" /> е нула</strong> — стига да „обхваща“ променящ се поток.
             </Callout>
             <p className="text-[15.5px] text-muted">
               Локалният еквивалент на (31.9) е една от уравненията на Максуел,{" "}
@@ -490,7 +569,7 @@ export default function FaradayLessonPage() {
             </p>
           </div>
 
-          <Example tag="Пример 31.7" title="Електрично поле, индуцирано в соленоид">
+          <Example tag="Пример 31.7" title="Електрично поле, индуцирано в соленоид" visual="solenoid" visualCaption="Индуцираното електрично поле образува затворени примки и извън соленоида.">
             <p>
               Дълъг соленоид с радиус <RichText text="$R$" /> и <RichText text="$n$" /> навивки на
               метър носи ток <RichText text="$I=I_{\max}\cos\omega t$" />; полето вътре е{" "}
@@ -532,7 +611,7 @@ export default function FaradayLessonPage() {
             </p>
           </div>
 
-          <div className="mt-6">
+          <div className={`mt-6 ${BLEED}`}>
             <GeneratorEMF />
           </div>
 
@@ -563,7 +642,7 @@ export default function FaradayLessonPage() {
             />
           </div>
 
-          <Example tag="Пример 31.8" title="ЕДН в генератор">
+          <Example tag="Пример 31.8" title="ЕДН в генератор" visual="generator-values" visualCaption="Въртящата се намотка непрекъснато променя ъгъла между площта и магнитното поле.">
             <p>
               <RichText text="$N=8$" />, <RichText text="$A=0{,}0900\ \mathrm{m^2}$" />,{" "}
               <RichText text="$R=12{,}0\ \Omega$" />, <RichText text="$B=0{,}500\ \mathrm{T}$" />,{" "}
@@ -608,7 +687,15 @@ export default function FaradayLessonPage() {
             </p>
           </div>
 
-          <Example tag="Пример 31.9" title="Ток в двигател">
+          <h3 className="mt-9 mb-3 font-serif text-[22px] font-bold text-ink">3D модел: генератор и двигател</h3>
+          <p className="text-[16px] leading-relaxed text-ink/90">
+            Превключете режима и завъртете гледната точка с мишка или пръст. Движещите се точки
+            показват тока в намотката; при двигателя разделеният комутатор обръща тока на всеки
+            половин оборот, за да запази въртящия момент в една посока.
+          </p>
+          <Wide><ElectromagneticMachine3D /></Wide>
+
+          <Example tag="Пример 31.9" title="Ток в двигател" visual="motor-current" visualCaption="Обратното ЕДН е срещу захранването, затова при въртене токът намалява.">
             <p>
               Двигател с <RichText text="$R=10\ \Omega$" />, захранван с{" "}
               <RichText text="$120\ \mathrm{V}$" />; при максимална скорост обратното ЕДН е{" "}
@@ -649,7 +736,7 @@ export default function FaradayLessonPage() {
             </p>
           </div>
 
-          <AppBox title="Електромагнитни спирачки и ламиниране">
+          <AppBox title="Електромагнитни спирачки и ламиниране" visual="eddy-brake" visualCaption="Вляво: вихровите токове спират движещия се метал. Вдясно: изолацията между пластините прекъсва големите токови контури.">
             <p>
               Спирачките на метро и влакове разполагат електромагнит близо до стоманените релси;
               относителното движение индуцира вихрови токове, които спъват влака. Силата е{" "}
