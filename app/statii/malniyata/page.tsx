@@ -8,7 +8,6 @@ import StreamerAttachmentExplorer from "@/components/articles/StreamerAttachment
 import {
   CloudChargeDiagram,
   ParticleCascadeDiagram,
-  SafetyInfographic,
 } from "@/components/articles/LightningFigures";
 
 export const metadata = {
@@ -23,8 +22,8 @@ const SECTION_NAV = [
   { id: "kanal", n: "§3", label: "Каналът" },
   { id: "udar", n: "§4", label: "Ударът" },
   { id: "pat", n: "§5", label: "Пътят" },
-  { id: "uskoritel", n: "§6", label: "Ускорителят" },
-  { id: "mikrosekundi", n: "§7", label: "Микросекундите" },
+  { id: "mikrosekundi", n: "§6", label: "Микросекундите" },
+  { id: "uskoritel", n: "Бонус", label: "Ускорителят" },
 ] as const;
 
 function Callout({ children }: { children: React.ReactNode }) {
@@ -340,16 +339,6 @@ export default function LightningArticlePage() {
             Дългият канал не звучи от една точка. Звукът от отделните му участъци пристига по
             различно време. Затова близката мълния изплющява остро, а далечната се търкаля.
           </p>
-          <Callout>
-            Светлината пътува с <RichText text="$3\times10^8\ \mathrm{m/s}$" />, а звукът с около{" "}
-            <RichText text="$340\ \mathrm{m/s}$" />. Три секунди между блясъка и гърма отговарят
-            на около километър. Но ако изобщо чувате гръм, вече сте достатъчно близо, за да сте в
-            опасност.
-          </Callout>
-
-          <Figure caption="Всяко от правилата е пряко следствие от физиката в §3 и §4.">
-            <SafetyInfographic />
-          </Figure>
         </div>
       </Section>
 
@@ -410,34 +399,7 @@ export default function LightningArticlePage() {
         </div>
       </Section>
 
-      <Section id="uskoritel" n="§6" title="Ускорител на частици над главите ни">
-        <div className="space-y-4 text-[17px] leading-relaxed text-ink/90">
-          <p>Мълнията не е просто уголемена искра от дръжката на вратата.</p>
-          <p>
-            Бурите ускоряват електрони до релативистки енергии. Когато такъв електрон се отклони
-            от молекула въздух, той излъчва. Процесът се нарича{" "}
-            <strong>спирачно лъчение</strong> (на немски <em>Bremsstrahlung</em>). Така се раждат
-            рентгенови лъчи, а при най-енергичните събития и гама-лъчи: спътниците ги
-            регистрират като кратки, интензивни{" "}
-            <strong>земни гама-изблици</strong>.
-          </p>
-          <p>
-            Някои гама-кванти носят достатъчно енергия, за да родят двойка частица и античастица:
-          </p>
-          <p className="text-center text-[19px]"><RichText text="$\gamma \rightarrow e^- + e^+$" /></p>
-          <p>
-            Тук <RichText text="$e^-$" /> е електрон, а <RichText text="$e^+$" /> е позитрон,
-            неговият антиматериален партньор. Над една наглед обикновена буря природата за кратко
-            произвежда релативистки снопове, гама-лъчи и антиматерия.
-          </p>
-
-          <Figure caption="Веригата, която превръща буря в ускорител: поле → бърз електрон → високоенергетичен фотон → нова двойка частици.">
-            <ParticleCascadeDiagram />
-          </Figure>
-        </div>
-      </Section>
-
-      <Section id="mikrosekundi" n="§7" title="Първите микросекунди">
+      <Section id="mikrosekundi" n="§6" title="Първите микросекунди">
         <div className="space-y-4 text-[17px] leading-relaxed text-ink/90">
           <p>
             Растежът на лидера, съединяването, възвратният удар и гръмът са разбрани
@@ -490,39 +452,39 @@ export default function LightningArticlePage() {
             микроскопична флуктуация отключва конкретната мълния.
           </p>
 
-          <div className="overflow-x-auto rounded-[10px] border-[1.5px] border-ink bg-surface shadow-hard">
-            <table className="w-full min-w-140 border-collapse text-[15px]">
-              <caption className="sr-only">Степен на разбиране по въпроси около мълнията</caption>
-              <thead className="bg-hl">
-                <tr>
-                  <th className="p-3 text-left">Въпрос</th>
-                  <th className="p-3 text-left">Къде сме днес</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-rule">
-                <tr>
-                  <td className="p-3">Кои закони управляват зарядите и полетата?</td>
-                  <td className="p-3 font-semibold text-ok">Много добре разбрано</td>
-                </tr>
-                <tr>
-                  <td className="p-3">Как се развива зряла мълния от облак към земя?</td>
-                  <td className="p-3 font-semibold text-ok">Разбрано и пряко наблюдавано</td>
-                </tr>
-                <tr>
-                  <td className="p-3">Как бурята създава и подрежда зарядите?</td>
-                  <td className="p-3 font-semibold text-minus">Механизмът е ясен; детайлите са активна тема</td>
-                </tr>
-                <tr>
-                  <td className="p-3">Какво пали първия самоподдържащ се разряд?</td>
-                  <td className="p-3 font-semibold text-plus">Няколко силни модела, без общоприет отговор</td>
-                </tr>
-                <tr>
-                  <td className="p-3">Кога и къде ще падне следващата мълния?</td>
-                  <td className="p-3 font-semibold text-plus">Непредсказуемо с днешните измервания</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        </div>
+      </Section>
+
+      <Section id="uskoritel" n="Бонус" title="Бурята като ускорител на частици">
+        <div className="space-y-4 text-[17px] leading-relaxed text-ink/90">
+          <p>
+            При малка част от най-енергичните процеси в гръмотевичните бури електричното поле
+            ускорява някои електрони почти до скоростта на светлината.
+          </p>
+          <p>
+            Когато такъв електрон премине близо до атом или молекула на въздуха, той се отклонява
+            и отдава част от енергията си като фотон. Това е <strong>спирачно лъчение</strong>,
+            или <em>Bremsstrahlung</em>. Фотоните могат да достигнат рентгенови и гама-енергии.
+            Спътниците регистрират най-кратките и интензивни събития като{" "}
+            <strong>земни гама-изблици</strong>.
+          </p>
+          <p>
+            Ако гама-фотон с достатъчно енергия премине близо до атомно ядро, той може да се
+            превърне в двойка частица и античастица:
+          </p>
+          <p className="text-center text-[19px]">
+            <RichText text="$\gamma \rightarrow e^- + e^+$" />
+          </p>
+          <p>
+            Тук <RichText text="$e^-$" /> е електрон, а <RichText text="$e^+$" /> е позитрон,
+            неговият антиматериален партньор. Това не се случва при всяка мълния. Но показва
+            докъде могат да стигнат най-силните електрични полета в една буря: до релативистки
+            електрони, гама-лъчи и антиматерия.
+          </p>
+
+          <Figure caption="Възможната верига при най-енергичните събития: поле → бърз електрон → високоенергичен фотон → двойка частица и античастица.">
+            <ParticleCascadeDiagram />
+          </Figure>
         </div>
       </Section>
 
