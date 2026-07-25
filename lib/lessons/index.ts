@@ -5,9 +5,16 @@ import { lessonKinematikaDvizheniePodAgal } from "./kinematika-dvizhenie-pod-aga
 const lessons: Lesson[] = [lessonKinematikaDvizheniePodAgal];
 
 export function getAllLessons(): Lesson[] {
-  return lessons;
+  if (process.env.NODE_ENV !== "production") return lessons;
+  return lessons.filter(
+    (lesson) =>
+      !(
+        lesson.topicSlug === "kinematika" &&
+        lesson.slug === "dvizhenie-pod-agal"
+      ),
+  );
 }
 
 export function getLesson(topicSlug: string, slug: string): Lesson | undefined {
-  return lessons.find((l) => l.topicSlug === topicSlug && l.slug === slug);
+  return getAllLessons().find((l) => l.topicSlug === topicSlug && l.slug === slug);
 }

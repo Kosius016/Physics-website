@@ -3,6 +3,7 @@ import LessonNav from "@/components/LessonNav";
 import RichText from "@/components/RichText";
 import Section from "@/components/Section";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { ChargedSphereGraph, PotentialMap } from "@/components/interactives/PotentialVisualizations";
 import { TeacherModeProvider, TeacherModeToggle, TeacherNote } from "@/components/interactives/TeacherMode";
 
@@ -30,6 +31,8 @@ const Box = ({ title, children, blue = false }: { title: string; children: React
 );
 
 export default function PotentialLessonPage() {
+  if (process.env.NODE_ENV === "production") notFound();
+
   return <TeacherModeProvider><main className="mx-auto max-w-3xl px-5 pb-24">
     <header className="pb-2 pt-11">
       <nav aria-label="Път до урока" className="flex flex-wrap items-center gap-2 text-[12px] font-semibold uppercase tracking-[.22em] text-muted">

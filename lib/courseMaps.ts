@@ -15,6 +15,8 @@ export interface CourseLessonEntry {
   title: string;
   /** Линк към урока; липсва → урокът предстои. */
   href?: string;
+  /** Черновите се виждат само при локална разработка. */
+  draft?: boolean;
 }
 
 export interface CourseSection {
@@ -30,6 +32,7 @@ const physics11: CourseSection[] = [
         number: "1.1",
         title: "Движение под ъгъл към хоризонта",
         href: "/physics/kinematika/dvizhenie-pod-agal",
+        draft: true,
       },
       { number: "1.2", title: "Свободно падане и хвърляне нагоре" },
       { number: "1.3", title: "Относителност на движението" },
@@ -52,6 +55,7 @@ const physicsUni: CourseSection[] = [
         number: "1.1",
         title: "Електростатичен потенциал",
         href: "/physics/elektrichestvo/potencial",
+        draft: true,
       },
     ],
   },
@@ -131,5 +135,13 @@ const courseMaps: Partial<Record<Subject, Partial<Record<Level, CourseSection[]>
 };
 
 export function getCourseMap(subject: Subject, level: Level): CourseSection[] {
-  return courseMaps[subject]?.[level] ?? [];
+  const sections = courseMaps[subject]?.[level] ?? [];
+  if (process.env.NODE_ENV !== "production") return sections;
+
+  return sections
+    .map((section) => ({
+      ...section,
+      lessons: section.lessons.filter((lesson) => !lesson.draft),
+    }))
+    .filter((section) => section.lessons.length > 0);
 }

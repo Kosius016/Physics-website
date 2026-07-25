@@ -593,13 +593,15 @@ export default function LightningArticlePage() {
         </ul>
       </div>
 
-      <p className="mt-10 text-[15.5px] text-muted">
-        Свързан урок в платформата:{" "}
-        <Link href="/physics/elektrichestvo/potencial" className="font-semibold text-minus hover:underline">
-          Електричен потенциал
-        </Link>{" "}
-        обяснява какво стои зад „стотиците милиони волтове“ между облака и земята.
-      </p>
+      {process.env.NODE_ENV !== "production" && (
+        <p className="mt-10 text-[15.5px] text-muted">
+          Свързан урок в платформата:{" "}
+          <Link href="/physics/elektrichestvo/potencial" className="font-semibold text-minus hover:underline">
+            Електричен потенциал
+          </Link>{" "}
+          обяснява какво стои зад „стотиците милиони волтове“ между облака и земята.
+        </p>
+      )}
     </main>
   );
 }
