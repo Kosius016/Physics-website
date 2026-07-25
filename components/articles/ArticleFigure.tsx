@@ -1,18 +1,18 @@
 import type { CSSProperties, ReactNode } from "react";
+import ZoomableImage from "./ZoomableImage";
 
 /**
  * Общи обвивки за визуалните блокове в статиите.
  *
- * `Figure` дава еднакви отстояния и надпис под фигурата; `wide` изнася блока
- * в дясното поле на голям екран (виж CLAUDE.md §6 — отстъпите са със запас
- * спрямо свободното поле при 1280 и 1536 px).
+ * `Figure` дава еднакви отстояния и надпис под фигурата; `wide` разширява блока
+ * симетрично от двете страни на текстовата колона (виж CLAUDE.md §6).
  *
  * `PhotoFrame` рендва снимка, ако има файл в `public/`, и рамка-заместител,
  * ако още няма. Така страницата е завършена и без готовите изображения:
  * слагате файла, добавяте `src` и нищо друго не се променя.
  */
 
-export const BLEED = "xl:-mr-[11rem] 2xl:-mr-[19rem]";
+export const BLEED = "xl:-mx-[5.5rem] 2xl:-mx-[9.5rem]";
 
 export function Figure({
   children,
@@ -36,13 +36,16 @@ export function Figure({
 export function PhotoFrame({
   alt,
   brief,
+  eager = false,
   ratio = "16 / 9",
   src,
 }: {
-  /** Текст за екранни четци — описва какво се вижда на снимката. */
+  /** Текст за екранни четци, който описва какво се вижда на снимката. */
   alt: string;
   /** Кратко задание какво трябва да показва снимката (вижда се само в заместителя). */
   brief: string;
+  /** Зарежда веднага само водещата снимка; останалите се отлагат до приближаване. */
+  eager?: boolean;
   /** CSS съотношение на страните, напр. "16 / 9". */
   ratio?: string;
   /** Път до файла в public/, напр. "/images/statii/malniyata/hero.jpg". */
@@ -52,12 +55,11 @@ export function PhotoFrame({
 
   if (src) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
+      <ZoomableImage
         src={src}
         alt={alt}
-        style={style}
-        className="w-full rounded-[10px] border-[1.5px] border-ink object-cover shadow-hard"
+        ratio={ratio}
+        eager={eager}
       />
     );
   }

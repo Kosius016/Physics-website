@@ -6,3 +6,4 @@ build/
 .env*
 .DS_Store
 .codex-dev.*.log
+.vercel

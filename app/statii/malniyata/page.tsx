@@ -3,9 +3,10 @@ import LessonNav from "@/components/LessonNav";
 import RichText from "@/components/RichText";
 import Section from "@/components/Section";
 import { Figure, PhotoFrame } from "@/components/articles/ArticleFigure";
+import SlowMotionLightning from "@/components/articles/SlowMotionLightning";
+import StreamerAttachmentExplorer from "@/components/articles/StreamerAttachmentExplorer";
 import {
   CloudChargeDiagram,
-  LightningStagesDiagram,
   ParticleCascadeDiagram,
   SafetyInfographic,
 } from "@/components/articles/LightningFigures";
@@ -13,7 +14,7 @@ import {
 export const metadata = {
   title: "Мълнията: най-познатата загадка в небето · STEM Платформа",
   description:
-    "Въздухът е изолатор — и въпреки това бурята прекарва ток през километри от него. Как точно започва мълнията още е отворен въпрос.",
+    "Въздухът е изолатор, но въпреки това бурята прекарва ток през километри от него. Как точно започва мълнията още е отворен въпрос.",
 };
 
 const SECTION_NAV = [
@@ -66,7 +67,7 @@ export default function LightningArticlePage() {
           Въздухът е изолатор. Затова оголеният кабел не се разрежда в стаята, а батерията в
           чекмеджето не се изпразва през атмосферата.
         </p>
-        <p>После идва бурята — и електричеството прекосява километри от същия този въздух.</p>
+        <p>После идва бурята и електричеството прекосява километри от същия този въздух.</p>
 
         <Figure
           wide
@@ -76,12 +77,14 @@ export default function LightningArticlePage() {
             ratio="16 / 9"
             alt="Ярка разклонена мълния между буреносен облак и земята над нощен пейзаж"
             brief="Нощна снимка на разклонена мълния облак–земя над силует на пейзаж или град, дълга експозиция."
+            src="/images/statii/malniyata/hero.jpg"
+            eager
           />
         </Figure>
 
         <p>
           Мълнията не е предмет, паднал от небето. Тя е бързо растяща мрежа от плазмени канали,
-          лавини от електрони, радиовълни, ударни вълни, рентгенови лъчи — а понякога и
+          лавини от електрони, радиовълни, ударни вълни, рентгенови лъчи, а понякога и
           антиматерия.
         </p>
         <p>
@@ -92,6 +95,50 @@ export default function LightningArticlePage() {
           „Разбираме едно явление“ не значи „всички въпроси имат отговор“. Мълнията е
           най-ясният пример.
         </Callout>
+
+        <p>
+          Мълнията не е една мигновена искра. Разрядът от облака към земята се развива в четири
+          действия и статията минава през тях в този ред:
+        </p>
+
+        <ol className="my-6 grid gap-3 sm:grid-cols-2">
+          <li className="rounded-[10px] border-[1.5px] border-rule bg-surface px-4 py-3">
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-minus">
+              1 · Натрупване
+            </p>
+            <p className="mt-1.5 text-[15.5px] leading-relaxed">
+              Бурята разделя положителни и отрицателни заряди. Между тях възниква огромно
+              електрично поле.
+            </p>
+          </li>
+          <li className="rounded-[10px] border-[1.5px] border-rule bg-surface px-4 py-3">
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-minus">
+              2 · Първата искра
+            </p>
+            <p className="mt-1.5 text-[15.5px] leading-relaxed">
+              Някъде в облака се появява първият проводящ канал и от него надолу тръгва слаб
+              разклонен път. Точно тази стъпка е загадката.
+            </p>
+          </li>
+          <li className="rounded-[10px] border-[1.5px] border-rule bg-surface px-4 py-3">
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-minus">
+              3 · Свързване
+            </p>
+            <p className="mt-1.5 text-[15.5px] leading-relaxed">
+              От дървета, покриви и други високи обекти нагоре се протягат тънки проводящи
+              нишки. Една от тях среща слизащия път и свързва облака със земята.
+            </p>
+          </li>
+          <li className="rounded-[10px] border-[1.5px] border-rule bg-surface px-4 py-3">
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-minus">
+              4 · Удар
+            </p>
+            <p className="mt-1.5 text-[15.5px] leading-relaxed">
+              По готовия път преминава огромен ток. Каналът светва ослепително, въздухът се
+              нагрява рязко и се ражда гърмът.
+            </p>
+          </li>
+        </ol>
       </div>
 
       <Section id="bateriya" n="§1" title="Батерия, широка няколко километра">
@@ -100,13 +147,13 @@ export default function LightningArticlePage() {
           <p>
             Зрялата гръмотевична буря е огромна вертикална машина. Топъл влажен въздух се издига
             и отнася водни капки до височини, където температурата е под нулата. Част от капките
-            остават течни — <strong>преохладени капки</strong>. Те съжителстват с дребни ледени
+            остават течни. Това са <strong>преохладени капки</strong>. Те съжителстват с дребни ледени
             кристали и с по-едри меки ледени зърна, наричани <strong>граупел</strong> (нещо
             средно между сняг и дребна градушка).
           </p>
           <p>
             Частиците се сблъскват непрекъснато и при много от сблъсъците се прехвърля заряд: в
-            типичните условия ледените кристали излизат положителни, а граупелът — отрицателен.
+            типичните условия ледените кристали излизат положителни, а граупелът става отрицателен.
             Възходящото течение вдига леките кристали нагоре; тежкият граупел остава ниско.
           </p>
           <p>Бурята сортира заряд по маса.</p>
@@ -119,7 +166,7 @@ export default function LightningArticlePage() {
           </Figure>
 
           <p>
-            Резултатът е гигантска атмосферна батерия — между заредените области се натрупва
+            Резултатът е гигантска атмосферна батерия: между заредените области се натрупва
             разлика от стотици милиони волтове. (Истинските бури рядко са толкова спретнати:
             значимите заредени области може да са три, четири или повече.)
           </p>
@@ -139,12 +186,11 @@ export default function LightningArticlePage() {
           </p>
           <p>
             Измерванията вътре в буреносни облаци обаче рядко откриват толкова силно поле в
-            голям обем — обикновено намереното е осезаемо по-слабо от прага за пробив.
+            голям обем. Обикновено намереното е осезаемо по-слабо от прага за пробив.
           </p>
           <p>Бурята сякаш пали искра във въздух, който още не е готов да искри.</p>
           <p>
-            Точно това разминаване — между измереното поле и полето, което теорията изисква —
-            движи изследванията от десетилетия. Нарича се{" "}
+            Именно това разминаване движи изследванията от десетилетия. Нарича се{" "}
             <strong>проблем за инициирането на мълнията</strong>.
           </p>
         </div>
@@ -155,7 +201,7 @@ export default function LightningArticlePage() {
           <p>Да допуснем, че някъде в облака вече има един свободен електрон.</p>
           <p>
             Полето го ускорява. Той се блъска в молекула азот или кислород и ако е набрал
-            достатъчно енергия, избива от нея втори електрон. Двата стават четири, четири —
+            достатъчно енергия, избива от нея втори електрон. Двата стават четири, четири стават
             осем. Започва <strong>електронна лавина</strong>: въздухът се йонизира и се
             превръща в <strong>плазма</strong>, която провежда несравнимо по-добре от неутралния
             газ.
@@ -172,20 +218,72 @@ export default function LightningArticlePage() {
           </Callout>
           <p>
             Повечето стримери умират бързо. Някои се сливат и нагряват въздуха достатъчно, за да
-            се роди дълготраен проводящ канал — <strong>лидер</strong>.
+            се роди дълготраен проводящ канал, наречен <strong>лидер</strong>.
           </p>
           <p>
             Отрицателният лидер напредва на пресекулки: спира, изстрелва сноп стримери, скача
             напред с десетки метри, пак спира. Това е <strong>стъпаловидният лидер</strong> и
             всяка негова стъпка ражда разклонения.
           </p>
-          <p>Мълнията не „знае“ къде е земята. Тя опипва.</p>
+          <p>
+            При обикновена отрицателна мълния към земята има два различни вида стримери. Пред
+            върха на слизащия лидер се появява сноп от много къси канали, от който се оформя
+            следващата стъпка надолу. Когато лидерът се приближи до земята, от високи предмети
+            тръгват други, положителни стримери нагоре.
+          </p>
+          <p>
+            Точно това е „опипването“: не готовият ток търси маршрут, а разклоненият лидер
+            изгражда канала стъпка по стъпка от облака надолу. Клоновете, попаднали в по-силно
+            поле, продължават да растат. Останалите угасват.
+          </p>
+          <p>Мълнията не „знае“ къде е земята.</p>
+
+          <blockquote className="my-6 border-l-4 border-minus pl-5 font-serif text-[21px] leading-relaxed font-semibold text-ink">
+            Каналът не е избран. Той е построен.
+          </blockquote>
 
           <Figure
             wide
-            caption="Четирите фази. Окото различава само последната — всичко преди нея се разиграва за милисекунди и е почти невидимо."
+            caption="Схематична реконструкция на отрицателна мълния облак-земя. Плъзгачът спира събитието във всеки момент: слабите разклонения строят пътя, после от земята тръгват къси канали и едва след свързването идва яркият удар."
           >
-            <LightningStagesDiagram />
+            <SlowMotionLightning />
+          </Figure>
+
+          <div className="my-8 flex gap-4 rounded-[10px] border-[1.5px] border-ink bg-surface px-5 py-4 shadow-hard">
+            <span
+              aria-hidden="true"
+              className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-[1.5px] border-ink bg-hl text-ink"
+            >
+              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
+                <path d="M9 7.5v9l7.5-4.5z" />
+              </svg>
+            </span>
+            <div className="min-w-0">
+              <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-minus">
+                Как изглежда наистина
+              </p>
+              <p className="mt-1.5 text-[15.5px] leading-relaxed text-ink">
+                Горната сцена е схема, не заснет материал. Ако искате да видите истинското
+                събитие, каналът The Slow Mo Guys е заснел разряд при 103 000 кадъра в секунда:{" "}
+                <a
+                  className="font-semibold text-minus hover:underline"
+                  href="https://www.youtube.com/watch?v=qQKhIK4pvYo&t=306s"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Lightning Strike at 103,000 FPS
+                </a>
+                . Точно на 5:06 се вижда как слизащият лидер и възходящият канал се срещат и чак
+                тогава лумва възвратният удар.
+              </p>
+            </div>
+          </div>
+
+          <Figure
+            wide
+            caption="Изберете фаза, за да проследите отделно слизащия лидер, възходящите стримери, свързването и яркия фронт на възвратния удар."
+          >
+            <StreamerAttachmentExplorer />
           </Figure>
         </div>
       </Section>
@@ -193,24 +291,20 @@ export default function LightningArticlePage() {
       <Section id="udar" n="§4" title="Ослепителният миг и гърмът след него">
         <div className="space-y-4 text-[17px] leading-relaxed text-ink/90">
           <p>
-            Когато лидерът наближи повърхността, полето около високите и остри обекти става
-            особено силно: дървета, кули, стълбове, било на хълм, понякога хора. От тях нагоре
-            тръгват положителни <strong>възходящи стримери</strong> и за един кратък миг няколко
-            от тях се състезават.
-          </p>
-          <p>
-            Един среща един клон на лидера. Между облака и земята вече има непрекъснат проводящ
-            път — и небето избухва.
+            В мига, в който един възходящ стример достигне клон на лидера, между облака и земята
+            вече има непрекъснат проводящ път. И небето избухва.
           </p>
           <p>
             По готовия канал се понася <strong>възвратният удар</strong>: огромен ток, който
-            нагрява канала и го прави ослепителен. И макар лидерът да се е движел надолу,
-            светлината се разпространява <strong>нагоре</strong> — от точката на съединяване към
-            облака, с около една трета от скоростта на светлината.
+            нагрява канала и го прави ослепителен. Ярката граница на този процес се
+            разпространява <strong>нагоре</strong>, от точката на съединяване към облака, с около
+            една трета от скоростта на светлината.
           </p>
           <p>
-            Тоест най-яркото, което виждате, не е електричество, „падащо от небето“. Това е
-            вълна, която тича нагоре по път, построен тихо мигове по-рано.
+            Значи има две различни посоки в два различни момента: лидерът строи пътя надолу, а
+            яркият фронт на възвратния удар пробягва нагоре по вече построения канал. Това не е
+            ново „опипване“ и не означава, че една частица изминава целия път от земята до
+            облака.
           </p>
           <p>
             Ако в облака е останал заряд, по същия канал слиза нов лидер и следва втори удар.
@@ -230,17 +324,17 @@ export default function LightningArticlePage() {
           </dl>
 
           <p>
-            Каналът е тесен, но се нагрява невъобразимо бързо — до близо 28 000 °C, няколко пъти
+            Каналът е тесен, но се нагрява невъобразимо бързо, до близо 28 000 °C, няколко пъти
             повече от повърхността на Слънцето. Горещият въздух се разширява яростно и изстрелва
             вълна от налягане: близо до канала тя е ударна вълна, по-далеч става звукът, който
             наричаме гръм.
           </p>
           <p>
-            Дългият канал не звучи от една точка — звукът от отделните му участъци пристига по
+            Дългият канал не звучи от една точка. Звукът от отделните му участъци пристига по
             различно време. Затова близката мълния изплющява остро, а далечната се търкаля.
           </p>
           <Callout>
-            Светлината пътува с <RichText text="$3\times10^8\ \mathrm{m/s}$" />, звукът — с около{" "}
+            Светлината пътува с <RichText text="$3\times10^8\ \mathrm{m/s}$" />, а звукът с около{" "}
             <RichText text="$340\ \mathrm{m/s}$" />. Три секунди между блясъка и гърма отговарят
             на около километър. Но ако изобщо чувате гръм, вече сте достатъчно близо, за да сте в
             опасност.
@@ -266,7 +360,7 @@ export default function LightningArticlePage() {
           <p>
             Мълнията не избира най-лесния маршрут. Тя{" "}
             <strong>създава маршрутите в движение</strong>, а оцеляват онези, които подхранват
-            собствения си растеж. Оттам е и дървовидната ѝ форма — същата обратна връзка, която
+            собствения си растеж. Оттам идва и дървовидната ѝ форма. Същата обратна връзка
             оформя речните мрежи, корените и пукнатините в материалите.
           </p>
           <p>
@@ -275,13 +369,17 @@ export default function LightningArticlePage() {
             километричен канал.
           </p>
 
-          <Figure wide caption="Един и същ механизъм, различна геометрия: според това къде са зарядите, разрядът остава в облака, тръгва към земята или се разстила хоризонтално.">
+          <Figure
+            wide
+            caption="Един и същ механизъм, различна геометрия: според това къде са зарядите, разрядът остава в облака, тръгва към земята или се разстила хоризонтално."
+          >
             <div className="grid gap-4 sm:grid-cols-3">
               <div>
                 <PhotoFrame
                   ratio="3 / 4"
                   alt="Класическа разклонена мълния от облак към земята"
                   brief="Разклонена мълния облак–земя с ясно видими странични клони."
+                  src="/images/statii/malniyata/cloud-ground.jpg"
                 />
                 <p className="mt-1.5 text-[12.5px] font-semibold text-ink">Облак–земя</p>
               </div>
@@ -290,6 +388,7 @@ export default function LightningArticlePage() {
                   ratio="3 / 4"
                   alt="Вътрешнооблачен разряд, който осветява облака отвътре"
                   brief="Вътрешнооблачен разряд: облакът свети отвътре, без видим канал."
+                  src="/images/statii/malniyata/intracloud.jpg"
                 />
                 <p className="mt-1.5 text-[12.5px] font-semibold text-ink">Вътрешнооблачна</p>
               </div>
@@ -298,6 +397,7 @@ export default function LightningArticlePage() {
                   ratio="3 / 4"
                   alt="Хоризонтален разряд, който се разстила по основата на облачния слой"
                   brief="Хоризонтален разряд между облаци, разстлан по основата на облачния слой."
+                  src="/images/statii/malniyata/intercloud.jpg"
                 />
                 <p className="mt-1.5 text-[12.5px] font-semibold text-ink">Между облаци</p>
               </div>
@@ -311,7 +411,7 @@ export default function LightningArticlePage() {
           <p>Мълнията не е просто уголемена искра от дръжката на вратата.</p>
           <p>
             Бурите ускоряват електрони до релативистки енергии. Когато такъв електрон се отклони
-            от молекула въздух, той излъчва — процесът се нарича{" "}
+            от молекула въздух, той излъчва. Процесът се нарича{" "}
             <strong>спирачно лъчение</strong> (на немски <em>Bremsstrahlung</em>). Така се раждат
             рентгенови лъчи, а при най-енергичните събития и гама-лъчи: спътниците ги
             регистрират като кратки, интензивни{" "}
@@ -322,8 +422,8 @@ export default function LightningArticlePage() {
           </p>
           <p className="text-center text-[19px]"><RichText text="$\gamma \rightarrow e^- + e^+$" /></p>
           <p>
-            Тук <RichText text="$e^-$" /> е електрон, а <RichText text="$e^+$" /> е позитрон —
-            антиматериалният му партньор. Над една наглед обикновена буря природата за кратко
+            Тук <RichText text="$e^-$" /> е електрон, а <RichText text="$e^+$" /> е позитрон,
+            неговият антиматериален партньор. Над една наглед обикновена буря природата за кратко
             произвежда релативистки снопове, гама-лъчи и антиматерия.
           </p>
 
@@ -339,7 +439,7 @@ export default function LightningArticlePage() {
       <Section id="mikrosekundi" n="§7" title="Първите микросекунди">
         <div className="space-y-4 text-[17px] leading-relaxed text-ink/90">
           <p>
-            Растежът на лидера, съединяването, възвратният удар, гръмът — всичко това е разбрано
+            Растежът на лидера, съединяването, възвратният удар и гръмът са разбрани
             добре. Неизвестното е по-рано.
           </p>
           <Callout>
@@ -358,8 +458,8 @@ export default function LightningArticlePage() {
             </li>
             <li>
               <strong>Семена от космоса.</strong> Космичните лъчи раждат в атмосферата енергични
-              електрони. Електрон, който вече лети достатъчно бързо, може да „избяга“ — да печели
-              от полето повече, отколкото губи при сблъсъци — и да породи{" "}
+              електрони. Електрон, който вече лети достатъчно бързо, може да „избяга“, тоест да печели
+              от полето повече, отколкото губи при сблъсъци, и да породи{" "}
               <strong>релативистка лавина от убягващи електрони</strong>.
             </li>
             <li>
@@ -383,7 +483,7 @@ export default function LightningArticlePage() {
           </p>
           <p>
             Решен ли е с това проблемът? Не още. Един модел печели доверие едва когато предскаже
-            наблюдения, които не са били използвани при построяването му — а това предложение
+            наблюдения, които не са били използвани при построяването му, а това предложение
             тепърва ще се сравнява с много бури и много видове мълнии. Знанието има слоеве: може
             да знаем уравненията, процесите и реда на събитията и въпреки това да не знаем коя
             микроскопична флуктуация отключва конкретната мълния.
@@ -409,7 +509,7 @@ export default function LightningArticlePage() {
                 </tr>
                 <tr>
                   <td className="p-3">Как бурята създава и подрежда зарядите?</td>
-                  <td className="p-3 font-semibold text-minus">Механизмът е ясен, детайлите — активна тема</td>
+                  <td className="p-3 font-semibold text-minus">Механизмът е ясен; детайлите са активна тема</td>
                 </tr>
                 <tr>
                   <td className="p-3">Какво пали първия самоподдържащ се разряд?</td>
@@ -439,7 +539,7 @@ export default function LightningArticlePage() {
             разряд. Днешните инструменти виждат рентгенови лъчи, гама-изблици и антиматерия.
           </p>
           <p className="font-semibold text-ink">
-            Загадката не се смали с растежа на знанието — само стана по-точна. Днес тя се побира
+            Загадката не се смали с растежа на знанието, а само стана по-точна. Днес тя се побира
             в първите микросекунди.
           </p>
         </div>
@@ -458,6 +558,57 @@ export default function LightningArticlePage() {
           <li><a className="text-minus hover:underline" href="https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2025JD043897" target="_blank" rel="noopener noreferrer">Photoelectric Effect in Air Explains Lightning Initiation (Journal of Geophysical Research, 2025)</a></li>
           <li><a className="text-minus hover:underline" href="https://fermi.gsfc.nasa.gov/science/eteu/tgfs/" target="_blank" rel="noopener noreferrer">Spotting Terrestrial Gamma-Ray Flashes (NASA Fermi)</a></li>
         </ol>
+
+        <h3 className="mt-7 mb-3 font-serif text-[18px] font-bold text-ink">Фотографски кредити</h3>
+        <ul className="list-disc space-y-1.5 pl-6 text-[13.5px] leading-relaxed text-muted">
+          <li>
+            Водеща снимка:{" "}
+            <a className="text-minus hover:underline" href="https://commons.wikimedia.org/wiki/File:Lightning7_-_NOAA.jpg" target="_blank" rel="noopener noreferrer">
+              NOAA Photo Library / NSSL
+            </a>{" "}
+            (обществено достояние).
+          </li>
+          <li>
+            Облак–земя:{" "}
+            <a className="text-minus hover:underline" href="https://commons.wikimedia.org/wiki/File:Anvil-to-ground_lightning.jpg" target="_blank" rel="noopener noreferrer">
+              Bidgee
+            </a>
+            ,{" "}
+            <a className="text-minus hover:underline" href="https://creativecommons.org/licenses/by/3.0/" target="_blank" rel="noopener noreferrer">
+              CC BY 3.0
+            </a>{" "}
+            (без промени).
+          </li>
+          <li>
+            Вътрешнооблачна мълния:{" "}
+            <a className="text-minus hover:underline" href="https://commons.wikimedia.org/wiki/File:Florescent_cloud_blanket.jpg" target="_blank" rel="noopener noreferrer">
+              Jessie Eastland
+            </a>
+            ,{" "}
+            <a className="text-minus hover:underline" href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">
+              CC BY-SA 4.0
+            </a>{" "}
+            (без промени).
+          </li>
+          <li>
+            Между облаци:{" "}
+            <a className="text-minus hover:underline" href="https://commons.wikimedia.org/wiki/File:Cloud_to_cloud_lightning.jpg" target="_blank" rel="noopener noreferrer">
+              fdecomite
+            </a>
+            ,{" "}
+            <a className="text-minus hover:underline" href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener noreferrer">
+              CC BY 2.0
+            </a>{" "}
+            (без промени).
+          </li>
+          <li>
+            Видео: „Lightning Strike at 103,000 FPS“,{" "}
+            <a className="text-minus hover:underline" href="https://www.youtube.com/watch?v=qQKhIK4pvYo" target="_blank" rel="noopener noreferrer">
+              The Slow Mo Guys
+            </a>{" "}
+            (само връзка, материалът не се възпроизвежда тук).
+          </li>
+        </ul>
       </div>
 
       <p className="mt-10 text-[15.5px] text-muted">

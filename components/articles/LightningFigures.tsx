@@ -13,7 +13,7 @@ const FONT = "var(--font-sans), system-ui, sans-serif";
 
 /**
  * Сцената не се смалява под ~540 px, иначе надписите в нея стават нечетими на
- * телефон. Под тази ширина се плъзга хоризонтално в собствената си рамка —
+ * телефон. Под тази ширина се плъзга хоризонтално в собствената си рамка,
  * самата страница остава без хоризонтален скрол.
  */
 function Scene({ children }: { children: React.ReactNode }) {
@@ -71,7 +71,7 @@ function Minus({ x, y, r = 7, color = C.minus, opacity = 1 }: { x: number; y: nu
 }
 
 /* ------------------------------------------------------------------ */
-/* §1 — Зарядите в буреносния облак                                    */
+/* §1: Зарядите в буреносния облак                                     */
 /* ------------------------------------------------------------------ */
 
 export function CloudChargeDiagram() {
@@ -107,7 +107,7 @@ export function CloudChargeDiagram() {
         </g>
         <Cap x={45} y={296} size={10.5}>ВЪЗХОДЯЩО ТЕЧЕНИЕ</Cap>
 
-        {/* Положителна област — леки ледени кристали */}
+        {/* Положителна област: леки ледени кристали */}
         <g>
           <Plus x={175} y={104} />
           <Plus x={240} y={88} />
@@ -118,7 +118,7 @@ export function CloudChargeDiagram() {
         <Cap x={498} y={100} color={C.plus} size={11}>ЛЕДЕНИ КРИСТАЛИ</Cap>
         <Cap x={498} y={116} size={10}>леки, отиват нагоре</Cap>
 
-        {/* Отрицателна област — граупел */}
+        {/* Отрицателна област: граупел */}
         <g>
           <Minus x={148} y={214} />
           <Minus x={215} y={226} />
@@ -159,120 +159,7 @@ export function CloudChargeDiagram() {
 }
 
 /* ------------------------------------------------------------------ */
-/* §3 — Четирите фази                                                  */
-/* ------------------------------------------------------------------ */
-
-function StageFrame({
-  x,
-  y,
-  title,
-  children,
-}: {
-  x: number;
-  y: number;
-  title: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <g transform={`translate(${x} ${y})`}>
-      <rect width={300} height={234} rx={10} fill="rgba(242,239,245,0.035)" stroke={C.faint} strokeWidth={1.2} />
-      <Cap x={16} y={26} size={11}>{title}</Cap>
-      {children}
-      <line x1={20} y1={200} x2={280} y2={200} stroke={C.wire} strokeWidth={1.8} opacity={0.75} />
-    </g>
-  );
-}
-
-function MiniCloud({ opacity = 1 }: { opacity?: number }) {
-  return (
-    <g opacity={opacity}>
-      <g fill="rgba(242,239,245,0.09)" stroke={C.faint} strokeWidth={1.1}>
-        <ellipse cx={110} cy={62} rx={58} ry={26} />
-        <ellipse cx={170} cy={56} rx={62} ry={28} />
-        <rect x={54} y={62} width={176} height={30} rx={15} />
-      </g>
-    </g>
-  );
-}
-
-export function LightningStagesDiagram() {
-  const leader2 = "M150 94 L140 112 L153 126 L138 145 L147 160";
-  const branch2 = "M153 126 L177 141 L172 154";
-  const leader3 = "M150 94 L140 112 L153 126 L138 145 L147 160 L160 172";
-  const channel4 = "M150 92 L140 112 L153 126 L138 145 L149 161 L166 178 L180 200";
-
-  return (
-    <Scene>
-      <svg
-        viewBox="0 0 620 490"
-        className={STAGE_CLASS}
-        role="img"
-        aria-label="Четири фази на мълнията: разделяне на заряда, стъпаловиден лидер, среща с възходящ стример и възвратен удар"
-      >
-        <title>Как се образува мълнията — четири фази</title>
-        <rect width={620} height={490} fill={STAGE_BG} />
-
-        <StageFrame x={8} y={8} title="1 · ЗАРЯД В ОБЛАКА">
-          <MiniCloud />
-          <Plus x={112} y={54} r={5} />
-          <Plus x={150} y={50} r={5} />
-          <Plus x={188} y={54} r={5} />
-          <Minus x={120} y={84} r={5} />
-          <Minus x={155} y={86} r={5} />
-          <Minus x={192} y={84} r={5} />
-          <Plus x={110} y={190} r={5} />
-          <Plus x={150} y={190} r={5} />
-          <Plus x={190} y={190} r={5} />
-        </StageFrame>
-
-        <StageFrame x={312} y={8} title="2 · СТЪПАЛОВИДЕН ЛИДЕР">
-          <MiniCloud opacity={0.55} />
-          <g fill="none" stroke={C.minus} strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
-            <path d={leader2} />
-            <path d={branch2} opacity={0.6} />
-          </g>
-          <circle cx={147} cy={160} r={9} fill={C.minus} opacity={0.16} />
-          <Plus x={110} y={190} r={5} opacity={0.55} />
-          <Plus x={150} y={190} r={5} opacity={0.55} />
-          <Plus x={190} y={190} r={5} opacity={0.55} />
-        </StageFrame>
-
-        <StageFrame x={8} y={248} title="3 · ВЪЗХОДЯЩ СТРИМЕР">
-          <MiniCloud opacity={0.45} />
-          <g fill="none" stroke={C.minus} strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
-            <path d={leader3} />
-            <path d={branch2} opacity={0.45} />
-          </g>
-          {/* дърво / висок обект */}
-          <path d="M182 200 L182 182" stroke={C.wire} strokeWidth={2} opacity={0.7} />
-          <path d="M172 184 L182 166 L192 184 Z" fill="rgba(242,239,245,0.14)" stroke={C.wire} strokeWidth={1.2} opacity={0.7} />
-          <g fill="none" stroke={C.plus} strokeWidth={2.2} strokeLinecap="round">
-            <path d="M182 166 L176 178 M182 166 L172 172 M182 166 L166 176" transform="rotate(180 182 166)" />
-          </g>
-          <circle cx={165} cy={176} r={12} fill={C.warn} opacity={0.22} />
-          <circle cx={165} cy={176} r={4} fill={C.warn} />
-        </StageFrame>
-
-        <StageFrame x={312} y={248} title="4 · ВЪЗВРАТЕН УДАР">
-          <MiniCloud opacity={0.5} />
-          <g fill="none" strokeLinecap="round" strokeLinejoin="round">
-            <path d={channel4} stroke={C.warn} strokeWidth={9} opacity={0.2} />
-            <path d={channel4} stroke={C.warn} strokeWidth={3.4} />
-            <path d="M153 126 L177 141 L172 154" stroke={C.warn} strokeWidth={2} opacity={0.55} />
-          </g>
-          <g stroke={C.ok} strokeWidth={2.2} strokeLinecap="round" fill="none">
-            <line x1={232} y1={190} x2={232} y2={108} />
-            <path d="M232 108 l -6 12 M232 108 l 6 12" />
-          </g>
-          <SvgTex x={232} y={218} tex={String.raw`\sim 10^{8}\ \mathrm{m/s}`} color={C.ok} fontSize={13} width={110} anchor="middle" />
-        </StageFrame>
-      </svg>
-    </Scene>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* §6 — Каскадата от частици                                           */
+/* §6: Каскадата от частици                                            */
 /* ------------------------------------------------------------------ */
 
 export function ParticleCascadeDiagram() {
@@ -287,7 +174,7 @@ export function ParticleCascadeDiagram() {
         <title>От ускорен електрон до антиматерия</title>
         <rect width={660} height={210} fill={STAGE_BG} />
 
-        {/* 1 — ускорен електрон */}
+        {/* 1: ускорен електрон */}
         <circle cx={70} cy={92} r={9} fill={C.minus} />
         <SvgTex x={70} y={64} tex="e^-" color={C.minus} fontSize={14} width={40} anchor="middle" />
         <g stroke={C.minus} strokeWidth={2.2} strokeLinecap="round" fill="none">
@@ -297,7 +184,7 @@ export function ParticleCascadeDiagram() {
         <Cap x={70} y={150} size={10.5} anchor="middle">УСКОРЕН</Cap>
         <Cap x={70} y={166} size={10.5} anchor="middle">ЕЛЕКТРОН</Cap>
 
-        {/* 2 — отклонение от молекула */}
+        {/* 2: отклонение от молекула */}
         <circle cx={198} cy={92} r={17} fill="rgba(242,239,245,0.10)" stroke={C.faint} strokeWidth={1.3} />
         <g stroke={C.minus} strokeWidth={2.2} strokeLinecap="round" fill="none" opacity={0.8}>
           <path d="M215 88 C 240 78, 254 96, 276 74" />
@@ -305,7 +192,7 @@ export function ParticleCascadeDiagram() {
         <Cap x={198} y={150} size={10.5} anchor="middle">МОЛЕКУЛА</Cap>
         <Cap x={198} y={166} size={10.5} anchor="middle">ВЪЗДУХ</Cap>
 
-        {/* 3 — спирачно лъчение */}
+        {/* 3: спирачно лъчение */}
         <path
           d="M222 108 q 12 14 24 0 q 12 -14 24 0 q 12 14 24 0 q 12 -14 24 0 q 12 14 24 0"
           fill="none"
@@ -317,7 +204,7 @@ export function ParticleCascadeDiagram() {
         <Cap x={340} y={150} size={10.5} anchor="middle">СПИРАЧНО ЛЪЧЕНИЕ</Cap>
         <Cap x={340} y={166} size={10.5} anchor="middle">РЕНТГЕН И ГАМА</Cap>
 
-        {/* 4 — раждане на двойка */}
+        {/* 4: раждане на двойка */}
         <g stroke={C.faint} strokeWidth={1.4} strokeDasharray="5 5">
           <line x1={432} y1={40} x2={432} y2={140} />
         </g>
@@ -336,7 +223,7 @@ export function ParticleCascadeDiagram() {
 }
 
 /* ------------------------------------------------------------------ */
-/* §4 — Инфографика за безопасност                                     */
+/* §4: Инфографика за безопасност                                      */
 /* ------------------------------------------------------------------ */
 
 type SafetyIcon = "home" | "tree" | "peak" | "plug" | "clock" | "ruler";
@@ -373,7 +260,7 @@ const ICONS: Record<SafetyIcon, React.ReactNode> = {
 const SAFETY: { icon: SafetyIcon; rule: string; why: string }[] = [
   {
     icon: "home",
-    rule: "Чуете ли гръм — влезте вътре",
+    rule: "Чуете ли гръм, влезте вътре",
     why: "Сграда с инсталации или автомобил с твърд метален покрив отвежда тока по обвивката си.",
   },
   {
