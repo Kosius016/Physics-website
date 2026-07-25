@@ -113,9 +113,9 @@ export default function DeterminantsLessonPage() {
             <PredictionQuestion
               prompt="Преди симулацията: срязването [1 0.8; 0 1] накланя силно квадрата. Какво прави то с площта му?"
               options={[
-                { text: "Не я променя — успоредникът е точно толкова, колкото квадратът", correct: true },
-                { text: "Увеличава я — фигурата става по-дълга", correct: false },
-                { text: "Намалява я — фигурата се „изтънява“", correct: false },
+                { text: "Не я променя: успоредникът е точно колкото изходния квадрат", correct: true },
+                { text: "Увеличава я, защото фигурата става видимо по-дълга", correct: false },
+                { text: "Намалява я, защото фигурата се „изтънява“ при накланяне", correct: false },
               ]}
               explanation="Срязването мести всеки хоризонтален слой настрани, без да променя нито ширината, нито височината му — като изкривена колода карти: обемът на колодата не се променя. Проверете с preset-а „Срязване“: площта остава 1.000."
             />
@@ -185,9 +185,17 @@ export default function DeterminantsLessonPage() {
               <p className="mb-2 text-[12px] font-bold uppercase tracking-[.15em] text-minus">Стъпка 3 · Опростяваме</p>
               <Formula latex={String.raw`\boxed{\det\begin{pmatrix}a&b\\c&d\end{pmatrix}=ad-bc}`} />
               <p className="mt-3 text-ink/90">
-                Ако резултатът е отрицателен, геометричната площ е <RichText text="$|ad-bc|$" />,
-                а минусът казва, че ориентацията е обърната. При <RichText text="$a=0$" /> можем да
-                разменим колоните, да повторим аргумента и да отчетем смяната на знака.
+                Думата <strong>знакова</strong> в стъпка 2 върши цялата работа около знака. Ако
+                втората колона се окаже <em>под</em> изправената първа, височината{" "}
+                <RichText text={String.raw`$d-\frac{bc}{a}$`} /> е отрицателна и произведението също.
+                Това е същият минус, който в §2 обръщаше червено-синия ред на шахматната дъска:{" "}
+                <strong>отрицателна знакова височина = обърната ориентация</strong>. Геометричната
+                площ е <RichText text="$|ad-bc|$" />.
+              </p>
+              <p className="mt-3 text-ink/90">
+                Остана случаят <RichText text="$a=0$" />, в който не можем да делим на{" "}
+                <RichText text="$a$" />. Тогава разменяме двете колони: успоредникът е същият, но
+                ориентацията се обръща, затова повтаряме аргумента и накрая връщаме знака обратно.
               </p>
             </div>
           </div>
@@ -254,10 +262,29 @@ export default function DeterminantsLessonPage() {
               </table>
             </div>
 
+            <h3 className="pt-2 font-serif text-[21px] font-bold text-ink">
+              Защо <RichText text={String.raw`$\det(AB)=\det A\cdot\det B$`} />
+            </h3>
             <p className="text-ink/90">
-              Общите свойства остават същите: <RichText text={String.raw`$\det(AB)=\det A\,\det B$`} />;
-              размяната на две колони сменя знака; а в размерност <RichText text="$n$" /> важи
-              <RichText text={String.raw`$\ \det(kA)=k^n\det A$`} />.
+              Това свойство изглежда като факт за наизустяване, но е просто изречение на езика от
+              предишния урок. Там <RichText text="$AB$" /> значеше{" "}
+              <strong>първо B, после A</strong>. А детерминантата мери с колко се умножава площта.
+              Пуснете единичния квадрат през двете машини последователно:
+            </p>
+            <Formula latex={String.raw`1\ \xrightarrow{\ B\ }\ \det B\ \xrightarrow{\ A\ }\ \det A\cdot\det B`} />
+            <p className="text-ink/90">
+              Мащабирането на площта е един път по <RichText text={String.raw`$\det B$`} /> и още
+              веднъж по <RichText text={String.raw`$\det A$`} />, а два последователни коефициента се
+              умножават. Оттук веднага следва и защо изродената матрица „заразява“ произведението:
+              ако едната машина смачка равнината, никоя следваща не може да я разгъне, тоест{" "}
+              <RichText text={String.raw`$\det A=0$`} /> или{" "}
+              <RichText text={String.raw`$\det B=0$`} /> прави и{" "}
+              <RichText text={String.raw`$\det(AB)=0$`} />.
+            </p>
+            <p className="text-ink/90">
+              Останалите общи свойства: размяната на две колони сменя знака; а в размерност{" "}
+              <RichText text="$n$" /> важи <RichText text={String.raw`$\ \det(kA)=k^n\det A$`} /> —
+              мащабирането действа по всяка от <RichText text="$n$" /> независими посоки.
             </p>
           </div>
           <TeacherNote>
@@ -303,6 +330,14 @@ export default function DeterminantsLessonPage() {
         {/* §6 Якобиан */}
         <Section id="jacobian" n="§6" title="Якобиан: детерминанта на място">
           <div className="space-y-4">
+            <div className="rounded-r-lg border-l-4 border-minus bg-hl px-4 py-3 text-[15px] leading-relaxed text-ink/90">
+              <strong className="text-ink">Тази секция иска частни производни.</strong> Ако още не
+              сте ги срещали в курса по анализ, прескочете направо към{" "}
+              <a href="#applications" className="font-semibold text-minus hover:underline">§7</a> —
+              нищо в останалата част на главата не зависи от нея. Върнете се тук веднага щом видите
+              символа <RichText text={String.raw`$\partial$`} />: тогава якобианът ще е най-лесното
+              приложение на всичко дотук, а не нова тема.
+            </div>
             <p className="text-[17px] text-ink">
               Дотук всяка трансформация беше линейна и се описваше с една и съща матрица навсякъде.
               Но карти като полярната <RichText text={String.raw`$(r,\theta)\mapsto(r\cos\theta,r\sin\theta)$`} />
@@ -442,6 +477,10 @@ export default function DeterminantsLessonPage() {
                 Една проверка преди всяко „делене на матрица“.
               </li>
               <li>
+                <RichText text={String.raw`$\det(AB)=\det A\,\det B$`} />, защото две последователни
+                машини мащабират площта две последователни степени.
+              </li>
+              <li>
                 Якобиановата матрица е локалната линейна версия на крива карта, а |det J| е локалният
                 коефициент за площ.
               </li>
@@ -450,6 +489,22 @@ export default function DeterminantsLessonPage() {
                 после разгъваме по минори със знаците + − +.
               </li>
             </ul>
+          </div>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-[10px] border-[1.5px] border-ok bg-ok/10 px-4 py-3">
+              <p className="font-semibold text-ink">Можете да продължите, ако…</p>
+              <p className="mt-1 text-[14.5px] leading-relaxed text-ink/85">
+                обяснявате защо срязването има det = 1, какво значи отрицателна детерминанта и защо
+                det = 0 забранява връщането назад.
+              </p>
+            </div>
+            <div className="rounded-[10px] border-[1.5px] border-plus bg-plus/10 px-4 py-3">
+              <p className="font-semibold text-ink">Върнете се към §2, ако…</p>
+              <p className="mt-1 text-[14.5px] leading-relaxed text-ink/85">
+                смятате ad − bc безпогрешно, но не можете да предскажете знака на резултата, преди да
+                сте сметнали.
+              </p>
+            </div>
           </div>
           <p className="mt-5 text-ink/90">
             <strong>Следваща глава:</strong>{" "}

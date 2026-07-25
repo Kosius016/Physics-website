@@ -8,6 +8,7 @@ import CrossProductComponents from "@/components/interactives/CrossProductCompon
 import CrossProductGeometry from "@/components/interactives/CrossProductGeometry";
 import CrossProductProblemSet from "@/components/interactives/CrossProductProblemSet";
 import PredictionQuestion from "@/components/interactives/PredictionQuestion";
+import RightHandCross from "@/components/interactives/RightHandCross";
 import TripleProductLab from "@/components/interactives/TripleProductLab";
 import {
   TeacherModeProvider,
@@ -67,9 +68,9 @@ export default function CrossProductLessonPage() {
             <PredictionQuestion
               prompt={String.raw`Дадени са два непаралелни вектора $\vec a$ и $\vec b$. Колко посоки са перпендикулярни едновременно и на двата?`}
               options={[
-                { text: "Две противоположни посоки — трябва още правило, за да изберем едната", correct: true },
-                { text: "Точно една посока", correct: false },
-                { text: "Безкрайно много посоки", correct: false },
+                { text: "Две противоположни посоки, затова трябва още едно правило за избор", correct: true },
+                { text: "Точно една посока, определена еднозначно от двата вектора", correct: false },
+                { text: "Безкрайно много посоки, по една за всяка точка на равнината", correct: false },
               ]}
               explanation={String.raw`Нормалната права към равнината има две ориентации. Редът $\vec a\times\vec b$ и правилото на дясната ръка избират едната; $\vec b\times\vec a$ избира противоположната.`}
             />
@@ -141,13 +142,37 @@ export default function CrossProductLessonPage() {
             <PredictionQuestion
               prompt={String.raw`Без координатна сметка: накъде сочи $\vec k\times\vec j$?`}
               options={[
-                { text: String.raw`$-\vec i$`, correct: true },
-                { text: String.raw`$+\vec i$`, correct: false },
-                { text: String.raw`$\vec0$`, correct: false },
+                { text: String.raw`$-\vec i$, тоест обратно на положителната ос $x$`, correct: true },
+                { text: String.raw`$+\vec i$, по положителната ос $x$`, correct: false },
+                { text: String.raw`$\vec0$, защото множителите са перпендикулярни`, correct: false },
               ]}
-              explanation={String.raw`$\vec j\times\vec k=\vec i$ е напред по цикъла. Размяната на реда обръща знака, следователно $\vec k\times\vec j=-\vec i$.`}
+              explanation={String.raw`$\vec j\times\vec k=\vec i$ е напред по цикъла. Размяната на реда обръща знака, следователно $\vec k\times\vec j=-\vec i$. Нулев вектор се получава при **успоредни** множители, не при перпендикулярни.`}
             />
+            <p className="text-ink/90">
+              Тренажорът долу дава двойката, вие давате посоката. Сцената дорисува резултата чак
+              след отговора, за да не се превърне познаването в разчитане на картинката.
+            </p>
           </div>
+          <div className="mt-5">
+            <RightHandCross />
+          </div>
+          <TeacherNote>
+            <ul className="list-disc space-y-1.5 pl-5">
+              <li>
+                Изисквайте физическото движение с ръка при всяка двойка, не само мисленото. Ученик,
+                който върти дясната ръка над чина, прави много по-малко знакови грешки от този,
+                който помни цикъла наизуст.
+              </li>
+              <li>
+                Задължителна спирка: една и съща двойка в двата реда. Разликата в палеца е цялата
+                антикомутативност.
+              </li>
+              <li>
+                Диагностичен въпрос: „кога резултатът е нулевият вектор и защо това не значи, че
+                векторите са перпендикулярни?“ (нула се получава при успоредни).
+              </li>
+            </ul>
+          </TeacherNote>
         </Section>
 
         <Section id="coordinates" n="§4" title="Координатната формула е детерминанта">
@@ -175,6 +200,23 @@ export default function CrossProductLessonPage() {
             </p>
           </div>
           <div className="mt-5"><CrossProductComponents /></div>
+          <TeacherNote>
+            <ul className="list-disc space-y-1.5 pl-5">
+              <li>
+                Записът с <RichText text={String.raw`$\vec i,\vec j,\vec k$`} /> на първия ред е
+                мнемоника, не същинска детерминанта: първият ред съдържа вектори, не числа. Кажете
+                го веднъж честно, вместо ученикът да го открие сам и да се обърка.
+              </li>
+              <li>
+                Задължителен ред при сметка: първо схемата <strong>+ − +</strong> на хартия, после
+                числата. Средната компонента се проверява отделно.
+              </li>
+              <li>
+                Диагностика с preset-а „Успоредни“: питайте защо и трите компоненти стават нула
+                едновременно (всеки минор е детерминанта на пропорционални редове).
+              </li>
+            </ul>
+          </TeacherNote>
         </Section>
 
         <Section id="properties" n="§5" title="Свойства и гранични случаи">
@@ -264,9 +306,9 @@ export default function CrossProductLessonPage() {
 
         <Section id="problems" n="§8" title="Задачи от основни до сложни">
           <p className="mb-5 text-ink/90">
-            Решавайте в един и същи ред: <strong>какъв трябва да е типът на резултата</strong>,
-            <strong> накъде трябва да сочи</strong>, и чак тогава — компонентната сметка. Разгънете
-            решението едва след собствен опит.
+            Всяка задача налага един и същи ред: <strong>какъв е типът на резултата</strong>,{" "}
+            <strong>накъде сочи той</strong>, и чак тогава — компонентната сметка. Стъпките на
+            решението се отключват едва след двата въпроса, а фигурата се достроява с всеки отговор.
           </p>
           <CrossProductProblemSet />
           <ProblemSetLinkCard note="Problem set 01 надгражда този урок с тъждествата на Лагранж, Якоби и Бине-Коши, формулата BAC-CAB, компланарност и двойно кръстосване." />

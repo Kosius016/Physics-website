@@ -87,8 +87,10 @@ export default function CrossProductComponents() {
         ) : (
           <SvgTex x={300} y={78} tex={String.raw`\vec a\times\vec b=\vec 0`} color={C.ok} fontSize={16} width={170} anchor="middle" />
         )}
-        <text x="18" y="338" fill={C.mut} fontSize="11.5">Посоките са точни; много дългите стрелки са скалирани за четимост.</text>
       </svg>
+      <p className="mt-2 text-[13px] leading-relaxed text-muted">
+        Посоките в сцената са точни; много дългите стрелки са скалирани, за да се съберат в кадъра.
+      </p>
 
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         {(["a", "b"] as const).map((which) => {

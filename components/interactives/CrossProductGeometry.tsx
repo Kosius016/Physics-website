@@ -55,8 +55,19 @@ export default function CrossProductGeometry() {
         <Arrow x1={O[0]} y1={O[1]} x2={A[0]} y2={A[1]} color={C.plus} width={3.2} texLabel={String.raw`\vec a`} texLabelDy={18} texLabelWidth={46} />
         <Arrow x1={O[0]} y1={O[1]} x2={B[0]} y2={B[1]} color={C.minus} width={3.2} texLabel={String.raw`\vec b`} texLabelDx={-8} texLabelDy={-4} texLabelWidth={46} />
         <AngleArc cx={O[0]} cy={O[1]} a1={-rad} a2={0} r={50} color={C.warn} texLabel={String.raw`\theta`} />
-        <SvgTex x={B[0] + 10} y={(B[1] + O[1]) / 2} tex={String.raw`b\sin\theta`} color={C.warn} fontSize={13} width={92} />
-        <SvgTex x={(O[0] + D[0]) / 2} y={(O[1] + D[1]) / 2} tex={String.raw`S=ab\sin\theta`} color={C.ok} fontSize={15} width={130} anchor="middle" />
+        {/* Височината се крие при смачкан успоредник; иначе етикетът ѝ се блъска в S. */}
+        <g opacity={nearlyZero ? 0 : 1} className="transition-opacity">
+          <SvgTex x={B[0] + 10} y={(B[1] + O[1]) / 2} tex={String.raw`b\sin\theta`} color={C.warn} fontSize={13} width={92} />
+        </g>
+        <SvgTex
+          x={(O[0] + D[0]) / 2}
+          y={(O[1] + D[1]) / 2 + 30}
+          tex={String.raw`S=ab\sin\theta`}
+          color={C.ok}
+          fontSize={15}
+          width={130}
+          anchor="middle"
+        />
 
         <g opacity={nearlyZero ? 0.35 : 1}>
           <CurrentSymbol x={520} y={245} out={!swapped} r={24} color={C.ok} />

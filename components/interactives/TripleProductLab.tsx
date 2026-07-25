@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Formula from "@/components/Formula";
+import RichText from "@/components/RichText";
 import SvgTex from "./SvgTex";
 import { Arrow, C, PANEL_CLASS, STAGE_BG, STAGE_CLASS } from "./svg";
 
@@ -54,8 +55,11 @@ export default function TripleProductLab() {
         <line x1={c2[0]} y1={c2[1]} x2={c2[0]} y2={project([slide, 0.7, 0])[1]} stroke={C.warn} strokeWidth="1.6" strokeDasharray="5 5" />
         <SvgTex x={c2[0] + 10} y={(c2[1] + project([slide, 0.7, 0])[1]) / 2} tex="h" color={C.warn} fontSize={14} width={28} />
         <SvgTex x={430} y={72} tex={String.raw`V=S_{\text{основа}}h`} color={C.ok} fontSize={16} width={160} />
-        <text x="22" y="370" fill={C.mut} fontSize="11.5">Накланянето на c мести горната основа, но не променя височината и обема.</text>
       </svg>
+      <p className="mt-2 text-[13px] leading-relaxed text-muted">
+        Накланянето на <RichText text={String.raw`$\vec c$`} /> мести горната основа настрани, но не
+        променя нито височината, нито обема.
+      </p>
 
       <dl className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-[10px] border-[1.5px] border-ink bg-rule sm:grid-cols-4">
         {[

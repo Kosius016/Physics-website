@@ -4,6 +4,7 @@ import LessonNav from "@/components/LessonNav";
 import RichText from "@/components/RichText";
 import Section from "@/components/Section";
 import ProblemSetLinkCard from "@/components/problem-sets/ProblemSetLinkCard";
+import ColumnPicture from "@/components/interactives/ColumnPicture";
 import CompositionOrder from "@/components/interactives/CompositionOrder";
 import MatrixPlayground from "@/components/interactives/MatrixPlayground";
 import MatrixProblemSet from "@/components/interactives/MatrixProblemSet";
@@ -120,8 +121,8 @@ export default function MatricesLessonPage() {
               prompt="Преди плъзгачите: какво ще направи с ракетата матрицата с колони î′ = (0, 1) и ĵ′ = (−1, 0)?"
               options={[
                 { text: "Ще я завърти на 90° обратно на часовниковата стрелка", correct: true },
-                { text: "Ще я обърне огледално", correct: false },
-                { text: "Ще я разтегне по диагонала", correct: false },
+                { text: "Ще я обърне огледално спрямо вертикалната ос", correct: false },
+                { text: "Ще я разтегне по диагонала, без да я върти", correct: false },
               ]}
               explanation="î (дясно) отива нагоре, ĵ (горе) отива наляво — и двете са завъртени на 90° обратно на часовниковата стрелка, а с тях и цялата равнина. Проверете с preset-а „Ротация 90°“."
             />
@@ -197,7 +198,29 @@ export default function MatricesLessonPage() {
               <RichText text="$y=1$" />. Тоест търсим кой вход е бил изпратен в изхода
               <RichText text="$\vec b=(5,3)$" />.
             </p>
+            <p className="text-ink/90">
+              Дотук това е ученическа елиминация и още не обяснява <em>защо</em> решението излиза
+              точно едно. Отговорът е геометричен и вече го знаем от §3: умножението беше „вземи{" "}
+              <RichText text="$x$" /> части от първата колона и <RichText text="$y$" /> части от
+              втората“. Значи системата не пита нищо друго освен{" "}
+              <strong>с каква рецепта се смесват двете колони, за да се получи</strong>{" "}
+              <RichText text="$\vec b$" />.
+            </p>
+            <Formula latex={String.raw`x\begin{pmatrix}2\\1\end{pmatrix}+y\begin{pmatrix}1\\1\end{pmatrix}=\begin{pmatrix}5\\3\end{pmatrix}`} />
           </div>
+
+          <div className="mt-5 mb-5">
+            <PredictionQuestion
+              prompt="Двете колони на матрицата сочат в различни посоки. Колко двойки (x, y) могат да улучат точно вектора b?"
+              options={[
+                { text: "Точно една, защото двете посоки покриват равнината без повторение", correct: true },
+                { text: "Безброй много, защото плъзгачите приемат безброй стойности", correct: false },
+                { text: "Нито една, ако b не лежи върху някоя от двете колони", correct: false },
+              ]}
+              explanation="Два неуспоредни вектора образуват базис: всяка точка на равнината се достига по точно един начин. Затова системата има единствено решение. Ако колоните бяха успоредни, комбинациите щяха да покриват само една права — а това е случаят, който следващият урок ще нарече det = 0."
+            />
+          </div>
+          <ColumnPicture />
 
           <div className="mt-5 grid gap-3 sm:grid-cols-3">
             {[
@@ -221,12 +244,23 @@ export default function MatricesLessonPage() {
             възстановяването е невъзможно. Следващият урок ще даде точния тест кога това се случва.
           </div>
           <TeacherNote>
-            <p>
-              Не въвеждайте обратната матрица първо като формула. Използвайте езика „undo бутон“:
-              завъртането и мащабирането могат да се отменят, проекцията не може — тя е изтрила
-              информация. Едва след това напишете M⁻¹. Проверка: ученикът трябва да може да прочете
-              Mx=b с думи: „кой вход x машината M е превърнала в измерения изход b?“
-            </p>
+            <ul className="list-disc space-y-1.5 pl-5">
+              <li>
+                Не въвеждайте обратната матрица първо като формула. Използвайте езика „undo бутон“:
+                завъртането и мащабирането могат да се отменят, проекцията не може — тя е изтрила
+                информация. Едва след това напишете M⁻¹.
+              </li>
+              <li>
+                Проверка: ученикът трябва да може да прочете Mx=b с думи: „кой вход x машината M е
+                превърнала в измерения изход b?“
+              </li>
+              <li>
+                На колонната картина поискайте първо да улучат кръгчето „на око“, преди да смятат.
+                Диагностичен въпрос след това: „ако втората колона беше (4, 2) вместо (1, 1), кои
+                цели биха станали недостижими?“ (всички извън правата през (2, 1) — визуалният
+                предвестник на det = 0).
+              </li>
+            </ul>
           </TeacherNote>
         </Section>
 
@@ -326,7 +360,8 @@ export default function MatricesLessonPage() {
               </li>
               <li>
                 <RichText text="$M\vec x=\vec b$" /> е система от линейни уравнения в компактен
-                вид: правата задача намира изхода b, обратната търси неизвестния вход x.
+                вид: правата задача намира изхода b, обратната търси неизвестния вход x. Колонната
+                картина я чете като рецепта за смесване на колоните.
               </li>
               <li>
                 Обратимост означава, че входът може да се възстанови еднозначно. Проекцията губи
@@ -341,6 +376,22 @@ export default function MatricesLessonPage() {
                 мрежи — научите ли геометрията, приложенията са „безплатни“.
               </li>
             </ul>
+          </div>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <div className="rounded-[10px] border-[1.5px] border-ok bg-ok/10 px-4 py-3">
+              <p className="font-semibold text-ink">Можете да продължите, ако…</p>
+              <p className="mt-1 text-[14.5px] leading-relaxed text-ink/85">
+                конструирате матрицата на дадено действие само от въпроса „къде отиват î и ĵ?“ и
+                обяснявате защо S·R значи „първо R“.
+              </p>
+            </div>
+            <div className="rounded-[10px] border-[1.5px] border-plus bg-plus/10 px-4 py-3">
+              <p className="font-semibold text-ink">Върнете се към §3, ако…</p>
+              <p className="mt-1 text-[14.5px] leading-relaxed text-ink/85">
+                смятате умножението правилно, но не можете да кажете какво прави матрицата с
+                картинката, без да смятате.
+              </p>
+            </div>
           </div>
           <p className="mt-5 text-ink/90">
             <strong>Следваща глава:</strong>{" "}
