@@ -5,17 +5,14 @@ import { usePathname } from "next/navigation";
 
 const TABS: readonly { label: string; href?: string }[] = [
   { label: "Уроци", href: "/physics" },
-  { label: "Задачи" },
+  { label: "Задачи", href: "/zadachi" },
   { label: "Материали" },
   { label: "Симулации" },
   { label: "Практикум", href: "/praktikum" },
   { label: "Статии", href: "/statii" },
 ];
 
-/**
- * Горна навигационна лента: лого вляво, табове за тип съдържание вдясно.
- * Засега функционира само "Уроци"; останалите табове са визуални placeholder-и.
- */
+/** Горна навигационна лента: лого вляво, табове за тип съдържание вдясно. */
 export default function TopNav() {
   const pathname = usePathname();
 
@@ -29,7 +26,9 @@ export default function TopNav() {
           {TABS.map((tab) => {
             const active =
               tab.href === "/physics"
-                ? !pathname.startsWith("/praktikum") && !pathname.startsWith("/statii")
+                ? !pathname.startsWith("/praktikum") &&
+                  !pathname.startsWith("/statii") &&
+                  !pathname.startsWith("/zadachi")
                 : tab.href
                   ? pathname.startsWith(tab.href)
                   : false;

@@ -88,6 +88,11 @@ const physicsUni: CourseSection[] = [
         title: "Законът на Фарадей — индукция от променящ се поток",
         href: "/physics/magnetizm/faraday",
       },
+      {
+        number: "3.2",
+        title: "Индуктивност: токът има електромагнитна инерция",
+        href: "/physics/magnetizm/induktivnost",
+      },
     ],
   },
 ];

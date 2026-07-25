@@ -3,6 +3,7 @@ import Formula from "@/components/Formula";
 import LessonNav from "@/components/LessonNav";
 import RichText from "@/components/RichText";
 import Section from "@/components/Section";
+import ProblemSetLinkCard from "@/components/problem-sets/ProblemSetLinkCard";
 import DeterminantDerivation from "@/components/interactives/DeterminantDerivation";
 import DeterminantArea from "@/components/interactives/DeterminantArea";
 import Determinant3x3Practice from "@/components/interactives/Determinant3x3Practice";
@@ -417,6 +418,7 @@ export default function DeterminantsLessonPage() {
           <div className="mt-5">
             <DeterminantProblemSet />
           </div>
+          <ProblemSetLinkCard note="В problem set 01 детерминантата се появява като ориентиран обем, тест за компланарност и формула на Вандермонд. Решенията са скрити, за да опитате доказателствата самостоятелно." />
         </Section>
 
         {/* §9 Обобщение */}

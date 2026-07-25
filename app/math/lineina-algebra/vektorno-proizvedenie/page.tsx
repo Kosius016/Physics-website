@@ -3,6 +3,7 @@ import Formula from "@/components/Formula";
 import LessonNav from "@/components/LessonNav";
 import RichText from "@/components/RichText";
 import Section from "@/components/Section";
+import ProblemSetLinkCard from "@/components/problem-sets/ProblemSetLinkCard";
 import CrossProductComponents from "@/components/interactives/CrossProductComponents";
 import CrossProductGeometry from "@/components/interactives/CrossProductGeometry";
 import CrossProductProblemSet from "@/components/interactives/CrossProductProblemSet";
@@ -268,6 +269,7 @@ export default function CrossProductLessonPage() {
             решението едва след собствен опит.
           </p>
           <CrossProductProblemSet />
+          <ProblemSetLinkCard note="Problem set 01 надгражда този урок с тъждествата на Лагранж, Якоби и Бине-Коши, формулата BAC-CAB, компланарност и двойно кръстосване." />
         </Section>
 
         <Section id="recap" n="§9" title="Работен алгоритъм и обобщение">

@@ -3,6 +3,7 @@ import Formula from "@/components/Formula";
 import LessonNav from "@/components/LessonNav";
 import RichText from "@/components/RichText";
 import Section from "@/components/Section";
+import ProblemSetLinkCard from "@/components/problem-sets/ProblemSetLinkCard";
 import CompositionOrder from "@/components/interactives/CompositionOrder";
 import MatrixPlayground from "@/components/interactives/MatrixPlayground";
 import MatrixProblemSet from "@/components/interactives/MatrixProblemSet";
@@ -304,6 +305,7 @@ export default function MatricesLessonPage() {
           <div className="mt-5">
             <MatrixProblemSet />
           </div>
+          <ProblemSetLinkCard note="Продължете към общата серия за линейна алгебра. Задача 10 използва матричния запис на детерминантата на Вандермонд, а останалите задачи показват къде водят детерминантите във векторния анализ." />
         </Section>
 
         {/* §8 Обобщение */}
