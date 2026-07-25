@@ -11,7 +11,7 @@ import { BTN_PRI, BTN_SEC, C, PANEL_CLASS, STAGE_BG, STAGE_CLASS } from "@/compo
  * проверим без анимация (CLAUDE.md §4). Прозата е под сцената, не в нея (§3).
  */
 
-const DURATION_MS = 11000;
+const DURATION_MS = 5200;
 
 /** Дял от интервала [a, b], в който се намира t; извън него 0 или 1. */
 function seg(t: number, a: number, b: number) {
