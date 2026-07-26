@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata = {
@@ -60,18 +61,28 @@ export default function MaterialsPage() {
             </div>
           </div>
 
-          <div className="flex min-h-52 flex-col justify-between border-t-[1.5px] border-ink bg-hl p-6 md:border-l-[1.5px] md:border-t-0">
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-[.18em] text-muted">
-                Ключов въпрос
-              </p>
-              <p className="mt-3 font-serif text-[26px] font-bold leading-tight">
-                Зарядът или потенциалът е постоянен?
-              </p>
+          <div className="relative min-h-64 overflow-hidden border-t-[1.5px] border-ink bg-hl md:min-h-0 md:border-l-[1.5px] md:border-t-0">
+            <Image
+              src="/og.png"
+              alt="Стилизирана схема на кондензатор с частично вкаран диелектрик"
+              fill
+              sizes="(min-width: 768px) 42vw, 100vw"
+              className="object-cover object-[72%_center] transition-transform duration-500 group-hover:scale-[1.025]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-ink/95 via-ink/10 to-transparent" />
+            <div className="relative flex h-full min-h-64 flex-col justify-between p-6 md:min-h-full">
+              <div className="max-w-[17rem] rounded-[9px] border-[1.5px] border-ink bg-paper/95 px-4 py-3 shadow-hard-sm">
+                <p className="text-[10px] font-bold uppercase tracking-[.18em] text-muted">
+                  Ключов въпрос
+                </p>
+                <p className="mt-1.5 font-serif text-[21px] font-bold leading-tight text-ink">
+                  Зарядът или потенциалът е постоянен?
+                </p>
+              </div>
+              <span className="mt-8 self-start rounded-full bg-ink/90 px-4 py-2 text-[14px] font-bold text-white">
+                Отворете материала <span aria-hidden="true">→</span>
+              </span>
             </div>
-            <span className="mt-8 text-[15px] font-bold text-minus">
-              Отворете материала <span aria-hidden="true">→</span>
-            </span>
           </div>
         </Link>
       </section>
