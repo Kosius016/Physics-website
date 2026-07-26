@@ -64,15 +64,12 @@ export default function MaterialsPage() {
           <div className="flex min-h-[22rem] flex-col border-t-[1.5px] border-ink bg-hl md:min-h-0 md:border-l-[1.5px] md:border-t-0">
             <div className="relative min-h-48 flex-1 overflow-hidden border-b-[1.5px] border-ink">
               <Image
-                src="/og.png"
-                alt="Стилизирана схема на кондензатор с частично вкаран диелектрик"
+                src="/images/materiali/capacitor-grounded-sphere.png"
+                alt="Стилизирана схема на кондензатор с диелектрик и заземена сфера"
                 fill
                 sizes="(min-width: 768px) 42vw, 100vw"
-                className="origin-right scale-[1.35] object-cover object-right transition-transform duration-500 group-hover:scale-[1.39]"
+                className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.025]"
               />
-              <span className="absolute left-4 top-4 rounded-full border-[1.5px] border-ink bg-paper/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[.16em] text-ink shadow-hard-sm">
-                Интерактивен преговор
-              </span>
             </div>
             <div className="bg-hl px-5 py-4">
               <p className="text-[10px] font-bold uppercase tracking-[.18em] text-muted">
