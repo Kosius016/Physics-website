@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import RichText from "@/components/RichText";
 import type { QuizQuestion } from "@/lib/types";
 
 /**
@@ -21,10 +22,11 @@ export default function Quiz({ questions }: { questions: QuizQuestion[] }) {
       {questions.map((q, qi) => {
         const pickedIdx = picked[qi];
         const locked = pickedIdx !== null;
+        const pickedCorrect = locked ? q.options[pickedIdx].correct : false;
         return (
           <div key={qi}>
             <p className="mb-3 font-semibold text-ink">
-              {qi + 1}. {q.question}
+              {qi + 1}. <RichText text={q.question} />
             </p>
             <div className="flex flex-col gap-2.5">
               {q.options.map((opt, oi) => {
@@ -49,11 +51,24 @@ export default function Quiz({ questions }: { questions: QuizQuestion[] }) {
                     }
                     className={cls}
                   >
-                    {opt.text}
+                    <RichText text={opt.text} />
                   </button>
                 );
               })}
             </div>
+            {locked && q.explanation && (
+              <div
+                className={`mt-3 rounded-r-lg border-l-4 px-4 py-3 text-[14.5px] leading-relaxed animate-rise ${
+                  pickedCorrect ? "border-ok bg-ok/10" : "border-plus bg-plus/10"
+                }`}
+                role="status"
+              >
+                <strong className={pickedCorrect ? "text-ok" : "text-plus"}>
+                  {pickedCorrect ? "Вярно. " : "Не съвсем. "}
+                </strong>
+                <RichText text={q.explanation} />
+              </div>
+            )}
           </div>
         );
       })}

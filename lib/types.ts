@@ -88,6 +88,8 @@ export interface QuizOption {
 export interface QuizQuestion {
   question: string;
   options: QuizOption[];
+  /** Обяснение, което се показва след избора на отговор. */
+  explanation?: RichTextString;
 }
 
 /* ---------- Урок ---------- */

@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 const TABS: readonly { label: string; href?: string }[] = [
   { label: "Уроци", href: "/physics" },
   { label: "Задачи", href: "/zadachi" },
-  { label: "Материали" },
+  { label: "Материали", href: "/materiali" },
   { label: "Симулации" },
   { label: "Практикум", href: "/praktikum" },
   { label: "Статии", href: "/statii" },
@@ -28,7 +28,8 @@ export default function TopNav() {
               tab.href === "/physics"
                 ? !pathname.startsWith("/praktikum") &&
                   !pathname.startsWith("/statii") &&
-                  !pathname.startsWith("/zadachi")
+                  !pathname.startsWith("/zadachi") &&
+                  !pathname.startsWith("/materiali")
                 : tab.href
                   ? pathname.startsWith(tab.href)
                   : false;
