@@ -3,6 +3,7 @@
 import { useState } from "react";
 import RichText from "@/components/RichText";
 import SvgTex from "./SvgTex";
+import { texNumber } from "./mathTex";
 import { Arrow, BTN_PRI, BTN_SEC, C, PANEL_CLASS, STAGE_BG, STAGE_CLASS } from "./svg";
 
 /**
@@ -88,21 +89,31 @@ export default function DeterminantDerivation() {
         <Arrow x1={o[0]} y1={o[1]} x2={pv[0]} y2={pv[1]} color={C.ok} width={3.2} texLabel={String.raw`\vec v`} texLabelDx={-6} texLabelWidth={40} />
 
         <text x={26} y={34} fill={C.mut} fontSize={11.5} fontWeight={800} letterSpacing="0.12em">
-          {straight ? "ИЗПРАВЕН: ОСНОВА × ВИСОЧИНА" : "СРЯЗВАНЕТО ПАЗИ ПЛОЩТА"}
+          {straight ? "ИЗПРАВЕН: ОСНОВА ПО ВИСОЧИНА" : "СРЯЗВАНЕТО ПАЗИ ПЛОЩТА"}
         </text>
       </svg>
 
       <dl className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-[10px] border-[1.5px] border-ink bg-rule sm:grid-cols-4">
         {[
-          { label: "Вектор u", value: `(${u[0].toFixed(2)}, ${u[1].toFixed(2)})`, tone: "minus" },
-          { label: "Вектор v", value: `(${v[0].toFixed(2)}, ${v[1].toFixed(2)})`, tone: "minus" },
-          { label: "Срязване", value: `${Math.round(t * 100)} %`, tone: "minus" },
-          { label: "Площ (знакова)", value: area.toFixed(2), tone: "ok" },
+          {
+            label: "Вектор $\\vec u$",
+            value: String.raw`$\left(${texNumber(u[0])},${texNumber(u[1])}\right)$`,
+            tone: "minus",
+          },
+          {
+            label: "Вектор $\\vec v$",
+            value: String.raw`$\left(${texNumber(v[0])},${texNumber(v[1])}\right)$`,
+            tone: "minus",
+          },
+          { label: "Срязване", value: `$${Math.round(t * 100)}\\,\\%$`, tone: "minus" },
+          { label: "Знакова площ", value: `$A=${texNumber(area)}$`, tone: "ok" },
         ].map((r) => (
           <div key={r.label} className="min-w-0 bg-surface px-3 py-2.5">
-            <dt className="text-[10.5px] font-bold uppercase tracking-wide text-muted">{r.label}</dt>
+            <dt className="text-[10.5px] font-bold uppercase tracking-wide text-muted">
+              <RichText text={r.label} />
+            </dt>
             <dd className={`mt-0.5 text-[15px] font-bold tabular-nums ${r.tone === "ok" ? "text-ok" : "text-minus"}`}>
-              {r.value}
+              <RichText text={r.value} />
             </dd>
           </div>
         ))}
@@ -111,7 +122,7 @@ export default function DeterminantDerivation() {
       <label className="mt-4 block text-[13px] font-semibold text-ink">
         Колко от срязването е приложено
         <input
-          className="mt-2 w-full accent-[#2e6fd8]"
+          className="mt-2 w-full accent-(--color-minus)"
           type="range"
           min="0"
           max="1"

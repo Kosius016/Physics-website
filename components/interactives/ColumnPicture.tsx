@@ -3,6 +3,7 @@
 import { useState } from "react";
 import RichText from "@/components/RichText";
 import SvgTex from "./SvgTex";
+import { texNumber } from "./mathTex";
 import { Arrow, BTN_PRI, BTN_SEC, C, PANEL_CLASS, STAGE_BG, STAGE_CLASS } from "./svg";
 
 /**
@@ -109,19 +110,29 @@ export default function ColumnPicture() {
 
       <dl className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-[10px] border-[1.5px] border-ink bg-rule sm:grid-cols-4">
         {[
-          { label: "x (части от 1-ва колона)", value: x.toFixed(2), tone: "minus" },
-          { label: "y (части от 2-ра колона)", value: y.toFixed(2), tone: "minus" },
-          { label: "Стигнахме до", value: `(${rx.toFixed(2)}, ${ry.toFixed(2)})`, tone: solved ? "ok" : "minus" },
-          { label: "Разстояние до b", value: miss.toFixed(2), tone: solved ? "ok" : "plus" },
+          { label: "$x$ (части от 1-вата колона)", value: `$${texNumber(x)}$`, tone: "minus" },
+          { label: "$y$ (части от 2-рата колона)", value: `$${texNumber(y)}$`, tone: "minus" },
+          {
+            label: "Стигнахме до",
+            value: String.raw`$\left(${texNumber(rx)},${texNumber(ry)}\right)$`,
+            tone: solved ? "ok" : "minus",
+          },
+          {
+            label: "Разстояние до $\\vec b$",
+            value: `$${texNumber(miss)}$`,
+            tone: solved ? "ok" : "plus",
+          },
         ].map((r) => (
           <div key={r.label} className="min-w-0 bg-surface px-3 py-2.5">
-            <dt className="text-[10.5px] font-bold uppercase tracking-wide text-muted">{r.label}</dt>
+            <dt className="text-[10.5px] font-bold uppercase tracking-wide text-muted">
+              <RichText text={r.label} />
+            </dt>
             <dd
               className={`mt-0.5 text-[15px] font-bold tabular-nums ${
                 r.tone === "ok" ? "text-ok" : r.tone === "plus" ? "text-plus" : "text-minus"
               }`}
             >
-              {r.value}
+              <RichText text={r.value} />
             </dd>
           </div>
         ))}
@@ -129,9 +140,9 @@ export default function ColumnPicture() {
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <label className="text-[13px] font-semibold text-ink">
-          <RichText text="$x$ — части от първата колона" />
+          <RichText text="$x$: части от първата колона" />
           <input
-            className="mt-2 w-full accent-[#e8563f]"
+            className="mt-2 w-full accent-(--color-plus)"
             type="range"
             min="-0.5"
             max="3"
@@ -141,9 +152,9 @@ export default function ColumnPicture() {
           />
         </label>
         <label className="text-[13px] font-semibold text-ink">
-          <RichText text="$y$ — части от втората колона" />
+          <RichText text="$y$: части от втората колона" />
           <input
-            className="mt-2 w-full accent-[#2f8f4e]"
+            className="mt-2 w-full accent-(--color-ok)"
             type="range"
             min="-0.5"
             max="3"
@@ -178,11 +189,9 @@ export default function ColumnPicture() {
       </div>
 
       <p className="mt-4 rounded-r-lg border-l-4 border-minus bg-hl px-4 py-3 text-[15px] leading-relaxed text-ink/90">
-        Решаването на системата е търсене на <strong>рецептата за смесване</strong>: колко от всяка
-        колона. Тъй като двете колони сочат в различни посоки, всяка точка на равнината се получава
-        от точно една двойка <RichText text="$(x,y)$" /> и затова решението е единствено. Ако колоните
-        бяха успоредни, всички комбинации щяха да лежат на една права и повечето цели биха били
-        недостижими: точно случаят, който следващият урок ще нарече <RichText text="$\det=0$" />.
+        <RichText
+          text={String.raw`Решаването на системата е търсене на **рецептата за смесване**: колко от всяка колона. Тъй като двете колони сочат в различни посоки, всяка точка на равнината се получава от точно една двойка $(x,y)$ и затова решението е единствено. Ако колоните бяха успоредни, всички комбинации щяха да лежат на една права и повечето цели биха били недостижими: точно случаят, който следващият урок ще нарече $\det M=0$.`}
+        />
       </p>
     </div>
   );

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Formula from "@/components/Formula";
 import RichText from "@/components/RichText";
 import SvgTex from "./SvgTex";
+import { texNumber } from "./mathTex";
 import { Arrow, C, PANEL_CLASS, STAGE_BG, STAGE_CLASS } from "./svg";
 
 type V3 = [number, number, number];
@@ -36,10 +37,10 @@ export default function TripleProductLab() {
     <div className={PANEL_CLASS}>
       <svg viewBox="0 0 620 390" className={STAGE_CLASS} role="img" aria-label="Паралелепипед и смесено произведение">
         <rect width="620" height="390" fill={STAGE_BG} />
-        <polygon points={polygon([O, a, ab, b])} fill="rgba(89,173,255,0.22)" stroke={C.minus} strokeWidth="2" />
-        <polygon points={polygon([c, ac, abc, bc])} fill="rgba(98,215,160,0.18)" stroke={C.ok} strokeWidth="2" />
-        <polygon points={polygon([O, a, ac, c])} fill="rgba(255,118,84,0.12)" stroke="none" />
-        <polygon points={polygon([a, ab, abc, ac])} fill="rgba(255,209,102,0.10)" stroke="none" />
+        <polygon points={polygon([O, a, ab, b])} fill={C.minus} fillOpacity={0.22} stroke={C.minus} strokeWidth="2" />
+        <polygon points={polygon([c, ac, abc, bc])} fill={C.ok} fillOpacity={0.18} stroke={C.ok} strokeWidth="2" />
+        <polygon points={polygon([O, a, ac, c])} fill={C.plus} fillOpacity={0.12} stroke="none" />
+        <polygon points={polygon([a, ab, abc, ac])} fill={C.warn} fillOpacity={0.1} stroke="none" />
 
         {([[O, c], [a, ac], [b, bc], [ab, abc]] as [V3, V3][]).map(([p, q], i) => {
           const p2 = project(p);
@@ -63,31 +64,40 @@ export default function TripleProductLab() {
 
       <dl className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-[10px] border-[1.5px] border-ink bg-rule sm:grid-cols-4">
         {[
-          ["основа |a × b|", baseArea.toFixed(1)],
-          ["височина h", height.toFixed(1)],
-          ["странично отместване", slide.toFixed(1)],
-          ["обем", volume.toFixed(1)],
-        ].map(([label, value]) => (
-          <div key={label} className="bg-surface px-3 py-2.5">
-            <dt className="text-[10px] font-bold uppercase tracking-wide text-muted">{label}</dt>
-            <dd className="mt-0.5 text-[15px] font-bold tabular-nums text-minus">{value}</dd>
+          {
+            label: String.raw`$S_{\text{основа}}=|\vec a\times\vec b|$`,
+            value: `$${texNumber(baseArea, 1)}$`,
+          },
+          { label: "Височина $h$", value: `$${texNumber(height, 1)}$` },
+          { label: "Странично отместване", value: `$${texNumber(slide, 1)}$` },
+          { label: "Обем $V$", value: `$${texNumber(volume, 1)}$` },
+        ].map((item) => (
+          <div key={item.label} className="bg-surface px-3 py-2.5">
+            <dt className="text-[10px] font-bold uppercase tracking-wide text-muted">
+              <RichText text={item.label} />
+            </dt>
+            <dd className="mt-0.5 text-[15px] font-bold tabular-nums text-minus">
+              <RichText text={item.value} />
+            </dd>
           </div>
         ))}
       </dl>
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <label className="text-[13px] font-semibold text-ink">
-          Странично накланяне на c
-          <input className="mt-2 w-full accent-[#347fb8]" type="range" min="-0.5" max="2" step="0.1" value={slide} onChange={(e) => setSlide(Number(e.target.value))} />
+          <RichText text={String.raw`Странично накланяне на $\vec c$`} />
+          <input className="mt-2 w-full accent-(--color-minus)" type="range" min="-0.5" max="2" step="0.1" value={slide} onChange={(e) => setSlide(Number(e.target.value))} />
         </label>
         <label className="text-[13px] font-semibold text-ink">
-          Перпендикулярна височина h
-          <input className="mt-2 w-full accent-[#e8563f]" type="range" min="0" max="3" step="0.1" value={height} onChange={(e) => setHeight(Number(e.target.value))} />
+          <RichText text="Перпендикулярна височина $h$" />
+          <input className="mt-2 w-full accent-(--color-plus)" type="range" min="0" max="3" step="0.1" value={height} onChange={(e) => setHeight(Number(e.target.value))} />
         </label>
       </div>
 
       <div className="mt-4">
-        <Formula latex={String.raw`V=\left|\vec c\cdot(\vec a\times\vec b)\right|=\left|\det\begin{pmatrix}3&1&${slide}\\0&2&0.7\\0&0&${height}\end{pmatrix}\right|=6\cdot${height}=\boxed{${volume.toFixed(1)}}`} />
+        <Formula
+          latex={String.raw`V=\left|\vec c\cdot(\vec a\times\vec b)\right|=\left|\det\begin{pmatrix}3&1&${texNumber(slide, 1)}\\0&2&0{,}7\\0&0&${texNumber(height, 1)}\end{pmatrix}\right|=6\cdot${texNumber(height, 1)}=\boxed{${texNumber(volume, 1)}}`}
+        />
       </div>
     </div>
   );

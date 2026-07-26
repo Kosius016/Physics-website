@@ -140,7 +140,7 @@ export default function GuidedProblem({ index, data }: { index: number; data: Gu
       )}
 
       {/* Методически бележки — само в режим преподавател */}
-      <TeacherNote title="Методически бележки — чести грешки">
+      <TeacherNote title="Методически бележки: чести грешки">
         <ul className="list-disc space-y-1.5 pl-5">
           {data.teacherNotes.map((n, i) => (
             <li key={i}>

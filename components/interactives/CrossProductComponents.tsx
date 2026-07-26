@@ -2,14 +2,16 @@
 
 import { useMemo, useState } from "react";
 import Formula from "@/components/Formula";
+import RichText from "@/components/RichText";
 import SvgTex from "./SvgTex";
+import { texNumber } from "./mathTex";
 import { Arrow, BTN_SEC, C, PANEL_CLASS, STAGE_BG, STAGE_CLASS } from "./svg";
 
 type V3 = [number, number, number];
 
 const presets: { label: string; a: V3; b: V3 }[] = [
   { label: "Общ пример", a: [2, -1, 3], b: [1, 4, -2] },
-  { label: "Базис i × j", a: [1, 0, 0], b: [0, 1, 0] },
+  { label: "Базис $\\hat{\\imath}\\times\\hat{\\jmath}$", a: [1, 0, 0], b: [0, 1, 0] },
   { label: "Успоредни", a: [1, 2, 3], b: [2, 4, 6] },
   { label: "Нормала на равнина", a: [1, 2, 0], b: [-1, 1, 3] },
 ];
@@ -53,7 +55,7 @@ export default function CrossProductComponents() {
       <div className="mb-3 flex flex-wrap gap-2">
         {presets.map((preset) => (
           <button key={preset.label} className={BTN_SEC} onClick={() => { setA(preset.a); setB(preset.b); }}>
-            {preset.label}
+            <RichText text={preset.label} />
           </button>
         ))}
       </div>
@@ -74,7 +76,12 @@ export default function CrossProductComponents() {
         ] as [V3, V3, string][]).map(([from, to, label]) => {
           const p1 = project(from);
           const p2 = project(to);
-          return <g key={label}><line x1={p1[0]} y1={p1[1]} x2={p2[0]} y2={p2[1]} stroke={C.faint} strokeWidth="1.2" /><text x={p2[0] + 6} y={p2[1] - 4} fill={C.mut} fontSize="12">{label}</text></g>;
+          return (
+            <g key={label}>
+              <line x1={p1[0]} y1={p1[1]} x2={p2[0]} y2={p2[1]} stroke={C.faint} strokeWidth="1.2" />
+              <SvgTex x={p2[0] + 6} y={p2[1] - 4} tex={label} color={C.mut} fontSize={12} width={24} />
+            </g>
+          );
         })}
 
         <Arrow x1={origin[0]} y1={origin[1]} x2={pa[0]} y2={pa[1]} color={C.plus} width={3.2} />
@@ -97,11 +104,13 @@ export default function CrossProductComponents() {
           const vector = which === "a" ? a : b;
           return (
             <fieldset key={which} className="rounded-[10px] border-[1.5px] border-rule bg-hl p-3">
-              <legend className="px-1 font-serif text-[18px] font-bold text-ink">Вектор {which}</legend>
+              <legend className="px-1 font-serif text-[18px] font-bold text-ink">
+                <RichText text={`Вектор $\\vec ${which}$`} />
+              </legend>
               <div className="grid grid-cols-3 gap-2">
                 {vector.map((value, i) => (
                   <label key={i} className="text-[11px] font-bold uppercase tracking-wide text-muted">
-                    {which}<sub>{i + 1}</sub>
+                    <RichText text={`$${which}_${i + 1}$`} />
                     <input
                       type="number"
                       min="-9"
@@ -121,20 +130,33 @@ export default function CrossProductComponents() {
 
       <div className="mt-4">
         <Formula
-          latex={String.raw`\vec a\times\vec b=\bigl(${a[1]}\cdot${b[2]}-${a[2]}\cdot${b[1]},\;${a[2]}\cdot${b[0]}-${a[0]}\cdot${b[2]},\;${a[0]}\cdot${b[1]}-${a[1]}\cdot${b[0]}\bigr)=\boxed{(${n.join(",\,")})}`}
+          latex={String.raw`\vec a\times\vec b=\bigl(${a[1]}\cdot${b[2]}-${a[2]}\cdot${b[1]},\;${a[2]}\cdot${b[0]}-${a[0]}\cdot${b[2]},\;${a[0]}\cdot${b[1]}-${a[1]}\cdot${b[0]}\bigr)=\boxed{\left(${n.join(String.raw`,\,`)}\right)}`}
         />
       </div>
 
       <dl className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-[10px] border-[1.5px] border-ink bg-rule sm:grid-cols-4">
         {[
-          ["a · (a × b)", dot(a, n)],
-          ["b · (a × b)", dot(b, n)],
-          ["|a × b|", Number(norm(n).toFixed(3))],
-          ["тип", norm(n) < 1e-9 ? "успоредни" : "нормала"],
-        ].map(([label, value]) => (
-          <div key={label} className="bg-surface px-3 py-2.5">
-            <dt className="text-[10px] font-bold uppercase tracking-wide text-muted">{label}</dt>
-            <dd className="mt-0.5 text-[14.5px] font-bold tabular-nums text-ok">{value}</dd>
+          {
+            label: String.raw`$\vec a\cdot(\vec a\times\vec b)$`,
+            value: `$${texNumber(dot(a, n), 2, true)}$`,
+          },
+          {
+            label: String.raw`$\vec b\cdot(\vec a\times\vec b)$`,
+            value: `$${texNumber(dot(b, n), 2, true)}$`,
+          },
+          {
+            label: String.raw`$|\vec a\times\vec b|$`,
+            value: `$${texNumber(norm(n), 3)}$`,
+          },
+          { label: "Тип", value: norm(n) < 1e-9 ? "успоредни" : "нормала" },
+        ].map((item) => (
+          <div key={item.label} className="bg-surface px-3 py-2.5">
+            <dt className="text-[10px] font-bold uppercase tracking-wide text-muted">
+              <RichText text={item.label} />
+            </dt>
+            <dd className="mt-0.5 text-[14.5px] font-bold tabular-nums text-ok">
+              <RichText text={item.value} />
+            </dd>
           </div>
         ))}
       </dl>

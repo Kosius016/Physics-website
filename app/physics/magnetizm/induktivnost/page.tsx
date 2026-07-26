@@ -329,7 +329,7 @@ export default function InductanceLessonPage() {
             <p>
               <strong>Тълкуване.</strong> Положителното{" "}
               <RichText text="$\mathcal E_L$" /> означава, че при намаляващ ток индукторът
-              обръща полярността си така, че да поддържа старата посока на тока. Резултатът
+              обръща полярността си така, че да поддържа старата посока на тока. Резултатът{" "}
               <RichText text="$0{,}181\,\mathrm{mH}$" /> е малък, което е очаквано за
               намотка без феромагнитна сърцевина.
             </p>
@@ -1014,7 +1014,7 @@ export default function InductanceLessonPage() {
             </p>
             <Formula latex={String.raw`U_E=\int_0^q\frac{q'}{C}\,dq'=\frac{q^2}{2C}`} />
             <p>
-              При начален заряд <RichText text="$Q_{\max}$" /> и нулев ток общата енергия е
+              При начален заряд <RichText text="$Q_{\max}$" /> и нулев ток общата енергия е{" "}
               <RichText text="$Q_{\max}^2/(2C)$" />. В произволен момент:
             </p>
             <Formula

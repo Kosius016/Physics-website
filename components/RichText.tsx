@@ -21,7 +21,8 @@ export default function RichText({ text }: { text: RichTextString }) {
         if (part.startsWith("**") && part.endsWith("**")) {
           return (
             <strong key={i} className="font-semibold text-ink">
-              {part.slice(2, -2)}
+              {/* Рекурсията рендва $…$ и вътре в удебелен сегмент; вложен ** няма как да мине през регекса. */}
+              <RichText text={part.slice(2, -2)} />
             </strong>
           );
         }

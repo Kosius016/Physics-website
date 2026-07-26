@@ -375,11 +375,11 @@ export default function BioSavartLessonPage() {
                 нулев принос, без сметки.
               </li>
               <li>
-                Кръгова дъга с ъгъл <RichText text="$\theta$" /> дава в центъра
+                Кръгова дъга с ъгъл <RichText text="$\theta$" /> дава в центъра{" "}
                 <RichText text="$B=\mu_0I\theta/(4\pi a)$" />; радиалните прави части дават нула.
               </li>
               <li>
-                По оста на кръгов контур напречните компоненти се унищожават и
+                По оста на кръгов контур напречните компоненти се унищожават и{" "}
                 <RichText text="$B_x=\mu_0Ia^2/[2(a^2+x^2)^{3/2}]$" />.
               </li>
               <li>
@@ -387,7 +387,7 @@ export default function BioSavartLessonPage() {
                 от проводника (<RichText text="$\alpha,\,\cos$" />) — допълнителни ъгли, <RichText text="$\theta+\alpha=90^\circ$" />, една и съща физика.
               </li>
               <li>
-                „Безкраен проводник“ е граница: при <RichText text="$L \gg a$" /> ъглите клонят към
+                „Безкраен проводник“ е граница: при <RichText text="$L \gg a$" /> ъглите клонят към{" "}
                 <RichText text="$90^\circ$" />, скобата — към 2, и{" "}
                 <RichText text="$B \to \frac{\mu_0 I}{4\pi a}\cdot 2 = \frac{\mu_0 I}{2\pi a}$" />.
               </li>

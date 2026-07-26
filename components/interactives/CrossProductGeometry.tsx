@@ -3,6 +3,7 @@
 import { useState } from "react";
 import RichText from "@/components/RichText";
 import SvgTex from "./SvgTex";
+import { texNumber } from "./mathTex";
 import { AngleArc, Arrow, BTN_SEC, C, CurrentSymbol, PANEL_CLASS, STAGE_BG, STAGE_CLASS } from "./svg";
 
 export default function CrossProductGeometry() {
@@ -29,7 +30,11 @@ export default function CrossProductGeometry() {
           <p className="mt-1 text-[14.5px] text-ink/85">Променете страните и ъгъла; после разменете реда.</p>
         </div>
         <button className={BTN_SEC} onClick={() => setSwapped((v) => !v)}>
-          {swapped ? "Ред: b × a" : "Ред: a × b"} ↔
+          <RichText
+            text={swapped
+              ? String.raw`Ред: $\vec b\times\vec a\;\rightleftarrows$`
+              : String.raw`Ред: $\vec a\times\vec b\;\rightleftarrows$`}
+          />
         </button>
       </div>
 
@@ -44,7 +49,8 @@ export default function CrossProductGeometry() {
 
         <polygon
           points={`${O[0]},${O[1]} ${A[0]},${A[1]} ${D[0]},${D[1]} ${B[0]},${B[1]}`}
-          fill="rgba(98,215,160,0.18)"
+          fill={C.ok}
+          fillOpacity={0.18}
           stroke={C.ok}
           strokeWidth="1.5"
         />
@@ -59,15 +65,19 @@ export default function CrossProductGeometry() {
         <g opacity={nearlyZero ? 0 : 1} className="transition-opacity">
           <SvgTex x={B[0] + 10} y={(B[1] + O[1]) / 2} tex={String.raw`b\sin\theta`} color={C.warn} fontSize={13} width={92} />
         </g>
-        <SvgTex
-          x={(O[0] + D[0]) / 2}
-          y={(O[1] + D[1]) / 2 + 30}
-          tex={String.raw`S=ab\sin\theta`}
-          color={C.ok}
-          fontSize={15}
-          width={130}
-          anchor="middle"
-        />
+        {/* При смачкан успоредник етикетът за площта се крие (CLAUDE.md §5);
+            стойността остава в readout лентата отдолу. */}
+        <g opacity={nearlyZero ? 0 : 1} className="transition-opacity">
+          <SvgTex
+            x={(O[0] + D[0]) / 2}
+            y={(O[1] + D[1]) / 2 + 30}
+            tex={String.raw`S=ab\sin\theta`}
+            color={C.ok}
+            fontSize={15}
+            width={130}
+            anchor="middle"
+          />
+        </g>
 
         <g opacity={nearlyZero ? 0.35 : 1}>
           <CurrentSymbol x={520} y={245} out={!swapped} r={24} color={C.ok} />
@@ -88,14 +98,21 @@ export default function CrossProductGeometry() {
 
       <dl className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-[10px] border-[1.5px] border-ink bg-rule sm:grid-cols-4">
         {[
-          ["|a|", a.toFixed(1)],
-          ["|b|", b.toFixed(1)],
-          ["ъгъл θ", `${theta}°`],
-          ["|a × b|", magnitude.toFixed(2)],
-        ].map(([label, value]) => (
-          <div key={label} className="bg-surface px-3 py-2.5">
-            <dt className="text-[10.5px] font-bold uppercase tracking-wide text-muted">{label}</dt>
-            <dd className="mt-0.5 text-[15px] font-bold tabular-nums text-minus">{value}</dd>
+          { label: String.raw`$|\vec a|$`, value: `$${texNumber(a, 1)}$` },
+          { label: String.raw`$|\vec b|$`, value: `$${texNumber(b, 1)}$` },
+          { label: String.raw`$\theta$`, value: `$${theta}^{\\circ}$` },
+          {
+            label: String.raw`$|\vec a\times\vec b|$`,
+            value: `$${texNumber(magnitude)}$`,
+          },
+        ].map((item) => (
+          <div key={item.label} className="bg-surface px-3 py-2.5">
+            <dt className="text-[10.5px] font-bold uppercase tracking-wide text-muted">
+              <RichText text={item.label} />
+            </dt>
+            <dd className="mt-0.5 text-[15px] font-bold tabular-nums text-minus">
+              <RichText text={item.value} />
+            </dd>
           </div>
         ))}
       </dl>
@@ -103,15 +120,15 @@ export default function CrossProductGeometry() {
       <div className="mt-4 grid gap-4 sm:grid-cols-3">
         <label className="text-[13px] font-semibold text-ink">
           Дължина <RichText text={String.raw`$|\vec a|$`} />
-          <input className="mt-2 w-full accent-[#e8563f]" type="range" min="1" max="4" step="0.1" value={a} onChange={(e) => setA(Number(e.target.value))} />
+          <input className="mt-2 w-full accent-(--color-plus)" type="range" min="1" max="4" step="0.1" value={a} onChange={(e) => setA(Number(e.target.value))} />
         </label>
         <label className="text-[13px] font-semibold text-ink">
           Дължина <RichText text={String.raw`$|\vec b|$`} />
-          <input className="mt-2 w-full accent-[#347fb8]" type="range" min="1" max="4" step="0.1" value={b} onChange={(e) => setB(Number(e.target.value))} />
+          <input className="mt-2 w-full accent-(--color-minus)" type="range" min="1" max="4" step="0.1" value={b} onChange={(e) => setB(Number(e.target.value))} />
         </label>
         <label className="text-[13px] font-semibold text-ink">
           Ъгъл <RichText text={String.raw`$\theta$`} />
-          <input className="mt-2 w-full accent-[#347fb8]" type="range" min="0" max="180" step="1" value={theta} onChange={(e) => setTheta(Number(e.target.value))} />
+          <input className="mt-2 w-full accent-(--color-minus)" type="range" min="0" max="180" step="1" value={theta} onChange={(e) => setTheta(Number(e.target.value))} />
         </label>
       </div>
 

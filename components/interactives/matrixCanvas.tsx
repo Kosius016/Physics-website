@@ -1,4 +1,7 @@
-import { C, STAGE_BG } from "./svg";
+import RichText from "@/components/RichText";
+import { texNumber } from "./mathTex";
+import { Arrow, C, STAGE_BG, STAGE_CLASS } from "./svg";
+export { texNumber } from "./mathTex";
 
 /**
  * Споделено ядро за матричните интерактиви (уроци по линейна алгебра):
@@ -227,6 +230,7 @@ export function SvgMatrixScene({
   square = false,
   grid = true,
   spriteOpacity = 1,
+  basis = false,
 }: {
   m: Mat2;
   ox?: number;
@@ -237,6 +241,7 @@ export function SvgMatrixScene({
   square?: boolean;
   grid?: boolean;
   spriteOpacity?: number;
+  basis?: boolean;
 }) {
   const [a, b, c, d] = m;
   const T = (x: number, y: number): [number, number] => [
@@ -299,8 +304,68 @@ export function SvgMatrixScene({
           strokeWidth={2}
         />
       )}
+      {basis && (
+        <>
+          <Arrow
+            x1={ox}
+            y1={oy}
+            x2={T(1, 0)[0]}
+            y2={T(1, 0)[1]}
+            color={C.plus}
+            texLabel="\hat{\imath}'"
+            texLabelWidth={48}
+          />
+          <Arrow
+            x1={ox}
+            y1={oy}
+            x2={T(0, 1)[0]}
+            y2={T(0, 1)[1]}
+            color={C.ok}
+            texLabel="\hat{\jmath}'"
+            texLabelWidth={48}
+          />
+        </>
+      )}
       <circle cx={ox} cy={oy} r={2.5} fill={C.wire} />
     </g>
+  );
+}
+
+/** Пълноразмерна SVG сцена за матричните интерактиви. */
+export function MatrixScene({
+  m,
+  sprite = false,
+  checker = false,
+  square = false,
+  basis = true,
+  ariaLabel,
+}: {
+  m: Mat2;
+  sprite?: boolean;
+  checker?: boolean;
+  square?: boolean;
+  basis?: boolean;
+  ariaLabel: string;
+}) {
+  return (
+    <svg
+      viewBox={`0 0 ${MC_W} ${MC_H}`}
+      className={STAGE_CLASS}
+      role="img"
+      aria-label={ariaLabel}
+    >
+      <rect width={MC_W} height={MC_H} fill={STAGE_BG} />
+      <SvgMatrixScene
+        m={m}
+        ox={260}
+        oy={300}
+        s={55}
+        sprite={sprite}
+        checker={checker}
+        square={square}
+        basis={basis}
+      />
+    </svg>
   );
 }
 
@@ -317,22 +382,11 @@ export function MatrixDisplay({
   highlight?: boolean;
 }) {
   const [a, b, c, d] = m;
-  const fmt = (v: number) => (Object.is(v, -0) ? 0 : Math.round(v * 100) / 100).toString();
+  const matrix = String.raw`\begin{pmatrix}${texNumber(a, 2, true)}&${texNumber(b, 2, true)}\\${texNumber(c, 2, true)}&${texNumber(d, 2, true)}\end{pmatrix}`;
+  const expression = label ? `${label}=${matrix}` : matrix;
   return (
-    <span className="inline-flex items-center gap-2">
-      {label && <span className="text-[14px] font-semibold text-muted">{label} =</span>}
-      <span
-        className={`inline-flex items-stretch font-mono text-[15px] font-semibold tabular-nums ${highlight ? "text-minus" : "text-ink"}`}
-      >
-        <span className="w-1.5 rounded-l-[3px] border-y-2 border-l-2 border-current" />
-        <span className="grid grid-cols-2 gap-x-3 px-1.5 py-0.5 text-center">
-          <span>{fmt(a)}</span>
-          <span>{fmt(b)}</span>
-          <span>{fmt(c)}</span>
-          <span>{fmt(d)}</span>
-        </span>
-        <span className="w-1.5 rounded-r-[3px] border-y-2 border-r-2 border-current" />
-      </span>
+    <span className={`inline-flex items-center text-[15px] font-semibold ${highlight ? "text-minus" : "text-ink"}`}>
+      <RichText text={`$${expression}$`} />
     </span>
   );
 }
@@ -356,8 +410,10 @@ export function MatrixSliders({
             htmlFor={`mat-${lb}`}
             className="mb-0.5 flex items-baseline justify-between text-[13px] font-medium text-muted"
           >
-            <span className="font-mono font-bold">{lb}</span>
-            <span className="font-mono font-bold tabular-nums text-minus">{m[i].toFixed(2)}</span>
+            <span className="font-bold text-ink"><RichText text={`$${lb}$`} /></span>
+            <span className="font-bold tabular-nums text-minus">
+              <RichText text={`$${texNumber(m[i])}$`} />
+            </span>
           </label>
           <input
             id={`mat-${lb}`}

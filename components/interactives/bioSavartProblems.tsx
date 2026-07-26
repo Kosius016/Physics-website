@@ -704,7 +704,7 @@ export const bioSavartProblems: GuidedProblemData[] = [
       phase >= 2
         ? String.raw`Хоризонталното рамо дава нула; остава полето $\otimes$ от вертикалното рамо.`
         : phase >= 1
-          ? String.raw`За хоризонталното рамо $d\vec l\parallel\hat r$, следователно $d\vec B=0.`
+          ? String.raw`За хоризонталното рамо $d\vec l\parallel\hat r$, следователно $d\vec B=0$.`
           : undefined,
     directionQuestion: {
       prompt: "Каква ще бъде посоката на $d\\vec B$ от всяко от двете рамена в $P$?",

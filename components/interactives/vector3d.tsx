@@ -58,9 +58,7 @@ export function Axes3D({ P, len = 1.15, labels = true }: { P: Projector; len?: n
           <g key={label}>
             <line x1={from[0]} y1={from[1]} x2={p[0]} y2={p[1]} stroke={C.faint} strokeWidth={1.2} />
             {labels && (
-              <text x={p[0] + 5} y={p[1] - 3} fill={C.mut} fontSize={11} fontWeight={700}>
-                {label}
-              </text>
+              <SvgTex x={p[0] + 5} y={p[1] - 3} tex={label} color={C.mut} fontSize={11} width={22} />
             )}
           </g>
         );
@@ -88,9 +86,7 @@ export function MiniAxes({ cx, cy, size = 26 }: { cx: number; cy: number; size?:
         return (
           <g key={label}>
             <line x1={cx} y1={cy} x2={p[0]} y2={p[1]} stroke={C.mut} strokeWidth={1.3} />
-            <text x={p[0] + 4} y={p[1] + 4} fill={C.mut} fontSize={12} fontWeight={700}>
-              {label}
-            </text>
+            <SvgTex x={p[0] + 4} y={p[1] + 4} tex={label} color={C.mut} fontSize={12} width={22} />
           </g>
         );
       })}

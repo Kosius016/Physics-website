@@ -112,14 +112,12 @@ export default function CrossProductLessonPage() {
           <div className="mt-5"><CrossProductGeometry /></div>
           <TeacherNote>
             <p>
-              Накарайте учащия първо да предскаже какво става при θ = 0°, 90° и 180°, после да го
-              провери с плъзгача. Критичната идея е, че големината не различава 0° от 180° — и в двата
-              случая успоредникът е смачкан и произведението е нулевият вектор.
+              <RichText text={String.raw`Накарайте учащия първо да предскаже какво става при $\theta=0^\circ$, $90^\circ$ и $180^\circ$, после да го провери с плъзгача. Критичната идея е, че големината не различава $0^\circ$ от $180^\circ$: и в двата случая успоредникът е смачкан и произведението е нулевият вектор.`} />
             </p>
           </TeacherNote>
         </Section>
 
-        <Section id="direction" n="§3" title="Правилото на дясната ръка — без догадки">
+        <Section id="direction" n="§3" title="Правилото на дясната ръка без догадки">
           <div className="space-y-4">
             <div className="rounded-[10px] border-[1.5px] border-ink bg-surface px-5 py-4 shadow-hard-sm">
               <ol className="list-decimal space-y-2 pl-5 text-[15.5px] leading-relaxed text-ink/90">
@@ -180,15 +178,15 @@ export default function CrossProductLessonPage() {
             <p className="text-ink/90">
               Нека <RichText text={String.raw`$\vec a=(a_1,a_2,a_3)$`} /> и
               <RichText text={String.raw`$\ \vec b=(b_1,b_2,b_3)$`} />. Всяка компонента на новия
-              вектор е 2×2 детерминанта — ориентираната площ на съответната координатна проекция:
+              вектор е детерминанта <RichText text="$2\\times2$" />: ориентираната площ на съответната координатна проекция:
             </p>
             <Formula latex={String.raw`\vec a\times\vec b=\begin{vmatrix}\vec i&\vec j&\vec k\\a_1&a_2&a_3\\b_1&b_2&b_3\end{vmatrix}`} />
             <p className="text-ink/90">
-              Разгъваме формално по първия ред със знаците <strong>+ − +</strong>:
+              Разгъваме формално по първия ред със знаците <RichText text="$+\;- \;+$" />:
             </p>
             <Formula latex={String.raw`\boxed{\vec a\times\vec b=\bigl(a_2b_3-a_3b_2,\;a_3b_1-a_1b_3,\;a_1b_2-a_2b_1\bigr)}`} />
             <div className="rounded-r-lg border-l-4 border-plus bg-hl px-4 py-3 text-[15px] leading-relaxed text-ink/90">
-              <strong>Средната компонента:</strong> при разгъването е
+              <strong>Средната компонента:</strong> при разгъването е{" "}
               <RichText text={String.raw`$-(a_1b_3-a_3b_1)=a_3b_1-a_1b_3$`} />. Това е най-честата
               знакова грешка; вторият запис я прави видима.
             </div>
@@ -208,11 +206,11 @@ export default function CrossProductLessonPage() {
                 го веднъж честно, вместо ученикът да го открие сам и да се обърка.
               </li>
               <li>
-                Задължителен ред при сметка: първо схемата <strong>+ − +</strong> на хартия, после
+                Задължителен ред при сметка: първо схемата <RichText text="$+\;- \;+$" /> на хартия, после
                 числата. Средната компонента се проверява отделно.
               </li>
               <li>
-                Диагностика с preset-а „Успоредни“: питайте защо и трите компоненти стават нула
+                Диагностика с готовата настройка „Успоредни“: питайте защо и трите компоненти стават нула
                 едновременно (всеки минор е детерминанта на пропорционални редове).
               </li>
             </ul>
@@ -245,11 +243,11 @@ export default function CrossProductLessonPage() {
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="rounded-[10px] border-[1.5px] border-ink bg-surface px-4 py-3">
                 <p className="font-semibold text-ink">Скаларно: <RichText text={String.raw`$\vec a\cdot\vec b$`} /></p>
-                <p className="mt-2 text-[14.5px] leading-relaxed text-ink/85">Резултатът е число; използва cos θ; мери успоредната компонента; комутативно е.</p>
+                <p className="mt-2 text-[14.5px] leading-relaxed text-ink/85"><RichText text="Резултатът е число; използва $\cos\theta$; мери успоредната компонента; комутативно е." /></p>
               </div>
               <div className="rounded-[10px] border-[1.5px] border-ink bg-surface px-4 py-3">
                 <p className="font-semibold text-ink">Векторно: <RichText text={String.raw`$\vec a\times\vec b$`} /></p>
-                <p className="mt-2 text-[14.5px] leading-relaxed text-ink/85">Резултатът е вектор; използва sin θ; мери перпендикулярната площ; антикомутативно е.</p>
+                <p className="mt-2 text-[14.5px] leading-relaxed text-ink/85"><RichText text="Резултатът е вектор; използва $\sin\theta$; мери перпендикулярната площ; антикомутативно е." /></p>
               </div>
             </div>
           </div>
@@ -290,16 +288,16 @@ export default function CrossProductLessonPage() {
             <Formula latex={String.raw`\boxed{V=\left|\vec c\cdot(\vec a\times\vec b)\right|}`} />
             <ul className="list-disc space-y-2 pl-5 text-[15.5px] leading-relaxed text-ink/90">
               <li>Цикличните размествания пазят стойността: <RichText text={String.raw`$\vec a\cdot(\vec b\times\vec c)=\vec b\cdot(\vec c\times\vec a)$`} />.</li>
-              <li>Размяна само на два вектора сменя знака — както размяна на две колони в детерминанта.</li>
+              <li>Размяна само на два вектора сменя знака, както размяна на две колони в детерминанта.</li>
               <li>Смесеното произведение е нула точно когато трите вектора са компланарни.</li>
             </ul>
           </div>
           <div className="mt-5"><TripleProductLab /></div>
           <TeacherNote>
             <p>
-              Плъзгачът за странично отместване е ключов: той променя ръба c, но не и височината му
+              Плъзгачът за странично отместване е ключов: той променя ръба <RichText text="$\vec c$" />, но не и височината му
               над основата, затова обемът остава постоянен. Това е пространственият аналог на
-              срязването с det = 1 от предишния урок.
+              срязването с <RichText text="$\det M=1$" /> от предишния урок.
             </p>
           </TeacherNote>
         </Section>
@@ -307,19 +305,19 @@ export default function CrossProductLessonPage() {
         <Section id="problems" n="§8" title="Задачи от основни до сложни">
           <p className="mb-5 text-ink/90">
             Всяка задача налага един и същи ред: <strong>какъв е типът на резултата</strong>,{" "}
-            <strong>накъде сочи той</strong>, и чак тогава — компонентната сметка. Стъпките на
+            <strong>накъде сочи той</strong>, и чак тогава идва компонентната сметка. Стъпките на
             решението се отключват едва след двата въпроса, а фигурата се достроява с всеки отговор.
           </p>
           <CrossProductProblemSet />
-          <ProblemSetLinkCard note="Problem set 01 надгражда този урок с тъждествата на Лагранж, Якоби и Бине-Коши, формулата BAC-CAB, компланарност и двойно кръстосване." />
+          <ProblemSetLinkCard note="Problem set 01 надгражда този урок с тъждествата на Лагранж, Якоби и Бине-Коши, формулата $\mathrm{BAC-CAB}$, компланарност и двойно кръстосване." />
         </Section>
 
         <Section id="recap" n="§9" title="Работен алгоритъм и обобщение">
           <div className="rounded-[10px] border-[1.5px] border-ink bg-surface px-5 py-4 shadow-hard">
             <ol className="list-decimal space-y-2 pl-5 text-[15.5px] leading-relaxed text-ink/90">
-              <li>Подредете множителите — редът определя знака и посоката.</li>
+              <li>Подредете множителите: редът определя знака и посоката.</li>
               <li>Предскажете нормалата с правилото на дясната ръка.</li>
-              <li>Сметнете трите компоненти като 2×2 детерминанти със знаци + − +.</li>
+              <li><RichText text="Сметнете трите компоненти като детерминанти $2\times2$ със знаци $+\;- \;+$. " /></li>
               <li>Проверете перпендикулярността с две скаларни произведения.</li>
               <li>Интерпретирайте: дължината е площ; половината е площ на триъгълник; скаларно произведение с трети вектор дава ориентиран обем.</li>
             </ol>
@@ -327,7 +325,7 @@ export default function CrossProductLessonPage() {
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             <div className="rounded-[10px] border-[1.5px] border-ok bg-ok/10 px-4 py-3">
               <p className="font-semibold text-ink">Можете да продължите, ако…</p>
-              <p className="mt-1 text-[14.5px] leading-relaxed text-ink/85">обяснявате защо има sin θ, защо размяната обръща знака и защо резултатът е перпендикулярен.</p>
+              <p className="mt-1 text-[14.5px] leading-relaxed text-ink/85"><RichText text="обяснявате защо има $\sin\theta$, защо размяната обръща знака и защо резултатът е перпендикулярен." /></p>
             </div>
             <div className="rounded-[10px] border-[1.5px] border-plus bg-plus/10 px-4 py-3">
               <p className="font-semibold text-ink">Върнете се към §4, ако…</p>
