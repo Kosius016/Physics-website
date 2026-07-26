@@ -1,25 +1,53 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RichText from "@/components/RichText";
 import type { QuizQuestion } from "@/lib/types";
+
+function shuffledQuestions(questions: QuizQuestion[]): QuizQuestion[] {
+  return questions.map((question) => {
+    const options = [...question.options];
+    for (let i = options.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [options[i], options[j]] = [options[j], options[i]];
+    }
+    return { ...question, options };
+  });
+}
 
 /**
  * Quiz с моментална обратна връзка: клик върху опция заключва въпроса,
  * оцветява верния отговор (и грешния, ако е избран) и обновява резултата.
  */
 export default function Quiz({ questions }: { questions: QuizQuestion[] }) {
+  const [displayQuestions, setDisplayQuestions] = useState<QuizQuestion[] | null>(null);
   // Индекс на избраната опция за всеки въпрос; null = още неотговорен.
   const [picked, setPicked] = useState<(number | null)[]>(() => questions.map(() => null));
 
+  useEffect(() => {
+    setDisplayQuestions(shuffledQuestions(questions));
+    setPicked(questions.map(() => null));
+  }, [questions]);
+
+  if (!displayQuestions) {
+    return (
+      <div
+        className="rounded-[10px] border-[1.5px] border-rule bg-surface px-4 py-5 text-[14px] text-muted"
+        aria-busy="true"
+      >
+        Разбъркваме вариантите…
+      </div>
+    );
+  }
+
   const answered = picked.filter((p) => p !== null).length;
   const correctCount = picked.filter(
-    (p, qi) => p !== null && questions[qi].options[p].correct,
+    (p, qi) => p !== null && displayQuestions[qi].options[p].correct,
   ).length;
 
   return (
     <div className="flex flex-col gap-7">
-      {questions.map((q, qi) => {
+      {displayQuestions.map((q, qi) => {
         const pickedIdx = picked[qi];
         const locked = pickedIdx !== null;
         const pickedCorrect = locked ? q.options[pickedIdx].correct : false;
