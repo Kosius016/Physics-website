@@ -52,6 +52,91 @@ function Callout({ children }: { children: React.ReactNode }) {
   );
 }
 
+type DifficultyLevel = "Основно" | "Надграждащо" | "По-напреднало";
+
+const DIFFICULTY_STYLES: Record<DifficultyLevel, string> = {
+  Основно: "border-ok/40 bg-ok/10 text-ok",
+  Надграждащо: "border-plus/30 bg-hl text-ink",
+  "По-напреднало": "border-minus/40 bg-minus/10 text-minus",
+};
+
+function DifficultyNote({
+  level,
+  requires,
+  firstRead,
+}: {
+  level: DifficultyLevel;
+  requires: React.ReactNode;
+  firstRead?: React.ReactNode;
+}) {
+  return (
+    <aside
+      aria-label={`Трудност на раздела: ${level}`}
+      className="mb-6 rounded-[10px] border-[1.5px] border-rule bg-surface px-4 py-3"
+    >
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-[10.5px] font-bold uppercase tracking-[0.15em] text-muted">
+          Трудност
+        </span>
+        <span
+          className={`rounded-full border px-2.5 py-1 text-[12px] font-bold ${DIFFICULTY_STYLES[level]}`}
+        >
+          {level}
+        </span>
+      </div>
+      <p className="mt-2 text-[14.5px] leading-relaxed text-ink/85">
+        <strong>Полезно е да знаете:</strong> {requires}
+      </p>
+      {firstRead && (
+        <p className="mt-1 text-[14.5px] leading-relaxed text-muted">
+          <strong className="text-ink/85">При първо четене:</strong> {firstRead}
+        </p>
+      )}
+    </aside>
+  );
+}
+
+function DifficultyGuide() {
+  return (
+    <aside
+      aria-labelledby="difficulty-guide-title"
+      className="mt-7 rounded-[10px] border-[1.5px] border-ink bg-paper px-5 py-4 shadow-hard-sm"
+    >
+      <h2 id="difficulty-guide-title" className="font-serif text-[21px] font-bold text-ink">
+        Как да четете урока
+      </h2>
+      <p className="mt-2 text-[15.5px] leading-relaxed text-ink/85">
+        Разделите са означени според математическата подготовка, която използват. Това не е
+        оценка колко са важни. Физическата идея остава достъпна и когато решението е
+        по-напреднало.
+      </p>
+      <div className="mt-4 grid gap-2 sm:grid-cols-3">
+        {(
+          [
+            ["Основно", "Алгебра и познатите идеи от закона на Фарадей."],
+            ["Надграждащо", "Производни, интеграли или ОДУ от първи ред."],
+            ["По-напреднало", "ОДУ от втори ред и характеристично уравнение."],
+          ] as const
+        ).map(([level, description]) => (
+          <div key={level} className="rounded-lg border border-rule bg-surface px-3 py-3">
+            <span
+              className={`inline-block rounded-full border px-2.5 py-1 text-[12px] font-bold ${DIFFICULTY_STYLES[level]}`}
+            >
+              {level}
+            </span>
+            <p className="mt-2 text-[13.5px] leading-relaxed text-muted">{description}</p>
+          </div>
+        ))}
+      </div>
+      <p className="mt-3 text-[13.5px] leading-relaxed text-muted">
+        <strong className="text-ink">Уточнение:</strong> тук използваме обикновени
+        диференциални уравнения, съкратено ОДУ. Частни диференциални уравнения, ЧДУ, не са
+        необходими.
+      </p>
+    </aside>
+  );
+}
+
 function Derivation({
   title,
   children,
@@ -124,6 +209,8 @@ export default function InductanceLessonPage() {
 
         <LessonNav items={SECTION_NAV} right={<TeacherModeToggle />} />
 
+        <DifficultyGuide />
+
         <div className="space-y-4 pt-8 text-[17px] leading-relaxed text-ink/90">
           <p>
             Представете си батерия, резистор и намотка, свързани последователно. Затваряме
@@ -142,6 +229,11 @@ export default function InductanceLessonPage() {
         </div>
 
         <Section id="self" n="§1" title="Самоиндукция и индуктивност">
+          <DifficultyNote
+            level="Основно"
+            requires="закона на Фарадей, магнитен поток и обикновена алгебра."
+            firstRead="следвайте физическата причинна верига. Интегралният запис на потока може да остане като определение."
+          />
           <div className="space-y-4 text-[17px] leading-relaxed text-ink/90">
             <p>
               Свържете батерия, резистор и намотка. В мига на затваряне на ключа токът{" "}
@@ -355,6 +447,11 @@ export default function InductanceLessonPage() {
         </Section>
 
         <Section id="rl" n="§2" title="Резистор и индуктор при последователно свързване">
+          <DifficultyNote
+            level="Надграждащо"
+            requires="производна и ОДУ от първи ред за пълното извеждане на експоненциалния отговор."
+            firstRead="графиката, времеконстантата и готовите формули са достатъчни, дори ако още не решавате ОДУ."
+          />
           <div className="space-y-4 text-[17px] leading-relaxed text-ink/90">
             <p>
               <strong>Индуктор</strong> е компонент, проектиран да има определена
@@ -607,6 +704,11 @@ export default function InductanceLessonPage() {
         </Section>
 
         <Section id="energy" n="§3" title="Енергия в магнитно поле">
+          <DifficultyNote
+            level="Надграждащо"
+            requires="работа, мощност и прост определен интеграл."
+            firstRead="съсредоточете се върху идеята, че енергията се съхранява в магнитното поле. Извеждането може да се прочете по-късно."
+          />
           <div className="space-y-4 text-[17px] leading-relaxed text-ink/90">
             <p>
               Батерията в <RichText text="$RL$" /> контур доставя повече енергия, отколкото
@@ -783,6 +885,11 @@ export default function InductanceLessonPage() {
         </Section>
 
         <Section id="mutual" n="§4" title="Взаимна индуктивност">
+          <DifficultyNote
+            level="Надграждащо"
+            requires="магнитен поток, закон на Фарадей и внимателно следене на индексите."
+            firstRead="важната идея е как променящият се ток в едната намотка поражда ЕДН в другата."
+          />
           <div className="space-y-4 text-[17px] leading-relaxed text-ink/90">
             <p>
               Две близки, електрически несвързани намотки могат да обменят енергия чрез
@@ -959,6 +1066,11 @@ export default function InductanceLessonPage() {
         </Section>
 
         <Section id="lc" n="§5" title="Кондензатор и индуктор: LC трептения">
+          <DifficultyNote
+            level="По-напреднало"
+            requires="ОДУ от втори ред, синус и косинус. Комплексните експоненти са само метод за пълното решение."
+            firstRead="наблюдавайте обмяната на енергия между кондензатора и намотката. Алгебричното решение може да се прескочи."
+          />
           <div className="space-y-4 text-[17px] leading-relaxed text-ink/90">
             <p>
               Добавяме <strong>кондензатор</strong> с капацитет{" "}
@@ -1237,6 +1349,11 @@ export default function InductanceLessonPage() {
         </Section>
 
         <Section id="rlc" n="§6" title="Резистор, индуктор и кондензатор: RLC затихване">
+          <DifficultyNote
+            level="По-напреднало"
+            requires="ОДУ от втори ред, характеристично уравнение и комплексни корени."
+            firstRead="разграничете трите режима по графиките. Пълният извод на решенията е допълнителен слой."
+          />
           <div className="space-y-4 text-[17px] leading-relaxed text-ink/90">
             <p>
               Към предишната <RichText text="$LC$" /> верига добавяме последователен
@@ -1535,6 +1652,11 @@ export default function InductanceLessonPage() {
         </Section>
 
         <Section id="recap" n="§7" title="Обобщение">
+          <DifficultyNote
+            level="Основно"
+            requires="само основните физически идеи от предишните раздели."
+            firstRead="използвайте този раздел като карта на урока и се върнете само към извежданията, които са ви нужни."
+          />
           <Derivation title="Една причинна верига зад целия урок">
             <Formula
               latex={String.raw`I\longrightarrow \vec B\longrightarrow \Phi_B\longrightarrow \lambda=LI\longrightarrow \mathcal E_L=-L\frac{dI}{dt}`}
