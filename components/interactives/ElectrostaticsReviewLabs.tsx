@@ -150,7 +150,10 @@ export function CapacitorDielectricLab() {
         тях има въздух.
       </p>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1.45fr)_minmax(230px,.75fr)]">
+      {/* Сцената заема цялата ширина; плъзгачите стоят под нея, за да не я
+          свиват до неразличимо на средни екрани. */}
+      <div className="mt-4 overflow-x-auto rounded-[10px]">
+        <div className="mx-auto min-w-[560px]">
         <svg
           viewBox="0 0 720 320"
           className={STAGE_CLASS}
@@ -267,10 +270,13 @@ export function CapacitorDielectricLab() {
 
           <SvgTex x={342} y={296} tex="E=V/d" color={C.ok} width={92} anchor="middle" />
         </svg>
+        </div>
+      </div>
 
-        <div className="space-y-4 rounded-[10px] border-[1.5px] border-rule bg-paper p-4">
+      <div className="mt-4 rounded-[10px] border-[1.5px] border-rule bg-paper p-4">
+        <div className="grid gap-4 sm:grid-cols-3">
           <RangeControl
-            label="Вкарана част"
+            label="Колко е вкаран диелектрикът"
             value={fraction}
             min={0}
             max={1}
@@ -296,18 +302,18 @@ export function CapacitorDielectricLab() {
             valueLabel={`${gapMm} mm`}
             onChange={setGapMm}
           />
-          <button
-            type="button"
-            className={`${BTN_SEC} w-full`}
-            onClick={() => {
-              setEpsilonR(4);
-              setFraction(0.6);
-              setGapMm(8);
-            }}
-          >
-            Върнете началните стойности
-          </button>
         </div>
+        <button
+          type="button"
+          className={`${BTN_SEC} mt-4`}
+          onClick={() => {
+            setEpsilonR(4);
+            setFraction(0.6);
+            setGapMm(8);
+          }}
+        >
+          Върнете началните стойности
+        </button>
       </div>
 
       <dl className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-[10px] border-[1.5px] border-ink bg-rule sm:grid-cols-5">
@@ -336,7 +342,8 @@ export function CapacitorDielectricLab() {
         />
       </dl>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1.2fr)_minmax(230px,.8fr)]">
+      <div className="mt-4 overflow-x-auto rounded-[10px]">
+        <div className="mx-auto min-w-[560px]">
         <svg
           viewBox="0 0 720 250"
           className={STAGE_CLASS}
@@ -381,14 +388,15 @@ export function CapacitorDielectricLab() {
             );
           })}
         </svg>
-        <div className="rounded-r-lg border-l-4 border-minus bg-hl px-4 py-3 text-[14.5px] leading-relaxed">
-          <p className="font-bold text-ink">Наблюдавайте зелената колона.</p>
-          <p className="mt-1">
-            {mode === "connected"
-              ? "При фиксирано разстояние полето не се променя, когато вкарвате диелектрик: E = V/d. То се променя само ако местите плочите."
-              : "При фиксиран заряд диелектрикът отслабва полето. Разстоянието променя напрежението и капацитета, но не и E за идеални безкрайни плочи."}
-          </p>
         </div>
+      </div>
+      <div className="mt-4 rounded-r-lg border-l-4 border-minus bg-hl px-4 py-3 text-[14.5px] leading-relaxed">
+        <p className="font-bold text-ink">Наблюдавайте зелената колона.</p>
+        <p className="mt-1">
+          {mode === "connected"
+            ? "При фиксирано разстояние полето не се променя, когато вкарвате диелектрик: E = V/d. То се променя само ако местите плочите."
+            : "При фиксиран заряд диелектрикът отслабва полето. Разстоянието променя напрежението и капацитета, но не и E за идеални безкрайни плочи."}
+        </p>
       </div>
     </div>
   );
@@ -692,7 +700,8 @@ export function DielectricConfigurationGuide() {
         </div>
       </div>
 
-      <div className="mt-4 grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(230px,.85fr)]">
+      <div className="mt-4 overflow-x-auto rounded-[10px]">
+        <div className="mx-auto min-w-[520px]">
         <svg
           viewBox="0 0 620 330"
           className={STAGE_CLASS}
@@ -727,25 +736,24 @@ export function DielectricConfigurationGuide() {
             <Arrow key={x} x1={x} y1={76} x2={x} y2={253} color={C.ok} width={1.8} />
           ))}
         </svg>
+        </div>
+      </div>
 
-        <div className="flex flex-col justify-center rounded-[10px] border-[1.5px] border-rule bg-paper p-4">
-          <p className="text-[11px] font-bold uppercase tracking-[.15em] text-muted">
-            Мнемоника
-          </p>
-          <p className="mt-2 text-[15px]">
-            {series
-              ? "Една силова линия пресича двата материала един след друг. Кондензаторите са последователни."
-              : "Едни силови линии минават само през първия материал, други само през втория. Кондензаторите са паралелни."}
-          </p>
-          <div className="mt-4">
-            <RichText
-              text={
-                series
-                  ? "**Резултат:** $C_e=4\\varepsilon A/(3d)$"
-                  : "**Резултат:** $C_e=3\\varepsilon A/(2d)$"
-              }
-            />
-          </div>
+      <div className="mt-4 rounded-[10px] border-[1.5px] border-rule bg-paper p-4">
+        <p className="text-[11px] font-bold uppercase tracking-[.15em] text-muted">Мнемоника</p>
+        <p className="mt-2 text-[15px]">
+          {series
+            ? "Една силова линия пресича двата материала един след друг. Кондензаторите са последователни."
+            : "Едни силови линии минават само през първия материал, други само през втория. Кондензаторите са паралелни."}
+        </p>
+        <div className="mt-3">
+          <RichText
+            text={
+              series
+                ? "**Резултат:** $C_e=4\\varepsilon A/(3d)$"
+                : "**Резултат:** $C_e=3\\varepsilon A/(2d)$"
+            }
+          />
         </div>
       </div>
     </div>
