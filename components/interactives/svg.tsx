@@ -31,6 +31,53 @@ export const BTN_PRI =
 export const BTN_SEC =
   "cursor-pointer rounded-lg border-[1.5px] border-ink bg-surface px-3.5 py-2 text-[13.5px] font-semibold text-ink shadow-hard-sm transition-colors hover:bg-hl active:translate-x-px active:translate-y-px active:shadow-none disabled:cursor-default disabled:opacity-40";
 
+/**
+ * KaTeX етикет с плътна подложка в цвета на сцената.
+ *
+ * Ползва се, когато етикетът неизбежно пада върху линия, окръжност или
+ * защрихована област: без подложка текстът се слива с чертежа и не се чете.
+ * `width` е ширината на самия етикет, затова я подавайте прилепнала към
+ * съдържанието, иначе подложката ще закрие съседни елементи.
+ */
+export function TexChip({
+  x,
+  y,
+  tex,
+  color,
+  width,
+  fontSize = 13,
+  anchor = "start",
+  padX = 7,
+  padY = 5,
+}: {
+  x: number;
+  y: number;
+  tex: string;
+  color: string;
+  width: number;
+  fontSize?: number;
+  anchor?: "start" | "middle" | "end";
+  padX?: number;
+  padY?: number;
+}) {
+  const height = fontSize + padY * 2;
+  const left = anchor === "middle" ? x - width / 2 : anchor === "end" ? x - width : x;
+  return (
+    <g>
+      <rect
+        x={left - padX}
+        y={y - height / 2}
+        width={width + padX * 2}
+        height={height}
+        rx={5}
+        fill={STAGE_BG}
+        opacity={0.94}
+      />
+      <SvgTex x={x} y={y} tex={tex} color={color} width={width} fontSize={fontSize} anchor={anchor} />
+    </g>
+  );
+}
+
 /** Стрелка (вектор) с връх-триъгълник и опционален етикет. */
 export function Arrow({
   x1,

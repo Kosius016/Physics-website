@@ -57,6 +57,21 @@ const physicsUni: CourseSection[] = [
         href: "/physics/elektrichestvo/potencial",
         draft: true,
       },
+      {
+        number: "1.2",
+        title: "Проводници в електростатично равновесие",
+        href: "/physics/elektrichestvo/provodnici",
+      },
+      {
+        number: "1.3",
+        title: "Кондензатори: капацитет, свързване и енергия",
+        href: "/physics/elektrichestvo/kondenzatori",
+      },
+      {
+        number: "1.4",
+        title: "Диелектрици: поляризация, капацитет и енергия",
+        href: "/physics/elektrichestvo/dielektrici",
+      },
     ],
   },
   {

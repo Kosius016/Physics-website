@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import RichText from "@/components/RichText";
 import SvgTex from "./SvgTex";
-import { Arrow, BTN_SEC, C, PANEL_CLASS, STAGE_BG, STAGE_CLASS } from "./svg";
+import { Arrow, BTN_SEC, C, PANEL_CLASS, STAGE_BG, STAGE_CLASS, TexChip } from "./svg";
 
 const EPSILON_0 = 8.854_187_812_8e-12;
 const AREA = 0.01;
@@ -441,7 +441,7 @@ export function GaussShellExplorer() {
 
   const graph = useMemo(() => {
     const x = (r: number) => 58 + (r / 3.2) * 604;
-    const y = (field: number) => 115 - (field / 1.2) * 78;
+    const y = (field: number) => 335 - (field / 1.2) * 250;
     return {
       x,
       y,
@@ -452,9 +452,15 @@ export function GaussShellExplorer() {
     };
   }, [shellCharge]);
 
-  const centerX = 330;
-  const centerY = 168;
+  /**
+   * Платното е прилепнато към чертежа: при по-широк viewBox същите окръжности
+   * се свиват до неразличимо. Центърът е и център на платното, а етикетите
+   * стоят по диагоналите, за да остане композицията симетрична.
+   */
+  const centerX = 230;
+  const centerY = 220;
   const scale = 62;
+  const diag = 0.72;
 
   return (
     <div className={PANEL_CLASS}>
@@ -472,9 +478,11 @@ export function GaussShellExplorer() {
         </p>
       </div>
 
-      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+      {/* Едва при 2xl има достатъчно поле, че двете сцени да стоят една до
+          друга, без чертежът да се смали до неразличимо. */}
+      <div className="mt-4 grid gap-4 2xl:grid-cols-2">
         <svg
-          viewBox="0 0 660 336"
+          viewBox="0 0 460 440"
           className={STAGE_CLASS}
           style={{ background: STAGE_BG }}
           role="img"
@@ -520,40 +528,54 @@ export function GaussShellExplorer() {
             strokeWidth={2}
             strokeDasharray="7 5"
           />
-          <SvgTex x={centerX + scale * 0.55} y={centerY - scale * 0.55} tex="Q_1" color={C.plus} width={54} />
-          <SvgTex x={centerX + 1.58 * scale} y={centerY - 8} tex="-Q_1" color={C.minus} width={64} />
-          <SvgTex
-            x={centerX + 2.2 * scale}
-            y={centerY + 8}
+          <TexChip
+            x={centerX + scale * 0.55}
+            y={centerY - scale * 0.55}
+            tex="Q_1"
+            color={C.plus}
+            width={24}
+          />
+          <TexChip
+            x={centerX - 1.6 * scale * diag}
+            y={centerY - 1.6 * scale * diag}
+            tex="-Q_1"
+            color={C.minus}
+            width={32}
+            anchor="end"
+          />
+          <TexChip
+            x={centerX + 2.2 * scale * diag}
+            y={centerY + 2.2 * scale * diag}
             tex="Q+Q_1"
             color={C.ok}
-            width={80}
+            width={48}
           />
-          <SvgTex
-            x={centerX + radius * scale * 0.72}
-            y={centerY + radius * scale * 0.72}
+          <TexChip
+            x={centerX}
+            y={centerY + radius * scale + 15}
             tex="r"
             color={C.warn}
-            width={30}
+            width={8}
+            anchor="middle"
           />
         </svg>
 
         <svg
-          viewBox="0 0 720 250"
+          viewBox="0 0 720 690"
           className={STAGE_CLASS}
           style={{ background: STAGE_BG }}
           role="img"
           aria-label="Графика на електричното поле по радиуса за сферична система"
         >
-          <line x1={58} y1={115} x2={674} y2={115} stroke={C.mut} strokeWidth={1.5} />
-          <line x1={58} y1={25} x2={58} y2={212} stroke={C.mut} strokeWidth={1.5} />
+          <line x1={58} y1={335} x2={674} y2={335} stroke={C.mut} strokeWidth={1.5} />
+          <line x1={58} y1={55} x2={58} y2={620} stroke={C.mut} strokeWidth={1.5} />
           {[1, 1.6, 2.2].map((r) => (
             <line
               key={r}
               x1={graph.x(r)}
-              y1={25}
+              y1={55}
               x2={graph.x(r)}
-              y2={212}
+              y2={620}
               stroke={C.faint}
               strokeWidth={1.2}
               strokeDasharray="5 5"
@@ -565,19 +587,19 @@ export function GaussShellExplorer() {
           <path d={graph.outside} fill="none" stroke={C.warn} strokeWidth={3} />
           <line
             x1={graph.x(radius)}
-            y1={25}
+            y1={55}
             x2={graph.x(radius)}
-            y2={212}
+            y2={620}
             stroke={C.wire}
             strokeWidth={1.4}
             strokeDasharray="5 4"
           />
           <circle cx={graph.x(radius)} cy={graph.y(current.field)} r={5} fill={C.wire} />
-          <SvgTex x={44} y={28} tex="E" color={C.wire} width={28} anchor="end" />
-          <SvgTex x={678} y={224} tex="r" color={C.wire} width={28} />
-          <SvgTex x={graph.x(1)} y={229} tex="R_1" color={C.plus} width={52} anchor="middle" />
-          <SvgTex x={graph.x(1.6)} y={229} tex="R_2" color={C.minus} width={52} anchor="middle" />
-          <SvgTex x={graph.x(2.2)} y={229} tex="R_3" color={C.ok} width={52} anchor="middle" />
+          <SvgTex x={44} y={58} tex="E" color={C.wire} width={28} anchor="end" />
+          <SvgTex x={678} y={655} tex="r" color={C.wire} width={28} />
+          <SvgTex x={graph.x(1)} y={660} tex="R_1" color={C.plus} width={52} anchor="middle" />
+          <SvgTex x={graph.x(1.6)} y={660} tex="R_2" color={C.minus} width={52} anchor="middle" />
+          <SvgTex x={graph.x(2.2)} y={660} tex="R_3" color={C.ok} width={52} anchor="middle" />
         </svg>
       </div>
 
@@ -689,16 +711,16 @@ export function DielectricConfigurationGuide() {
               <rect x={80} y={62} width={460} height={103} fill={C.warn} opacity={0.2} />
               <rect x={80} y={165} width={460} height={103} fill={C.minus} opacity={0.2} />
               <line x1={80} y1={165} x2={540} y2={165} stroke={C.faint} strokeWidth={2} />
-              <SvgTex x={310} y={113} tex="\varepsilon" color={C.warn} width={60} anchor="middle" />
-              <SvgTex x={310} y={216} tex="2\varepsilon" color={C.minus} width={72} anchor="middle" />
+              <SvgTex x={310} y={113} tex={String.raw`\varepsilon`} color={C.warn} width={60} anchor="middle" />
+              <SvgTex x={310} y={216} tex={String.raw`2\varepsilon`} color={C.minus} width={72} anchor="middle" />
             </>
           ) : (
             <>
               <rect x={80} y={62} width={230} height={206} fill={C.warn} opacity={0.2} />
               <rect x={310} y={62} width={230} height={206} fill={C.minus} opacity={0.2} />
               <line x1={310} y1={62} x2={310} y2={268} stroke={C.faint} strokeWidth={2} />
-              <SvgTex x={195} y={165} tex="\varepsilon" color={C.warn} width={60} anchor="middle" />
-              <SvgTex x={425} y={165} tex="2\varepsilon" color={C.minus} width={72} anchor="middle" />
+              <SvgTex x={195} y={165} tex={String.raw`\varepsilon`} color={C.warn} width={60} anchor="middle" />
+              <SvgTex x={425} y={165} tex={String.raw`2\varepsilon`} color={C.minus} width={72} anchor="middle" />
             </>
           )}
           {[120, 195, 270, 345, 420, 495].map((x) => (
@@ -719,8 +741,8 @@ export function DielectricConfigurationGuide() {
             <RichText
               text={
                 series
-                  ? "**Резултат:** $C_e=2\\varepsilon A/(3d)$"
-                  : "**Резултат:** $C_e=3\\varepsilon A/(4d)$"
+                  ? "**Резултат:** $C_e=4\\varepsilon A/(3d)$"
+                  : "**Резултат:** $C_e=3\\varepsilon A/(2d)$"
               }
             />
           </div>

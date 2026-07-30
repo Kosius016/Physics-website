@@ -241,7 +241,7 @@ export default function DeterminantsLessonPage() {
             <div className="overflow-x-auto rounded-[10px] border-[1.5px] border-ink bg-surface">
               <table className="w-full min-w-[560px] border-collapse text-left text-[14.5px]">
                 <thead className="bg-hl text-[11px] uppercase tracking-wide text-muted">
-                  <tr><th className="px-4 py-3">Операция</th><th className="px-4 py-3">Ефект върху <RichText text="$\\det$" /></th><th className="px-4 py-3">Защо</th></tr>
+                  <tr><th className="px-4 py-3">Операция</th><th className="px-4 py-3">Ефект върху <RichText text="$\det$" /></th><th className="px-4 py-3">Защо</th></tr>
                 </thead>
                 <tbody className="divide-y divide-rule text-ink/90">
                   <tr><td className="px-4 py-3">Размяна на два реда</td><td className="px-4 py-3 font-semibold">сменя знака</td><td className="px-4 py-3">обръща ориентацията</td></tr>
@@ -422,7 +422,7 @@ export default function DeterminantsLessonPage() {
         <Section id="problems" n="§8" title="Задачи: от техника към приложение">
           <div className="space-y-3">
             <p className="text-ink/90">
-              Първо натрупайте увереност с девет детерминанти <RichText text="$3\\times3$" />. Не печели този, който разгъва
+              Първо натрупайте увереност с девет детерминанти <RichText text="$3\times3$" />. Не печели този, който разгъва
               най-бързо, а този, който вижда удобния ред, нулата или редовата операция преди сметката.
             </p>
           </div>

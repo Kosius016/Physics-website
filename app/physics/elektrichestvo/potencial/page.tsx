@@ -48,14 +48,14 @@ export default function PotentialLessonPage() {
     <LessonNav items={NAV} right={<TeacherModeToggle />} />
 
     <Section id="motivation" n="§1" title="Защо ни трябва потенциал?">
-      <p>Законът на Гаус намира <RichText text="$\\vec E$" /> елегантно при висока симетрия. В общия случай обаче полето има три компоненти и се събира векторно. Потенциалът решава три проблема наведнъж:</p>
+      <p>Законът на Гаус намира <RichText text="$\vec E$" /> елегантно при висока симетрия. В общия случай обаче полето има три компоненти и се събира векторно. Потенциалът решава три проблема наведнъж:</p>
       <ol className="mt-3 list-decimal space-y-2 pl-5"><li><strong>Скалар вместо вектор:</strong> V е едно число във всяка точка.</li><li><strong>Енергия:</strong> казва каква работа е нужна за преместване на заряд.</li><li><strong>Практика:</strong> напрежението на батерия, ЕКГ и електрическите вериги са потенциални разлики.</li></ol>
       <div className="mt-5 rounded-r-lg border-l-4 border-plus bg-hl px-4 py-3 text-[15.5px]"><strong>Ключова идея:</strong> електростатичното поле е консервативно, затова можем да дефинираме потенциал.</div>
       <TeacherNote>Започнете с контраста „три компоненти срещу едно число“. Попитайте коя величина реално измерва волтметърът.</TeacherNote>
     </Section>
 
     <Section id="work" n="§2" title="Работа и консервативност на полето">
-      <p>Силата върху пробен заряд е <RichText text="$\\vec F=q\\vec E$" />. Работата на полето от a до b е:</p>
+      <p>Силата върху пробен заряд е <RichText text="$\vec F=q\vec E$" />. Работата на полето от a до b е:</p>
       <div className="mt-4"><Formula latex={String.raw`W_{a\to b}=q\int_a^b \vec E\cdot d\vec l`} /></div>
       <p className="mt-4">В електростатиката резултатът зависи само от началната и крайната точка, не от пътя. Еквивалентно:</p>
       <Box title="Консервативност"><Formula latex={String.raw`\oint \vec E\cdot d\vec l=0 \quad\Longleftrightarrow\quad \nabla\times\vec E=\vec 0`} /></Box>
@@ -63,9 +63,9 @@ export default function PotentialLessonPage() {
     </Section>
 
     <Section id="definition" n="§3" title="Потенциална енергия и потенциал">
-      <p>За консервативна сила <RichText text="$\\Delta U=-W$" />. Потенциалът е потенциалната енергия на единица пробен заряд.</p>
+      <p>За консервативна сила <RichText text="$\Delta U=-W$" />. Потенциалът е потенциалната енергия на единица пробен заряд.</p>
       <Box title="Дефиниция" blue><Formula latex={String.raw`V(\vec r)=\frac{U(\vec r)}q,\qquad \Delta V=-\int_a^b \vec E\cdot d\vec l`} /><p className="mt-3 text-[15px]">Референтната точка V = 0 е наш избор; за локализирани заряди обикновено е безкрайността.</p></Box>
-      <p><RichText text="$1\\,\\mathrm V=1\\,\\mathrm{J/C}$" />. Електронволтът е енергията, която електрон придобива при преминаване през 1 V.</p>
+      <p><RichText text="$1\,\mathrm V=1\,\mathrm{J/C}$" />. Електронволтът е енергията, която електрон придобива при преминаване през 1 V.</p>
       <div className="mt-5 rounded-r-lg border-l-4 border-plus bg-hl px-4 py-3 text-[15.5px]"><strong>Езикова клопка:</strong> V е свойство на полето; <RichText text="$U=qV$" /> е свойство на системата поле + заряд. Отрицателен заряд понижава U, движейки се към по-висок V.</div>
     </Section>
 
@@ -83,7 +83,7 @@ export default function PotentialLessonPage() {
     </Section>
 
     <Section id="sphere" n="§6" title="От Гаус към потенциал: заредена сфера">
-      <p>За проводникова сфера с радиус R и заряд Q законът на Гаус дава E = 0 вътре и <RichText text="$E=kQ/r^2$" /> отвън. Интегрирането с <RichText text="$V(\\infty)=0$" /> дава:</p>
+      <p>За проводникова сфера с радиус R и заряд Q законът на Гаус дава E = 0 вътре и <RichText text="$E=kQ/r^2$" /> отвън. Интегрирането с <RichText text="$V(\infty)=0$" /> дава:</p>
       <div className="mt-4"><Formula latex={String.raw`V(r)=\begin{cases}\dfrac{kQ}{R},&r\le R\\[6pt]\dfrac{kQ}{r},&r\ge R\end{cases}`} /></div>
       <ul className="mt-4 list-disc space-y-2 pl-5"><li>V е непрекъснат дори когато E скача.</li><li>Вътре E = 0, но V не е задължително нула — то е константа.</li><li>Целият проводник е еквипотенциален обем.</li></ul>
     </Section>
@@ -92,7 +92,7 @@ export default function PotentialLessonPage() {
       <div className="space-y-4">
         <Box title="Пример 1 · Диполна ос"><Formula latex={String.raw`V=kq\left(\frac1{z-a}-\frac1{z+a}\right)=\frac{2kqa}{z^2-a^2}\xrightarrow{z\gg a}\frac{kp}{z^2}`} /><p className="mt-3">Потенциалът на дипола намалява като 1/r², а полето — като 1/r³.</p></Box>
         <Box title="Пример 2 · Сглобяване"><p>За три еднакви заряда във върховете на равностранен триъгълник със страна d събираме енергията на трите двойки:</p><div className="mt-3"><Formula latex={String.raw`U=3\frac{kq^2}{d}`} /></div></Box>
-        <Box title="Пример 3 · Електрон"><p>Електрон, ускорен през 100 V, придобива 100 eV и скорост приблизително <RichText text="$5{,}9\\times10^6\\,\\mathrm{m/s}$" />.</p></Box>
+        <Box title="Пример 3 · Електрон"><p>Електрон, ускорен през 100 V, придобива 100 eV и скорост приблизително <RichText text="$5{,}9\times10^6\,\mathrm{m/s}$" />.</p></Box>
       </div>
     </Section>
 
@@ -112,7 +112,7 @@ export default function PotentialLessonPage() {
 
     <Section id="recap" n="§11" title="Обобщение и какво следва">
       <div className="overflow-x-auto rounded-[10px] border-[1.5px] border-ink bg-surface shadow-hard"><table className="w-full min-w-[560px] border-collapse text-[15px]"><thead className="bg-hl"><tr><th className="p-3 text-left">Величина</th><th className="p-3 text-left">Формула</th><th className="p-3 text-left">Помни</th></tr></thead><tbody className="divide-y divide-rule"><tr><td className="p-3">Разлика в потенциала</td><td className="p-3">ΔV = −∫E·dl</td><td className="p-3">не зависи от пътя</td></tr><tr><td className="p-3">Точков заряд</td><td className="p-3">V = kQ/r</td><td className="p-3">скаларна суперпозиция</td></tr><tr><td className="p-3">Поле от потенциал</td><td className="p-3">E = −∇V</td><td className="p-3">надолу по склона</td></tr><tr><td className="p-3">Енергия</td><td className="p-3">U = qV</td><td className="p-3">зависи и от заряда</td></tr></tbody></table></div>
-      <p className="mt-5"><strong>Следва:</strong> кондензатори и капацитет <RichText text="$C=Q/\\Delta V$" /> — първото устройство, построено изцяло от тези идеи.</p>
+      <p className="mt-5"><strong>Следва:</strong> <Link href="/physics/elektrichestvo/provodnici" className="font-semibold text-minus hover:underline">проводници в електростатично равновесие</Link>. Досега зарядите бяха неподвижни и поставени на ръка; в метала те се подреждат сами и точно това определя полето.</p>
     </Section>
   </main></TeacherModeProvider>;
 }

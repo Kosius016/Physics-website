@@ -178,7 +178,7 @@ export default function CrossProductLessonPage() {
             <p className="text-ink/90">
               Нека <RichText text={String.raw`$\vec a=(a_1,a_2,a_3)$`} /> и
               <RichText text={String.raw`$\ \vec b=(b_1,b_2,b_3)$`} />. Всяка компонента на новия
-              вектор е детерминанта <RichText text="$2\\times2$" />: ориентираната площ на съответната координатна проекция:
+              вектор е детерминанта <RichText text="$2\times2$" />: ориентираната площ на съответната координатна проекция:
             </p>
             <Formula latex={String.raw`\vec a\times\vec b=\begin{vmatrix}\vec i&\vec j&\vec k\\a_1&a_2&a_3\\b_1&b_2&b_3\end{vmatrix}`} />
             <p className="text-ink/90">

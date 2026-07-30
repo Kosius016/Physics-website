@@ -12,8 +12,6 @@ import { BTN_SEC, C, PANEL_CLASS, STAGE_BG, STAGE_CLASS } from "./svg";
  * лентите под тях, както изисква CLAUDE.md §4.
  */
 
-const METAL_FILL = "rgba(242,239,245,0.13)";
-
 function Cap({
   x,
   y,
@@ -60,9 +58,14 @@ function Minus({ x, y, r = 5, color = C.minus }: { x: number; y: number; r?: num
 
 /** Знаци, разпределени равномерно по окръжност. */
 function onCircle(cx: number, cy: number, radius: number, count: number, phase = 0) {
+  const q = (value: number) => Math.round(value * 1000) / 1000;
   return Array.from({ length: count }, (_, i) => {
     const a = phase + (2 * Math.PI * i) / count;
-    return { x: cx + radius * Math.cos(a), y: cy + radius * Math.sin(a), key: i };
+    return {
+      x: q(cx + radius * Math.cos(a)),
+      y: q(cy + radius * Math.sin(a)),
+      key: i,
+    };
   });
 }
 
@@ -136,7 +139,15 @@ export function CavityChargeFigure() {
             <rect width={620} height={400} fill={STAGE_BG} />
 
             {/* Металът е пръстенът между a и b */}
-            <circle cx={CX} cy={CY} r={B} fill={METAL_FILL} stroke={C.wire} strokeWidth={2} />
+            <circle
+              cx={CX}
+              cy={CY}
+              r={B}
+              fill={C.wire}
+              fillOpacity={0.13}
+              stroke={C.wire}
+              strokeWidth={2}
+            />
             <circle cx={CX} cy={CY} r={A} fill={STAGE_BG} stroke={C.wire} strokeWidth={2} />
 
             {/* Гаусова повърхност вътре в метала */}
@@ -271,8 +282,24 @@ export function TwoSpheresFigure() {
             <line x1={C1X + R1_PX} y1={CY} x2={C2X - R2_PX} y2={CY} stroke={C.wire} strokeWidth={2.5} />
 
             {/* Сферите */}
-            <circle cx={C1X} cy={CY} r={R1_PX} fill={METAL_FILL} stroke={C.wire} strokeWidth={2} />
-            <circle cx={C2X} cy={CY} r={R2_PX} fill={METAL_FILL} stroke={C.wire} strokeWidth={2} />
+            <circle
+              cx={C1X}
+              cy={CY}
+              r={R1_PX}
+              fill={C.wire}
+              fillOpacity={0.13}
+              stroke={C.wire}
+              strokeWidth={2}
+            />
+            <circle
+              cx={C2X}
+              cy={CY}
+              r={R2_PX}
+              fill={C.wire}
+              fillOpacity={0.13}
+              stroke={C.wire}
+              strokeWidth={2}
+            />
 
             {/* Еднакъв брой знаци на всяка сфера: по-малката ги събира по-нагъсто,
                 което е точно смисълът на sigma ∝ 1/R. */}

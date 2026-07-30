@@ -247,7 +247,7 @@ export default function Determinant3x3Practice() {
       <div className="mt-4 flex flex-wrap items-center gap-2">
         {problem.answer !== undefined && (
           <label className="flex items-center gap-2 text-[14px] font-semibold text-ink">
-            <RichText text="$\\det=$" />
+            <RichText text="$\det=$" />
             <input
               value={input}
               onChange={(e) => {

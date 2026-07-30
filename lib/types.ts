@@ -83,6 +83,12 @@ export interface Problem {
 export interface QuizOption {
   text: string;
   correct: boolean;
+  /**
+   * Защо точно тази опция е вярна или грешна. Показва се на ученика, когато
+   * я избере, и когато е верният отговор, а той е избрал друго. Общото
+   * `explanation` остава за разсъждението, което важи за целия въпрос.
+   */
+  why?: RichTextString;
 }
 
 export interface QuizQuestion {

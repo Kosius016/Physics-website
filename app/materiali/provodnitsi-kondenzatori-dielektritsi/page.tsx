@@ -196,7 +196,7 @@ export default function ElectrostaticsReviewPage() {
             Материали
           </Link>
           <span aria-hidden="true">·</span>
-          <span>Физика · глава 4</span>
+          <span>Физика · Електростатика</span>
         </nav>
         <div className="mt-3 flex flex-wrap gap-2">
           <Condition>Преговор след урок</Condition>
@@ -321,7 +321,7 @@ export default function ElectrostaticsReviewPage() {
           Две достатъчно отдалечени сфери се свързват с жица. Зарядът се запазва, а
           потенциалите се изравняват.
         </p>
-        <div className="mt-4 xl:-mx-[5.5rem] 2xl:-mx-[9.5rem]">
+        <div className="mt-4">
           <TwoSpheresFigure />
         </div>
         <div className="mt-4">
@@ -362,7 +362,7 @@ export default function ElectrostaticsReviewPage() {
           </li>
         </ol>
 
-        <div className="mt-6 xl:-mx-[5.5rem] 2xl:-mx-[9.5rem]">
+        <div className="mt-6">
           <GaussShellExplorer />
         </div>
 
@@ -541,7 +541,7 @@ export default function ElectrostaticsReviewPage() {
           explanation="Батерията фиксира $V$, а разстоянието $d$ не се променя. За идеален плосък кондензатор $E=V/d=\mathrm{const}$. Допълнителният заряд идва от батерията."
         />
 
-        <div className="mt-6 xl:-mx-[5.5rem] 2xl:-mx-[9.5rem]">
+        <div className="mt-6">
           <CapacitorDielectricLab />
         </div>
 
@@ -614,7 +614,7 @@ export default function ElectrostaticsReviewPage() {
           увеличава, докато потенциалът остава фиксиран.
         </p>
 
-        <div className="mt-6 xl:-mx-[5.5rem] 2xl:-mx-[9.5rem]">
+        <div className="mt-6">
           <DielectricConfigurationGuide />
         </div>
 

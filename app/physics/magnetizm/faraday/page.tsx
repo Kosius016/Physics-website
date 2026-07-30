@@ -638,7 +638,7 @@ export default function FaradayLessonPage() {
                 { text: "По-силно поле $B$", correct: false },
                 { text: "Повече навивки $N$", correct: false },
               ]}
-              explanation="От $\\mathcal{E}_{\\max}=NAB\\omega$ следва, че $N$, $B$ и $\\omega$ увеличават ЕДН. Съпротивлението не влиза в израза — по-ниско $R$ увеличава тока $I=\\mathcal{E}/R$, но не и самото ЕДН."
+              explanation="От $\mathcal{E}_{\max}=NAB\omega$ следва, че $N$, $B$ и $\omega$ увеличават ЕДН. Съпротивлението не влиза в израза — по-ниско $R$ увеличава тока $I=\mathcal{E}/R$, но не и самото ЕДН."
             />
           </div>
 

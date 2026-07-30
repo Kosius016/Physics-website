@@ -84,17 +84,30 @@ export default function Quiz({ questions }: { questions: QuizQuestion[] }) {
                 );
               })}
             </div>
-            {locked && q.explanation && (
+            {locked && (q.explanation || q.options.some((o) => o.why)) && (
               <div
                 className={`mt-3 rounded-r-lg border-l-4 px-4 py-3 text-[14.5px] leading-relaxed animate-rise ${
                   pickedCorrect ? "border-ok bg-ok/10" : "border-plus bg-plus/10"
                 }`}
                 role="status"
               >
-                <strong className={pickedCorrect ? "text-ok" : "text-plus"}>
-                  {pickedCorrect ? "Вярно. " : "Не съвсем. "}
-                </strong>
-                <RichText text={q.explanation} />
+                <p>
+                  <strong className={pickedCorrect ? "text-ok" : "text-plus"}>
+                    {pickedCorrect ? "Вярно. " : "Не съвсем. "}
+                  </strong>
+                  {q.options[pickedIdx].why && <RichText text={q.options[pickedIdx].why} />}
+                </p>
+                {!pickedCorrect && q.options.find((o) => o.correct)?.why && (
+                  <p className="mt-2">
+                    <strong className="text-ok">Верният отговор: </strong>
+                    <RichText text={q.options.find((o) => o.correct)!.why!} />
+                  </p>
+                )}
+                {q.explanation && (
+                  <p className="mt-2">
+                    <RichText text={q.explanation} />
+                  </p>
+                )}
               </div>
             )}
           </div>
