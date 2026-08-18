@@ -84,9 +84,34 @@ export default function MaterialsPage() {
             </div>
           </div>
         </Link>
-      </section>
 
-    
+        <Link
+          href="/materiali/zadachi-kondenzatori"
+          className="group mt-5 block rounded-[12px] border-[1.5px] border-ink bg-surface px-6 py-5 shadow-hard transition-transform hover:-translate-y-0.5"
+        >
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="rounded-full border-[1.5px] border-minus bg-minus/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-minus">
+              Задачи
+            </span>
+            <span className="rounded-full border-[1.5px] border-rule px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-muted">
+              Физика · Електростатика
+            </span>
+          </div>
+          <h3 className="mt-4 font-serif text-[clamp(24px,4.4vw,32px)] font-bold leading-[1.1] text-ink group-hover:text-minus">
+            Плосък и цилиндричен кондензатор
+          </h3>
+          <p className="mt-2 max-w-2xl text-[15.5px] leading-relaxed text-muted">
+            Шест задачи с пълни решения: извеждане на енергията от лицето под графиката, ред на
+            Тейлър за коаксиален кабел, оптималният радиус срещу пробив, енергийният баланс при
+            раздалечаване на плочите и къде отива изчезналата половина енергия.
+          </p>
+          <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] font-semibold text-ink">
+            <span>6 задачи</span>
+            <span>6 интерактива</span>
+            <span>Пълни решения</span>
+          </div>
+        </Link>
+      </section>
     </main>
   );
 }

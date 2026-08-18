@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Formula from "@/components/Formula";
 import RichText from "@/components/RichText";
 
@@ -5,7 +6,9 @@ export type ProblemBlock =
   | { kind: "paragraph"; text: string }
   | { kind: "formula"; latex: string }
   | { kind: "list"; items: string[] }
-  | { kind: "subheading"; text: string };
+  | { kind: "subheading"; text: string }
+  /** Интерактивна фигура вътре в условието или решението. */
+  | { kind: "figure"; node: ReactNode; caption?: string };
 
 export interface ProblemSetProblemData {
   number: number;
@@ -33,6 +36,18 @@ function Blocks({ blocks }: { blocks: ProblemBlock[] }) {
                 </li>
               ))}
             </ul>
+          );
+        }
+        if (block.kind === "figure") {
+          return (
+            <figure key={index} className="my-4">
+              {block.node}
+              {block.caption && (
+                <figcaption className="mt-2 text-[13.5px] leading-relaxed text-muted">
+                  <RichText text={block.caption} />
+                </figcaption>
+              )}
+            </figure>
           );
         }
         if (block.kind === "subheading") {
