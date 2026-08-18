@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import FieldAtlas from "@/components/materiali/FieldAtlas";
+import RichText from "@/components/RichText";
 
 export const metadata = {
   title: "Материали за преговор · STEM Платформа",
@@ -35,14 +37,70 @@ export default function MaterialsPage() {
         </h2>
 
         <Link
-          href="/materiali/provodnitsi-kondenzatori-dielektritsi"
-          className="group grid overflow-hidden rounded-[12px] border-[1.5px] border-ink bg-surface shadow-hard transition-transform hover:-translate-y-0.5 md:grid-cols-[1.15fr_.85fr]"
+          href="/materiali/elektrichestvo-i-magnetizam"
+          className="group mb-6 grid overflow-hidden rounded-[12px] border-[1.5px] border-ink bg-surface shadow-hard transition-transform hover:-translate-y-0.5 md:grid-cols-[1.15fr_.85fr]"
         >
           <div className="p-6 sm:p-8">
             <div className="flex flex-wrap gap-2">
               <span className="rounded-full border-[1.5px] border-plus bg-plus/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-plus">
                 Ново
               </span>
+              <span className="rounded-full border-[1.5px] border-rule px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-muted">
+                Физика · Електричество и магнетизъм
+              </span>
+            </div>
+            <h3 className="mt-5 font-serif text-[clamp(28px,5vw,38px)] font-bold leading-[1.08]">
+              Електричество и магнетизъм: голям справочник
+            </h3>
+            <p className="mt-3 max-w-xl text-[15.5px] text-muted">
+              Всички величини с дефинициите им, законите с условията за приложимост,
+              стандартните резултати, стратегиите за задачи и типичните грешки.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] font-semibold text-ink">
+              <span>40-50 мин преговор</span>
+              <span>14 секции</span>
+              <span>10 въпроса</span>
+            </div>
+          </div>
+
+          <div className="relative isolate flex min-h-[22rem] flex-col justify-between overflow-hidden border-t-[1.5px] border-ink bg-hl px-6 py-6 md:min-h-0 md:border-l-[1.5px] md:border-t-0">
+            <FieldAtlas className="absolute inset-0 -z-10 h-full w-full transition-transform duration-500 group-hover:scale-[1.025]" />
+            <ul className="space-y-1.5 text-[13.5px] font-semibold text-ink">
+              {[
+                "Заряд, поле, поток и потенциал",
+                "Проводници, кондензатори, диелектрици",
+                "Лоренц, Био-Савар, Ампер",
+                "Фарадей, Ленц, индуктивност",
+                "Вериги: RC срещу RL",
+              ].map((item) => (
+                <li key={item} className="flex gap-2">
+                  <span aria-hidden="true" className="text-minus">
+                    ·
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-5">
+              <p className="text-[10px] font-bold uppercase tracking-[.18em] text-muted">
+                Червената нишка
+              </p>
+              <p className="mt-1 font-serif text-[19px] font-bold leading-tight text-ink">
+                Две полета, шест въпроса
+              </p>
+              <span className="mt-3 inline-block text-[14px] font-bold text-minus">
+                Отворете материала <span aria-hidden="true">→</span>
+              </span>
+            </div>
+          </div>
+        </Link>
+
+        <Link
+          href="/materiali/provodnitsi-kondenzatori-dielektritsi"
+          className="group grid overflow-hidden rounded-[12px] border-[1.5px] border-ink bg-surface shadow-hard transition-transform hover:-translate-y-0.5 md:grid-cols-[1.15fr_.85fr]"
+        >
+          <div className="p-6 sm:p-8">
+            <div className="flex flex-wrap gap-2">
               <span className="rounded-full border-[1.5px] border-rule px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-muted">
                 Физика · Електростатика
               </span>
@@ -87,31 +145,101 @@ export default function MaterialsPage() {
 
         <Link
           href="/materiali/zadachi-kondenzatori"
-          className="group mt-5 block rounded-[12px] border-[1.5px] border-ink bg-surface px-6 py-5 shadow-hard transition-transform hover:-translate-y-0.5"
+          className="group mt-6 grid overflow-hidden rounded-[12px] border-[1.5px] border-ink bg-surface shadow-hard transition-transform hover:-translate-y-0.5 md:grid-cols-[1.15fr_.85fr]"
         >
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full border-[1.5px] border-minus bg-minus/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-minus">
-              Задачи
-            </span>
-            <span className="rounded-full border-[1.5px] border-rule px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-muted">
-              Физика · Електростатика
+          <div className="p-6 sm:p-8">
+            <div className="flex flex-wrap gap-2">
+              <span className="rounded-full border-[1.5px] border-plus bg-plus/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-plus">
+                Ново
+              </span>
+              <span className="rounded-full border-[1.5px] border-rule px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-muted">
+                Физика · Задачи с решения
+              </span>
+            </div>
+            <h3 className="mt-5 font-serif text-[clamp(28px,5vw,38px)] font-bold leading-[1.08]">
+              Трудни задачи за кондензатори
+            </h3>
+            <p className="mt-3 max-w-xl text-[15.5px] text-muted">
+              Плоски и коаксиални кондензатори, енергийни парадокси, пробив и асимптотични
+              приближения. Всяка задача има пълно решение и интерактивна проверка.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] font-semibold text-ink">
+              <span>6 задачи</span>
+              <span>6 интерактива</span>
+              <span>Пълни решения</span>
+            </div>
+          </div>
+
+          <div className="flex min-h-[20rem] flex-col justify-between border-t-[1.5px] border-ink bg-ink px-6 py-6 text-white md:min-h-0 md:border-l-[1.5px] md:border-t-0">
+            <p className="text-[10px] font-bold uppercase tracking-[.18em] text-hl">
+              От графиката до физическия смисъл
+            </p>
+            <div className="my-6 space-y-3 font-serif text-[clamp(20px,3vw,27px)] font-bold">
+              <div className="border-l-4 border-minus pl-4 text-minus">
+                <RichText text={String.raw`$U=\frac12Q\Delta V$`} />
+              </div>
+              <div className="border-l-4 border-ok pl-4 text-ok">
+                <RichText text={String.raw`$a_{\mathrm{opt}}=b/e$`} />
+              </div>
+              <div className="border-l-4 border-hl pl-4 text-hl">
+                <RichText text={String.raw`$r_{1/2}=\sqrt{ab}$`} />
+              </div>
+            </div>
+            <span className="text-[14px] font-bold text-white">
+              Решете задачите <span aria-hidden="true">→</span>
             </span>
           </div>
-          <h3 className="mt-4 font-serif text-[clamp(24px,4.4vw,32px)] font-bold leading-[1.1] text-ink group-hover:text-minus">
-            Плосък и цилиндричен кондензатор
-          </h3>
-          <p className="mt-2 max-w-2xl text-[15.5px] leading-relaxed text-muted">
-            Шест задачи с пълни решения: извеждане на енергията от лицето под графиката, ред на
-            Тейлър за коаксиален кабел, оптималният радиус срещу пробив, енергийният баланс при
-            раздалечаване на плочите и къде отива изчезналата половина енергия.
-          </p>
-          <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] font-semibold text-ink">
-            <span>6 задачи</span>
-            <span>6 интерактива</span>
-            <span>Пълни решения</span>
+        </Link>
+
+        <Link
+          href="/materiali/redove-na-teylar"
+          className="group mt-6 grid overflow-hidden rounded-[12px] border-[1.5px] border-ink bg-surface shadow-hard transition-transform hover:-translate-y-0.5 md:grid-cols-[1.15fr_.85fr]"
+        >
+          <div className="p-6 sm:p-8">
+            <div className="flex flex-wrap gap-2">
+              <span className="rounded-full border-[1.5px] border-plus bg-plus/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-plus">
+                Ново
+              </span>
+              <span className="rounded-full border-[1.5px] border-rule px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-muted">
+                Математични методи · Физика
+              </span>
+            </div>
+            <h3 className="mt-5 font-serif text-[clamp(28px,5vw,38px)] font-bold leading-[1.08]">
+              Редове на Тейлър във физиката
+            </h3>
+            <p className="mt-3 max-w-xl text-[15.5px] text-muted">
+              Махало, гравитация, относителност, дифракция, адиабатен процес и зареден
+              пръстен. Всяка следваща стъпка от решението се отключва с верен отговор.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] font-semibold text-ink">
+              <span>6 задачи</span>
+              <span>24 отключващи въпроса</span>
+              <span>7 графики</span>
+            </div>
+          </div>
+
+          <div className="flex min-h-[20rem] flex-col justify-between border-t-[1.5px] border-ink bg-ink px-6 py-6 text-white md:min-h-0 md:border-l-[1.5px] md:border-t-0">
+            <p className="text-[10px] font-bold uppercase tracking-[.18em] text-hl">
+              Точна крива, локален полином
+            </p>
+            <div className="my-6 space-y-3 font-serif text-[clamp(18px,2.6vw,24px)] font-bold">
+              <div className="border-l-4 border-minus pl-4 text-minus">
+                <RichText text={String.raw`$\sin x\approx x-x^3/3!$`} />
+              </div>
+              <div className="border-l-4 border-ok pl-4 text-ok">
+                <RichText text={String.raw`$(1+x)^\alpha\approx1+\alpha x+\cdots$`} />
+              </div>
+              <div className="border-l-4 border-hl pl-4 text-hl">
+                <RichText text={String.raw`$K\approx mv^2/2+3mv^4/(8c^2)$`} />
+              </div>
+            </div>
+            <span className="text-[14px] font-bold text-white">
+              Започнете практикума <span aria-hidden="true">→</span>
+            </span>
           </div>
         </Link>
       </section>
+
     </main>
   );
 }

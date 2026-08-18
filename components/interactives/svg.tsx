@@ -8,6 +8,9 @@ import SvgTex from "./SvgTex";
 
 export const STAGE_BG = "#24212d";
 
+/** Серифният шрифт на заглавията в урока, използван и за текст в чертежите. */
+export const DRAWING_FONT_FAMILY = 'Georgia, "Times New Roman", serif';
+
 export const C = {
   wire: "#f2eff5",
   plus: "#ff7654", // топло оранжево-червено (плюс, грешка)
