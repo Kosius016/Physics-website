@@ -16,6 +16,8 @@
   --color-minus: #2e6fd8;
   --color-hl: #fff3d6;
   --color-ok: #2f8f4e;
+  /* Тъмен вариант на жълтото от сцените (C.warn), четим върху бяла подложка */
+  --color-warn: #8a6206;
 
   --font-sans: var(--font-rubik), ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
   --font-serif: Georgia, "Times New Roman", serif;

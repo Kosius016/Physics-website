@@ -114,6 +114,16 @@ const physicsUni: CourseSection[] = [
       },
     ],
   },
+  {
+    title: "Променлив ток",
+    lessons: [
+      {
+        number: "4.1",
+        title: "Променлив ток: от фазата до импеданса и резонанса",
+        href: "/physics/promenliv-tok/impedans-i-rezonans",
+      },
+    ],
+  },
 ];
 
 const mathUni: CourseSection[] = [

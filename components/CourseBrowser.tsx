@@ -85,9 +85,11 @@ export default function CourseBrowser({
                   ? "electricity"
                   : section.title === "Магнетизъм"
                     ? "magnetism"
-                    : section.title === "Линейна алгебра"
-                      ? "linear-algebra"
-                      : undefined
+                    : section.title === "Променлив ток"
+                      ? "ac"
+                      : section.title === "Линейна алгебра"
+                        ? "linear-algebra"
+                        : undefined
               }
               className="mb-10 scroll-mt-24"
             >
