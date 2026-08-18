@@ -144,54 +144,6 @@ export default function MaterialsPage() {
         </Link>
 
         <Link
-          href="/materiali/zadachi-kondenzatori"
-          className="group mt-6 grid overflow-hidden rounded-[12px] border-[1.5px] border-ink bg-surface shadow-hard transition-transform hover:-translate-y-0.5 md:grid-cols-[1.15fr_.85fr]"
-        >
-          <div className="p-6 sm:p-8">
-            <div className="flex flex-wrap gap-2">
-              <span className="rounded-full border-[1.5px] border-plus bg-plus/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-plus">
-                Ново
-              </span>
-              <span className="rounded-full border-[1.5px] border-rule px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-muted">
-                Физика · Задачи с решения
-              </span>
-            </div>
-            <h3 className="mt-5 font-serif text-[clamp(28px,5vw,38px)] font-bold leading-[1.08]">
-              Трудни задачи за кондензатори
-            </h3>
-            <p className="mt-3 max-w-xl text-[15.5px] text-muted">
-              Плоски и коаксиални кондензатори, енергийни парадокси, пробив и асимптотични
-              приближения. Всяка задача има пълно решение и интерактивна проверка.
-            </p>
-            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] font-semibold text-ink">
-              <span>6 задачи</span>
-              <span>6 интерактива</span>
-              <span>Пълни решения</span>
-            </div>
-          </div>
-
-          <div className="flex min-h-[20rem] flex-col justify-between border-t-[1.5px] border-ink bg-ink px-6 py-6 text-white md:min-h-0 md:border-l-[1.5px] md:border-t-0">
-            <p className="text-[10px] font-bold uppercase tracking-[.18em] text-hl">
-              От графиката до физическия смисъл
-            </p>
-            <div className="my-6 space-y-3 font-serif text-[clamp(20px,3vw,27px)] font-bold">
-              <div className="border-l-4 border-minus pl-4 text-minus">
-                <RichText text={String.raw`$U=\frac12Q\Delta V$`} />
-              </div>
-              <div className="border-l-4 border-ok pl-4 text-ok">
-                <RichText text={String.raw`$a_{\mathrm{opt}}=b/e$`} />
-              </div>
-              <div className="border-l-4 border-hl pl-4 text-hl">
-                <RichText text={String.raw`$r_{1/2}=\sqrt{ab}$`} />
-              </div>
-            </div>
-            <span className="text-[14px] font-bold text-white">
-              Решете задачите <span aria-hidden="true">→</span>
-            </span>
-          </div>
-        </Link>
-
-        <Link
           href="/materiali/redove-na-teylar"
           className="group mt-6 grid overflow-hidden rounded-[12px] border-[1.5px] border-ink bg-surface shadow-hard transition-transform hover:-translate-y-0.5 md:grid-cols-[1.15fr_.85fr]"
         >

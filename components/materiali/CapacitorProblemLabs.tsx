@@ -191,7 +191,7 @@ export function ChargingEnergyGraph() {
         <circle cx={px} cy={py} r={6} fill={C.plus} />
         <SvgTex x={left + width - 8} y={top - 14} tex={String.raw`\Delta V=q/C`} color={C.minus} width={112} anchor="end" />
         <SvgTex x={left + width} y={top + height + 28} tex={String.raw`q/Q`} color={C.wire} width={54} anchor="end" />
-        <SvgTex x={left - 15} y={top} tex={String.raw`\Delta V/\Delta V_f`} color={C.wire} width={128} anchor="end" />
+        <SvgTex x={left + 8} y={top - 16} tex={String.raw`\Delta V/\Delta V_f`} color={C.wire} width={128} anchor="start" />
         <SvgTex x={(left + px) / 2} y={(top + height + py) / 2 + 18} tex={String.raw`U=\int_0^q V(q')\,dq'`} color={C.ok} width={172} anchor="middle" />
       </svg>
     </LabShell>
@@ -207,6 +207,55 @@ function coaxErrors(x: number) {
     seriesInner: -x / 2 + (x * x) / 3,
     seriesMean: (x * x) / 12,
   };
+}
+
+function CoaxialGeometrySketch() {
+  const cx = 178;
+  const cy = 145;
+
+  return (
+    <svg
+      viewBox="0 0 720 270"
+      className={STAGE_CLASS}
+      aria-label="Напречно сечение на коаксиален кондензатор и локалното му плоско приближение"
+    >
+      <defs>
+        <marker id="coax-field-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill={C.warn} />
+        </marker>
+      </defs>
+      <rect width={720} height={270} fill={STAGE_BG} />
+
+      <text x={178} y={28} textAnchor="middle" fill={C.mut} fontFamily={DRAWING_FONT_FAMILY} fontSize={12} fontWeight={700} letterSpacing={1.4}>
+        НАПРЕЧНО СЕЧЕНИЕ
+      </text>
+      <circle cx={cx} cy={cy} r={88} fill="none" stroke={C.plus} strokeWidth={13} />
+      <circle cx={cx} cy={cy} r={76} fill={C.minus} opacity={0.1} />
+      <circle cx={cx} cy={cy} r={43} fill={C.minus} stroke={C.wire} strokeWidth={2} />
+      <circle cx={cx} cy={cy} r={4} fill={C.wire} />
+      <line x1={cx} y1={cy} x2={cx + 39} y2={cy - 17} stroke={C.wire} strokeWidth={2} />
+      <line x1={cx + 43} y1={cy + 8} x2={cx + 78} y2={cy + 15} stroke={C.warn} strokeWidth={2} markerEnd="url(#coax-field-arrow)" />
+      <SvgTex x={cx + 18} y={cy - 31} tex="a" color={C.wire} width={24} anchor="middle" />
+      <SvgTex x={cx} y={253} tex={String.raw`d=b-a`} color={C.warn} width={70} anchor="middle" />
+
+      <path d="M 294 145 C 330 145, 342 145, 374 145" fill="none" stroke={C.faint} strokeWidth={2} strokeDasharray="6 6" markerEnd="url(#coax-field-arrow)" />
+      <SvgTex x={334} y={118} tex={String.raw`d\ll a`} color={C.ok} width={58} anchor="middle" />
+
+      <text x={537} y={28} textAnchor="middle" fill={C.mut} fontFamily={DRAWING_FONT_FAMILY} fontSize={12} fontWeight={700} letterSpacing={1.4}>
+        ЛОКАЛЕН ПЛОСЪК МОДЕЛ
+      </text>
+      <rect x={454} y={72} width={14} height={146} rx={3} fill={C.minus} />
+      <rect x={602} y={72} width={14} height={146} rx={3} fill={C.plus} />
+      {[96, 128, 160, 192].map((y) => (
+        <line key={y} x1={474} y1={y} x2={596} y2={y} stroke={C.warn} strokeWidth={2} markerEnd="url(#coax-field-arrow)" />
+      ))}
+      <line x1={468} y1={234} x2={602} y2={234} stroke={C.wire} strokeWidth={1.5} />
+      <line x1={468} y1={226} x2={468} y2={242} stroke={C.wire} strokeWidth={1.5} />
+      <line x1={602} y1={226} x2={602} y2={242} stroke={C.wire} strokeWidth={1.5} />
+      <SvgTex x={535} y={250} tex="d" color={C.wire} width={24} anchor="middle" />
+      <SvgTex x={535} y={53} tex={String.raw`S_m=2\pi(a+d/2)L`} color={C.ok} width={176} anchor="middle" />
+    </svg>
+  );
 }
 
 export function CoaxialApproximationLab() {
@@ -228,8 +277,8 @@ export function CoaxialApproximationLab() {
 
   return (
     <LabShell
-      title="Кога навитият кондензатор изглежда плосък?"
-      description="Графиката показва точната относителна грешка на двете плоски апроксимации. Средният радиус премахва линейната грешка."
+      title="Кога коаксиалният кондензатор се държи като плосък?"
+      description="Схемата показва кое точно „изправяме“, а графиката сравнява грешките на двете плоски апроксимации. Средният радиус премахва линейната грешка."
       controls={
         <RangeControl
           label="Относителна дебелина"
@@ -248,20 +297,23 @@ export function CoaxialApproximationLab() {
         { label: "Ред за средния", tex: signedPercent(values.seriesMean), tone: "text-ink" },
       ]}
     >
-      <svg viewBox="0 0 720 330" className={STAGE_CLASS} aria-label="Графика на грешките на плоските апроксимации">
-        <rect width={720} height={330} fill={STAGE_BG} />
-        {graphGrid({ left, top, width, height })}
-        <line x1={left} y1={sy(0)} x2={left + width} y2={sy(0)} stroke={C.wire} strokeWidth={1.5} />
-        <polyline points={innerPoints} fill="none" stroke={C.minus} strokeWidth={3} />
-        <polyline points={meanPoints} fill="none" stroke={C.warn} strokeWidth={3} />
-        <line x1={sx(x)} y1={top} x2={sx(x)} y2={top + height} stroke={C.faint} strokeWidth={2} strokeDasharray="6 5" />
-        <circle cx={sx(x)} cy={sy(values.exactInner)} r={6} fill={C.minus} />
-        <circle cx={sx(x)} cy={sy(values.exactMean)} r={6} fill={C.warn} />
-        <SvgTex x={left + width} y={top + height + 28} tex={String.raw`x=d/a`} color={C.wire} width={62} anchor="end" />
-        <SvgTex x={left - 16} y={top} tex={String.raw`(C_{\text{апр}}-C)/C`} color={C.wire} width={142} anchor="end" />
-        <SvgTex x={left + width - 8} y={sy(-0.16)} tex={String.raw`C_{\text{вътр}}`} color={C.minus} width={92} anchor="end" />
-        <SvgTex x={left + width - 8} y={sy(0.012)} tex={String.raw`C_{\text{ср}}`} color={C.warn} width={82} anchor="end" />
-      </svg>
+      <div className="space-y-3">
+        <CoaxialGeometrySketch />
+        <svg viewBox="0 0 720 330" className={STAGE_CLASS} aria-label="Графика на грешките на плоските апроксимации">
+          <rect width={720} height={330} fill={STAGE_BG} />
+          {graphGrid({ left, top, width, height })}
+          <line x1={left} y1={sy(0)} x2={left + width} y2={sy(0)} stroke={C.wire} strokeWidth={1.5} />
+          <polyline points={innerPoints} fill="none" stroke={C.minus} strokeWidth={3} />
+          <polyline points={meanPoints} fill="none" stroke={C.warn} strokeWidth={3} />
+          <line x1={sx(x)} y1={top} x2={sx(x)} y2={top + height} stroke={C.faint} strokeWidth={2} strokeDasharray="6 5" />
+          <circle cx={sx(x)} cy={sy(values.exactInner)} r={6} fill={C.minus} />
+          <circle cx={sx(x)} cy={sy(values.exactMean)} r={6} fill={C.warn} />
+          <SvgTex x={left + width} y={top + height + 28} tex={String.raw`x=d/a`} color={C.wire} width={62} anchor="end" />
+          <SvgTex x={left + 8} y={top - 16} tex={String.raw`(C_{\text{апр}}-C)/C`} color={C.wire} width={142} anchor="start" />
+          <SvgTex x={left + width - 8} y={sy(-0.16)} tex={String.raw`C_{\text{вътр}}`} color={C.minus} width={92} anchor="end" />
+          <SvgTex x={left + width - 8} y={sy(0.012)} tex={String.raw`C_{\text{ср}}`} color={C.warn} width={82} anchor="end" />
+        </svg>
+      </div>
     </LabShell>
   );
 }
@@ -326,7 +378,7 @@ export function BreakdownOptimizationLab() {
         <circle cx={sx(aMm)} cy={sy(breakdownVoltage)} r={7} fill={C.warn} />
         <circle cx={sx(optimum)} cy={sy(maximumVoltage)} r={6} fill={C.ok} />
         <SvgTex x={left + width} y={top + height + 28} tex={String.raw`a\ (\mathrm{mm})`} color={C.wire} width={92} anchor="end" />
-        <SvgTex x={left - 16} y={top} tex={String.raw`\Delta V_{\mathrm{crit}}`} color={C.wire} width={104} anchor="end" />
+        <SvgTex x={left + 8} y={top - 16} tex={String.raw`\Delta V_{\mathrm{crit}}`} color={C.wire} width={104} anchor="start" />
         <SvgTex x={left + width - 8} y={sy(operatingVoltage) - 16} tex={String.raw`10\,\mathrm{kV}`} color={C.plus} width={76} anchor="end" />
         <SvgTex x={sx(optimum) + 14} y={top + 18} tex={String.raw`a=b/e`} color={C.ok} width={72} />
       </svg>
@@ -494,7 +546,7 @@ export function SharingEnergyLab() {
         <circle cx={sx(timeUnits)} cy={sy(fieldEnergy / initialEnergy)} r={6} fill={C.minus} />
         <circle cx={sx(timeUnits)} cy={sy(heat / initialEnergy)} r={6} fill={C.ok} />
         <SvgTex x={left + width} y={top + height + 28} tex={String.raw`t/\tau`} color={C.wire} width={44} anchor="end" />
-        <SvgTex x={left - 16} y={top} tex={String.raw`U/U_i`} color={C.wire} width={52} anchor="end" />
+        <SvgTex x={left + 8} y={top - 16} tex={String.raw`U/U_i`} color={C.wire} width={52} anchor="start" />
         <SvgTex x={left + width - 8} y={sy(0.51) - 14} tex={String.raw`U_{\text{поле}}`} color={C.minus} width={98} anchor="end" />
         <SvgTex x={left + width - 8} y={sy(0.49) + 16} tex={String.raw`Q_R`} color={C.ok} width={44} anchor="end" />
       </svg>
@@ -556,7 +608,7 @@ export function EnergyConcentrationLab() {
         <circle cx={sx(logRadius)} cy={sy(volumeFraction)} r={6} fill={C.plus} />
         <line x1={sx(1)} y1={top} x2={sx(1)} y2={top + height} stroke={C.faint} strokeWidth={1.5} />
         <SvgTex x={left + width} y={top + height + 28} tex={String.raw`\log_{10}(r/a)`} color={C.wire} width={104} anchor="end" />
-        <SvgTex x={left - 16} y={top} tex={String.raw`\text{дял}`} color={C.wire} width={58} anchor="end" />
+        <SvgTex x={left + 8} y={top - 16} tex={String.raw`\text{дял}`} color={C.wire} width={58} anchor="start" />
         <SvgTex x={left + width - 8} y={sy(0.86)} tex={String.raw`U(<r)/U`} color={C.ok} width={82} anchor="end" />
         <SvgTex x={left + width - 8} y={sy(0.72)} tex={String.raw`V(<r)/V`} color={C.plus} width={82} anchor="end" />
         <SvgTex x={sx(1) + 12} y={top + 20} tex={String.raw`r=\sqrt{ab}`} color={C.warn} width={90} />
