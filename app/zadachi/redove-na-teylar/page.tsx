@@ -145,24 +145,9 @@ export default function TaylorProblemsPage() {
           </div>
 
           <div className="mt-8 space-y-4">
-            <h3 className="font-serif text-[22px] font-bold text-ink">Откъде идват коефициентите</h3>
+            <h3 className="font-serif text-[22px] font-bold text-ink">Общата формула</h3>
             <p className="text-[15.5px] text-ink/90">
-              Общата формула не е за запомняне, а за извеждане, и извеждането е кратко.
-              Допуснете, че функцията се записва като степенен ред около точката{" "}
-              <RichText text="$a$" />:
-            </p>
-            <Formula latex={String.raw`f(x)=c_0+c_1(x-a)+c_2(x-a)^2+c_3(x-a)^3+\cdots`} />
-            <p className="text-[15.5px] text-ink/90">
-              При <RichText text="$x=a$" /> всички скоби се нулират и остава{" "}
-              <RichText text="$c_0=f(a)$" />. Диференцирайте веднъж и пак сложете{" "}
-              <RichText text="$x=a$" />: остава <RichText text="$c_1=f'(a)$" />. След{" "}
-              <RichText text="$n$" /> диференцирания водещият член е{" "}
-              <RichText text={String.raw`$n!\,c_n$`} />, откъдето
-            </p>
-            <Formula latex={String.raw`c_n=\frac{f^{(n)}(a)}{n!}`} />
-            <p className="text-[15.5px] text-ink/90">
-              Това е <strong>редът на Тейлър</strong> около точката{" "}
-              <RichText text="$a$" />:
+              <strong>Ред на Тейлър</strong> около точката <RichText text="$a$" />:
             </p>
             <Formula
               latex={String.raw`f(x)=\sum_{n=0}^{\infty}\frac{f^{(n)}(a)}{n!}\,(x-a)^n
@@ -176,17 +161,7 @@ export default function TaylorProblemsPage() {
               latex={String.raw`f(x)=\sum_{n=0}^{\infty}\frac{f^{(n)}(0)}{n!}\,x^n`}
             />
             <p className="text-[15.5px] text-ink/90">
-              Ако редът се спре след <RichText text="$N$" />-тия член, разликата не е
-              неизвестна. Тя се записва точно, във формата на Лагранж, с някакво{" "}
-              <RichText text={String.raw`$\xi$`} /> между <RichText text="$a$" /> и{" "}
-              <RichText text="$x$" />:
-            </p>
-            <Formula
-              latex={String.raw`f(x)=\sum_{n=0}^{N}\frac{f^{(n)}(a)}{n!}(x-a)^n+R_N(x),
-              \qquad R_N(x)=\frac{f^{(N+1)}(\xi)}{(N+1)!}\,(x-a)^{N+1}`}
-            />
-            <p className="text-[15.5px] text-ink/90">
-              Оттук идва и практическото правило, което ще използваме през целия практикум:{" "}
+              През целия практикум важи едно практическо правило:{" "}
               <strong>първият изхвърлен член е оценката за грешката</strong>. Записът{" "}
               <RichText text="$O(x^n)$" /> означава именно това, че първият пропуснат принос
               е от порядък <RichText text="$x^n$" />.
@@ -255,11 +230,6 @@ export default function TaylorProblemsPage() {
                 Честа грешка: разгъване по величина, която не е безразмерна. Проверката е
                 проста: ако параметърът има мерна единица, изразът не може да се степенува
                 смислено.
-              </li>
-              <li>
-                Поискайте от учениците да изведат реда за{" "}
-                <RichText text={String.raw`$\cos x$`} /> от общата формула, а не да го
-                препишат. Четирите производни се повтарят циклично и това се вижда веднага.
               </li>
               <li>
                 Обърнете внимание на областта на сходимост. Редовете за{" "}
