@@ -73,6 +73,53 @@ export default function ProblemSetsPage() {
         </Link>
 
         <Link
+          href="/zadachi/chestota-period-valni"
+          className="group mt-5 grid overflow-hidden rounded-[12px] border-[1.5px] border-ink bg-surface shadow-hard transition-transform hover:-translate-y-0.5 md:grid-cols-[1.15fr_.85fr]"
+        >
+          <div className="p-6 sm:p-8">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-[11px] font-bold uppercase tracking-[0.17em] text-minus">
+                Серия по физика
+              </span>
+              <span className="rounded-full border border-rule bg-hl px-3 py-1 text-[11px] font-semibold text-muted">
+                Трептения и вълни
+              </span>
+            </div>
+            <h3 className="mt-4 font-serif text-[clamp(28px,5vw,38px)] font-bold leading-[1.08] text-ink group-hover:text-minus">
+              Честота, период и вълни
+            </h3>
+            <p className="mt-3 max-w-xl text-[15.5px] leading-relaxed text-ink/85">
+              От въртеливо движение към честота, оттам към дължина и скорост на вълната, фаза,
+              интерференция и биения. Всяко решение се отключва стъпка по стъпка.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-[13px] font-semibold text-ink">
+              <span><RichText text="$20$ задачи" /></span>
+              <span><RichText text="$5$ интерактивни проверки" /></span>
+              <span>Водени решения</span>
+            </div>
+            <p className="mt-6 text-[13px] font-bold text-minus">Отворете серията →</p>
+          </div>
+
+          <div className="flex min-h-[17rem] flex-col justify-between border-t-[1.5px] border-ink bg-ink px-6 py-6 text-white md:min-h-0 md:border-l-[1.5px] md:border-t-0">
+            <p className="text-[10px] font-bold uppercase tracking-[.18em] text-hl">
+              От въртенето до биенията
+            </p>
+            <div className="my-5 space-y-3 font-serif text-[clamp(19px,3vw,26px)] font-bold">
+              <div className="border-l-4 border-minus pl-4 text-minus">
+                <RichText text={String.raw`$\omega=2\pi f$`} />
+              </div>
+              <div className="border-l-4 border-ok pl-4 text-ok">
+                <RichText text={String.raw`$\lambda=v/f$`} />
+              </div>
+              <div className="border-l-4 border-hl pl-4 text-hl">
+                <RichText text={String.raw`$A_{\text{рез}}=2A\cos\tfrac{\Delta\varphi}{2}$`} />
+              </div>
+            </div>
+            <p className="text-[12px] font-semibold text-white/75">Графики · симулации · фаза</p>
+          </div>
+        </Link>
+
+        <Link
           href="/zadachi/lineina-algebra-tazhdestva"
           className="group mt-6 block rounded-[12px] border-[1.5px] border-ink bg-surface px-6 py-5 shadow-hard transition-transform hover:-translate-y-0.5"
         >

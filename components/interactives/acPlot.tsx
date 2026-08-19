@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import RichText from "@/components/RichText";
 import SvgTex from "./SvgTex";
-import { C, STAGE_BG } from "./svg";
+import { C, DRAWING_FONT_FAMILY, STAGE_BG } from "./svg";
 
 /**
  * Споделен инструментариум за интерактивите към главата „Променлив ток“.
@@ -136,7 +136,15 @@ export function Stage({ w, h, title }: { w: number; h: number; title?: string })
         <line key={`h${i}`} x1={0} y1={i * step} x2={w} y2={i * step} stroke={C.faint} opacity={0.1} />
       ))}
       {title && (
-        <text x={20} y={24} fill={C.mut} fontSize={11.5} fontWeight={800} letterSpacing="0.06em">
+        <text
+          x={20}
+          y={24}
+          fill={C.mut}
+          fontFamily={DRAWING_FONT_FAMILY}
+          fontSize={12.5}
+          fontWeight={600}
+          letterSpacing="0.06em"
+        >
           {title}
         </text>
       )}
