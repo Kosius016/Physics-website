@@ -21,7 +21,7 @@ import type { RichTextString } from "@/lib/types";
 export const metadata = {
   title: "Задачи: редове на Тейлър и Маклорен · STEM Платформа",
   description:
-    "Двадесет и четири задачи с пълни решения: пресмятания без калкулатор, граници чрез редове и приложения в електростатиката.",
+    "Двадесет задачи с пълни решения: пресмятания без калкулатор, граници чрез редове и приложения в електростатиката.",
 };
 
 const NAV = [
@@ -110,13 +110,13 @@ export default function TaylorProblemsPage() {
           </p>
           <div className="mt-6 flex flex-wrap gap-2 text-[11px] font-bold uppercase tracking-wide">
             <span className="rounded-full border-[1.5px] border-ink bg-surface px-3 py-1.5">
-              <RichText text="$1$-$8$ пресмятания" />
+              <RichText text="$1$-$4$ пресмятания" />
             </span>
             <span className="rounded-full border-[1.5px] border-ink bg-surface px-3 py-1.5">
-              <RichText text="$9$-$17$ граници" />
+              <RichText text="$5$-$13$ граници" />
             </span>
             <span className="rounded-full border-[1.5px] border-ink bg-surface px-3 py-1.5">
-              <RichText text="$18$-$24$ електростатика" />
+              <RichText text="$14$-$20$ електростатика" />
             </span>
           </div>
           <div className="mt-6 rounded-[10px] border-[1.5px] border-rule bg-hl px-4 py-3 text-[14.5px] leading-relaxed">
@@ -248,9 +248,8 @@ export default function TaylorProblemsPage() {
 
         <Section id="numeric" n="§2" title="Пресмятания с молив и лист">
           <p className="text-ink/90">
-            Досега редът служеше да се разбере как се държи една зависимост. Тук той върши
-            съвсем прозаична работа: дава <strong>число</strong>. Похватът е винаги един и
-            същ. Изнася се близка кръгла стойност, остатъкът се записва като{" "}
+            Най-прякото приложение на реда е съвсем прозаично: да даде <strong>число</strong>
+            без калкулатор. Похватът е винаги един и същ. Изнася се близка кръгла стойност, остатъкът се записва като{" "}
             <RichText text="$1+x$" /> с малко <RichText text="$x$" />, разгъва се и се
             запазват толкова члена, колкото исканата точност изисква. Първият изхвърлен член
             е и оценката за грешката, затова отговорът идва заедно с гаранцията си.
@@ -440,203 +439,6 @@ export default function TaylorProblemsPage() {
             </SolutionPart>
           </ProgressiveSolution>
 
-          <ProblemTitle n={5} title={String.raw`Пресметнете $\ln1{,}02$`} />
-          <ProblemStatement>
-            <p>
-              Намерете <RichText text={String.raw`$\ln1{,}02$`} /> с един, два и три члена.
-              Точната стойност е <RichText text={String.raw`$0{,}019802627$`} />.
-            </p>
-            <p>
-              След това пресметнете капацитета на единица дължина за коаксиален кабел с{" "}
-              <RichText text={String.raw`$b/a=1{,}02$`} />, като използвате{" "}
-              <RichText text={String.raw`$C/L=\dfrac{2\pi\varepsilon_0}{\ln(b/a)}$`} />.
-            </p>
-          </ProblemStatement>
-          <ProgressiveSolution
-            hint={
-              <RichText text={String.raw`Тук $x=0{,}02$, а не $1{,}02$. Приближението $\ln(1+x)\approx x$ греши с около $1\,\%$ вече при $x=0{,}02$: логаритъмът е по-капризен от корена.`} />
-            }
-          >
-            <SolutionPart label="a" title="Трите приближения">
-              <Formula
-                latex={String.raw`x=0{,}02,\qquad x=0{,}02,\qquad x-\frac{x^2}{2}=0{,}0198,\qquad
-                x-\frac{x^2}{2}+\frac{x^3}{3}=0{,}01980267`}
-              />
-              <Formula
-                latex={String.raw`\delta_1=+1{,}00\,\%,\qquad \delta_2=-0{,}013\,\%,\qquad \delta_3=+0{,}0002\,\%`}
-              />
-              <p>
-                Обърнете внимание на редуването на знаците: това е характерно за ред с
-                редуващи се членове и означава, че истинската стойност винаги стои{" "}
-                <strong>между</strong> две последователни частични суми.
-              </p>
-            </SolutionPart>
-            <SolutionPart label="b" title="Капацитетът на кабела">
-              <Formula
-                latex={String.raw`\frac{C}{L}=\frac{2\pi\varepsilon_0}{\ln(b/a)}\approx\frac{2\pi\cdot8{,}85\cdot10^{-12}}{0{,}0198}
-                =2{,}81\cdot10^{-9}\ \mathrm{F/m}`}
-              />
-              <ResultBox>
-                <RichText text={String.raw`Около $2{,}8\,\mathrm{nF}$ на метър, тоест $55$ пъти повече от $50{,}6\,\mathrm{pF/m}$, колкото дава същата формула при $b/a=3$. Малкият логаритъм в знаменателя е причината: щом стените се доближат, коаксиалният кабел се държи като плосък кондензатор с много тънък процеп.`} />
-              </ResultBox>
-            </SolutionPart>
-          </ProgressiveSolution>
-
-          <ProblemTitle n={6} title={String.raw`Колко греши $\frac12mv^2$ при $v=0{,}10c$`} />
-          <ProblemStatement>
-            <p>Точната кинетична енергия е</p>
-            <Formula
-              latex={String.raw`K=mc^2\left(\frac1{\sqrt{1-\beta^2}}-1\right),\qquad \beta=\frac{v}{c}`}
-            />
-            <ol className="list-[lower-alpha] space-y-1.5 pl-6">
-              <li>
-                Разгънете по <RichText text={String.raw`$\beta^2$`} /> до втори ненулев член.
-              </li>
-              <li>
-                Пресметнете и трите стойности при <RichText text={String.raw`$\beta=0{,}10$`} />{" "}
-                в единици <RichText text={String.raw`$mc^2$`} />.
-              </li>
-              <li>С колко процента класическата формула греши?</li>
-            </ol>
-          </ProblemStatement>
-          <ProgressiveSolution
-            hint={
-              <RichText text={String.raw`Малкият параметър е $u=\beta^2=0{,}01$, а показателят е $-\tfrac12$. Не разгъвайте по $\beta$: редът съдържа само четни степени.`} />
-            }
-          >
-            <SolutionPart label="a" title="Разгъваме">
-              <Formula
-                latex={String.raw`(1-u)^{-1/2}=1+\frac{u}{2}+\frac38u^2+O(u^3)
-                \ \Longrightarrow\ \frac{K}{mc^2}=\frac{\beta^2}{2}+\frac38\beta^4+\cdots`}
-              />
-              <p>
-                Първият член е класическият:{" "}
-                <RichText text={String.raw`$\tfrac12\beta^2mc^2=\tfrac12mv^2$`} />. Тоест
-                класическата механика не е отделна теория, а водещият член на релативистката.
-              </p>
-            </SolutionPart>
-            <SolutionPart label="b" title="Числата при 0,10c">
-              <Formula
-                latex={String.raw`\frac{K_{\text{точно}}}{mc^2}=0{,}00503782,\qquad
-                \frac{K_{\text{клас}}}{mc^2}=0{,}00500000,\qquad
-                \frac{K_{\text{с поправка}}}{mc^2}=0{,}00503750`}
-              />
-            </SolutionPart>
-            <SolutionPart label="c" title="Големината на грешката">
-              <ResultBox>
-                <RichText text={String.raw`Класическата формула подценява с $0{,}75\,\%$ при $v=0{,}10c$. Единствената поправка $\tfrac38\beta^4$ сваля грешката до $0{,}0063\,\%$, тоест сто и двадесет пъти.`} />
-              </ResultBox>
-              <p>
-                Проверка на порядъка без сметки: отношението на втория към първия член е{" "}
-                <RichText text={String.raw`$\frac{3\beta^4/8}{\beta^2/2}=\frac34\beta^2=0{,}0075$`} />
-                , тоест точно тези <RichText text={String.raw`$0{,}75\,\%$`} />.
-              </p>
-            </SolutionPart>
-          </ProgressiveSolution>
-
-          <ProblemTitle n={7} title={String.raw`Период на махало при амплитуда $20^\circ$`} />
-          <ProblemStatement>
-            <p>Точният период на математично махало се разлага в реда</p>
-            <Formula
-              latex={String.raw`T=T_0\left(1+\frac{\theta_0^2}{16}+\frac{11\,\theta_0^4}{3072}+\cdots\right),
-              \qquad T_0=2\pi\sqrt{\frac{L}{g}}`}
-            />
-            <ol className="list-[lower-alpha] space-y-1.5 pl-6">
-              <li>
-                Пресметнете поправката при <RichText text={String.raw`$\theta_0=20^\circ$`} />{" "}
-                с един и с два коригиращи члена.
-              </li>
-              <li>
-                Сравнете с точната стойност{" "}
-                <RichText text={String.raw`$T/T_0=1{,}0076690$`} />.
-              </li>
-            </ol>
-          </ProblemStatement>
-          <ProgressiveSolution
-            hint={
-              <RichText text={String.raw`Пак: ъгълът влиза в радиани. $20^\circ$ е $0{,}349$ rad, а $0{,}349^2\approx0{,}122$, тоест поправката е под процент.`} />
-            }
-          >
-            <SolutionPart label="a" title="Първата поправка">
-              <Formula
-                latex={String.raw`\theta_0=\frac{20\pi}{180}=0{,}3490659\ \mathrm{rad},\qquad
-                \frac{\theta_0^2}{16}=\frac{0{,}1218469}{16}=0{,}0076154`}
-              />
-              <p>
-                Тоест <RichText text={String.raw`$T/T_0\approx1{,}0076154$`} />, или{" "}
-                <RichText text={String.raw`$+0{,}762\,\%$`} />.
-              </p>
-            </SolutionPart>
-            <SolutionPart label="b" title="Втората поправка">
-              <Formula
-                latex={String.raw`\frac{11\,\theta_0^4}{3072}=\frac{11\cdot0{,}0148457}{3072}=5{,}32\cdot10^{-5}
-                \ \Longrightarrow\ \frac{T}{T_0}\approx1{,}0076686`}
-              />
-              <ResultBox>
-                <RichText text={String.raw`Срещу точното $1{,}0076690$ това е грешка $4\cdot10^{-5}\,\%$. Практическият извод: при $20^\circ$ „малките трептения“ грешат под един процент, но при $60^\circ$ същият ред дава вече около $7\,\%$ и приближението не бива да се използва наивно.`} />
-              </ResultBox>
-            </SolutionPart>
-          </ProgressiveSolution>
-
-          <ProblemTitle n={8} title="Пренос на малки грешки при измерване" />
-          <ProblemStatement>
-            <p>
-              В лабораторно упражнение се измерват <RichText text="$L$" /> и{" "}
-              <RichText text="$T$" /> за махало.
-            </p>
-            <ol className="list-[lower-alpha] space-y-1.5 pl-6">
-              <li>
-                Дължината е отчетена с <RichText text={String.raw`$+2\,\%$`} /> грешка. С
-                колко процента ще сгреши <RichText text="$T$" />?
-              </li>
-              <li>
-                Изведете общото правило за <RichText text="$y=x^n$" />.
-              </li>
-              <li>
-                Ускорението се пресмята като{" "}
-                <RichText text={String.raw`$g=\dfrac{4\pi^2L}{T^2}$`} />. Ако{" "}
-                <RichText text="$L$" /> е с <RichText text={String.raw`$+2\,\%$`} />, а{" "}
-                <RichText text="$T$" /> с <RichText text={String.raw`$-1\,\%$`} />, с колко
-                греши <RichText text="$g$" />?
-              </li>
-            </ol>
-          </ProblemStatement>
-          <ProgressiveSolution
-            hint={
-              <RichText text={String.raw`Правилото за пренос на грешки не е отделна формула, а разгъване на Тейлър до първи ред около измерената стойност.`} />
-            }
-          >
-            <SolutionPart label="a" title="Грешката в периода">
-              <Formula
-                latex={String.raw`T\propto L^{1/2}\ \Longrightarrow\
-                \frac{T'}{T}=(1+0{,}02)^{1/2}\approx1+\frac{0{,}02}{2}=1{,}01`}
-              />
-              <p>
-                Тоест <RichText text={String.raw`$+1{,}00\,\%$`} />. Точната стойност е{" "}
-                <RichText text={String.raw`$\sqrt{1{,}02}-1=+0{,}995\,\%$`} />: разликата е в
-                изхвърления член <RichText text={String.raw`$-\delta^2/8$`} />.
-              </p>
-            </SolutionPart>
-            <SolutionPart label="b" title="Общото правило">
-              <Formula
-                latex={String.raw`y=x^n\ \Longrightarrow\ (1+\delta)^n\approx1+n\delta
-                \ \Longrightarrow\ \boxed{\ \frac{\Delta y}{y}\approx n\,\frac{\Delta x}{x}\ }`}
-              />
-              <p>
-                Показателят умножава относителната грешка. Затова величина, която влиза на
-                квадрат, е двойно по-опасна от такава, която влиза линейно.
-              </p>
-            </SolutionPart>
-            <SolutionPart label="c" title="Грешката в ускорението">
-              <Formula
-                latex={String.raw`\frac{\Delta g}{g}\approx\frac{\Delta L}{L}-2\frac{\Delta T}{T}
-                =(+2\,\%)-2(-1\,\%)=+4\,\%`}
-              />
-              <ResultBox>
-                <RichText text={String.raw`Точната стойност е $\frac{1{,}02}{0{,}99^2}-1=+4{,}07\,\%$. Двете грешки се **събират**, защото са с противоположни знаци, а $T$ влиза в знаменателя на квадрат. Ако искате $g$ с $1\,\%$, периодът трябва да е измерен по-добре от $0{,}5\,\%$.`} />
-              </ResultBox>
-            </SolutionPart>
-          </ProgressiveSolution>
 
           <TeacherNote>
             <ul className="list-disc space-y-1.5 pl-5">
@@ -648,16 +450,6 @@ export default function TaylorProblemsPage() {
                 Задача 3 хваща най-упоритата грешка в целия раздел: разгъване по ъгъл в
                 градуси. Ако някой получи <RichText text={String.raw`$\sin1^\circ\approx1$`} />
                 , причината е точно тази.
-              </li>
-              <li>
-                Задача 6 е добро място за въпроса „кога класическата механика става
-                недостатъчна“. Отговорът зависи от исканата точност, не от някаква граница на
-                скоростта.
-              </li>
-              <li>
-                Задача 8 свързва раздела с лабораторните упражнения. Полезно продължение: с
-                колко процента трябва да е точна дължината, за да се получи{" "}
-                <RichText text="$g$" /> с <RichText text={String.raw`$0{,}5\,\%$`} />?
               </li>
             </ul>
           </TeacherNote>
@@ -677,7 +469,7 @@ export default function TaylorProblemsPage() {
             <LimitRatioFigure />
           </div>
 
-          <ProblemTitle n={9} title={String.raw`Основната граница $\dfrac{\sin x}{x}$`} />
+          <ProblemTitle n={5} title={String.raw`Основната граница $\dfrac{\sin x}{x}$`} />
           <ProblemStatement>
             <p>
               Покажете чрез реда на Маклорен за <RichText text="$\sin x$" />, че{" "}
@@ -706,7 +498,7 @@ export default function TaylorProblemsPage() {
             </SolutionPart>
           </ProgressiveSolution>
 
-          <ProblemTitle n={10} title={String.raw`$\dfrac{\sin 3x}{x}$`} />
+          <ProblemTitle n={6} title={String.raw`$\dfrac{\sin 3x}{x}$`} />
           <ProblemStatement>
             <p>
               Намерете <RichText text={String.raw`$\lim\limits_{x\to0}\dfrac{\sin 3x}{x}$`} />.
@@ -728,7 +520,7 @@ export default function TaylorProblemsPage() {
             </SolutionPart>
           </ProgressiveSolution>
 
-          <ProblemTitle n={11} title={String.raw`Общият случай $\dfrac{\sin(ax)}{bx}$`} />
+          <ProblemTitle n={7} title={String.raw`Общият случай $\dfrac{\sin(ax)}{bx}$`} />
           <ProblemStatement>
             <p>
               Намерете в общ вид{" "}
@@ -738,7 +530,7 @@ export default function TaylorProblemsPage() {
           </ProblemStatement>
           <ProgressiveSolution
             hint={
-              <RichText text={String.raw`Задачи 9 и 10 са частни случаи. Проверете отговора си с тях: $a=b=1$ трябва да върне $1$, а $a=3,\ b=1$ трябва да върне $3$.`} />
+              <RichText text={String.raw`Задачи 5 и 6 са частни случаи. Проверете отговора си с тях: $a=b=1$ трябва да върне $1$, а $a=3,\ b=1$ трябва да върне $3$.`} />
             }
           >
             <SolutionPart label="a" title="Разгъваме и делим">
@@ -749,12 +541,12 @@ export default function TaylorProblemsPage() {
             </SolutionPart>
             <SolutionPart label="b" title="Четем границата">
               <ResultBox>
-                <RichText text={String.raw`$\lim\limits_{x\to0}\dfrac{\sin(ax)}{bx}=\dfrac{a}{b}$. Проверка: при $a=3,\ b=1$ се връща отговорът на задача 10.`} />
+                <RichText text={String.raw`$\lim\limits_{x\to0}\dfrac{\sin(ax)}{bx}=\dfrac{a}{b}$. Проверка: при $a=3,\ b=1$ се връща отговорът на задача 6.`} />
               </ResultBox>
             </SolutionPart>
           </ProgressiveSolution>
 
-          <ProblemTitle n={12} title={String.raw`$\dfrac{1-\cos x}{x^2}$`} />
+          <ProblemTitle n={8} title={String.raw`$\dfrac{1-\cos x}{x^2}$`} />
           <ProblemStatement>
             <p>
               Намерете{" "}
@@ -780,7 +572,7 @@ export default function TaylorProblemsPage() {
             </SolutionPart>
           </ProgressiveSolution>
 
-          <ProblemTitle n={13} title={String.raw`$\dfrac{\sin x-x}{x^3}$`} />
+          <ProblemTitle n={9} title={String.raw`$\dfrac{\sin x-x}{x^3}$`} />
           <ProblemStatement>
             <p>
               Намерете{" "}
@@ -803,7 +595,7 @@ export default function TaylorProblemsPage() {
             </SolutionPart>
           </ProgressiveSolution>
 
-          <ProblemTitle n={14} title={String.raw`$\dfrac{x-\sin x}{x\,(1-\cos x)}$`} />
+          <ProblemTitle n={10} title={String.raw`$\dfrac{x-\sin x}{x\,(1-\cos x)}$`} />
           <ProblemStatement>
             <p>
               Намерете{" "}
@@ -836,7 +628,7 @@ export default function TaylorProblemsPage() {
             </SolutionPart>
           </ProgressiveSolution>
 
-          <ProblemTitle n={15} title={String.raw`$\dfrac{\ln(1+x)}{x}$`} />
+          <ProblemTitle n={11} title={String.raw`$\dfrac{\ln(1+x)}{x}$`} />
           <ProblemStatement>
             <p>
               Намерете{" "}
@@ -861,7 +653,7 @@ export default function TaylorProblemsPage() {
             </SolutionPart>
           </ProgressiveSolution>
 
-          <ProblemTitle n={16} title={String.raw`$\dfrac{\ln(1+x)-x}{x^2}$`} />
+          <ProblemTitle n={12} title={String.raw`$\dfrac{\ln(1+x)-x}{x^2}$`} />
           <ProblemStatement>
             <p>
               Намерете{" "}
@@ -879,12 +671,12 @@ export default function TaylorProblemsPage() {
             <SolutionPart label="b" title="Делим и пускаме границата">
               <Formula latex={String.raw`\frac{\ln(1+x)-x}{x^2}=-\frac12+\frac{x}{3}+O(x^2)\ \longrightarrow\ -\frac12`} />
               <ResultBox>
-                <RichText text={String.raw`Границата е $-\tfrac12$. Сравнете със задача 13: там първата поправка беше кубична, тук е квадратична, защото $\ln$ няма симетрията на $\sin$.`} />
+                <RichText text={String.raw`Границата е $-\tfrac12$. Сравнете със задача 9: там първата поправка беше кубична, тук е квадратична, защото $\ln$ няма симетрията на $\sin$.`} />
               </ResultBox>
             </SolutionPart>
           </ProgressiveSolution>
 
-          <ProblemTitle n={17} title={String.raw`$\dfrac{\sin x-x+\frac{x^3}{6}}{x^5}$`} />
+          <ProblemTitle n={13} title={String.raw`$\dfrac{\sin x-x+\frac{x^3}{6}}{x^5}$`} />
           <ProblemStatement>
             <p>
               Намерете{" "}
@@ -917,17 +709,17 @@ export default function TaylorProblemsPage() {
           <TeacherNote>
             <ul className="list-disc space-y-1.5 pl-5">
               <li>
-                Задачи 13, 16 и 17 показват едно и също: изваждането на известните членове
+                Задачи 9, 12 и 13 показват едно и също: изваждането на известните членове
                 „вдига“ реда на числителя. Питайте предварително коя ще е първата оцеляла
                 степен, преди да се смята.
               </li>
               <li>
-                Честа грешка в задача 10: <RichText text="$(3x)^3$" /> се пише като{" "}
+                Честа грешка в задача 6: <RichText text="$(3x)^3$" /> се пише като{" "}
                 <RichText text="$3x^3$" />. Резултатът за границата остава верен, но първата
                 поправка става грешна, а тя е същинската полза от реда.
               </li>
               <li>
-                Задача 14 разграничава учениците, които съкращават механично, от тези, които
+                Задача 10 разграничава учениците, които съкращават механично, от тези, които
                 следят от коя степен започва всеки израз.
               </li>
             </ul>
@@ -947,7 +739,7 @@ export default function TaylorProblemsPage() {
             <RichText text={String.raw`$k=\dfrac1{4\pi\varepsilon_0}$`} />.
           </p>
 
-          <ProblemTitle n={18} title="Изместен точков заряд, гледан отдалеч" />
+          <ProblemTitle n={14} title="Изместен точков заряд, гледан отдалеч" />
           <ProblemStatement>
             <p>
               Точков заряд <RichText text="$q$" /> се намира на оста{" "}
@@ -988,7 +780,7 @@ export default function TaylorProblemsPage() {
             </SolutionPart>
           </ProgressiveSolution>
 
-          <ProblemTitle n={19} title="Потенциал на дипол по оста" />
+          <ProblemTitle n={15} title="Потенциал на дипол по оста" />
           <ProblemStatement>
             <p>
               Два заряда <RichText text="$+q$" /> и <RichText text="$-q$" /> са разположени
@@ -1044,7 +836,7 @@ export default function TaylorProblemsPage() {
             <DipolePotentialFigure />
           </div>
 
-          <ProblemTitle n={20} title="Поле на дипола по оста му" />
+          <ProblemTitle n={16} title="Поле на дипола по оста му" />
           <ProblemStatement>
             <p>
               Използвайте резултата от предната задача и{" "}
@@ -1077,7 +869,7 @@ export default function TaylorProblemsPage() {
             </SolutionPart>
           </ProgressiveSolution>
 
-          <ProblemTitle n={21} title="Два еднакви заряда: защо липсва член от ред $1/x^2$" />
+          <ProblemTitle n={17} title="Два еднакви заряда: защо липсва член от ред $1/x^2$" />
           <ProblemStatement>
             <p>
               Два еднакви заряда <RichText text="$+q$" /> са разположени в точките{" "}
@@ -1097,7 +889,7 @@ export default function TaylorProblemsPage() {
           </ProblemStatement>
           <ProgressiveSolution
             hint={
-              <RichText text={String.raw`Тук двете разгъвания се събират, а не се изваждат. Сравнете кои степени оцеляват със задача 19 и потърсете симетрията, преди да смятате.`} />
+              <RichText text={String.raw`Тук двете разгъвания се събират, а не се изваждат. Сравнете кои степени оцеляват със задача 15 и потърсете симетрията, преди да смятате.`} />
             }
           >
             <SolutionPart label="a" title="Събираме двата реда">
@@ -1132,7 +924,7 @@ export default function TaylorProblemsPage() {
             </SolutionPart>
           </ProgressiveSolution>
 
-          <ProblemTitle n={22} title="Зареден пръстен, гледан отдалеч" />
+          <ProblemTitle n={18} title="Зареден пръстен, гледан отдалеч" />
           <ProblemStatement>
             <p>
               Пръстен с радиус <RichText text="$R$" /> и общ заряд <RichText text="$Q$" />{" "}
@@ -1168,7 +960,7 @@ export default function TaylorProblemsPage() {
               <p>
                 Забележете и че поправката е от ред <RichText text={String.raw`$R^2/z^2$`} />,
                 а не <RichText text={String.raw`$R/z$`} />: пръстенът е симетричен и няма
-                диполен момент, точно както в задача 21.
+                диполен момент, точно както в задача 17.
               </p>
             </SolutionPart>
           </ProgressiveSolution>
@@ -1177,7 +969,7 @@ export default function TaylorProblemsPage() {
             <RingPotentialFigure />
           </div>
 
-          <ProblemTitle n={23} title="Поле близо до центъра на пръстена" />
+          <ProblemTitle n={19} title="Поле близо до центъра на пръстена" />
           <ProblemStatement>
             <p>По оста на същия зареден пръстен електричното поле е</p>
             <Formula latex={String.raw`E(z)=k\frac{Qz}{(z^2+R^2)^{3/2}}`} />
@@ -1226,7 +1018,7 @@ export default function TaylorProblemsPage() {
             </SolutionPart>
           </ProgressiveSolution>
 
-          <ProblemTitle n={24} title="Следващата поправка и къде свършва линейният закон" />
+          <ProblemTitle n={20} title="Следващата поправка и къде свършва линейният закон" />
           <ProblemStatement>
             <p>
               За предната задача намерете и следващия коригиращ член в разлагането на{" "}
@@ -1265,16 +1057,16 @@ export default function TaylorProblemsPage() {
           <TeacherNote>
             <ul className="list-disc space-y-1.5 pl-5">
               <li>
-                Задачи 19 и 21 са двойка. Питайте предварително коя подредба ще спада
+                Задачи 15 и 17 са двойка. Питайте предварително коя подредба ще спада
                 по-бързо и защо, преди да се смята. Отговорът се вижда от пълния заряд.
               </li>
               <li>
-                Задача 23 разделя учениците, които разгъват механично, от тези, които първо
+                Задача 19 разделя учениците, които разгъват механично, от тези, които първо
                 питат кой параметър е малък. Изнасянето на <RichText text="$z$" /> вместо на{" "}
                 <RichText text="$R$" /> е най-честата грешка в целия раздел.
               </li>
               <li>
-                Полезно упражнение върху задача 22: помолете за оценка на грешката при{" "}
+                Полезно упражнение върху задача 18: помолете за оценка на грешката при{" "}
                 <RichText text="$z=2R$" /> преди да погледнат лентата под фигурата.
               </li>
             </ul>
@@ -1309,7 +1101,7 @@ export default function TaylorProblemsPage() {
                 водеща степен и остава отношението на коефициентите пред нея.
               </li>
               <li>
-                Изваждането на известните членове вдига реда на числителя. Задачи 13, 16 и 17 са
+                Изваждането на известните членове вдига реда на числителя. Задачи 9, 12 и 13 са
                 една и съща задача на три различни височини.
               </li>
               <li>
@@ -1328,11 +1120,6 @@ export default function TaylorProblemsPage() {
                 При пресмятане редът е инструмент, не илюстрация: изнася се близка кръгла
                 стойност, остатъкът се пише като <RichText text="$1+x$" /> и всеки нов член
                 сваля грешката с още една степен на <RichText text="$x$" />.
-              </li>
-              <li>
-                Правилото за пренос на грешки{" "}
-                <RichText text={String.raw`$\frac{\Delta y}{y}\approx n\frac{\Delta x}{x}$`} />{" "}
-                е същото разгъване, спряно на първия член.
               </li>
             </ul>
           </div>

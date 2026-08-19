@@ -225,7 +225,7 @@ function Plot({
 const nearZero = (x: number, eps: number, value: number, fn: (t: number) => number) =>
   Math.abs(x) < eps ? value : fn(x);
 
-/** Трите частни от задачи 12, 13 и 16 клонят към различни, но напълно определени числа. */
+/** Трите частни от задачи 8, 9 и 12 клонят към различни, но напълно определени числа. */
 export function LimitRatioFigure() {
   return (
     <div className={PANEL_CLASS}>
@@ -268,9 +268,9 @@ export function LimitRatioFigure() {
 
       <Legend
         items={[
-          { color: C.ok, tex: String.raw`$\dfrac{1-\cos x}{x^2}$ (задача 12)` },
-          { color: C.minus, tex: String.raw`$\dfrac{\sin x-x}{x^3}$ (задача 13)` },
-          { color: C.warn, tex: String.raw`$\dfrac{\ln(1+x)-x}{x^2}$ (задача 16)` },
+          { color: C.ok, tex: String.raw`$\dfrac{1-\cos x}{x^2}$ (задача 8)` },
+          { color: C.minus, tex: String.raw`$\dfrac{\sin x-x}{x^3}$ (задача 9)` },
+          { color: C.warn, tex: String.raw`$\dfrac{\ln(1+x)-x}{x^2}$ (задача 12)` },
         ]}
       />
 

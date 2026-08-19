@@ -140,7 +140,7 @@ export default function ProblemSetsPage() {
               граници и накрая потенциал на дипол, на двойка заряди и на зареден пръстен.
             </p>
             <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-[13px] font-semibold text-ink">
-              <span><RichText text="$24$ задачи с решения" /></span>
+              <span><RichText text="$20$ задачи с решения" /></span>
               <span><RichText text="$4$ графики" /></span>
               <span>Водени решения</span>
             </div>
