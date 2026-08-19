@@ -225,7 +225,7 @@ function Plot({
 const nearZero = (x: number, eps: number, value: number, fn: (t: number) => number) =>
   Math.abs(x) < eps ? value : fn(x);
 
-/** Трите частни от задачи 4, 5 и 8 клонят към различни, но напълно определени числа. */
+/** Трите частни от задачи 12, 13 и 16 клонят към различни, но напълно определени числа. */
 export function LimitRatioFigure() {
   return (
     <div className={PANEL_CLASS}>
@@ -268,9 +268,9 @@ export function LimitRatioFigure() {
 
       <Legend
         items={[
-          { color: C.ok, tex: String.raw`$\dfrac{1-\cos x}{x^2}$ (задача 4)` },
-          { color: C.minus, tex: String.raw`$\dfrac{\sin x-x}{x^3}$ (задача 5)` },
-          { color: C.warn, tex: String.raw`$\dfrac{\ln(1+x)-x}{x^2}$ (задача 8)` },
+          { color: C.ok, tex: String.raw`$\dfrac{1-\cos x}{x^2}$ (задача 12)` },
+          { color: C.minus, tex: String.raw`$\dfrac{\sin x-x}{x^3}$ (задача 13)` },
+          { color: C.warn, tex: String.raw`$\dfrac{\ln(1+x)-x}{x^2}$ (задача 16)` },
         ]}
       />
 
@@ -418,7 +418,7 @@ export function RingPotentialFigure() {
 
 const ACC_X = [1e-3, 1] as const; // малкият параметър
 const ACC_Y = [1e-12, 1] as const; // относителна грешка
-const ACC_MARK = 0.01; // стойността от задача 17
+const ACC_MARK = 0.01; // стойността от задача 1
 
 const accExact = (x: number) => Math.sqrt(1 + x);
 const accTerms = [
@@ -508,7 +508,7 @@ export function BinomialAccuracyFigure() {
               <line x1={BOX.left} y1={BOX.top - 10} x2={BOX.left} y2={BOX.bottom} />
             </g>
 
-            {/* стойността, с която се смята задача 17 */}
+            {/* стойността, с която се смята задача 1 */}
             <line
               x1={lx(ACC_MARK)}
               y1={BOX.top}

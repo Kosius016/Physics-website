@@ -136,13 +136,13 @@ export default function ProblemSetsPage() {
               Редове на Тейлър и Маклорен
             </h3>
             <p className="mt-3 max-w-xl text-[15.5px] leading-relaxed text-ink/85">
-              Граници чрез редове, после потенциал на дипол, на двойка заряди и на зареден
-              пръстен, и накрая шест физични задачи от механиката, относителността и оптиката.
+              Общата формула и стандартните редове, после пресмятания без калкулатор,
+              граници и накрая потенциал на дипол, на двойка заряди и на зареден пръстен.
             </p>
             <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-[13px] font-semibold text-ink">
-              <span><RichText text="$16$ задачи с решения" /></span>
-              <span><RichText text="$6$ водени задачи" /></span>
-              <span><RichText text="$10$ графики" /></span>
+              <span><RichText text="$24$ задачи с решения" /></span>
+              <span><RichText text="$4$ графики" /></span>
+              <span>Водени решения</span>
             </div>
             <p className="mt-6 text-[13px] font-bold text-minus">Отворете серията →</p>
           </div>
