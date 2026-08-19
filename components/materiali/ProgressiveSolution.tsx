@@ -4,16 +4,23 @@ import { Children, useState, type ReactNode } from "react";
 
 export default function ProgressiveSolution({
   hint,
+  /**
+   * Показва цялото решение наведнъж при отваряне, без бутона за следваща
+   * стъпка. Отключването стъпка по стъпка остава по подразбиране.
+   */
+  revealAll = false,
   children,
 }: {
   hint: ReactNode;
+  revealAll?: boolean;
   children: ReactNode;
 }) {
   const steps = Children.toArray(children);
   const [hintOpen, setHintOpen] = useState(false);
   const [solutionOpen, setSolutionOpen] = useState(false);
   const [visibleSteps, setVisibleSteps] = useState(0);
-  const allVisible = visibleSteps >= steps.length;
+  const shownSteps = revealAll ? steps.length : Math.min(visibleSteps, steps.length);
+  const allVisible = shownSteps >= steps.length;
 
   function toggleSolution() {
     const next = !solutionOpen;
@@ -62,13 +69,13 @@ export default function ProgressiveSolution({
                 Решение стъпка по стъпка
               </p>
               <p className="text-[12px] font-bold tabular-nums text-muted" aria-live="polite">
-                {Math.min(visibleSteps, steps.length)} от {steps.length} стъпки
+                {revealAll ? `${steps.length} стъпки` : `${shownSteps} от ${steps.length} стъпки`}
               </p>
             </div>
 
-            <div className="space-y-8">{steps.slice(0, visibleSteps)}</div>
+            <div className="space-y-8">{steps.slice(0, shownSteps)}</div>
 
-            {!allVisible ? (
+            {!allVisible && !revealAll ? (
               <button
                 type="button"
                 onClick={() => setVisibleSteps((count) => Math.min(steps.length, count + 1))}
@@ -76,7 +83,7 @@ export default function ProgressiveSolution({
               >
                 Следваща стъпка →
               </button>
-            ) : (
+            ) : revealAll ? null : (
               <p className="mt-6 rounded-r-lg border-l-4 border-ok bg-ok/10 px-4 py-3 text-[14px] font-semibold text-ink animate-rise">
                 Пълното решение е отключено.
               </p>

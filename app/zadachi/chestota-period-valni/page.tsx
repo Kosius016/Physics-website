@@ -160,6 +160,7 @@ export default function WaveHomeworkPage() {
         </div>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`„Три обиколки за секунда“ е буквално определението на честотата. Всичко останало следва от $T=1/f$, $\omega=2\pi f$ и $v=R\omega$.`}
@@ -219,6 +220,7 @@ export default function WaveHomeworkPage() {
         </ProblemStatement>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`Всички въпроси излизат от една връзка: $\omega=2\pi f$. Обърнете я и продължавайте.`}
@@ -265,6 +267,7 @@ export default function WaveHomeworkPage() {
         </ProblemStatement>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`Честотата и периодът зависят само от $\omega$. Линейната скорост зависи и от радиуса: $v=R\omega$.`}
@@ -328,6 +331,7 @@ export default function WaveHomeworkPage() {
         </ProblemStatement>
 
         <ProgressiveSolution
+          revealAll
           hint={<RichText text={String.raw`Честотата е брой трептения, разделен на времето: $f=N/t$.`} />}
         >
           <SolutionPart label="a" title="Честота">
@@ -366,6 +370,7 @@ export default function WaveHomeworkPage() {
         </ProblemStatement>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`Двете връзки казват всичко: $T=1/f$ прави периода **обратно** пропорционален, а $\omega=2\pi f$ прави ъгловата честота **право** пропорционална.`}
@@ -423,6 +428,7 @@ export default function WaveHomeworkPage() {
         </div>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`Сравнете записа с общия вид $y=A\sin(\omega t)$ и просто прочетете кое число къде стои.`}
@@ -496,6 +502,7 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
         </ProblemStatement>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`Дължината на вълната е разстоянието, изминато за **един период**: $\lambda=vT=v/f$.`}
@@ -554,6 +561,7 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
         </div>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`Скоростта е фиксирана от средата, затова навсякъде важи едно и също: $\lambda=v/f$.`}
@@ -609,6 +617,7 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
         </ProblemStatement>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`Скоростта е една и съща и за трите, затова $\lambda$ зависи само от честотата.`}
@@ -661,6 +670,7 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
         </ProblemStatement>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`Внимавайте с броенето: между $5$ гребена има $4$ междини. Това е най-честата грешка в задачата.`}
@@ -704,6 +714,7 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
         </ProblemStatement>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`Запитайте се кое се задава от **източника** и кое от **средата**. Едното от двете не може да се промени на границата.`}
@@ -763,6 +774,7 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
         </div>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`Максимумът на синуса е там, където целият аргумент стане $\pi/2$. Сравнете кога това се случва за всяка от двете.`}
@@ -830,6 +842,7 @@ y_1:\quad &4\pi t=\frac\pi2\ \Longrightarrow\ t=0{,}125\ \mathrm{s}
         </ProblemStatement>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`Внимавайте с втората подточка: между „конструктивна“ и „деструктивна“ има цял непрекъснат диапазон.`}
@@ -895,6 +908,7 @@ y_1:\quad &4\pi t=\frac\pi2\ \Longrightarrow\ t=0{,}125\ \mathrm{s}
         </div>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`За третия случай ползвайте $\sin\alpha+\sin\beta=2\sin\left(\dfrac{\alpha+\beta}{2}\right)\cos\left(\dfrac{\alpha-\beta}{2}\right)$.`}
@@ -985,6 +999,7 @@ y_1:\quad &4\pi t=\frac\pi2\ \Longrightarrow\ t=0{,}125\ \mathrm{s}
         </ProblemStatement>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`Изразете всяка разлика в **дължини на вълната**. Дробната част на $\Delta r/\lambda$ решава всичко.`}
@@ -1052,6 +1067,7 @@ y_1:\quad &4\pi t=\frac\pi2\ \Longrightarrow\ t=0{,}125\ \mathrm{s}
         </ProblemStatement>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`Проследете фазовата разлика като функция от времето: тук тя не е константа, а $\Delta\varphi(t)=(\omega_2-\omega_1)t$.`}
@@ -1101,6 +1117,47 @@ t\ (\mathrm{s}) & y_1 & y_2 & y_1+y_2\\ \hline
           </SolutionPart>
         </ProgressiveSolution>
 
+        <div className="mt-9 rounded-[10px] border-[1.5px] border-ink bg-hl px-5 py-4 shadow-hard-sm">
+          <p className="text-[11px] font-bold uppercase tracking-[.16em] text-minus">
+            Какво всъщност са биенията
+          </p>
+          <div className="mt-3 space-y-3 text-[15.5px] leading-relaxed text-ink/90">
+            <p>
+              Задача 16 показа, че две вълни с различни честоти постоянно се разминават по фаза.
+              Ако разликата в честотите е <strong>малка</strong>, това разминаване става бавно и
+              се чува по особен начин: тонът звучи с равномерна височина, но силата му ту
+              нараства, ту заглъхва. Тези бавни пулсации на силата се наричат{" "}
+              <strong>биения</strong>.
+            </p>
+            <p>Причината се вижда с едно тъждество. Събираме двете трептения:</p>
+            <Formula
+              latex={String.raw`\sin(2\pi f_1t)+\sin(2\pi f_2t)=2\underbrace{\cos\left(2\pi\frac{f_2-f_1}{2}t\right)}_{\text{бавна обвивка}}\cdot\underbrace{\sin\left(2\pi\frac{f_1+f_2}{2}t\right)}_{\text{бърз тон}}`}
+            />
+            <p>
+              Резултатът <strong>не е</strong> нова вълна с нова честота. Това е обикновено
+              трептене със <strong>средната</strong> честота{" "}
+              <RichText text={String.raw`$\dfrac{f_1+f_2}{2}$`} />, чиято амплитуда бавно се мени
+              по закона на косинуса. Ухото чува височината от бързия множител, а силата от бавния.
+            </p>
+            <p>
+              Остава един въпрос, в който лесно се греши. Обвивката трепти с честота{" "}
+              <RichText text={String.raw`$\dfrac{|f_2-f_1|}{2}$`} />, но силата на звука зависи от{" "}
+              <strong>големината</strong> на амплитудата, а не от знака ѝ. Затова силен звук се
+              чува и когато обвивката е при{" "}
+              <RichText text="$+2$" />, и когато е при <RichText text="$-2$" />, тоест{" "}
+              <strong>два пъти за период на обвивката</strong>:
+            </p>
+            <Formula latex={String.raw`f_{\text{биене}}=2\cdot\frac{|f_2-f_1|}{2}=|f_1-f_2|`} />
+            <p>
+              Оттук идва и практическата стойност на явлението. Ухото различава два близки тона
+              много трудно, но <strong>брои пулсациите</strong> лесно. Затова инструментите се
+              настройват по изчезването на биенето: когато разликата падне под{" "}
+              <RichText text={String.raw`$1\,\mathrm{Hz}$`} />, между два максимума минава повече от
+              секунда и това се чува веднага.
+            </p>
+          </div>
+        </div>
+
         <ProblemTitle n={17} title="Биения" />
         <ProblemStatement>
           <p>
@@ -1127,6 +1184,7 @@ t\ (\mathrm{s}) & y_1 & y_2 & y_1+y_2\\ \hline
         </div>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`Честотата на биенията е разликата на двете честоти, а времето между максимумите е нейният период.`}
@@ -1181,6 +1239,7 @@ t\ (\mathrm{s}) & y_1 & y_2 & y_1+y_2\\ \hline
         </ProblemStatement>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`Фазата расте като $\varphi=\omega t$, затова времето за дадена промяна на фазата е $\Delta t=\Delta\varphi/\omega$.`}
@@ -1228,6 +1287,7 @@ t\ (\mathrm{s}) & y_1 & y_2 & y_1+y_2\\ \hline
         </ProblemStatement>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`Различните амплитуди $10$ и $6\,\mathrm{V}$ нямат нищо общо с фазата: тя се чете само от добавката в аргумента.`}
@@ -1285,6 +1345,7 @@ t\ (\mathrm{s}) & y_1 & y_2 & y_1+y_2\\ \hline
         </ProblemStatement>
 
         <ProgressiveSolution
+          revealAll
           hint={
             <RichText
               text={String.raw`Три от седемте въпроса се свеждат до $\lambda=v/f$: винаги питайте кое от трите е фиксирано и кое се мени.`}
