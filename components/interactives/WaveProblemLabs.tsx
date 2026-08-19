@@ -3,7 +3,17 @@
 import { useState } from "react";
 import RichText from "@/components/RichText";
 import SvgTex from "./SvgTex";
-import { AngleArc, Arrow, BTN_PRI, BTN_SEC, C, PANEL_CLASS, STAGE_CLASS } from "./svg";
+import {
+  AngleArc,
+  Arrow,
+  BTN_PRI,
+  BTN_SEC,
+  C,
+  DRAWING_FONT_FAMILY,
+  PANEL_CLASS,
+  STAGE_BG,
+  STAGE_CLASS,
+} from "./svg";
 import {
   Legend,
   PlotFrame,
@@ -321,119 +331,168 @@ export function HarmonicSampleLab() {
 
 /* ========================================= §3 дължина на вълната срещу честота */
 
-const SPEED_PRESETS = [
-  { name: "Въже (задача 7)", v: 12 },
-  { name: "Задача 8", v: 20 },
-  { name: "Среда 1 (задача 11)", v: 10 },
-  { name: "Среда 2 (задача 11)", v: 6 },
+/**
+ * Статична фигура към задача 8, подточка г).
+ *
+ * Тук нарочно няма плъзгачи: задачата иска една конкретна крива при една
+ * конкретна скорост и трите отчитания от условието. Скоростта е фиксирана на
+ * 20 m/s, а трите точки са означени с буквите на подточките, за да се вижда
+ * че числата в решението се четат от графиката, а не са отделна сметка.
+ */
+
+const LAMBDA_V = 20; // m/s: скоростта от условието на задача 8
+const LAMBDA_MAX = 12; // метра: фиксиран вертикален обхват
+const F_MAX = 12; // Hz: фиксиран хоризонтален обхват
+
+const LAMBDA_POINTS = [
+  { label: "a", f: 2, lambda: 10 },
+  { label: "b", f: 5, lambda: 4 },
+  { label: "c", f: 10, lambda: 2 },
 ];
 
-const LAMBDA_MAX = 12; // метра: фиксиран вертикален обхват
-const F_MAX = 12; // Hz
-
-export function LambdaFreqLab() {
-  const [speed, setSpeed] = useState(20);
-  const [freq, setFreq] = useState(5);
-
-  const lambda = speed / freq;
+export function LambdaFreqFigure() {
   const s = scaler({ x: 96, y: 56, w: 448, h: 232 }, F_MAX, LAMBDA_MAX, 0);
+  const fFrom = LAMBDA_V / LAMBDA_MAX; // честотата, при която кривата влиза в кадъра
 
   return (
     <div className={PANEL_CLASS}>
-      <div className="mb-3 flex flex-wrap gap-1.5">
-        {SPEED_PRESETS.map((preset) => (
-          <button
-            key={preset.name}
-            type="button"
-            className={BTN_SEC}
-            onClick={() => setSpeed(preset.v)}
-          >
-            {preset.name}
-          </button>
-        ))}
-      </div>
-
       <StageScroll minWidth={MINW}>
         <svg
           viewBox={`0 0 ${W} ${H}`}
           className={`${STAGE_CLASS} select-none`}
           role="img"
-          aria-label="Дължината на вълната като функция от честотата при няколко различни скорости"
+          aria-label="Дължината на вълната като функция от честотата при скорост 20 метра за секунда"
         >
-          <Stage w={W} h={H} title="ПО-БЪРЗА СРЕДА · ЦЯЛАТА ХИПЕРБОЛА СЕ ВДИГА НАГОРЕ" />
-          <PlotFrame s={s} xLabel="f\ (\mathrm{Hz})" yLabel="\lambda\ (\mathrm{m})" yLabelColor={C.minus} quarterTicks={false} />
+          <Stage w={W} h={H} title="ПОСТОЯННА СКОРОСТ · ПО-ВИСОКА ЧЕСТОТА, ПО-КЪСА ВЪЛНА" />
+          <PlotFrame
+            s={s}
+            xLabel="f\ (\mathrm{Hz})"
+            yLabel="\lambda\ (\mathrm{m})"
+            yLabelColor={C.minus}
+            quarterTicks={false}
+          />
 
-          {/* бледи криви за съседните скорости, за да се вижда какво мени v */}
-          {[6, 10, 20, 40].map((v) => (
-            <path
-              key={v}
-              d={s.path((f) => v / f, 200, v / LAMBDA_MAX, F_MAX)}
-              fill="none"
-              stroke={C.faint}
-              strokeWidth={1.5}
-            />
+          {/* пунктирните отсечки показват как се чете всяка двойка от осите */}
+          {LAMBDA_POINTS.map((p) => (
+            <g key={`read-${p.label}`}>
+              <line
+                x1={s.box.x}
+                y1={s.sy(p.lambda)}
+                x2={s.sx(p.f)}
+                y2={s.sy(p.lambda)}
+                stroke={C.faint}
+                strokeWidth={1.2}
+                strokeDasharray="5 4"
+              />
+              <line
+                x1={s.sx(p.f)}
+                y1={s.sy(p.lambda)}
+                x2={s.sx(p.f)}
+                y2={s.y0}
+                stroke={C.faint}
+                strokeWidth={1.2}
+                strokeDasharray="5 4"
+              />
+            </g>
           ))}
+
           <path
-            d={s.path((f) => speed / f, 260, Math.max(0.2, speed / LAMBDA_MAX), F_MAX)}
+            d={s.path((f) => LAMBDA_V / f, 320, fFrom, F_MAX)}
             fill="none"
             stroke={C.minus}
             strokeWidth={3.2}
           />
 
-          <line x1={s.sx(freq)} y1={s.box.y} x2={s.sx(freq)} y2={s.y0} stroke={C.warn} strokeWidth={1.8} />
-          {lambda <= LAMBDA_MAX && (
-            <line
-              x1={s.box.x}
-              y1={s.sy(lambda)}
-              x2={s.sx(freq)}
-              y2={s.sy(lambda)}
-              stroke={C.faint}
-              strokeDasharray="5 4"
-            />
-          )}
-          <circle cx={s.sx(freq)} cy={s.sy(Math.min(lambda, LAMBDA_MAX))} r={6} fill={C.warn} />
+          {/* деления само на трите стойности от условието */}
+          {LAMBDA_POINTS.map((p) => (
+            <g key={`tick-${p.label}`}>
+              <line x1={s.sx(p.f)} y1={s.y0} x2={s.sx(p.f)} y2={s.y0 + 5} stroke={C.mut} strokeWidth={1.4} />
+              <SvgTex
+                x={s.sx(p.f)}
+                y={s.y0 + 17}
+                tex={String(p.f)}
+                color={C.mut}
+                fontSize={12.5}
+                width={30}
+                anchor="middle"
+              />
+              <line
+                x1={s.box.x - 5}
+                y1={s.sy(p.lambda)}
+                x2={s.box.x}
+                y2={s.sy(p.lambda)}
+                stroke={C.mut}
+                strokeWidth={1.4}
+              />
+              <SvgTex
+                x={s.box.x - 10}
+                y={s.sy(p.lambda)}
+                tex={String(p.lambda)}
+                color={C.mut}
+                fontSize={12.5}
+                width={30}
+                anchor="end"
+              />
+            </g>
+          ))}
+
+          {/* трите отчитания, означени с буквите на подточките */}
+          {LAMBDA_POINTS.map((p) => (
+            <g key={`dot-${p.label}`}>
+              <circle
+                cx={s.sx(p.f)}
+                cy={s.sy(p.lambda)}
+                r={10.5}
+                fill={C.warn}
+                stroke={STAGE_BG}
+                strokeWidth={2}
+              />
+              <text
+                x={s.sx(p.f)}
+                y={s.sy(p.lambda) + 4.4}
+                textAnchor="middle"
+                fill={STAGE_BG}
+                fontFamily={DRAWING_FONT_FAMILY}
+                fontSize={13}
+                fontWeight={600}
+              >
+                {p.label}
+              </text>
+            </g>
+          ))}
         </svg>
       </StageScroll>
 
       <Legend
         items={[
-          { color: C.minus, tex: "$\\lambda=v/f$ при текущата скорост" },
-          { color: C.faint, tex: "същата зависимост при $v=6,\\ 10,\\ 20,\\ 40\\,\\mathrm{m/s}$" },
+          { color: C.minus, tex: "$\\lambda=v/f$ при $v=20\\,\\mathrm{m/s}$" },
+          { color: C.warn, tex: "трите отчитания от подточки a, b и c" },
         ]}
       />
-
-      <div className="mt-4 grid gap-x-6 gap-y-3 sm:grid-cols-2">
-        <RangeControl
-          label={<RichText text="Скорост на вълната $v$" />}
-          value={speed}
-          min={4}
-          max={40}
-          step={1}
-          valueTex={`${dec(speed, 0)}\\,\\mathrm{m/s}`}
-          onChange={setSpeed}
-        />
-        <RangeControl
-          label={<RichText text="Честота $f$" />}
-          value={freq}
-          min={0.5}
-          max={12}
-          step={0.5}
-          valueTex={`${dec(freq, 1)}\\,\\mathrm{Hz}`}
-          onChange={setFreq}
-        />
-      </div>
 
       <Readouts
-        cols={4}
+        cols={3}
         cells={[
-          { label: "Дължина на вълната", tex: `\\lambda=${dec(lambda, 2)}\\,\\mathrm{m}`, color: "var(--color-minus)" },
-          { label: "Период", tex: `T=${dec(1 / freq, 3)}\\,\\mathrm{s}`, color: "var(--color-ink)" },
-          { label: "Произведение", tex: `\\lambda f=${dec(lambda * freq, 1)}\\,\\mathrm{m/s}`, color: "var(--color-ok)" },
-          { label: "При двойна честота", tex: `\\lambda=${dec(speed / (2 * freq), 2)}\\,\\mathrm{m}`, color: "var(--color-muted)" },
+          {
+            label: "Подточка a",
+            tex: "f=2\\,\\mathrm{Hz}\\Rightarrow\\lambda=10\\,\\mathrm{m}",
+            color: "var(--color-minus)",
+          },
+          {
+            label: "Подточка b",
+            tex: "f=5\\,\\mathrm{Hz}\\Rightarrow\\lambda=4\\,\\mathrm{m}",
+            color: "var(--color-minus)",
+          },
+          {
+            label: "Подточка c",
+            tex: "f=10\\,\\mathrm{Hz}\\Rightarrow\\lambda=2\\,\\mathrm{m}",
+            color: "var(--color-minus)",
+          },
         ]}
       />
+
       <p className="mt-3 text-[13.5px] leading-relaxed text-muted">
-        <RichText text="Осите са фиксирани, затова се вижда и двете неща поотделно: **честотата** движи точката по една и съща крива, а **скоростта** сменя самата крива и вдига цялата хипербола. Произведението $\lambda f$ винаги връща скоростта. За звук във въздуха ($340\,\mathrm{m/s}$) кривата е от същия вид, но при тези честоти лежи далеч над кадъра: при $100\,\mathrm{Hz}$ дължината е $3{,}4\,\mathrm{m}$." />
+        <RichText text="Кривата е **хипербола**, защото произведението $\lambda f$ е постоянно и равно на скоростта: удвоите ли честотата, дължината на вълната се снишава наполовина. Кривата се приближава до двете оси, без да ги достига. В **по-бърза среда** зависимостта е от същия вид, но с по-голямо $v$, тоест цялата хипербола стои по-високо. Затова за звук във въздуха ($340\,\mathrm{m/s}$) при $100\,\mathrm{Hz}$ дължината е $3{,}4\,\mathrm{m}$, далеч над този кадър." />
       </p>
     </div>
   );

@@ -9,7 +9,7 @@ import {
   BeatsLab,
   HarmonicSampleLab,
   InterferenceLab,
-  LambdaFreqLab,
+  LambdaFreqFigure,
   RotationLab,
 } from "@/components/interactives/WaveProblemLabs";
 
@@ -557,7 +557,7 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
         </ProblemStatement>
 
         <div className="mt-6">
-          <LambdaFreqLab />
+          <LambdaFreqFigure />
         </div>
 
         <ProgressiveSolution
@@ -580,8 +580,8 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
           <SolutionPart label="d" title="Видът на графиката">
             <p>
               Графиката е <strong>хипербола</strong>: при малки честоти върви високо и стръмно
-              пада, а при големи се снишава и се доближава до оста, без да я достига. Бутонът
-              „Задача 8“ в симулацията поставя точно тази скорост.
+              пада, а при големи се снишава и се доближава до оста, без да я достига. Трите
+              отчитания от подточки a, b и c са означени върху фигурата над решението.
             </p>
           </SolutionPart>
           <SolutionPart label="e" title="Каква е пропорционалността">
