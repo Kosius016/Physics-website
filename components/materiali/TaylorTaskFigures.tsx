@@ -413,3 +413,210 @@ export function RingPotentialFigure() {
     </div>
   );
 }
+
+/* ================================================ §IV точност на пресмятането */
+
+const ACC_X = [1e-3, 1] as const; // малкият параметър
+const ACC_Y = [1e-12, 1] as const; // относителна грешка
+const ACC_MARK = 0.01; // стойността от задача 17
+
+const accExact = (x: number) => Math.sqrt(1 + x);
+const accTerms = [
+  { n: 1, fn: () => 1, color: C.plus, tex: "$1$ (само водещият член)" },
+  { n: 2, fn: (x: number) => 1 + x / 2, color: C.warn, tex: String.raw`$1+\frac{x}{2}$` },
+  {
+    n: 3,
+    fn: (x: number) => 1 + x / 2 - (x * x) / 8,
+    color: C.ok,
+    tex: String.raw`$1+\frac{x}{2}-\frac{x^2}{8}$`,
+  },
+];
+const accError = (fn: (x: number) => number, x: number) =>
+  Math.abs(fn(x) - accExact(x)) / accExact(x);
+
+/**
+ * Относителната грешка на приближението за $\sqrt{1+x}$ при един, два и три
+ * члена. И двете оси са логаритмични, затова степенните закони излизат прави, а
+ * наклонът им е точно броят запазени членове.
+ */
+export function BinomialAccuracyFigure() {
+  const lx = (x: number) =>
+    BOX.left +
+    ((Math.log10(x) - Math.log10(ACC_X[0])) / (Math.log10(ACC_X[1]) - Math.log10(ACC_X[0]))) *
+      (BOX.right - BOX.left);
+  const ly = (y: number) =>
+    BOX.bottom -
+    ((Math.log10(y) - Math.log10(ACC_Y[0])) / (Math.log10(ACC_Y[1]) - Math.log10(ACC_Y[0]))) *
+      (BOX.bottom - BOX.top);
+
+  const path = (fn: (x: number) => number) =>
+    Array.from({ length: 201 }, (_, i) => {
+      const x = 10 ** (Math.log10(ACC_X[0]) + (i / 200) * (Math.log10(ACC_X[1]) - Math.log10(ACC_X[0])));
+      return `${i === 0 ? "M" : "L"}${lx(x).toFixed(2)},${ly(Math.max(accError(fn, x), ACC_Y[0])).toFixed(2)}`;
+    }).join(" ");
+
+  return (
+    <div className={PANEL_CLASS}>
+      <div className="overflow-x-auto">
+        <div className="mx-auto min-w-[600px]">
+          <svg
+            viewBox={`0 0 ${W} ${H}`}
+            className={`${STAGE_CLASS} select-none`}
+            role="img"
+            aria-label="Относителната грешка на биномното приближение при един, два и три запазени члена"
+          >
+            <rect width={W} height={H} fill={STAGE_BG} />
+            <text
+              x={20}
+              y={22}
+              fill={C.mut}
+              fontFamily={DRAWING_FONT_FAMILY}
+              fontSize={12.5}
+              fontWeight={600}
+              letterSpacing="0.06em"
+            >
+              ВСЕКИ НОВ ЧЛЕН КУПУВА ОЩЕ ЕДНА СТЕПЕН ТОЧНОСТ
+            </text>
+
+            {[-2, -1].map((d) => (
+              <line
+                key={`gx${d}`}
+                x1={lx(10 ** d)}
+                y1={BOX.top}
+                x2={lx(10 ** d)}
+                y2={BOX.bottom}
+                stroke={C.faint}
+                strokeWidth={1}
+                opacity={0.5}
+              />
+            ))}
+            {[-9, -6, -3].map((d) => (
+              <line
+                key={`gy${d}`}
+                x1={BOX.left}
+                y1={ly(10 ** d)}
+                x2={BOX.right}
+                y2={ly(10 ** d)}
+                stroke={C.faint}
+                strokeWidth={1}
+                opacity={0.5}
+              />
+            ))}
+
+            <g stroke={C.mut} strokeWidth={1.5}>
+              <line x1={BOX.left} y1={BOX.bottom} x2={BOX.right + 14} y2={BOX.bottom} />
+              <line x1={BOX.left} y1={BOX.top - 10} x2={BOX.left} y2={BOX.bottom} />
+            </g>
+
+            {/* стойността, с която се смята задача 17 */}
+            <line
+              x1={lx(ACC_MARK)}
+              y1={BOX.top}
+              x2={lx(ACC_MARK)}
+              y2={BOX.bottom}
+              stroke={C.minus}
+              strokeWidth={1.6}
+              strokeDasharray="5 4"
+            />
+            <SvgTex
+              x={lx(ACC_MARK) + 8}
+              y={BOX.top + 12}
+              tex="x=0{,}01"
+              color={C.minus}
+              fontSize={12.5}
+              width={72}
+            />
+
+            {accTerms.map((term) => (
+              <g key={term.n}>
+                <path d={path(term.fn)} fill="none" stroke={term.color} strokeWidth={2.8} strokeLinecap="round" />
+                <circle
+                  cx={lx(ACC_MARK)}
+                  cy={ly(accError(term.fn, ACC_MARK))}
+                  r={5}
+                  fill={term.color}
+                  stroke={STAGE_BG}
+                  strokeWidth={2}
+                />
+              </g>
+            ))}
+
+            {[-3, -2, -1, 0].map((d) => (
+              <g key={`tx${d}`}>
+                <line
+                  x1={lx(10 ** d)}
+                  y1={BOX.bottom}
+                  x2={lx(10 ** d)}
+                  y2={BOX.bottom + 5}
+                  stroke={C.mut}
+                  strokeWidth={1.4}
+                />
+                <SvgTex
+                  x={lx(10 ** d)}
+                  y={BOX.bottom + 18}
+                  tex={d === 0 ? "1" : `10^{${d}}`}
+                  color={C.mut}
+                  fontSize={12}
+                  width={44}
+                  anchor="middle"
+                />
+              </g>
+            ))}
+            {[-12, -9, -6, -3, 0].map((d) => (
+              <g key={`ty${d}`}>
+                <line
+                  x1={BOX.left - 5}
+                  y1={ly(10 ** d)}
+                  x2={BOX.left}
+                  y2={ly(10 ** d)}
+                  stroke={C.mut}
+                  strokeWidth={1.4}
+                />
+                <SvgTex
+                  x={BOX.left - 10}
+                  y={ly(10 ** d)}
+                  tex={d === 0 ? "1" : `10^{${d}}`}
+                  color={C.mut}
+                  fontSize={12}
+                  width={44}
+                  anchor="end"
+                />
+              </g>
+            ))}
+
+            <SvgTex x={BOX.right + 8} y={BOX.bottom - 6} tex="x" color={C.mut} fontSize={13} width={40} />
+            <SvgTex
+              x={BOX.left - 6}
+              y={BOX.top - 12}
+              tex={String.raw`\text{относителна грешка}`}
+              color={C.mut}
+              fontSize={12.5}
+              width={190}
+            />
+          </svg>
+        </div>
+      </div>
+
+      <Legend items={accTerms.map((term) => ({ color: term.color, tex: term.tex }))} />
+
+      <dl className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-[10px] border-[1.5px] border-ink bg-rule sm:grid-cols-3">
+        {accTerms.map((term) => (
+          <div key={term.n} className="min-w-0 bg-surface px-3 py-2.5">
+            <dt className="text-[10.5px] font-bold tracking-wide text-muted">
+              <RichText text={`Грешка при $x=0{,}01$, $${term.n}$ ${term.n === 1 ? "член" : "члена"}`} />
+            </dt>
+            <dd className="mt-0.5 text-[14.5px] font-bold tabular-nums text-ok">
+              <RichText
+                text={`$${accError(term.fn, ACC_MARK).toExponential(1).replace(".", "{,}").replace(/e([+-])(\d+)/, "\\cdot10^{$1$2}")}$`}
+              />
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      <p className="mt-3 text-[13.5px] leading-relaxed text-muted">
+        <RichText text="И двете оси са логаритмични, затова степенните закони излизат **прави линии**, а наклонът им е точно броят запазени членове: с един член грешката пада като $x$, с два като $x^2$, с три като $x^3$. Оттук идва и цялата полза от разгъването при пресмятане наум. При $x=0{,}01$ трите члена дават седем верни знака, а работата е едно събиране и едно умножение." />
+      </p>
+    </div>
+  );
+}
