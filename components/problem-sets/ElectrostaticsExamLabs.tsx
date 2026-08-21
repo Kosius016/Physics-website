@@ -845,45 +845,51 @@ export function SphereInFieldLab() {
 
 /** Защо в празна област потенциалът е седло, а не яма. */
 export function EarnshawSaddleFigure() {
-  const leftCx = 216;
+  const leftCx = 200;
   const leftCy = 140;
-  const rightCx = 560;
+  const rightCx = 545;
   const rightCy = 140;
 
-  const probes = Array.from({ length: 12 }, (_, index) => (index / 12) * 2 * Math.PI);
+  /** Сечение на потенциала по една ос: нагоре при положителна втора производна. */
+  const section = (sign: number) =>
+    Array.from({ length: 41 }, (_, index) => {
+      const u = -100 + (index / 40) * 200;
+      return `${svgNumber(leftCx + u)},${svgNumber(leftCy - sign * (u / 100) ** 2 * 70)}`;
+    }).join(" ");
 
   return (
     <svg
       viewBox="0 0 720 268"
       className={STAGE_CLASS}
-      aria-label="Свойството на средната стойност и седловидната форма на потенциала в празна област"
+      aria-label="Двете втори производни през една точка и седловидната форма на потенциала в празна област"
     >
       <rect width={720} height={268} fill={STAGE_BG} />
 
-      <text x={leftCx} y={26} textAnchor="middle" {...CAP_LABEL}>
-        СРЕДНА СТОЙНОСТ ПО СФЕРАТА
+      <text x={leftCx} y={22} textAnchor="middle" {...CAP_LABEL}>
+        ДВЕ ПОСОКИ ПРЕЗ ТОЧКАТА
       </text>
-      <circle cx={leftCx} cy={leftCy} r={78} fill="none" stroke={C.minus} strokeWidth={2} strokeDasharray="6 5" />
-      {probes.map((angle) => (
-        <circle
-          key={angle}
-          cx={svgNumber(leftCx + 78 * Math.cos(angle))}
-          cy={svgNumber(leftCy + 78 * Math.sin(angle))}
-          r={4}
-          fill={C.minus}
-        />
-      ))}
+      <line x1={leftCx - 110} y1={leftCy} x2={leftCx + 110} y2={leftCy} stroke={C.faint} strokeWidth={1.5} />
+      <polyline points={section(1)} fill="none" stroke={C.plus} strokeWidth={2.5} />
+      <polyline points={section(-1)} fill="none" stroke={C.minus} strokeWidth={2.5} />
       <circle cx={leftCx} cy={leftCy} r={5.5} fill={C.ok} />
       <SvgTex
         x={leftCx}
-        y={240}
-        tex={String.raw`V(0)=\langle V\rangle_{\text{сфера}}`}
-        color={C.ok}
-        width={180}
+        y={54}
+        tex={String.raw`\partial^2V/\partial x^2>0`}
+        color={C.plus}
+        width={150}
+        anchor="middle"
+      />
+      <SvgTex
+        x={leftCx}
+        y={236}
+        tex={String.raw`\partial^2V/\partial y^2<0`}
+        color={C.minus}
+        width={150}
         anchor="middle"
       />
 
-      <text x={rightCx} y={26} textAnchor="middle" {...CAP_LABEL}>
+      <text x={rightCx} y={22} textAnchor="middle" {...CAP_LABEL}>
         СЕДЛО, НЕ ЯМА
       </text>
       {[0.34, 0.62, 0.92].map((k) => {
