@@ -842,35 +842,6 @@ export default function ElectrostaticsExamPage() {
           </FigurePanel>
         </div>
 
-        <div className="mt-6">
-          <PredictionQuestion
-            prompt="На какво разстояние по оста полето пада наполовина спрямо стойността непосредствено над центъра?"
-            options={[
-              {
-                text: String.raw`$z=R/\sqrt3\approx0{,}58R$`,
-                correct: true,
-                why: String.raw`От $1-z/\sqrt{R^2+z^2}=\tfrac12$ следва $z/\sqrt{R^2+z^2}=\tfrac12$, тоест $3z^2=R^2$.`,
-              },
-              {
-                text: "$z=R$",
-                correct: false,
-                why: String.raw`При $z=R$ полето е $1-1/\sqrt2\approx0{,}29$ от началното, тоест вече доста под половината.`,
-              },
-              {
-                text: "$z=R/2$",
-                correct: false,
-                why: String.raw`Там полето е около $0{,}55$ от началното, тоест още не е паднало наполовина.`,
-              },
-              {
-                text: "$z=2R$",
-                correct: false,
-                why: String.raw`На това разстояние спадът вече върви като $1/z^2$ и половината е премината много по-рано.`,
-              },
-            ]}
-            explanation={String.raw`Мащабът на спадането се задава от единствената дължина в задачата, радиуса $R$. Затова отговорът е число по $R$, а не по $\sigma$ или $Q$.`}
-          />
-        </div>
-
         <Solution
           hint={
             <RichText text="Тръгнете от потенциала, не от полето: така избягвате разлагането по компоненти. Полето се получава накрая чрез $E_z=-dV/dz$." />
