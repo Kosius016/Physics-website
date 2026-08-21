@@ -631,41 +631,177 @@ export function DielectricSlabLab() {
 
 /* ────────────────────────────  Задача 4  ──────────────────────────── */
 
+type StreamPoint = { x: number; y: number };
+
+/**
+ * Обръща $r^2/2+R^3/r=K$ (в единици $R=1$) за $r\ge 1$.
+ *
+ * Лявата страна расте монотонно там, затова половинното деление е достатъчно.
+ * Стойности под $3/2$ нямат корен извън сферата: това е линията, която е
+ * попаднала върху повърхността.
+ */
+function streamRadius(level: number) {
+  if (level <= 1.5) return null;
+  let lo = 1;
+  let hi = 2;
+  while (hi * hi * 0.5 + 1 / hi < level) hi *= 2;
+  for (let index = 0; index < 40; index += 1) {
+    const mid = (lo + hi) * 0.5;
+    if (mid * mid * 0.5 + 1 / mid < level) lo = mid;
+    else hi = mid;
+  }
+  return (lo + hi) * 0.5;
+}
+
+/**
+ * Една силова линия, зададена с отстоянието `b` от оста далеч от сферата.
+ *
+ * Полето извън сферата е сбор от еднородното поле и поле на дипол в центъра.
+ * За такова осесиметрично поле линиите са нивата на функцията на тока
+ * `psi = (r^2/2 + R^3/r) sin^2(theta)`, а `psi = b^2/2` фиксира линията.
+ * Същият похват описва и обтичането на сфера от флуид; там диполният член
+ * влиза с обратен знак и затова линиите се изтласкват навън, вместо навътре.
+ *
+ * Линиите с `b < sqrt(3)` завършват върху сферата, останалите я подминават.
+ * Затова резултатът е списък от участъци, а не една полилиния.
+ */
+function streamlineBranches(
+  b: number,
+  mirror: 1 | -1,
+  cx: number,
+  cy: number,
+  scale: number,
+  bounds: { x0: number; x1: number; y0: number; y1: number },
+) {
+  const branches: StreamPoint[][] = [];
+  let run: StreamPoint[] = [];
+  const steps = 360;
+
+  for (let index = 0; index <= steps; index += 1) {
+    const theta = 0.006 + (index / steps) * (Math.PI - 0.012);
+    const sine = Math.sin(theta);
+    const radius = streamRadius((b * b) / (2 * sine * sine));
+    const x = radius === null ? 0 : cx + radius * Math.cos(theta) * scale;
+    const y = radius === null ? 0 : cy - mirror * radius * sine * scale;
+    const inside =
+      radius !== null && x >= bounds.x0 && x <= bounds.x1 && y >= bounds.y0 && y <= bounds.y1;
+
+    if (!inside) {
+      if (run.length > 1) branches.push(run);
+      run = [];
+      continue;
+    }
+    run.push({ x: svgNumber(x), y: svgNumber(y) });
+  }
+  if (run.length > 1) branches.push(run);
+
+  // Линия, попаднала върху сферата, спира част от пиксела преди нея, защото
+  // стъпката по theta е крайна. Долепяме такъв край точно до повърхността.
+  const snap = (point: StreamPoint) => {
+    const dx = point.x - cx;
+    const dy = point.y - cy;
+    const distance = Math.hypot(dx, dy);
+    if (distance > scale * 1.25 || distance === 0) return point;
+    const factor = scale / distance;
+    return { x: svgNumber(cx + dx * factor), y: svgNumber(cy + dy * factor) };
+  };
+
+  return branches.map((branch) => {
+    const snapped = [...branch];
+    snapped[0] = snap(snapped[0]);
+    snapped[snapped.length - 1] = snap(snapped[snapped.length - 1]);
+    return snapped;
+  });
+}
+
+/**
+ * Връх на стрелка върху силова линия.
+ *
+ * Посоката на полето върви към по-малък индекс: масивът се обхожда от
+ * $\theta\to0$ (дясната страна) към $\theta\to\pi$ (лявата).
+ */
+function StreamHead({ points, at, color }: { points: StreamPoint[]; at: number; color: string }) {
+  const last = points.length - 1;
+  const center = Math.min(last, Math.max(0, Math.round(at * last)));
+  const ahead = points[Math.max(0, center - 4)];
+  const behind = points[Math.min(last, center + 4)];
+  const dx = ahead.x - behind.x;
+  const dy = ahead.y - behind.y;
+  const length = Math.hypot(dx, dy) || 1;
+  const ux = dx / length;
+  const uy = dy / length;
+  const size = 7;
+  const tip = points[center];
+  const baseX = tip.x - ux * size;
+  const baseY = tip.y - uy * size;
+  const nx = -uy * size * 0.5;
+  const ny = ux * size * 0.5;
+
+  return (
+    <polygon
+      points={`${tip.x},${tip.y} ${svgNumber(baseX + nx)},${svgNumber(baseY + ny)} ${svgNumber(
+        baseX - nx,
+      )},${svgNumber(baseY - ny)}`}
+      fill={color}
+    />
+  );
+}
+
 /**
  * Схема към условието на Задача 4: постановката без отговора.
  *
- * Индуцираният заряд нарочно липсва, защото точно той е търсеното. Тук стоят
- * само външното поле, сферата и означенията, с които е написан потенциалът.
+ * Индуцираният заряд нарочно липсва, защото точно той е търсеното. Показани
+ * са външното поле, обтичането около сферата и означенията, с които е написан
+ * потенциалът.
  */
 export function SphereInFieldFigure() {
-  const cx = 360;
-  const cy = 140;
-  const R = 84;
+  const cx = 260;
+  const cy = 150;
+  const R = 52;
+  const bounds = { x0: 24, x1: 494, y0: 12, y1: 288 };
   const theta = (42 * Math.PI) / 180;
+
+  const lines = [0.7, 1.15, 1.55, 1.8, 2.05].flatMap((b) =>
+    ([1, -1] as const).flatMap((mirror) =>
+      streamlineBranches(b, mirror, cx, cy, R, bounds).map((points, index) => ({
+        key: `${b}-${mirror}-${index}`,
+        points,
+        passing: points[0].x > cx && points[points.length - 1].x < cx,
+      })),
+    ),
+  );
 
   return (
     <svg
-      viewBox="0 0 720 246"
+      viewBox="0 0 520 300"
       className={STAGE_CLASS}
-      aria-label="Незаредена проводяща сфера, поставена в първоначално еднородно поле"
+      aria-label="Силовите линии около незаредена проводяща сфера, поставена в първоначално еднородно поле"
     >
-      <rect width={720} height={246} fill={STAGE_BG} />
-      <text x={cx} y={22} textAnchor="middle" {...CAP_LABEL}>
-        СФЕРА В ЕДНОРОДНО ПОЛЕ
-      </text>
-
-      {[64, 102, 140, 178, 216].map((y) => (
-        <g key={y}>
-          <Arrow x1={30} y1={y} x2={150} y2={y} color={C.warn} width={2} />
-          <Arrow x1={570} y1={y} x2={690} y2={y} color={C.warn} width={2} />
-        </g>
-      ))}
-      <SvgTex x={30} y={38} tex={String.raw`\vec E_0`} color={C.warn} width={40} />
+      <rect width={520} height={300} fill={STAGE_BG} />
 
       <circle cx={cx} cy={cy} r={R} fill={C.wire} opacity={0.1} stroke={C.wire} strokeWidth={2} />
-      <line x1={cx} y1={cy} x2={536} y2={cy} stroke={C.faint} strokeWidth={1.5} strokeDasharray="6 6" />
-      <SvgTex x={548} y={cy} tex="z" color={C.mut} width={13} />
 
+      {lines.map((line) => (
+        <g key={line.key}>
+          <polyline
+            points={line.points.map((point) => `${point.x},${point.y}`).join(" ")}
+            fill="none"
+            stroke={C.warn}
+            strokeWidth={1.8}
+            opacity={0.9}
+          />
+          <StreamHead points={line.points} at={0.3} color={C.warn} />
+          {line.passing ? <StreamHead points={line.points} at={0.74} color={C.warn} /> : null}
+        </g>
+      ))}
+
+      <Arrow x1={bounds.x0} y1={cy} x2={svgNumber(cx - R)} y2={cy} color={C.warn} width={1.8} />
+      <Arrow x1={svgNumber(cx + R)} y1={cy} x2={bounds.x1} y2={cy} color={C.warn} width={1.8} />
+
+      <SvgTex x={18} y={20} tex={String.raw`\vec E_0`} color={C.warn} width={40} />
+      <SvgTex x={470} y={132} tex="z" color={C.mut} width={13} anchor="middle" />
+
+      <line x1={cx} y1={cy} x2={svgNumber(cx + R)} y2={cy} stroke={C.faint} strokeWidth={1.5} strokeDasharray="5 4" />
       <line
         x1={cx}
         y1={cy}
@@ -680,7 +816,7 @@ export function SphereInFieldFigure() {
         r={5}
         fill={C.ok}
       />
-      <AngleArc cx={cx} cy={cy} a1={0} a2={-theta} r={44} color={C.ok} texLabel={String.raw`\theta`} />
+      <AngleArc cx={cx} cy={cy} a1={0} a2={-theta} r={28} color={C.ok} texLabel={String.raw`\theta`} />
 
       <line
         x1={cx}
@@ -690,8 +826,12 @@ export function SphereInFieldFigure() {
         stroke={C.wire}
         strokeWidth={2}
       />
-      <TexChip x={318} y={166} tex="R" color={C.wire} width={13} />
+      <TexChip x={234} y={166} tex="R" color={C.wire} width={13} />
       <circle cx={cx} cy={cy} r={3.5} fill={C.wire} />
+
+      <text x={cx} y={288} textAnchor="middle" {...CAP_LABEL}>
+        СФЕРА В ЕДНОРОДНО ПОЛЕ
+      </text>
     </svg>
   );
 }
