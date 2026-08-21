@@ -3,7 +3,6 @@ import Formula from "@/components/Formula";
 import LessonNav from "@/components/LessonNav";
 import RichText from "@/components/RichText";
 import Section from "@/components/Section";
-import PredictionQuestion from "@/components/interactives/PredictionQuestion";
 import {
   Prereq,
   ProblemStatement,
@@ -668,34 +667,6 @@ export default function ElectrostaticsExamPage() {
           </FigurePanel>
         </div>
 
-        <div className="mt-6">
-          <PredictionQuestion
-            prompt="Как се променя полето вътре в сферата, докато се движим от центъра към повърхността?"
-            options={[
-              {
-                text: "Расте, защото обхванатият заряд расте по-бързо от лицето на гаусовата сфера",
-                correct: true,
-                why: String.raw`$Q_{\text{вътр}}\propto r^4$, а лицето е $4\pi r^2$. Отношението дава $E\propto r^2$.`,
-              },
-              {
-                text: String.raw`Спада като $1/r^2$, както при точков заряд`,
-                correct: false,
-                why: String.raw`Този закон важи само вън от разпределението, където гаусовата сфера огражда целия заряд.`,
-              },
-              {
-                text: "Остава постоянно, както между плочите на кондензатор",
-                correct: false,
-                why: "Постоянно поле дава равномерно заредена равнина, а не сферично разпределение.",
-              },
-              {
-                text: "Расте линейно, както при равномерно заредена сфера",
-                correct: false,
-                why: String.raw`Линейният закон следва от постоянна $\rho$. Тук плътността сама расте с $r$ и добавя още една степен.`,
-              },
-            ]}
-            explanation={String.raw`Полето вътре не се определя от целия заряд, а само от този под гаусовата повърхност. Затова начинът, по който зарядът е разпределен, се вижда точно във вътрешната област.`}
-          />
-        </div>
 
         <Solution
           hint={
@@ -994,34 +965,6 @@ export default function ElectrostaticsExamPage() {
           </FigurePanel>
         </div>
 
-        <div className="mt-6">
-          <PredictionQuestion
-            prompt="При постоянно напрежение пластината се втегля навътре или се изтласква навън?"
-            options={[
-              {
-                text: "Втегля се навътре, защото капацитетът расте с дълбочината",
-                correct: true,
-                why: String.raw`$F_x=\tfrac12(\Delta V_0)^2\,dC/dx$, а $dC/dx=\varepsilon_0b(\varepsilon_r-1)/d>0$.`,
-              },
-              {
-                text: "Изтласква се навън, защото енергията на полето расте",
-                correct: false,
-                why: "Енергията наистина расте, но батерията върши двойно повече работа от този прираст. Излишъкът е точно механичната работа.",
-              },
-              {
-                text: "Не действа сила, защото полето е перпендикулярно на движението",
-                correct: false,
-                why: "Идеализираното поле е перпендикулярно, но силата идва от разсеяното поле в края на плочите. Енергийният баланс я дава, без то да се смята.",
-              },
-              {
-                text: "Зависи от знака на заряда върху плочите",
-                correct: false,
-                why: "Свързаните заряди се подреждат според посоката на полето, затова притеглянето е едно и също при двата знака.",
-              },
-            ]}
-            explanation={String.raw`Общото правило: при постоянно напрежение системата се стреми да увеличи капацитета си, защото $U=\tfrac12C(\Delta V)^2$ и батерията плаща двойно.`}
-          />
-        </div>
 
         <Solution
           hint={
