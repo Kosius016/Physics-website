@@ -6,9 +6,13 @@ import LessonNav from "@/components/LessonNav";
 import RichText from "@/components/RichText";
 import Section from "@/components/Section";
 import PredictionQuestion from "@/components/interactives/PredictionQuestion";
-import ProgressiveSolution from "@/components/materiali/ProgressiveSolution";
 import ProblemContextPhoto from "@/components/problem-sets/ProblemContextPhoto";
-import type { RichTextString } from "@/lib/types";
+import {
+  ProblemStatement,
+  ResultBox,
+  Solution,
+  SolutionPart,
+} from "@/components/problem-sets/SolutionParts";
 import {
   BreakdownOptimizationLab,
   ChargingEnergyGraph,
@@ -33,56 +37,6 @@ const NAV = [
   { id: "concentration", n: "§6", label: "Енергия в обема" },
   { id: "recap", n: "§7", label: "Обобщение" },
 ] as const;
-
-function ProblemStatement({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="rounded-[10px] border-[1.5px] border-ink bg-surface px-5 py-4 shadow-hard-sm">
-      <p className="text-[11px] font-bold uppercase tracking-[.16em] text-plus">Условие</p>
-      <div className="mt-3 space-y-3 text-[15.5px] leading-relaxed text-ink/90">{children}</div>
-    </div>
-  );
-}
-
-function SolutionPart({
-  label,
-  title,
-  children,
-}: {
-  label: string;
-  title: RichTextString;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="grid gap-3 sm:grid-cols-[2.5rem_1fr]">
-      <div
-        aria-hidden="true"
-        data-solution-step={label}
-        className="flex h-9 w-9 items-center justify-center rounded-full border-[1.5px] border-ink bg-hl text-[13px] font-bold text-ink"
-      >
-        {label}
-      </div>
-      <div className="min-w-0">
-        <h3 className="font-serif text-[20px] font-bold">
-          <span className="sr-only">Подточка {label}: </span>
-          <RichText text={title} />
-        </h3>
-        <div className="mt-2 space-y-3 text-[15.5px] leading-relaxed text-ink/90">{children}</div>
-      </div>
-    </div>
-  );
-}
-
-function Solution({ hint, children }: { hint: React.ReactNode; children: React.ReactNode }) {
-  return <ProgressiveSolution hint={hint}>{children}</ProgressiveSolution>;
-}
-
-function ResultBox({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="rounded-r-lg border-l-4 border-ok bg-ok/10 px-4 py-3 text-[15px] font-semibold">
-      {children}
-    </div>
-  );
-}
 
 export default function CapacitorProblemsPage() {
   return (

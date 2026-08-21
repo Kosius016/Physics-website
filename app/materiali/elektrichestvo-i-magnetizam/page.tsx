@@ -1883,6 +1883,28 @@ export default function ElectromagnetismCheatSheet() {
           </p>
         </div>
 
+        <Link
+          href="/zadachi/kontrolno-elektrostatika"
+          className="group mt-6 block rounded-[10px] border-[1.5px] border-ink bg-surface px-5 py-4 shadow-hard-sm transition-transform hover:-translate-y-0.5"
+        >
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-[11px] font-bold uppercase tracking-[0.17em] text-minus">
+              Проверете се
+            </span>
+            <span className="rounded-full border border-rule bg-hl px-3 py-1 text-[11px] font-semibold text-muted">
+              Университетско ниво · <RichText text="$1$-$2$ курс" />
+            </span>
+          </div>
+          <h3 className="mt-2 font-serif text-[22px] font-bold leading-tight text-ink group-hover:text-minus">
+            Контролно по електростатика с подробни решения
+          </h3>
+          <p className="mt-2 text-[15px] leading-relaxed text-ink/85">
+            Седем въпроса от теорията и четири задачи с пълни решения. Под всяко условие пише
+            върху кои уроци стъпва задачата и колко от нея излиза извън тях.
+          </p>
+          <p className="mt-3 text-[13px] font-bold text-minus">Отворете контролното →</p>
+        </Link>
+
         <p className="mt-6 text-[15px]">
           <Link href="/materiali" className="font-bold text-minus hover:underline">
             ← Назад към всички материали

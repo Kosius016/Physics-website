@@ -26,6 +26,57 @@ export default function ProblemSetsPage() {
         </h2>
 
         <Link
+          href="/zadachi/kontrolno-elektrostatika"
+          className="group mb-6 grid overflow-hidden rounded-[12px] border-[1.5px] border-ink bg-surface shadow-hard transition-transform hover:-translate-y-0.5 md:grid-cols-[1.15fr_.85fr]"
+        >
+          <div className="p-6 sm:p-8">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-[11px] font-bold uppercase tracking-[0.17em] text-minus">
+                Контролно с решения
+              </span>
+              <span className="rounded-full border border-rule bg-hl px-3 py-1 text-[11px] font-semibold text-muted">
+                Университетско ниво · <RichText text="$1$-$2$ курс" />
+              </span>
+            </div>
+            <h3 className="mt-4 font-serif text-[clamp(28px,5vw,38px)] font-bold leading-[1.08] text-ink group-hover:text-minus">
+              Електростатика: контролно
+            </h3>
+            <p className="mt-3 max-w-xl text-[15.5px] leading-relaxed text-ink/85">
+              Реално контролно с пълни решения. Под всяко условие е отбелязано върху кои уроци
+              стъпва задачата и колко от нея излиза извън тях, така че нищо не остава скрито.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-[13px] font-semibold text-ink">
+              <span>
+                <RichText text="$7$ въпроса от теорията" />
+              </span>
+              <span>
+                <RichText text="$4$ задачи" />
+              </span>
+              <span>Отключване стъпка по стъпка</span>
+            </div>
+            <p className="mt-6 text-[13px] font-bold text-minus">Отворете контролното →</p>
+          </div>
+
+          <div className="flex min-h-[17rem] flex-col justify-between border-t-[1.5px] border-ink bg-ink px-6 py-6 text-white md:min-h-0 md:border-l-[1.5px] md:border-t-0">
+            <p className="text-[10px] font-bold uppercase tracking-[.18em] text-hl">
+              От закона на Гаус до гръмоотвода
+            </p>
+            <div className="my-5 space-y-3 font-serif text-[clamp(19px,3vw,26px)] font-bold">
+              <div className="border-l-4 border-minus pl-4 text-minus">
+                <RichText text={String.raw`$\nabla\cdot\vec E=\rho/\varepsilon_0$`} />
+              </div>
+              <div className="border-l-4 border-ok pl-4 text-ok">
+                <RichText text={String.raw`$z=R/\sqrt3$`} />
+              </div>
+              <div className="border-l-4 border-hl pl-4 text-hl">
+                <RichText text={String.raw`$E_{\max}=3E_0$`} />
+              </div>
+            </div>
+            <p className="text-[12px] font-semibold text-white/75">Схеми · графики · симулации</p>
+          </div>
+        </Link>
+
+        <Link
           href="/zadachi/kondenzatori"
           className="group grid overflow-hidden rounded-[12px] border-[1.5px] border-ink bg-surface shadow-hard transition-transform hover:-translate-y-0.5 md:grid-cols-[1.15fr_.85fr]"
         >

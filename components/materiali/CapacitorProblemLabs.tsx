@@ -1,155 +1,28 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import RichText from "@/components/RichText";
 import SvgTex from "@/components/interactives/SvgTex";
 import {
   BTN_SEC,
   C,
   DRAWING_FONT_FAMILY,
-  PANEL_CLASS,
   STAGE_BG,
   STAGE_CLASS,
 } from "@/components/interactives/svg";
+import {
+  LabShell,
+  RangeControl,
+  decimal,
+  graphGrid,
+  svgNumber,
+} from "@/components/problem-sets/LabShell";
 
 const EPSILON_0 = 8.85e-12;
-
-type ReadoutItem = {
-  label: string;
-  tex: string;
-  tone?: "text-ink" | "text-minus" | "text-plus" | "text-ok";
-};
-
-function decimal(value: number, digits = 2) {
-  return value.toFixed(digits).replace(".", "{,}");
-}
-
-function svgNumber(value: number) {
-  return Math.round(value * 1000) / 1000;
-}
 
 function signedPercent(value: number, digits = 3) {
   const sign = value >= 0 ? "+" : "-";
   return `${sign}${decimal(Math.abs(value) * 100, digits)}\\%`;
-}
-
-function RangeControl({
-  label,
-  value,
-  min,
-  max,
-  step,
-  valueLabel,
-  onChange,
-}: {
-  label: string;
-  value: number;
-  min: number;
-  max: number;
-  step: number;
-  valueLabel: ReactNode;
-  onChange: (value: number) => void;
-}) {
-  return (
-    <label className="block">
-      <span className="mb-1.5 flex items-center justify-between gap-3 text-[13px] font-semibold">
-        <span>{label}</span>
-        <span className="tabular-nums text-minus">{valueLabel}</span>
-      </span>
-      <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        onChange={(event) => onChange(Number(event.target.value))}
-        className="w-full accent-minus"
-      />
-    </label>
-  );
-}
-
-function Readouts({ items }: { items: ReadoutItem[] }) {
-  return (
-    <dl className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-[10px] border-[1.5px] border-ink bg-rule sm:grid-cols-3 xl:grid-cols-6">
-      {items.map((item) => (
-        <div key={item.label} className="min-w-0 bg-surface px-3 py-2.5">
-          <dt className="text-[10.5px] font-bold uppercase tracking-wide text-muted">
-            <RichText text={item.label} />
-          </dt>
-          <dd className={`mt-0.5 text-[14px] font-bold tabular-nums ${item.tone ?? "text-ink"}`}>
-            <RichText text={`$${item.tex}$`} />
-          </dd>
-        </div>
-      ))}
-    </dl>
-  );
-}
-
-function LabShell({
-  title,
-  description,
-  children,
-  controls,
-  readouts,
-}: {
-  title: string;
-  description: string;
-  children: ReactNode;
-  controls?: ReactNode;
-  readouts: ReadoutItem[];
-}) {
-  return (
-    <div className={PANEL_CLASS}>
-      <div className="mb-4">
-        <p className="text-[11px] font-bold uppercase tracking-[.16em] text-minus">Интерактивна проверка</p>
-        <h3 className="mt-1 font-serif text-[22px] font-bold">{title}</h3>
-        <p className="mt-1 max-w-3xl text-[14px] text-muted">{description}</p>
-      </div>
-      {children}
-      {controls && <div className="mt-4 grid gap-4 sm:grid-cols-2">{controls}</div>}
-      <Readouts items={readouts} />
-    </div>
-  );
-}
-
-function graphGrid({
-  left,
-  top,
-  width,
-  height,
-}: {
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-}) {
-  return (
-    <g>
-      {[0, 0.25, 0.5, 0.75, 1].map((fraction) => (
-        <g key={fraction}>
-          <line
-            x1={left + fraction * width}
-            y1={top}
-            x2={left + fraction * width}
-            y2={top + height}
-            stroke={C.faint}
-            strokeWidth={1}
-          />
-          <line
-            x1={left}
-            y1={top + fraction * height}
-            x2={left + width}
-            y2={top + fraction * height}
-            stroke={C.faint}
-            strokeWidth={1}
-          />
-        </g>
-      ))}
-      <line x1={left} y1={top + height} x2={left + width} y2={top + height} stroke={C.wire} strokeWidth={2} />
-      <line x1={left} y1={top} x2={left} y2={top + height} stroke={C.wire} strokeWidth={2} />
-    </g>
-  );
 }
 
 export function ChargingEnergyGraph() {
