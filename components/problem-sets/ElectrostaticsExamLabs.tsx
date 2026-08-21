@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useId, useState, type ReactNode } from "react";
 import RichText from "@/components/RichText";
 import SvgTex from "@/components/interactives/SvgTex";
 import {
@@ -440,15 +440,102 @@ export function ChargedDiskLab() {
 
 /* ────────────────────────────  Задача 3  ──────────────────────────── */
 
-export function DielectricSlabLab() {
-  const [x, setX] = useState(0.4);
-  const [epsilon, setEpsilon] = useState(4);
-
+/**
+ * Геометрията на частично запълнения кондензатор.
+ *
+ * Едно и също чертане обслужва схемата към условието и интерактива в
+ * решението: `showForce` е единствената разлика, защото силата е търсеното,
+ * а не част от условието.
+ */
+function SlabScene({ x, showForce = false }: { x: number; showForce?: boolean }) {
+  const hatchId = useId();
   const plateLeft = 54;
   const plateRight = 614;
   const span = plateRight - plateLeft;
   const slabEnd = svgNumber(plateLeft + span * x);
   const arrowEnd = svgNumber(Math.min(slabEnd + 76, plateRight - 10));
+
+  return (
+    <svg
+      viewBox="0 0 720 236"
+      className={STAGE_CLASS}
+      aria-label={
+        showForce
+          ? "Диелектрична пластина в плосък кондензатор с посоката на силата върху нея"
+          : "Диелектрична пластина, вкарана на дълбочина в плосък кондензатор"
+      }
+    >
+      <defs>
+        <pattern id={hatchId} width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+          <line x1="0" y1="0" x2="0" y2="10" stroke={C.minus} strokeWidth="1.6" opacity="0.5" />
+        </pattern>
+      </defs>
+      <rect width={720} height={236} fill={STAGE_BG} />
+
+      <rect x={plateLeft} y={64} width={span} height={8} fill={C.wire} />
+      <rect x={plateLeft} y={158} width={span} height={8} fill={C.wire} />
+      <rect x={plateLeft} y={72} width={svgNumber(slabEnd - plateLeft)} height={86} fill={C.minus} opacity={0.13} />
+      <rect x={plateLeft} y={72} width={svgNumber(slabEnd - plateLeft)} height={86} fill={`url(#${hatchId})`} />
+      <line x1={slabEnd} y1={72} x2={slabEnd} y2={158} stroke={C.minus} strokeWidth={2.5} />
+
+      {showForce ? (
+        <>
+          <Arrow x1={svgNumber(slabEnd + 10)} y1={102} x2={arrowEnd} y2={102} color={C.ok} width={3} />
+          <SvgTex
+            x={svgNumber((slabEnd + arrowEnd) / 2)}
+            y={86}
+            tex={String.raw`\vec F`}
+            color={C.ok}
+            width={24}
+            anchor="middle"
+          />
+        </>
+      ) : null}
+      <TexChip
+        x={svgNumber((plateLeft + slabEnd) / 2)}
+        y={128}
+        tex={String.raw`\varepsilon_r`}
+        color={C.minus}
+        width={15}
+        anchor="middle"
+      />
+      <text x={svgNumber((slabEnd + plateRight) / 2)} y={150} textAnchor="middle" {...CAP_LABEL}>
+        ВАКУУМ
+      </text>
+
+      <line x1={plateLeft} y1={40} x2={slabEnd} y2={40} stroke={C.warn} strokeWidth={1.5} />
+      <line x1={plateLeft} y1={32} x2={plateLeft} y2={48} stroke={C.warn} strokeWidth={1.5} />
+      <line x1={slabEnd} y1={32} x2={slabEnd} y2={48} stroke={C.warn} strokeWidth={1.5} />
+      <SvgTex x={svgNumber((plateLeft + slabEnd) / 2)} y={18} tex="x" color={C.warn} width={13} anchor="middle" />
+
+      <line x1={640} y1={72} x2={640} y2={158} stroke={C.wire} strokeWidth={1.5} />
+      <line x1={632} y1={72} x2={648} y2={72} stroke={C.wire} strokeWidth={1.5} />
+      <line x1={632} y1={158} x2={648} y2={158} stroke={C.wire} strokeWidth={1.5} />
+      <SvgTex x={656} y={115} tex="d" color={C.wire} width={13} />
+
+      <line x1={plateLeft} y1={198} x2={plateRight} y2={198} stroke={C.wire} strokeWidth={1.5} />
+      <line x1={plateLeft} y1={190} x2={plateLeft} y2={206} stroke={C.wire} strokeWidth={1.5} />
+      <line x1={plateRight} y1={190} x2={plateRight} y2={206} stroke={C.wire} strokeWidth={1.5} />
+      <SvgTex
+        x={svgNumber((plateLeft + plateRight) / 2)}
+        y={218}
+        tex="L"
+        color={C.wire}
+        width={13}
+        anchor="middle"
+      />
+    </svg>
+  );
+}
+
+/** Схема към условието на Задача 3: геометрията без търсената сила. */
+export function DielectricSlabFigure() {
+  return <SlabScene x={0.42} />;
+}
+
+export function DielectricSlabLab() {
+  const [x, setX] = useState(0.4);
+  const [epsilon, setEpsilon] = useState(4);
 
   const left = 84;
   const top = 44;
@@ -494,80 +581,7 @@ export function DielectricSlabLab() {
       readoutColumns="sm:grid-cols-4"
     >
       <div className="space-y-3">
-        <svg
-          viewBox="0 0 720 236"
-          className={STAGE_CLASS}
-          aria-label="Диелектрична пластина, вкарана на дълбочина в плосък кондензатор"
-        >
-          <defs>
-            <pattern
-              id="slab-hatch"
-              width="10"
-              height="10"
-              patternUnits="userSpaceOnUse"
-              patternTransform="rotate(35)"
-            >
-              <line x1="0" y1="0" x2="0" y2="10" stroke={C.minus} strokeWidth="1.6" opacity="0.5" />
-            </pattern>
-          </defs>
-          <rect width={720} height={236} fill={STAGE_BG} />
-
-          <rect x={plateLeft} y={64} width={span} height={8} fill={C.wire} />
-          <rect x={plateLeft} y={158} width={span} height={8} fill={C.wire} />
-          <rect x={plateLeft} y={72} width={svgNumber(slabEnd - plateLeft)} height={86} fill={C.minus} opacity={0.13} />
-          <rect x={plateLeft} y={72} width={svgNumber(slabEnd - plateLeft)} height={86} fill="url(#slab-hatch)" />
-          <line x1={slabEnd} y1={72} x2={slabEnd} y2={158} stroke={C.minus} strokeWidth={2.5} />
-
-          <Arrow x1={svgNumber(slabEnd + 10)} y1={102} x2={arrowEnd} y2={102} color={C.ok} width={3} />
-          <SvgTex
-            x={svgNumber((slabEnd + arrowEnd) / 2)}
-            y={86}
-            tex={String.raw`\vec F`}
-            color={C.ok}
-            width={24}
-            anchor="middle"
-          />
-          <TexChip
-            x={svgNumber((plateLeft + slabEnd) / 2)}
-            y={128}
-            tex={String.raw`\varepsilon_r`}
-            color={C.minus}
-            width={15}
-            anchor="middle"
-          />
-          <text x={svgNumber((slabEnd + plateRight) / 2)} y={150} textAnchor="middle" {...CAP_LABEL}>
-            ВАКУУМ
-          </text>
-
-          <line x1={plateLeft} y1={40} x2={slabEnd} y2={40} stroke={C.warn} strokeWidth={1.5} />
-          <line x1={plateLeft} y1={32} x2={plateLeft} y2={48} stroke={C.warn} strokeWidth={1.5} />
-          <line x1={slabEnd} y1={32} x2={slabEnd} y2={48} stroke={C.warn} strokeWidth={1.5} />
-          <SvgTex
-            x={svgNumber((plateLeft + slabEnd) / 2)}
-            y={18}
-            tex="x"
-            color={C.warn}
-            width={13}
-            anchor="middle"
-          />
-
-          <line x1={640} y1={72} x2={640} y2={158} stroke={C.wire} strokeWidth={1.5} />
-          <line x1={632} y1={72} x2={648} y2={72} stroke={C.wire} strokeWidth={1.5} />
-          <line x1={632} y1={158} x2={648} y2={158} stroke={C.wire} strokeWidth={1.5} />
-          <SvgTex x={656} y={115} tex="d" color={C.wire} width={13} />
-
-          <line x1={plateLeft} y1={198} x2={plateRight} y2={198} stroke={C.wire} strokeWidth={1.5} />
-          <line x1={plateLeft} y1={190} x2={plateLeft} y2={206} stroke={C.wire} strokeWidth={1.5} />
-          <line x1={plateRight} y1={190} x2={plateRight} y2={206} stroke={C.wire} strokeWidth={1.5} />
-          <SvgTex
-            x={svgNumber((plateLeft + plateRight) / 2)}
-            y={218}
-            tex="L"
-            color={C.wire}
-            width={13}
-            anchor="middle"
-          />
-        </svg>
+        <SlabScene x={x} showForce />
 
         <svg
           viewBox="0 0 720 316"
@@ -616,6 +630,71 @@ export function DielectricSlabLab() {
 }
 
 /* ────────────────────────────  Задача 4  ──────────────────────────── */
+
+/**
+ * Схема към условието на Задача 4: постановката без отговора.
+ *
+ * Индуцираният заряд нарочно липсва, защото точно той е търсеното. Тук стоят
+ * само външното поле, сферата и означенията, с които е написан потенциалът.
+ */
+export function SphereInFieldFigure() {
+  const cx = 360;
+  const cy = 140;
+  const R = 84;
+  const theta = (42 * Math.PI) / 180;
+
+  return (
+    <svg
+      viewBox="0 0 720 246"
+      className={STAGE_CLASS}
+      aria-label="Незаредена проводяща сфера, поставена в първоначално еднородно поле"
+    >
+      <rect width={720} height={246} fill={STAGE_BG} />
+      <text x={cx} y={22} textAnchor="middle" {...CAP_LABEL}>
+        СФЕРА В ЕДНОРОДНО ПОЛЕ
+      </text>
+
+      {[64, 102, 140, 178, 216].map((y) => (
+        <g key={y}>
+          <Arrow x1={30} y1={y} x2={150} y2={y} color={C.warn} width={2} />
+          <Arrow x1={570} y1={y} x2={690} y2={y} color={C.warn} width={2} />
+        </g>
+      ))}
+      <SvgTex x={30} y={38} tex={String.raw`\vec E_0`} color={C.warn} width={40} />
+
+      <circle cx={cx} cy={cy} r={R} fill={C.wire} opacity={0.1} stroke={C.wire} strokeWidth={2} />
+      <line x1={cx} y1={cy} x2={536} y2={cy} stroke={C.faint} strokeWidth={1.5} strokeDasharray="6 6" />
+      <SvgTex x={548} y={cy} tex="z" color={C.mut} width={13} />
+
+      <line
+        x1={cx}
+        y1={cy}
+        x2={svgNumber(cx + R * Math.cos(theta))}
+        y2={svgNumber(cy - R * Math.sin(theta))}
+        stroke={C.ok}
+        strokeWidth={2}
+      />
+      <circle
+        cx={svgNumber(cx + R * Math.cos(theta))}
+        cy={svgNumber(cy - R * Math.sin(theta))}
+        r={5}
+        fill={C.ok}
+      />
+      <AngleArc cx={cx} cy={cy} a1={0} a2={-theta} r={44} color={C.ok} texLabel={String.raw`\theta`} />
+
+      <line
+        x1={cx}
+        y1={cy}
+        x2={svgNumber(cx + R * Math.cos(3.578))}
+        y2={svgNumber(cy - R * Math.sin(3.578))}
+        stroke={C.wire}
+        strokeWidth={2}
+      />
+      <TexChip x={318} y={166} tex="R" color={C.wire} width={13} />
+      <circle cx={cx} cy={cy} r={3.5} fill={C.wire} />
+    </svg>
+  );
+}
 
 export function SphereInFieldLab() {
   const [degrees, setDegrees] = useState(35);

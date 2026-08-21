@@ -14,11 +14,13 @@ import {
 import {
   ChargedDiskLab,
   ChargedSphereLab,
+  DielectricSlabFigure,
   DielectricSlabLab,
   DiskRingFigure,
   EarnshawSaddleFigure,
   FigurePanel,
   SphereDensityFigure,
+  SphereInFieldFigure,
   SphereInFieldLab,
 } from "@/components/problem-sets/ElectrostaticsExamLabs";
 
@@ -510,23 +512,6 @@ export default function ElectrostaticsExamPage() {
             note="Въпросът ползва уравнението на Лаплас $\nabla^2V=0$ и свойството на средната стойност. Урок по темата предстои; дотогава всичко нужно се въвежда в самото решение."
           />
 
-          <div className="mt-6">
-            <FigurePanel
-              eyebrow="Схема към въпроса"
-              title="Средна стойност и седло"
-              caption={
-                <>
-                  Вляво: стойността в центъра на малка сфера е точно средната стойност по
-                  повърхността ѝ. Вдясно: затова около всяка точка в празно пространство има
-                  посока, по която потенциалът расте, и посока, по която намалява. Ямата, която би
-                  задържала заряд, никъде не се получава.
-                </>
-              }
-            >
-              <EarnshawSaddleFigure />
-            </FigurePanel>
-          </div>
-
           <Solution
             hint={<RichText text="Какво казва законът на Гаус за $\nabla^2V$ там, където $\rho=0$?" />}
           >
@@ -545,6 +530,20 @@ export default function ElectrostaticsExamPage() {
                 да бъде строго по-голям или строго по-малък от всички съседни стойности, освен ако
                 не е постоянен.
               </p>
+              <FigurePanel
+                eyebrow="Схема към решението"
+                title="Средна стойност и седло"
+                caption={
+                  <>
+                    Вляво: стойността в центъра на малката сфера е точно средната по повърхността
+                    ѝ. Вдясно: затова около всяка точка в празно пространство има посока, по която
+                    потенциалът расте, и посока, по която намалява. Ямата, която би задържала
+                    заряд, никъде не се получава.
+                  </>
+                }
+              >
+                <EarnshawSaddleFigure />
+              </FigurePanel>
             </SolutionPart>
 
             <SolutionPart label="c" title="Изводът за равновесието">
@@ -644,10 +643,6 @@ export default function ElectrostaticsExamPage() {
           />
         </div>
 
-        <div className="mt-6">
-          <ChargedSphereLab />
-        </div>
-
         <Solution
           hint={
             <RichText text="Работете със сферични слоеве с обем $dV=4\pi r^2\,dr$. За потенциала в центъра интегрирайте полето от $0$ до $\infty$ и разделете интеграла при $r=R$." />
@@ -687,6 +682,9 @@ export default function ElectrostaticsExamPage() {
               компонента е непрекъсната. Това е очаквано: при <RichText text="$r=R$" /> няма
               отделен безкрайно тънък слой с повърхностен заряд.
             </p>
+            <div className="mt-4">
+              <ChargedSphereLab />
+            </div>
           </SolutionPart>
 
           <SolutionPart label="c" title="Потенциал в центъра">
@@ -819,10 +817,6 @@ export default function ElectrostaticsExamPage() {
           />
         </div>
 
-        <div className="mt-6">
-          <ChargedDiskLab />
-        </div>
-
         <Solution
           hint={
             <RichText text="Тръгнете от потенциала, не от полето: така избягвате разлагането по компоненти. Полето се получава накрая чрез $E_z=-dV/dz$." />
@@ -898,6 +892,9 @@ export default function ElectrostaticsExamPage() {
               Отдалече размерът на диска не може да се различи и той се държи като точков заряд{" "}
               <RichText text={String.raw`$Q=\pi R^2\sigma$`} />.
             </p>
+            <div className="mt-4">
+              <ChargedDiskLab />
+            </div>
           </SolutionPart>
 
           <SolutionPart label="d" title="Къде полето намалява наполовина">
@@ -958,6 +955,21 @@ export default function ElectrostaticsExamPage() {
         />
 
         <div className="mt-6">
+          <FigurePanel
+            title="Геометрията на частично запълнения кондензатор"
+            caption={
+              <>
+                Границата между диелектрика и вакуума е успоредна на полето, а не напречна на
+                него. Двете области виждат едни и същи плочи и една и съща потенциална разлика.
+                Силата не е нарисувана: тя е търсеното в подточки в) и г).
+              </>
+            }
+          >
+            <DielectricSlabFigure />
+          </FigurePanel>
+        </div>
+
+        <div className="mt-6">
           <PredictionQuestion
             prompt="При постоянно напрежение пластината се втегля навътре или се изтласква навън?"
             options={[
@@ -984,10 +996,6 @@ export default function ElectrostaticsExamPage() {
             ]}
             explanation={String.raw`Общото правило: при постоянно напрежение системата се стреми да увеличи капацитета си, защото $U=\tfrac12C(\Delta V)^2$ и батерията плаща двойно.`}
           />
-        </div>
-
-        <div className="mt-6">
-          <DielectricSlabLab />
         </div>
 
         <Solution
@@ -1072,6 +1080,9 @@ export default function ElectrostaticsExamPage() {
               напрежение тя не зависи от дълбочината, при постоянен заряд зависи. Една и съща
               геометрия, два различни отговора.
             </ResultBox>
+            <div className="mt-4">
+              <DielectricSlabLab />
+            </div>
           </SolutionPart>
         </Solution>
       </Section>
@@ -1121,6 +1132,22 @@ export default function ElectrostaticsExamPage() {
         />
 
         <div className="mt-6">
+          <FigurePanel
+            title="Постановката на задачата"
+            caption={
+              <>
+                Далеч от сферата полето е еднородно и сочи по оста{" "}
+                <RichText text="$z$" />. Ъгълът <RichText text={String.raw`$\theta$`} /> се брои
+                от тази ос. Индуцираният заряд нарочно липсва: точно той е търсеното в подточки
+                в) и г).
+              </>
+            }
+          >
+            <SphereInFieldFigure />
+          </FigurePanel>
+        </div>
+
+        <div className="mt-6">
           <PredictionQuestion
             prompt="Колко пъти полето върху повърхността надвишава външното поле в най-силната точка?"
             options={[
@@ -1147,10 +1174,6 @@ export default function ElectrostaticsExamPage() {
             ]}
             explanation={String.raw`Числото $3$ е характерно за сферата. За силно издължен проводник усилването се определя от отношението дължина към радиус на кривина и може да е с порядъци по-голямо.`}
           />
-        </div>
-
-        <div className="mt-6">
-          <SphereInFieldLab />
         </div>
 
         <Solution
@@ -1217,6 +1240,9 @@ export default function ElectrostaticsExamPage() {
               Северното полукълбо е положително, южното отрицателно, а на екватора{" "}
               <RichText text={String.raw`$\sigma=0$`} />.
             </p>
+            <div className="mt-4">
+              <SphereInFieldLab />
+            </div>
           </SolutionPart>
 
           <SolutionPart label="d" title="Пълен заряд и проверка на момента">
