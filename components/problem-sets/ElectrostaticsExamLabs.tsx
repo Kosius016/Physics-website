@@ -990,11 +990,25 @@ const SphereGeometry = memo(function SphereGeometry({
           <stop offset="0%" stopColor={sphereInner} stopOpacity={sphereInnerOpacity} />
           <stop offset="100%" stopColor={sphereOuter} stopOpacity={sphereOuterOpacity} />
         </radialGradient>
+        {/* Картата се спира до ивицата с линиите, за да остане тъмно поле за
+            легендата и етикетите горе и долу. */}
+        <clipPath id={`${gradientId}-clip`}>
+          <rect
+            x={bounds.x0}
+            y={bounds.y0}
+            width={bounds.x1 - bounds.x0}
+            height={bounds.y1 - bounds.y0}
+          />
+        </clipPath>
       </defs>
 
-      {bands.map((band) => (
-        <path key={band.key} d={band.d} fill={band.color} opacity={potentialAlpha} />
-      ))}
+      {bands.length ? (
+        <g clipPath={`url(#${gradientId}-clip)`}>
+          {bands.map((band) => (
+            <path key={band.key} d={band.d} fill={band.color} opacity={potentialAlpha} />
+          ))}
+        </g>
+      ) : null}
 
       {showEquipotential ? (
         <g>
@@ -1118,14 +1132,16 @@ export function SphereInFieldFigure() {
    * на $-90°$ я изправя вертикално, както е в условието. Затова границите тук
    * са в незавъртяната рамка: `x` ограничава по височина, `y` по ширина.
    *
-   * Горната и долната ивица остават празни нарочно: там оста $z$ продължава
-   * извън полето на линиите, а легендата и етикетите имат къде да седнат.
+   * Цветната карта е изрязана до същите граници, така че горната и долната
+   * ивица остават тъмни и легендата се чете без подложка под нея.
    */
   const bounds = useMemo(() => ({ x0: 166, x1: 554, y0: -90, y1: 590 }), []);
   const offsets = useMemo(() => [0.6, 1, 1.4, 1.75, 2.15, 2.6, 3.1, 3.6], []);
   const levels = useMemo(() => [0.4, 0.8, 1.2, 1.6, 2], []);
   const reach = useMemo(() => ({ x: 300, y: 420 }), []);
   const theta = (40 * Math.PI) / 180;
+  const top = cy - (bounds.x1 - cx);
+  const bottom = cy + (cx - bounds.x0);
 
   return (
     <svg
@@ -1150,40 +1166,42 @@ export function SphereInFieldFigure() {
           showPotential
           potentialAlpha={0.075}
           potentialReach={reach}
-          fieldColor={C.wire}
-          equipotentialColor={C.warn}
-          equipotentialOpacity={0.85}
+          fieldColor={C.warn}
+          equipotentialColor={C.wire}
+          equipotentialOpacity={0.8}
           fieldWidth={1.8}
-          sphereStroke={C.wire}
+          sphereStroke={C.mut}
           sphereInner={C.wire}
           sphereOuter={C.wire}
-          sphereInnerOpacity={0.22}
-          sphereOuterOpacity={0.07}
+          sphereInnerOpacity={0.34}
+          sphereOuterOpacity={0.14}
         />
       </g>
 
-      {/* Оста продължава само там, където няма осева силова линия под нея. */}
-      <line x1={cx} y1={54} x2={cx} y2={30} stroke={C.mut} strokeWidth={1.4} strokeDasharray="6 5" />
-      <line x1={cx} y1={H - 22} x2={cx} y2={446} stroke={C.mut} strokeWidth={1.4} strokeDasharray="6 5" />
+      {/* Оста минава и през проводника; прекъсва се само там, където под нея
+          вече върви осевата силова линия. */}
+      <g stroke={C.mut} strokeWidth={1.4} strokeDasharray="6 5">
+        <line x1={cx} y1={svgNumber(top - 2)} x2={cx} y2={30} />
+        <line x1={cx} y1={svgNumber(cy - R)} x2={cx} y2={svgNumber(cy + R)} />
+        <line x1={cx} y1={H - 22} x2={cx} y2={svgNumber(bottom + 2)} />
+      </g>
       <polygon points={`${cx},22 ${cx - 5},34 ${cx + 5},34`} fill={C.mut} />
 
       <g>
-        <rect x={14} y={16} width={200} height={28} rx={6} fill={STAGE_BG} opacity={0.86} stroke={C.faint} />
-        <line x1={24} y1={30} x2={46} y2={30} stroke={C.wire} strokeWidth={2} />
-        <SvgTex x={52} y={30} tex={String.raw`\vec E`} color={C.wire} width={24} fontSize={12.5} />
-        <line x1={88} y1={30} x2={110} y2={30} stroke={C.warn} strokeWidth={1.8} strokeDasharray="5 4" />
-        <SvgTex x={116} y={30} tex={String.raw`V=\mathrm{const}`} color={C.warn} width={84} fontSize={12.5} />
+        <line x1={20} y1={30} x2={44} y2={30} stroke={C.warn} strokeWidth={2.2} />
+        <SvgTex x={50} y={30} tex={String.raw`\vec E`} color={C.warn} width={24} fontSize={12.5} />
+        <line x1={86} y1={30} x2={110} y2={30} stroke={C.wire} strokeWidth={1.8} strokeDasharray="5 4" />
+        <SvgTex x={116} y={30} tex={String.raw`V=\mathrm{const}`} color={C.wire} width={84} fontSize={12.5} />
       </g>
-      <TexChip x={374} y={30} tex="z" color={C.mut} width={12} fontSize={12.5} padY={4} />
-      <TexChip
-        x={698}
+      <SvgTex x={374} y={30} tex="z" color={C.mut} width={13} fontSize={12.5} />
+      <SvgTex
+        x={700}
         y={30}
         tex={String.raw`\vec E_0=E_0\hat z`}
         color={C.mut}
-        width={92}
+        width={94}
         anchor="end"
         fontSize={12.5}
-        padY={4}
       />
 
       <line
@@ -1398,13 +1416,13 @@ export function SphereFieldExplorer() {
         <div className="flex flex-wrap gap-2">
           <LayerToggle
             label="Силови линии"
-            color={C.wire}
+            color={C.warn}
             pressed={showField}
             onToggle={() => setShowField((value) => !value)}
           />
           <LayerToggle
             label="Еквипотенциали"
-            color={C.warn}
+            color={C.wire}
             dashed
             pressed={showEquipotential}
             onToggle={() => setShowEquipotential((value) => !value)}
@@ -1439,12 +1457,13 @@ export function SphereFieldExplorer() {
             showField={showField}
             showEquipotential={showEquipotential}
             showCharge={showCharge}
-            fieldColor={C.wire}
-            equipotentialColor={C.warn}
+            fieldColor={C.warn}
+            equipotentialColor={C.wire}
+            sphereStroke={C.mut}
             equipotentialOpacity={0.6}
           />
 
-          <SvgTex x={20} y={24} tex={String.raw`\vec E_0`} color={C.wire} width={40} />
+          <SvgTex x={20} y={24} tex={String.raw`\vec E_0`} color={C.warn} width={40} />
           <SvgTex x={700} y={24} tex="z" color={C.mut} width={13} anchor="end" />
 
           {inside ? null : (
