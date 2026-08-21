@@ -1146,10 +1146,10 @@ export function SphereInFieldFigure() {
   return (
     <svg
       viewBox={`0 0 ${W} ${H}`}
-      className={STAGE_CLASS}
+      className="block h-auto w-full rounded-[10px] border-[1.5px] border-rule bg-surface"
       aria-label="Потенциалът като цветна карта, силовите линии и еквипотенциалите около незаредена проводяща сфера в еднородно поле"
     >
-      <rect width={W} height={H} fill={STAGE_BG} />
+      <rect width={W} height={H} fill="var(--color-surface)" />
 
       <g transform={`rotate(-90 ${cx} ${cy})`}>
         <SphereGeometry
@@ -1166,8 +1166,8 @@ export function SphereInFieldFigure() {
           showPotential
           potentialAlpha={0.075}
           potentialReach={reach}
-          fieldColor={C.warn}
-          equipotentialColor={C.wire}
+          fieldColor="var(--color-warn)"
+          equipotentialColor="var(--color-plus)"
           equipotentialOpacity={0.8}
           fieldWidth={1.8}
           sphereStroke={C.mut}
@@ -1180,25 +1180,47 @@ export function SphereInFieldFigure() {
 
       {/* Оста минава и през проводника; прекъсва се само там, където под нея
           вече върви осевата силова линия. */}
-      <g stroke={C.mut} strokeWidth={1.4} strokeDasharray="6 5">
+      <g stroke="var(--color-muted)" strokeWidth={1.4} strokeDasharray="6 5">
         <line x1={cx} y1={svgNumber(top - 2)} x2={cx} y2={30} />
         <line x1={cx} y1={svgNumber(cy - R)} x2={cx} y2={svgNumber(cy + R)} />
         <line x1={cx} y1={H - 22} x2={cx} y2={svgNumber(bottom + 2)} />
       </g>
-      <polygon points={`${cx},22 ${cx - 5},34 ${cx + 5},34`} fill={C.mut} />
+      <polygon points={`${cx},22 ${cx - 5},34 ${cx + 5},34`} fill="var(--color-muted)" />
 
       <g>
-        <line x1={20} y1={30} x2={44} y2={30} stroke={C.warn} strokeWidth={2.2} />
-        <SvgTex x={50} y={30} tex={String.raw`\vec E`} color={C.warn} width={24} fontSize={12.5} />
-        <line x1={86} y1={30} x2={110} y2={30} stroke={C.wire} strokeWidth={1.8} strokeDasharray="5 4" />
-        <SvgTex x={116} y={30} tex={String.raw`V=\mathrm{const}`} color={C.wire} width={84} fontSize={12.5} />
+        <line x1={20} y1={30} x2={44} y2={30} stroke="var(--color-warn)" strokeWidth={2.2} />
+        <SvgTex
+          x={50}
+          y={30}
+          tex={String.raw`\vec E`}
+          color="var(--color-warn)"
+          width={24}
+          fontSize={12.5}
+        />
+        <line
+          x1={86}
+          y1={30}
+          x2={110}
+          y2={30}
+          stroke="var(--color-plus)"
+          strokeWidth={1.8}
+          strokeDasharray="5 4"
+        />
+        <SvgTex
+          x={116}
+          y={30}
+          tex={String.raw`V=\mathrm{const}`}
+          color="var(--color-plus)"
+          width={84}
+          fontSize={12.5}
+        />
       </g>
-      <SvgTex x={374} y={30} tex="z" color={C.mut} width={13} fontSize={12.5} />
+      <SvgTex x={374} y={30} tex="z" color="var(--color-muted)" width={13} fontSize={12.5} />
       <SvgTex
         x={700}
         y={30}
         tex={String.raw`\vec E_0=E_0\hat z`}
-        color={C.mut}
+        color="var(--color-muted)"
         width={94}
         anchor="end"
         fontSize={12.5}
