@@ -42,11 +42,14 @@ export function FigurePanel({
   eyebrow = "Схема към условието",
   title,
   caption,
+  extra,
   children,
 }: {
   eyebrow?: string;
   title: string;
   caption: ReactNode;
+  /** По избор: втори абзац за произхода на кривите, отделен от четенето на сцената. */
+  extra?: ReactNode;
   children: ReactNode;
 }) {
   return (
@@ -56,7 +59,14 @@ export function FigurePanel({
         <h3 className="mt-1 font-serif text-[22px] font-bold">{title}</h3>
       </div>
       {children}
-      <figcaption className="mt-3 text-[13.5px] leading-relaxed text-muted">{caption}</figcaption>
+      <figcaption className="mt-3 text-[13.5px] leading-relaxed text-muted">
+        {caption}
+        {extra ? (
+          <span className="mt-2 block border-t border-rule pt-2 text-[13px] text-ink/70">
+            {extra}
+          </span>
+        ) : null}
+      </figcaption>
     </figure>
   );
 }
@@ -714,6 +724,60 @@ function streamlineBranches(
   });
 }
 
+/** Обръща $r-R^3/r^2=A$ (в единици $R=1$) за $r\ge 1$; лявата страна расте монотонно. */
+function equipotentialRadius(level: number) {
+  if (level < 0) return null;
+  let lo = 1;
+  let hi = 2;
+  while (hi - 1 / (hi * hi) < level) hi *= 2;
+  for (let index = 0; index < 40; index += 1) {
+    const mid = (lo + hi) * 0.5;
+    if (mid - 1 / (mid * mid) < level) lo = mid;
+    else hi = mid;
+  }
+  return (lo + hi) * 0.5;
+}
+
+/**
+ * Еквипотенциала $V=\mp L E_0R$, взета отдясно (`side = 1`) или отляво.
+ *
+ * От $V=-E_0(r-R^3/r^2)\cos\theta$ следва $r-R^3/r^2=L/\cos\theta$. Далеч от
+ * сферата кривата клони към равнина, перпендикулярна на полето, а близо до
+ * полюса се отдалечава от повърхността. Точно това се вижда и на контурната
+ * карта на потенциала.
+ */
+function equipotentialBranches(
+  level: number,
+  side: 1 | -1,
+  cx: number,
+  cy: number,
+  scale: number,
+  bounds: { x0: number; x1: number; y0: number; y1: number },
+) {
+  const branches: StreamPoint[][] = [];
+  let run: StreamPoint[] = [];
+  const steps = 240;
+  const span = Math.PI - 0.06;
+
+  for (let index = 0; index <= steps; index += 1) {
+    const theta = -span / 2 + (index / steps) * span;
+    const radius = equipotentialRadius(level / Math.cos(theta));
+    const x = radius === null ? 0 : cx + side * radius * Math.cos(theta) * scale;
+    const y = radius === null ? 0 : cy - radius * Math.sin(theta) * scale;
+    const inside =
+      radius !== null && x >= bounds.x0 && x <= bounds.x1 && y >= bounds.y0 && y <= bounds.y1;
+
+    if (!inside) {
+      if (run.length > 1) branches.push(run);
+      run = [];
+      continue;
+    }
+    run.push({ x: svgNumber(x), y: svgNumber(y) });
+  }
+  if (run.length > 1) branches.push(run);
+  return branches;
+}
+
 /**
  * Връх на стрелка върху силова линия.
  *
@@ -771,6 +835,15 @@ export function SphereInFieldFigure() {
     ),
   );
 
+  const equipotentials = [0.85, 1.7, 2.55].flatMap((level) =>
+    ([1, -1] as const).flatMap((side) =>
+      equipotentialBranches(level, side, cx, cy, R, bounds).map((points, index) => ({
+        key: `v-${level}-${side}-${index}`,
+        points,
+      })),
+    ),
+  );
+
   return (
     <svg
       viewBox="0 0 520 300"
@@ -778,6 +851,20 @@ export function SphereInFieldFigure() {
       aria-label="Силовите линии около незаредена проводяща сфера, поставена в първоначално еднородно поле"
     >
       <rect width={520} height={300} fill={STAGE_BG} />
+
+      {equipotentials.map((curve) => (
+        <polyline
+          key={curve.key}
+          points={curve.points.map((point) => `${point.x},${point.y}`).join(" ")}
+          fill="none"
+          stroke={C.minus}
+          strokeWidth={1.4}
+          strokeDasharray="5 4"
+          opacity={0.45}
+        />
+      ))}
+      <line x1={cx} y1={bounds.y0} x2={cx} y2={svgNumber(cy - R)} stroke={C.minus} strokeWidth={1.4} strokeDasharray="5 4" opacity={0.45} />
+      <line x1={cx} y1={svgNumber(cy + R)} x2={cx} y2={270} stroke={C.minus} strokeWidth={1.4} strokeDasharray="5 4" opacity={0.45} />
 
       <circle cx={cx} cy={cy} r={R} fill={C.wire} opacity={0.1} stroke={C.wire} strokeWidth={2} />
 
@@ -799,6 +886,7 @@ export function SphereInFieldFigure() {
       <Arrow x1={svgNumber(cx + R)} y1={cy} x2={bounds.x1} y2={cy} color={C.warn} width={1.8} />
 
       <SvgTex x={18} y={20} tex={String.raw`\vec E_0`} color={C.warn} width={40} />
+      <SvgTex x={496} y={20} tex={String.raw`V=\mathrm{const}`} color={C.minus} width={100} anchor="end" />
       <SvgTex x={470} y={132} tex="z" color={C.mut} width={13} anchor="middle" />
 
       <line x1={cx} y1={cy} x2={svgNumber(cx + R)} y2={cy} stroke={C.faint} strokeWidth={1.5} strokeDasharray="5 4" />
