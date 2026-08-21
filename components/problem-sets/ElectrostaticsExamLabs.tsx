@@ -1063,11 +1063,13 @@ export function SphereInFieldFigure() {
    * `SphereGeometry` рисува с оста $z$ водоравно. Завъртането на цялата група
    * на $-90°$ я изправя вертикално, както е в условието. Затова границите тук
    * са в незавъртяната рамка: `x` ограничава по височина, `y` по ширина.
+   *
+   * Горната и долната ивица остават празни нарочно: там оста $z$ продължава
+   * извън полето на линиите и носи етикета си.
    */
-  const bounds = useMemo(() => ({ x0: 134, x1: 586, y0: -90, y1: 590 }), []);
+  const bounds = useMemo(() => ({ x0: 166, x1: 554, y0: -90, y1: 590 }), []);
   const offsets = useMemo(() => [0.6, 1, 1.4, 1.75, 2.15, 2.6, 3.1, 3.6], []);
-  const levels = useMemo(() => [0.35, 0.7, 1.05, 1.45, 1.9, 2.4], []);
-  const labelled = [0.7, 1.45, 2.4];
+  const levels = useMemo(() => [0.35, 0.7, 1.05, 1.45, 1.9], []);
   const theta = (40 * Math.PI) / 180;
 
   const grid = R / 2;
@@ -1091,13 +1093,9 @@ export function SphereInFieldFigure() {
         ))}
       </g>
 
-      {[26, W - 26].map((x) => (
-        <g key={x} opacity={0.7}>
-          {[78, 164, 250, 336, 422].map((y) => (
-            <Arrow key={y} x1={x} y1={y + 26} x2={x} y2={y - 26} color={C.mut} width={1.6} />
-          ))}
-        </g>
-      ))}
+      <line x1={cx} y1={H - 22} x2={cx} y2={30} stroke={C.mut} strokeWidth={1.4} strokeDasharray="6 5" />
+      <polygon points={`${cx},22 ${cx - 5},34 ${cx + 5},34`} fill={C.mut} />
+      <SvgTex x={cx + 14} y={30} tex="z" color={C.mut} width={14} fontSize={13} />
 
       <g transform={`rotate(-90 ${cx} ${cy})`}>
         <SphereGeometry
@@ -1123,28 +1121,11 @@ export function SphereInFieldFigure() {
         />
       </g>
 
-      {labelled.flatMap((level) => {
-        const distance = (equipotentialRadius(level) ?? 1) * R;
-        const value = level.toFixed(2).replace(/0$/, "").replace(".", "{,}");
-        return ([1, -1] as const).map((side) => (
-          <TexChip
-            key={`${level}-${side}`}
-            x={cx + 14}
-            y={svgNumber(cy - side * distance)}
-            tex={`${side > 0 ? "-" : "+"}${value}`}
-            color={C.plus}
-            width={30}
-            fontSize={11}
-            padY={3}
-          />
-        ));
-      })}
-
-      <SvgTex x={50} y={24} tex={String.raw`\vec E_0=E_0\hat z`} color={C.mut} width={98} fontSize={12.5} />
+      <SvgTex x={20} y={28} tex={String.raw`\vec E_0=E_0\hat z`} color={C.mut} width={98} fontSize={12.5} />
 
       <line
-        x1={cx}
-        y1={cy}
+        x1={svgNumber(cx + 0.5 * R * Math.sin(theta))}
+        y1={svgNumber(cy - 0.5 * R * Math.cos(theta))}
         x2={svgNumber(cx + R * Math.sin(theta))}
         y2={svgNumber(cy - R * Math.cos(theta))}
         stroke={C.ok}
@@ -1161,10 +1142,10 @@ export function SphereInFieldFigure() {
         texLabel={String.raw`\theta`}
       />
 
-      <SvgTex x={cx} y={cy - 10} tex="E=0" color={C.wire} width={54} anchor="middle" />
+      <SvgTex x={cx} y={cy - 12} tex="E=0" color={C.wire} width={54} anchor="middle" />
       <SvgTex
         x={cx}
-        y={cy + 14}
+        y={cy + 20}
         tex={String.raw`V=\mathrm{const}`}
         color={C.wire}
         width={92}
@@ -1173,8 +1154,8 @@ export function SphereInFieldFigure() {
       />
 
       <line
-        x1={cx}
-        y1={cy}
+        x1={svgNumber(cx + 0.5 * R * 0.707)}
+        y1={svgNumber(cy + 0.5 * R * 0.707)}
         x2={svgNumber(cx + R * 0.707)}
         y2={svgNumber(cy + R * 0.707)}
         stroke={C.mut}
@@ -1182,8 +1163,8 @@ export function SphereInFieldFigure() {
         strokeDasharray="3 3"
       />
       <SvgTex
-        x={svgNumber(cx + R * 0.67)}
-        y={svgNumber(cy + R * 0.9)}
+        x={svgNumber(cx + 40)}
+        y={svgNumber(cy + 62)}
         tex="R"
         color={C.wire}
         width={16}
@@ -1193,7 +1174,6 @@ export function SphereInFieldFigure() {
     </svg>
   );
 }
-
 function LayerToggle({
   label,
   color,
