@@ -1,6 +1,15 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import {
+  memo,
+  useCallback,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+  type ReactNode,
+} from "react";
 import RichText from "@/components/RichText";
 import SvgTex from "@/components/interactives/SvgTex";
 import {
@@ -12,6 +21,7 @@ import {
   STAGE_BG,
   STAGE_CLASS,
   TexChip,
+  svgPoint,
 } from "@/components/interactives/svg";
 import {
   LabShell,
@@ -818,75 +828,230 @@ function StreamHead({ points, at, color }: { points: StreamPoint[]; at: number; 
  * са външното поле, обтичането около сферата и означенията, с които е написан
  * потенциалът.
  */
+/** Потенциал и поле извън сферата, в единици $R=1$, $E_0=1$. */
+function spherePotential(r: number, theta: number) {
+  if (r <= 1) return 0;
+  return -(r - 1 / (r * r)) * Math.cos(theta);
+}
+
+function sphereField(r: number, theta: number) {
+  const cube = 1 / (r * r * r);
+  const radial = (1 + 2 * cube) * Math.cos(theta);
+  const tangential = -(1 - cube) * Math.sin(theta);
+  return { radial, tangential, magnitude: Math.hypot(radial, tangential) };
+}
+
+interface SphereGeometryProps {
+  cx: number;
+  cy: number;
+  radius: number;
+  bounds: { x0: number; x1: number; y0: number; y1: number };
+  offsets: number[];
+  levels: number[];
+  gradientId: string;
+  showField: boolean;
+  showEquipotential: boolean;
+  showCharge: boolean;
+}
+
+/**
+ * Общото рисуване на сцената: еквипотенциали, силови линии, сфера и
+ * повърхностен заряд. Изнесено, за да служи и на схемата към условието, и на
+ * интерактива, и `memo`-нато, защото при движение на пробата се променя само
+ * маркерът, а тези десетки полилинии остават същите.
+ */
+const SphereGeometry = memo(function SphereGeometry({
+  cx,
+  cy,
+  radius,
+  bounds,
+  offsets,
+  levels,
+  gradientId,
+  showField,
+  showEquipotential,
+  showCharge,
+}: SphereGeometryProps) {
+  const lines = useMemo(
+    () =>
+      offsets.flatMap((b) =>
+        ([1, -1] as const).flatMap((mirror) =>
+          streamlineBranches(b, mirror, cx, cy, radius, bounds).map((points, index) => ({
+            key: `e-${b}-${mirror}-${index}`,
+            points,
+            passing: points[0].x > cx && points[points.length - 1].x < cx,
+          })),
+        ),
+      ),
+    [offsets, cx, cy, radius, bounds],
+  );
+
+  const equipotentials = useMemo(
+    () =>
+      levels.flatMap((level) =>
+        ([1, -1] as const).flatMap((side) =>
+          equipotentialBranches(level, side, cx, cy, radius, bounds).map((points, index) => ({
+            key: `v-${level}-${side}-${index}`,
+            points,
+          })),
+        ),
+      ),
+    [levels, cx, cy, radius, bounds],
+  );
+
+  const charges = useMemo(() => {
+    const ticks = [];
+    for (let degrees = 4; degrees < 360; degrees += 8) {
+      const angle = (degrees * Math.PI) / 180;
+      const cosine = Math.cos(angle);
+      const length = radius * (0.3 * Math.abs(cosine) + 0.012);
+      ticks.push({
+        key: degrees,
+        x1: svgNumber(cx + radius * Math.cos(angle)),
+        y1: svgNumber(cy - radius * Math.sin(angle)),
+        x2: svgNumber(cx + (radius + length) * Math.cos(angle)),
+        y2: svgNumber(cy - (radius + length) * Math.sin(angle)),
+        color: cosine > 0 ? C.plus : C.minus,
+      });
+    }
+    return ticks;
+  }, [cx, cy, radius]);
+
+  return (
+    <g>
+      <defs>
+        <radialGradient id={gradientId} cx="38%" cy="32%" r="78%">
+          <stop offset="0%" stopColor={C.wire} stopOpacity={0.2} />
+          <stop offset="100%" stopColor={C.wire} stopOpacity={0.06} />
+        </radialGradient>
+      </defs>
+
+      {showEquipotential ? (
+        <g>
+          {equipotentials.map((curve) => (
+            <polyline
+              key={curve.key}
+              points={curve.points.map((point) => `${point.x},${point.y}`).join(" ")}
+              fill="none"
+              stroke={C.mut}
+              strokeWidth={1.4}
+              strokeDasharray="6 5"
+              opacity={0.5}
+            />
+          ))}
+          <line
+            x1={cx}
+            y1={bounds.y0}
+            x2={cx}
+            y2={svgNumber(cy - radius)}
+            stroke={C.mut}
+            strokeWidth={1.4}
+            strokeDasharray="6 5"
+            opacity={0.5}
+          />
+          <line
+            x1={cx}
+            y1={svgNumber(cy + radius)}
+            x2={cx}
+            y2={bounds.y1}
+            stroke={C.mut}
+            strokeWidth={1.4}
+            strokeDasharray="6 5"
+            opacity={0.5}
+          />
+        </g>
+      ) : null}
+
+      <circle
+        cx={cx}
+        cy={cy}
+        r={radius}
+        fill={`url(#${gradientId})`}
+        stroke={C.wire}
+        strokeWidth={2}
+      />
+
+      {showCharge ? (
+        <g>
+          {charges.map((tick) => (
+            <line
+              key={tick.key}
+              x1={tick.x1}
+              y1={tick.y1}
+              x2={tick.x2}
+              y2={tick.y2}
+              stroke={tick.color}
+              strokeWidth={3.2}
+              strokeLinecap="round"
+              opacity={0.8}
+            />
+          ))}
+        </g>
+      ) : null}
+
+      {showField ? (
+        <g>
+          {lines.map((line) => (
+            <g key={line.key}>
+              <polyline
+                points={line.points.map((point) => `${point.x},${point.y}`).join(" ")}
+                fill="none"
+                stroke={C.warn}
+                strokeWidth={1.8}
+                opacity={0.9}
+              />
+              <StreamHead points={line.points} at={0.3} color={C.warn} />
+              {line.passing ? <StreamHead points={line.points} at={0.74} color={C.warn} /> : null}
+            </g>
+          ))}
+          <Arrow x1={bounds.x0} y1={cy} x2={svgNumber(cx - radius)} y2={cy} color={C.warn} width={1.8} />
+          <Arrow x1={svgNumber(cx + radius)} y1={cy} x2={bounds.x1} y2={cy} color={C.warn} width={1.8} />
+        </g>
+      ) : null}
+    </g>
+  );
+});
+
+/**
+ * Схема към условието на Задача 4: постановката без отговора.
+ *
+ * Индуцираният заряд нарочно липсва, защото точно той е търсеното. Показани
+ * са външното поле, обтичането около сферата и означенията, с които е написан
+ * потенциалът.
+ */
 export function SphereInFieldFigure() {
+  const gradientId = useId();
   const cx = 260;
   const cy = 150;
   const R = 52;
-  const bounds = { x0: 24, x1: 494, y0: 12, y1: 288 };
+  const bounds = useMemo(() => ({ x0: 24, x1: 494, y0: 12, y1: 288 }), []);
+  const offsets = useMemo(() => [0.7, 1.15, 1.55, 1.8, 2.05], []);
+  const levels = useMemo(() => [0.85, 1.7, 2.55], []);
   const theta = (42 * Math.PI) / 180;
-
-  const lines = [0.7, 1.15, 1.55, 1.8, 2.05].flatMap((b) =>
-    ([1, -1] as const).flatMap((mirror) =>
-      streamlineBranches(b, mirror, cx, cy, R, bounds).map((points, index) => ({
-        key: `${b}-${mirror}-${index}`,
-        points,
-        passing: points[0].x > cx && points[points.length - 1].x < cx,
-      })),
-    ),
-  );
-
-  const equipotentials = [0.85, 1.7, 2.55].flatMap((level) =>
-    ([1, -1] as const).flatMap((side) =>
-      equipotentialBranches(level, side, cx, cy, R, bounds).map((points, index) => ({
-        key: `v-${level}-${side}-${index}`,
-        points,
-      })),
-    ),
-  );
 
   return (
     <svg
       viewBox="0 0 520 300"
       className={STAGE_CLASS}
-      aria-label="Силовите линии около незаредена проводяща сфера, поставена в първоначално еднородно поле"
+      aria-label="Силовите линии и еквипотенциалите около незаредена проводяща сфера в еднородно поле"
     >
       <rect width={520} height={300} fill={STAGE_BG} />
 
-      {equipotentials.map((curve) => (
-        <polyline
-          key={curve.key}
-          points={curve.points.map((point) => `${point.x},${point.y}`).join(" ")}
-          fill="none"
-          stroke={C.minus}
-          strokeWidth={1.4}
-          strokeDasharray="5 4"
-          opacity={0.45}
-        />
-      ))}
-      <line x1={cx} y1={bounds.y0} x2={cx} y2={svgNumber(cy - R)} stroke={C.minus} strokeWidth={1.4} strokeDasharray="5 4" opacity={0.45} />
-      <line x1={cx} y1={svgNumber(cy + R)} x2={cx} y2={270} stroke={C.minus} strokeWidth={1.4} strokeDasharray="5 4" opacity={0.45} />
-
-      <circle cx={cx} cy={cy} r={R} fill={C.wire} opacity={0.1} stroke={C.wire} strokeWidth={2} />
-
-      {lines.map((line) => (
-        <g key={line.key}>
-          <polyline
-            points={line.points.map((point) => `${point.x},${point.y}`).join(" ")}
-            fill="none"
-            stroke={C.warn}
-            strokeWidth={1.8}
-            opacity={0.9}
-          />
-          <StreamHead points={line.points} at={0.3} color={C.warn} />
-          {line.passing ? <StreamHead points={line.points} at={0.74} color={C.warn} /> : null}
-        </g>
-      ))}
-
-      <Arrow x1={bounds.x0} y1={cy} x2={svgNumber(cx - R)} y2={cy} color={C.warn} width={1.8} />
-      <Arrow x1={svgNumber(cx + R)} y1={cy} x2={bounds.x1} y2={cy} color={C.warn} width={1.8} />
+      <SphereGeometry
+        cx={cx}
+        cy={cy}
+        radius={R}
+        bounds={bounds}
+        offsets={offsets}
+        levels={levels}
+        gradientId={gradientId}
+        showField
+        showEquipotential
+        showCharge={false}
+      />
 
       <SvgTex x={18} y={20} tex={String.raw`\vec E_0`} color={C.warn} width={40} />
-      <SvgTex x={496} y={20} tex={String.raw`V=\mathrm{const}`} color={C.minus} width={100} anchor="end" />
+      <SvgTex x={496} y={20} tex={String.raw`V=\mathrm{const}`} color={C.mut} width={100} anchor="end" />
       <SvgTex x={470} y={132} tex="z" color={C.mut} width={13} anchor="middle" />
 
       <line x1={cx} y1={cy} x2={svgNumber(cx + R)} y2={cy} stroke={C.faint} strokeWidth={1.5} strokeDasharray="5 4" />
@@ -924,19 +1089,104 @@ export function SphereInFieldFigure() {
   );
 }
 
-export function SphereInFieldLab() {
-  const [degrees, setDegrees] = useState(35);
-  const theta = (degrees * Math.PI) / 180;
-  const cx = 360;
-  const cy = 140;
-  const R = 84;
+function LayerToggle({
+  label,
+  color,
+  dashed = false,
+  gradient = false,
+  pressed,
+  onToggle,
+}: {
+  label: string;
+  color: string;
+  dashed?: boolean;
+  gradient?: boolean;
+  pressed: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={pressed}
+      onClick={onToggle}
+      className={`inline-flex cursor-pointer items-center gap-2 rounded-lg border-[1.5px] px-3 py-1.5 text-[13px] font-semibold shadow-hard-sm transition-colors active:translate-x-px active:translate-y-px active:shadow-none ${
+        pressed ? "border-ink bg-hl text-ink" : "border-rule bg-surface text-muted"
+      }`}
+    >
+      <span
+        aria-hidden="true"
+        className="inline-block h-3 w-5 shrink-0 rounded-[2px]"
+        style={
+          gradient
+            ? { background: `linear-gradient(90deg, ${C.minus}, ${C.plus})`, opacity: pressed ? 1 : 0.45 }
+            : {
+                height: 0,
+                borderTopWidth: 2.5,
+                borderTopStyle: dashed ? "dashed" : "solid",
+                borderTopColor: color,
+                opacity: pressed ? 1 : 0.45,
+              }
+        }
+      />
+      {label}
+    </button>
+  );
+}
 
-  const ticks = Array.from({ length: 25 }, (_, index) => (index / 24) * 2 * Math.PI);
-  const cosine = Math.cos(theta);
-  const markerLength = 52 * Math.abs(cosine);
-  const outward = cosine >= 0 ? 1 : -1;
-  const mx = svgNumber(cx + R * cosine);
-  const my = svgNumber(cy - R * Math.sin(theta));
+/**
+ * Интерактивът към подточка в): пробата се води с мишката или с двата
+ * плъзгача, а стойностите излизат в readout лентата под сцената.
+ */
+export function SphereFieldExplorer() {
+  const gradientId = useId();
+  const svgRef = useRef<SVGSVGElement | null>(null);
+
+  const W = 720;
+  const H = 440;
+  const cx = 360;
+  const cy = 220;
+  const R = 84;
+  const bounds = useMemo(() => ({ x0: 16, x1: 704, y0: 16, y1: 424 }), []);
+  const offsets = useMemo(() => [0.35, 0.7, 1.05, 1.4, 1.75, 2.1], []);
+  const levels = useMemo(() => [0.6, 1.2, 1.8, 2.4, 3], []);
+
+  const [showField, setShowField] = useState(true);
+  const [showEquipotential, setShowEquipotential] = useState(true);
+  const [showCharge, setShowCharge] = useState(false);
+  const [probe, setProbe] = useState({ r: 1.6, degrees: 40, side: 1 });
+
+  const theta = (probe.degrees * Math.PI) / 180;
+  // Половин процент допуск: посочване точно по повърхността иначе попада на
+  // $r=0{,}9999$ заради закръгляне и се брои за вътрешна точка.
+  const inside = probe.r < 0.995;
+  const potential = spherePotential(probe.r, theta);
+  const field = sphereField(Math.max(probe.r, 1), theta);
+
+  const probeX = svgNumber(cx + probe.r * Math.cos(theta) * R);
+  const probeY = svgNumber(cy - probe.side * probe.r * Math.sin(theta) * R);
+  const alongZ = field.radial * Math.cos(theta) - field.tangential * Math.sin(theta);
+  const alongPerp = field.radial * Math.sin(theta) + field.tangential * Math.cos(theta);
+  const norm = Math.hypot(alongZ, alongPerp) || 1;
+  const tipX = svgNumber(probeX + (alongZ / norm) * 46);
+  const tipY = svgNumber(probeY - ((probe.side * alongPerp) / norm) * 46);
+
+  const handlePointer = useCallback(
+    (event: ReactPointerEvent<SVGSVGElement>) => {
+      const svg = svgRef.current;
+      if (!svg) return;
+      const [x, y] = svgPoint(svg, event.clientX, event.clientY, W, H);
+      const z = (x - cx) / R;
+      const perp = (cy - y) / R;
+      const r = Math.hypot(z, perp);
+      if (r < 0.02) return;
+      setProbe({
+        r: Math.min(3, r),
+        degrees: Math.round((Math.acos(Math.max(-1, Math.min(1, z / r))) * 180) / Math.PI),
+        side: perp >= 0 ? 1 : -1,
+      });
+    },
+    [cx, cy, R],
+  );
 
   const left = 84;
   const top = 44;
@@ -944,86 +1194,121 @@ export function SphereInFieldLab() {
   const height = 200;
   const sx = (value: number) => svgNumber(left + (value / Math.PI) * width);
   const sy = (value: number) => svgNumber(top + ((1.05 - value) / 2.1) * height);
-  const samples = Array.from({ length: 181 }, (_, index) => (index / 180) * Math.PI);
+  const samples = useMemo(
+    () => Array.from({ length: 181 }, (_, index) => (index / 180) * Math.PI),
+    [],
+  );
 
   return (
     <LabShell
-      title="Къде се събира индуцираният заряд"
-      description="Външното поле разделя зарядите на проводника. Плътността следва косинус, затова полюсите носят най-плътен заряд и най-силно поле, а по екватора повърхността остава незаредена."
+      title="Разходка около сферата"
+      description="Водете пробата с мишката или с плъзгачите. Силовите линии влизат перпендикулярно в проводника, еквипотенциалите ги пресичат под прав ъгъл, а слоят със заряда показва откъде идва всичко това."
       controls={
-        <RangeControl
-          label="Ъгъл от оста на външното поле"
-          value={degrees}
-          min={0}
-          max={180}
-          step={1}
-          valueLabel={<RichText text={`$\\theta=${degrees}^\\circ$`} />}
-          onChange={setDegrees}
-        />
+        <>
+          <RangeControl
+            label="Разстояние от центъра"
+            value={probe.r}
+            min={0}
+            max={3}
+            step={0.02}
+            valueLabel={<RichText text={`$r/R=${decimal(probe.r, 2)}$`} />}
+            onChange={(value) => setProbe((state) => ({ ...state, r: value }))}
+          />
+          <RangeControl
+            label="Ъгъл от оста на полето"
+            value={probe.degrees}
+            min={0}
+            max={180}
+            step={1}
+            valueLabel={<RichText text={`$\\theta=${probe.degrees}^\\circ$`} />}
+            onChange={(value) => setProbe((state) => ({ ...state, degrees: value }))}
+          />
+        </>
       }
       readouts={[
-        { label: "Ъгъл", tex: `\\theta=${degrees}^\\circ` },
-        { label: "Плътност", tex: `\\sigma/\\varepsilon_0E_0=${decimal(3 * cosine, 2)}`, tone: "text-plus" },
-        { label: "Поле", tex: `|E|/E_0=${decimal(3 * Math.abs(cosine), 2)}`, tone: "text-ok" },
-        { label: "Пълен индуциран заряд", tex: `Q_{\\text{инд}}=0`, tone: "text-minus" },
+        { label: "Разстояние", tex: `r/R=${decimal(probe.r, 2)}` },
+        { label: "Ъгъл", tex: `\\theta=${probe.degrees}^\\circ` },
+        {
+          label: "Потенциал",
+          tex: `V/E_0R=${decimal(potential, 3)}`,
+          tone: "text-minus",
+        },
+        {
+          label: "Поле",
+          tex: `|E|/E_0=${inside ? "0{,}000" : decimal(field.magnitude, 3)}`,
+          tone: "text-ok",
+        },
       ]}
       readoutColumns="sm:grid-cols-4"
     >
       <div className="space-y-3">
+        <div className="flex flex-wrap gap-2">
+          <LayerToggle
+            label="Силови линии"
+            color={C.warn}
+            pressed={showField}
+            onToggle={() => setShowField((value) => !value)}
+          />
+          <LayerToggle
+            label="Еквипотенциали"
+            color={C.mut}
+            dashed
+            pressed={showEquipotential}
+            onToggle={() => setShowEquipotential((value) => !value)}
+          />
+          <LayerToggle
+            label="Повърхностен заряд"
+            color={C.plus}
+            gradient
+            pressed={showCharge}
+            onToggle={() => setShowCharge((value) => !value)}
+          />
+        </div>
+
         <svg
-          viewBox="0 0 720 246"
-          className={STAGE_CLASS}
-          aria-label="Незаредена проводяща сфера във външно еднородно поле с индуциран повърхностен заряд"
+          ref={svgRef}
+          viewBox={`0 0 ${W} ${H}`}
+          className={`${STAGE_CLASS} cursor-crosshair touch-none`}
+          aria-label="Силови линии, еквипотенциали и индуциран заряд около проводяща сфера във външно поле"
+          onPointerMove={handlePointer}
+          onPointerDown={handlePointer}
         >
-          <rect width={720} height={246} fill={STAGE_BG} />
-          <text x={cx} y={22} textAnchor="middle" {...CAP_LABEL}>
-            ИНДУЦИРАН ПОВЪРХНОСТЕН ЗАРЯД
-          </text>
+          <rect width={W} height={H} fill={STAGE_BG} />
 
-          {[64, 102, 140, 178, 216].map((y) => (
-            <g key={y}>
-              <Arrow x1={30} y1={y} x2={150} y2={y} color={C.warn} width={2} />
-              <Arrow x1={570} y1={y} x2={690} y2={y} color={C.warn} width={2} />
-            </g>
-          ))}
-          <SvgTex x={30} y={38} tex={String.raw`\vec E_0`} color={C.warn} width={40} />
+          <SphereGeometry
+            cx={cx}
+            cy={cy}
+            radius={R}
+            bounds={bounds}
+            offsets={offsets}
+            levels={levels}
+            gradientId={gradientId}
+            showField={showField}
+            showEquipotential={showEquipotential}
+            showCharge={showCharge}
+          />
 
-          <circle cx={cx} cy={cy} r={R} fill={C.wire} opacity={0.1} stroke={C.wire} strokeWidth={2} />
-          {ticks.map((angle) => {
-            const value = Math.cos(angle);
-            const length = 46 * Math.abs(value);
-            if (length < 1.5) return null;
-            const sign = value > 0 ? 1 : -1;
-            return (
-              <line
-                key={angle}
-                x1={svgNumber(cx + R * Math.cos(angle))}
-                y1={svgNumber(cy - R * Math.sin(angle))}
-                x2={svgNumber(cx + (R + sign * length) * Math.cos(angle))}
-                y2={svgNumber(cy - (R + sign * length) * Math.sin(angle))}
-                stroke={value > 0 ? C.plus : C.minus}
-                strokeWidth={3}
-                opacity={0.5}
-                strokeLinecap="round"
+          <SvgTex x={20} y={24} tex={String.raw`\vec E_0`} color={C.warn} width={40} />
+          <SvgTex x={700} y={24} tex="z" color={C.mut} width={13} anchor="end" />
+
+          {inside ? null : (
+            <>
+              <line x1={probeX} y1={probeY} x2={tipX} y2={tipY} stroke={C.ok} strokeWidth={2.5} />
+              <polygon
+                points="0,0 -9,4 -9,-4"
+                fill={C.ok}
+                transform={`translate(${tipX},${tipY}) rotate(${svgNumber(
+                  (Math.atan2(tipY - probeY, tipX - probeX) * 180) / Math.PI,
+                )})`}
               />
-            );
-          })}
-
-          <line x1={cx} y1={cy} x2={cx + R} y2={cy} stroke={C.faint} strokeWidth={1.5} />
-          <line x1={cx} y1={cy} x2={mx} y2={my} stroke={C.ok} strokeWidth={2} strokeDasharray="5 4" />
-          {markerLength > 2.5 ? (
-            <Arrow
-              x1={mx}
-              y1={my}
-              x2={svgNumber(cx + (R + outward * markerLength) * cosine)}
-              y2={svgNumber(cy - (R + outward * markerLength) * Math.sin(theta))}
-              color={C.ok}
-              width={3.5}
-            />
-          ) : (
-            <circle cx={mx} cy={my} r={5} fill={C.ok} />
+            </>
           )}
-          <AngleArc cx={cx} cy={cy} a1={0} a2={-theta} r={42} color={C.ok} texLabel={String.raw`\theta`} />
+          <circle cx={probeX} cy={probeY} r={5.5} fill="none" stroke={C.ok} strokeWidth={2.5} />
+          <circle cx={probeX} cy={probeY} r={1.8} fill={C.ok} />
+
+          <text x={cx} y={H - 12} textAnchor="middle" {...CAP_LABEL}>
+            {inside ? "ВЪТРЕ ПОЛЕТО Е НУЛА" : "ПРОВОДЯЩА СФЕРА В ЕДНОРОДНО ПОЛЕ"}
+          </text>
         </svg>
 
         <svg

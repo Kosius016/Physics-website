@@ -20,8 +20,8 @@ import {
   EarnshawSaddleFigure,
   FigurePanel,
   SphereDensityFigure,
+  SphereFieldExplorer,
   SphereInFieldFigure,
-  SphereInFieldLab,
 } from "@/components/problem-sets/ElectrostaticsExamLabs";
 
 export const metadata = {
@@ -1283,7 +1283,7 @@ export default function ElectrostaticsExamPage() {
               <RichText text={String.raw`$\sigma=0$`} />.
             </p>
             <div className="mt-4">
-              <SphereInFieldLab />
+              <SphereFieldExplorer />
             </div>
           </SolutionPart>
 
