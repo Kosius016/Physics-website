@@ -1132,10 +1132,10 @@ export function SphereInFieldFigure() {
    * на $-90°$ я изправя вертикално, както е в условието. Затова границите тук
    * са в незавъртяната рамка: `x` ограничава по височина, `y` по ширина.
    *
-   * Цветната карта е изрязана до същите граници, така че горната и долната
-   * ивица остават тъмни и легендата се чете без подложка под нея.
+   * Границите стигат точно до четирите края на платното след завъртането.
+   * Така цветната карта и линиите запълват цялото място без тъмна рамка.
    */
-  const bounds = useMemo(() => ({ x0: 166, x1: 554, y0: -90, y1: 590 }), []);
+  const bounds = useMemo(() => ({ x0: 110, x1: 610, y0: -110, y1: 610 }), []);
   const offsets = useMemo(() => [0.6, 1, 1.4, 1.75, 2.15, 2.6, 3.1, 3.6], []);
   const levels = useMemo(() => [0.4, 0.8, 1.2, 1.6, 2], []);
   const reach = useMemo(() => ({ x: 300, y: 420 }), []);
@@ -1146,10 +1146,10 @@ export function SphereInFieldFigure() {
   return (
     <svg
       viewBox={`0 0 ${W} ${H}`}
-      className="block h-auto w-full rounded-[10px] border-[1.5px] border-rule bg-surface"
+      className={STAGE_CLASS}
       aria-label="Потенциалът като цветна карта, силовите линии и еквипотенциалите около незаредена проводяща сфера в еднородно поле"
     >
-      <rect width={W} height={H} fill="var(--color-surface)" />
+      <rect width={W} height={H} fill={STAGE_BG} />
 
       <g transform={`rotate(-90 ${cx} ${cy})`}>
         <SphereGeometry
@@ -1166,8 +1166,8 @@ export function SphereInFieldFigure() {
           showPotential
           potentialAlpha={0.075}
           potentialReach={reach}
-          fieldColor="var(--color-warn)"
-          equipotentialColor="var(--color-plus)"
+          fieldColor={C.warn}
+          equipotentialColor={C.wire}
           equipotentialOpacity={0.8}
           fieldWidth={1.8}
           sphereStroke={C.mut}
@@ -1180,47 +1180,25 @@ export function SphereInFieldFigure() {
 
       {/* Оста минава и през проводника; прекъсва се само там, където под нея
           вече върви осевата силова линия. */}
-      <g stroke="var(--color-muted)" strokeWidth={1.4} strokeDasharray="6 5">
+      <g stroke={C.mut} strokeWidth={1.4} strokeDasharray="6 5">
         <line x1={cx} y1={svgNumber(top - 2)} x2={cx} y2={30} />
         <line x1={cx} y1={svgNumber(cy - R)} x2={cx} y2={svgNumber(cy + R)} />
         <line x1={cx} y1={H - 22} x2={cx} y2={svgNumber(bottom + 2)} />
       </g>
-      <polygon points={`${cx},22 ${cx - 5},34 ${cx + 5},34`} fill="var(--color-muted)" />
+      <polygon points={`${cx},22 ${cx - 5},34 ${cx + 5},34`} fill={C.mut} />
 
       <g>
-        <line x1={20} y1={30} x2={44} y2={30} stroke="var(--color-warn)" strokeWidth={2.2} />
-        <SvgTex
-          x={50}
-          y={30}
-          tex={String.raw`\vec E`}
-          color="var(--color-warn)"
-          width={24}
-          fontSize={12.5}
-        />
-        <line
-          x1={86}
-          y1={30}
-          x2={110}
-          y2={30}
-          stroke="var(--color-plus)"
-          strokeWidth={1.8}
-          strokeDasharray="5 4"
-        />
-        <SvgTex
-          x={116}
-          y={30}
-          tex={String.raw`V=\mathrm{const}`}
-          color="var(--color-plus)"
-          width={84}
-          fontSize={12.5}
-        />
+        <line x1={20} y1={30} x2={44} y2={30} stroke={C.warn} strokeWidth={2.2} />
+        <SvgTex x={50} y={30} tex={String.raw`\vec E`} color={C.warn} width={24} fontSize={12.5} />
+        <line x1={86} y1={30} x2={110} y2={30} stroke={C.wire} strokeWidth={1.8} strokeDasharray="5 4" />
+        <SvgTex x={116} y={30} tex={String.raw`V=\mathrm{const}`} color={C.wire} width={84} fontSize={12.5} />
       </g>
-      <SvgTex x={374} y={30} tex="z" color="var(--color-muted)" width={13} fontSize={12.5} />
+      <SvgTex x={374} y={30} tex="z" color={C.mut} width={13} fontSize={12.5} />
       <SvgTex
         x={700}
         y={30}
         tex={String.raw`\vec E_0=E_0\hat z`}
-        color="var(--color-muted)"
+        color={C.mut}
         width={94}
         anchor="end"
         fontSize={12.5}
