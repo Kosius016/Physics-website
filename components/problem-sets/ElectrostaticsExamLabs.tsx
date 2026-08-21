@@ -1124,8 +1124,8 @@ export function SphereInFieldFigure() {
       <SvgTex x={20} y={28} tex={String.raw`\vec E_0=E_0\hat z`} color={C.mut} width={98} fontSize={12.5} />
 
       <line
-        x1={svgNumber(cx + 0.5 * R * Math.sin(theta))}
-        y1={svgNumber(cy - 0.5 * R * Math.cos(theta))}
+        x1={cx}
+        y1={cy}
         x2={svgNumber(cx + R * Math.sin(theta))}
         y2={svgNumber(cy - R * Math.cos(theta))}
         stroke={C.ok}
@@ -1142,26 +1142,30 @@ export function SphereInFieldFigure() {
         texLabel={String.raw`\theta`}
       />
 
-      <SvgTex x={cx} y={cy - 12} tex="E=0" color={C.wire} width={54} anchor="middle" />
-      <SvgTex
-        x={cx}
-        y={cy + 20}
-        tex={String.raw`V=\mathrm{const}`}
-        color={C.wire}
-        width={92}
-        anchor="middle"
-        fontSize={13}
-      />
-
       <line
-        x1={svgNumber(cx + 0.5 * R * 0.707)}
-        y1={svgNumber(cy + 0.5 * R * 0.707)}
+        x1={cx}
+        y1={cy}
         x2={svgNumber(cx + R * 0.707)}
         y2={svgNumber(cy + R * 0.707)}
         stroke={C.mut}
         strokeWidth={1.2}
         strokeDasharray="3 3"
       />
+      <circle cx={cx} cy={cy} r={3} fill={C.wire} />
+
+      {/* Надписите стоят вляво от центъра, за да могат помощните линии за
+          theta и за R да стигат до самия център, без да минават през тях. */}
+      <SvgTex x={cx - 8} y={cy - 18} tex="E=0" color={C.wire} width={54} anchor="end" />
+      <SvgTex
+        x={cx - 8}
+        y={cy + 14}
+        tex={String.raw`V=\mathrm{const}`}
+        color={C.wire}
+        width={92}
+        anchor="end"
+        fontSize={13}
+      />
+
       <SvgTex
         x={svgNumber(cx + 40)}
         y={svgNumber(cy + 62)}
