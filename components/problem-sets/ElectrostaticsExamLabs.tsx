@@ -1317,8 +1317,10 @@ export function SphereFieldExplorer() {
   const cx = 360;
   const cy = 220;
   const R = 84;
-  const bounds = useMemo(() => ({ x0: 16, x1: 704, y0: 16, y1: 424 }), []);
-  const offsets = useMemo(() => [0.35, 0.7, 1.05, 1.4, 1.75, 2.1], []);
+  // SphereGeometry е изведена с хоризонтална ос z. Групата се завърта на
+  // -90°, затова границите са записани в незавъртяната координатна система.
+  const bounds = useMemo(() => ({ x0: 156, x1: 564, y0: -124, y1: 564 }), []);
+  const offsets = useMemo(() => [0.6, 1, 1.4, 1.75, 2.15, 2.6, 3.1, 3.6], []);
   const levels = useMemo(() => [0.6, 1.2, 1.8, 2.4, 3], []);
 
   const [showField, setShowField] = useState(true);
@@ -1333,21 +1335,21 @@ export function SphereFieldExplorer() {
   const potential = spherePotential(probe.r, theta);
   const field = sphereField(Math.max(probe.r, 1), theta);
 
-  const probeX = svgNumber(cx + probe.r * Math.cos(theta) * R);
-  const probeY = svgNumber(cy - probe.side * probe.r * Math.sin(theta) * R);
+  const probeX = svgNumber(cx + probe.side * probe.r * Math.sin(theta) * R);
+  const probeY = svgNumber(cy - probe.r * Math.cos(theta) * R);
   const alongZ = field.radial * Math.cos(theta) - field.tangential * Math.sin(theta);
   const alongPerp = field.radial * Math.sin(theta) + field.tangential * Math.cos(theta);
   const norm = Math.hypot(alongZ, alongPerp) || 1;
-  const tipX = svgNumber(probeX + (alongZ / norm) * 46);
-  const tipY = svgNumber(probeY - ((probe.side * alongPerp) / norm) * 46);
+  const tipX = svgNumber(probeX + ((probe.side * alongPerp) / norm) * 46);
+  const tipY = svgNumber(probeY - (alongZ / norm) * 46);
 
   const handlePointer = useCallback(
     (event: ReactPointerEvent<SVGSVGElement>) => {
       const svg = svgRef.current;
       if (!svg) return;
       const [x, y] = svgPoint(svg, event.clientX, event.clientY, W, H);
-      const z = (x - cx) / R;
-      const perp = (cy - y) / R;
+      const z = (cy - y) / R;
+      const perp = (x - cx) / R;
       const r = Math.hypot(z, perp);
       if (r < 0.02) return;
       setProbe({
@@ -1446,25 +1448,27 @@ export function SphereFieldExplorer() {
         >
           <rect width={W} height={H} fill={STAGE_BG} />
 
-          <SphereGeometry
-            cx={cx}
-            cy={cy}
-            radius={R}
-            bounds={bounds}
-            offsets={offsets}
-            levels={levels}
-            gradientId={gradientId}
-            showField={showField}
-            showEquipotential={showEquipotential}
-            showCharge={showCharge}
-            fieldColor={C.warn}
-            equipotentialColor={C.wire}
-            sphereStroke={C.mut}
-            equipotentialOpacity={0.6}
-          />
+          <g transform={`rotate(-90 ${cx} ${cy})`}>
+            <SphereGeometry
+              cx={cx}
+              cy={cy}
+              radius={R}
+              bounds={bounds}
+              offsets={offsets}
+              levels={levels}
+              gradientId={gradientId}
+              showField={showField}
+              showEquipotential={showEquipotential}
+              showCharge={showCharge}
+              fieldColor={C.warn}
+              equipotentialColor={C.wire}
+              sphereStroke={C.mut}
+              equipotentialOpacity={0.6}
+            />
+          </g>
 
           <SvgTex x={20} y={24} tex={String.raw`\vec E_0`} color={C.warn} width={40} />
-          <SvgTex x={700} y={24} tex="z" color={C.mut} width={13} anchor="end" />
+          <SvgTex x={cx + 14} y={18} tex="z" color={C.mut} width={13} />
 
           {inside ? null : (
             <>
