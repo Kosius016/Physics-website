@@ -88,6 +88,11 @@ export default function ElectrostaticsExamPage() {
           Седем въпроса от теорията и четири задачи, давани на реално контролно. Решенията са
           написани като пълни модели на разсъждение и се отключват стъпка по стъпка.
         </p>
+        <p className="mt-3 max-w-2xl text-[15.5px] leading-relaxed text-muted">
+          Под всяко условие стои ред с уроците, на които стъпва задачата. Част от тях още не са
+          публикувани; ще бъдат качени в близко бъдеще. Дотогава решението въвежда нужното на
+          място, така че всеки въпрос остава решим.
+        </p>
         <div className="mt-6 flex flex-wrap gap-2 text-[11px] font-bold uppercase tracking-wide">
           <span className="rounded-full border-[1.5px] border-ink bg-surface px-3 py-1.5">
             Университетско ниво · <RichText text="$1$-$2$ курс" />
@@ -100,26 +105,6 @@ export default function ElectrostaticsExamPage() {
           </span>
         </div>
 
-        <div className="mt-6 rounded-[10px] border-[1.5px] border-rule bg-hl px-4 py-3 text-[14.5px] leading-relaxed">
-          <p>
-            Под всяко условие стои ред, който казва върху кои уроци стъпва задачата и колко от
-            нея излиза извън тях. Етикетът{" "}
-            <span className="rounded-full border-[1.5px] border-ok bg-ok/10 px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-wide text-ok">
-              по уроците
-            </span>{" "}
-            означава, че всичко нужно е публикувано в платформата. Етикетът{" "}
-            <span className="rounded-full border-[1.5px] border-plus bg-plus/10 px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-wide text-plus">
-              над курса
-            </span>{" "}
-            означава, че задачата ползва апарат, който още не е преподаден: диференциална форма
-            на закона на Гаус, уравнение на Лаплас, интегриране по непрекъснато разпределение.
-            Решението и там е пълно, така че въпросът остава решим и се чете като въведение.
-          </p>
-          <p className="mt-3">
-            Използваме <RichText text={String.raw`$k=1/4\pi\varepsilon_0=8{,}99\times10^9\,\mathrm{N\,m^2/C^2}$`} /> и{" "}
-            <RichText text={String.raw`$\varepsilon_0=8{,}85\times10^{-12}\,\mathrm{F/m}$`} />.
-          </p>
-        </div>
       </header>
 
       <LessonNav items={NAV} />
@@ -135,9 +120,8 @@ export default function ElectrostaticsExamPage() {
             </p>
           </ProblemStatement>
           <Prereq
-            level="partial"
             links={[LESSON.conductors]}
-            note="Интегралната форма е изведена и използвана в урока за проводници. Диференциалната форма и теоремата за дивергенцията още не са преподавани в платформата."
+            note="Интегралната форма е изведена и използвана в урока за проводници. Отделен урок за закона на Гаус, който стига до диференциалната форма, предстои."
           />
           <Solution
             hint={
@@ -189,7 +173,7 @@ export default function ElectrostaticsExamPage() {
               <RichText text={String.raw`$\vec E$`} /> и <RichText text="$V$" /> в двете посоки.
             </p>
           </ProblemStatement>
-          <Prereq level="covered" links={[LESSON.potential]} />
+          <Prereq links={[LESSON.potential]} />
           <Solution
             hint={
               <RichText text="Разгледайте два различни пътя от $A$ до $B$. Единият, изминат наобратно след другия, образува един затворен контур." />
@@ -243,9 +227,8 @@ export default function ElectrostaticsExamPage() {
             </p>
           </ProblemStatement>
           <Prereq
-            level="partial"
             links={[LESSON.potential, LESSON.dielectrics]}
-            note="Диполът се появява в двата урока като физическа картина. Диполният момент на произволна система и мултиполното развитие на потенциала още не са преподавани."
+            note="Диполът се появява в двата урока като физическа картина. Урок за диполния момент на произволна система и за далечното развитие на потенциала предстои."
           />
           <Solution
             hint={
@@ -299,7 +282,7 @@ export default function ElectrostaticsExamPage() {
               гаусова повърхност изведете <RichText text={String.raw`$E_n=\sigma/\varepsilon_0$`} />.
             </p>
           </ProblemStatement>
-          <Prereq level="covered" links={[LESSON.conductors]} />
+          <Prereq links={[LESSON.conductors]} />
           <Solution
             hint={
               <RichText text="Ако имаше тангенциална компонента, свободните заряди щяха да продължат да се движат. Използвайте тънка цилиндрична гаусова повърхност." />
@@ -355,7 +338,7 @@ export default function ElectrostaticsExamPage() {
               капацитета?
             </p>
           </ProblemStatement>
-          <Prereq level="covered" links={[LESSON.dielectrics]} />
+          <Prereq links={[LESSON.dielectrics]} />
           <Solution
             hint={
               <RichText text="При едните молекули полето индуцира дипол, а при другите само подрежда частично вече съществуващи диполи. В обема съседните заряди се компенсират." />
@@ -409,7 +392,7 @@ export default function ElectrostaticsExamPage() {
               свързан към батерия.
             </p>
           </ProblemStatement>
-          <Prereq level="covered" links={[LESSON.dielectrics, LESSON.capacitors]} />
+          <Prereq links={[LESSON.dielectrics, LESSON.capacitors]} />
           <Solution
             hint={<RichText text="Решете първо коя величина е фиксирана във всеки от двата случая. Всичко останало следва от нея." />}
           >
@@ -523,9 +506,8 @@ export default function ElectrostaticsExamPage() {
             </p>
           </ProblemStatement>
           <Prereq
-            level="beyond"
             links={[LESSON.potential]}
-            note="Въпросът ползва уравнението на Лаплас $\nabla^2V=0$ и свойството на средната стойност. Нужна е само дефиницията на потенциала от урока; останалото се въвежда тук."
+            note="Въпросът ползва уравнението на Лаплас $\nabla^2V=0$ и свойството на средната стойност. Урок по темата предстои; дотогава всичко нужно се въвежда в самото решение."
           />
 
           <div className="mt-6">
@@ -611,9 +593,8 @@ export default function ElectrostaticsExamPage() {
           </ol>
         </ProblemStatement>
         <Prereq
-          level="partial"
           links={[LESSON.conductors, LESSON.capacitors]}
-          note="Законът на Гаус и плътността на енергията $u=\varepsilon_0E^2/2$ са в уроците. Интегрирането по сферични слоеве още не е показвано в платформата."
+          note="Законът на Гаус и плътността на енергията $u=\varepsilon_0E^2/2$ са в уроците. Урок за интегрирането по сферични слоеве предстои."
         />
 
         <div className="mt-6">
@@ -789,9 +770,8 @@ export default function ElectrostaticsExamPage() {
           </ol>
         </ProblemStatement>
         <Prereq
-          level="beyond"
           links={[LESSON.potential, LESSON.taylor]}
-          note="Суперпозицията и връзката $E=-dV/dz$ са от урока за потенциала, а развитието при $z\gg R$ е от материала за редове на Тейлър. Самото интегриране по непрекъснато разпределение още не е показвано."
+          note="Суперпозицията и връзката $E=-dV/dz$ са от урока за потенциала, а развитието при $z\gg R$ е от материала за редове на Тейлър. Урок за полето на непрекъснати разпределения предстои."
         />
 
         <div className="mt-6">
@@ -973,9 +953,8 @@ export default function ElectrostaticsExamPage() {
           </ol>
         </ProblemStatement>
         <Prereq
-          level="covered"
           links={[LESSON.dielectrics, LESSON.capacitors]}
-          note="Това е задачата от контролното, която стъпва изцяло на публикуваните уроци: частично запълненият кондензатор е в „Диелектрици“ §6, а енергийните баланси в §5."
+          note="Задачата стъпва изцяло на публикувани уроци: частично запълненият кондензатор е в „Диелектрици“ §6, а енергийните баланси в §5."
         />
 
         <div className="mt-6">
@@ -1137,9 +1116,8 @@ export default function ElectrostaticsExamPage() {
           </ol>
         </ProblemStatement>
         <Prereq
-          level="beyond"
           links={[LESSON.conductors, LESSON.lightning]}
-          note="Граничните условия за проводник са от урока, но решението на уравнението на Лаплас в сферични координати и мултиполният език още не са преподавани. Подточка д) продължава директно в статията за мълнията."
+          note="Граничните условия за проводник са от урока за проводници. Урок за уравнението на Лаплас в сферични координати и за мултиполния език предстои. Подточка д) продължава директно в статията за мълнията."
         />
 
         <div className="mt-6">

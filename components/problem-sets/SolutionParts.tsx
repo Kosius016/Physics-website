@@ -62,43 +62,25 @@ export function ResultBox({ children }: { children: ReactNode }) {
   );
 }
 
-/** Нивото на една задача спрямо публикуваните уроци. */
-export type ProblemLevel = "covered" | "partial" | "beyond";
-
-const LEVEL_BADGE: Record<ProblemLevel, { text: string; className: string }> = {
-  covered: { text: "По уроците", className: "border-ok bg-ok/10 text-ok" },
-  partial: { text: "Частично над курса", className: "border-warn bg-hl text-warn" },
-  beyond: { text: "Над курса", className: "border-plus bg-plus/10 text-plus" },
-};
-
 export interface PrereqLink {
   label: string;
   href: string;
 }
 
 /**
- * Ред под условието: колко от задачата стъпва на публикуваните уроци и кои
- * точно са те. Целта е ученикът да вижда какво да отвори, преди да опита,
- * вместо да гадае дали е трябвало да може задачата.
+ * Ред под условието: кои уроци стоят зад задачата. Целта е ученикът да вижда
+ * какво да отвори, преди да опита, вместо да гадае откъде идва нужното.
  */
 export function Prereq({
-  level,
   links,
   note,
 }: {
-  level: ProblemLevel;
   links?: PrereqLink[];
   note?: RichTextString;
 }) {
-  const badge = LEVEL_BADGE[level];
   return (
     <div className="mt-3 rounded-[10px] border border-rule bg-hl/60 px-4 py-3">
       <div className="flex flex-wrap items-center gap-2">
-        <span
-          className={`rounded-full border-[1.5px] px-2.5 py-0.5 text-[10.5px] font-bold uppercase tracking-wide ${badge.className}`}
-        >
-          {badge.text}
-        </span>
         {links?.length ? (
           <span className="text-[11px] font-bold uppercase tracking-[.14em] text-muted">Стъпва на</span>
         ) : null}
