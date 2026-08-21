@@ -852,6 +852,15 @@ interface SphereGeometryProps {
   showField: boolean;
   showEquipotential: boolean;
   showCharge: boolean;
+  fieldColor?: string;
+  equipotentialColor?: string;
+  equipotentialOpacity?: number;
+  fieldWidth?: number;
+  sphereStroke?: string;
+  sphereInner?: string;
+  sphereOuter?: string;
+  sphereInnerOpacity?: number;
+  sphereOuterOpacity?: number;
 }
 
 /**
@@ -871,6 +880,15 @@ const SphereGeometry = memo(function SphereGeometry({
   showField,
   showEquipotential,
   showCharge,
+  fieldColor = C.warn,
+  equipotentialColor = C.mut,
+  equipotentialOpacity = 0.5,
+  fieldWidth = 1.8,
+  sphereStroke = C.wire,
+  sphereInner = C.wire,
+  sphereOuter = C.wire,
+  sphereInnerOpacity = 0.2,
+  sphereOuterOpacity = 0.06,
 }: SphereGeometryProps) {
   const lines = useMemo(
     () =>
@@ -921,8 +939,8 @@ const SphereGeometry = memo(function SphereGeometry({
     <g>
       <defs>
         <radialGradient id={gradientId} cx="38%" cy="32%" r="78%">
-          <stop offset="0%" stopColor={C.wire} stopOpacity={0.2} />
-          <stop offset="100%" stopColor={C.wire} stopOpacity={0.06} />
+          <stop offset="0%" stopColor={sphereInner} stopOpacity={sphereInnerOpacity} />
+          <stop offset="100%" stopColor={sphereOuter} stopOpacity={sphereOuterOpacity} />
         </radialGradient>
       </defs>
 
@@ -933,10 +951,10 @@ const SphereGeometry = memo(function SphereGeometry({
               key={curve.key}
               points={curve.points.map((point) => `${point.x},${point.y}`).join(" ")}
               fill="none"
-              stroke={C.mut}
+              stroke={equipotentialColor}
               strokeWidth={1.4}
               strokeDasharray="6 5"
-              opacity={0.5}
+              opacity={equipotentialOpacity}
             />
           ))}
           <line
@@ -944,20 +962,20 @@ const SphereGeometry = memo(function SphereGeometry({
             y1={bounds.y0}
             x2={cx}
             y2={svgNumber(cy - radius)}
-            stroke={C.mut}
+            stroke={equipotentialColor}
             strokeWidth={1.4}
             strokeDasharray="6 5"
-            opacity={0.5}
+            opacity={equipotentialOpacity}
           />
           <line
             x1={cx}
             y1={svgNumber(cy + radius)}
             x2={cx}
             y2={bounds.y1}
-            stroke={C.mut}
+            stroke={equipotentialColor}
             strokeWidth={1.4}
             strokeDasharray="6 5"
-            opacity={0.5}
+            opacity={equipotentialOpacity}
           />
         </g>
       ) : null}
@@ -967,7 +985,7 @@ const SphereGeometry = memo(function SphereGeometry({
         cy={cy}
         r={radius}
         fill={`url(#${gradientId})`}
-        stroke={C.wire}
+        stroke={sphereStroke}
         strokeWidth={2}
       />
 
@@ -996,16 +1014,30 @@ const SphereGeometry = memo(function SphereGeometry({
               <polyline
                 points={line.points.map((point) => `${point.x},${point.y}`).join(" ")}
                 fill="none"
-                stroke={C.warn}
-                strokeWidth={1.8}
+                stroke={fieldColor}
+                strokeWidth={fieldWidth}
                 opacity={0.9}
               />
-              <StreamHead points={line.points} at={0.3} color={C.warn} />
-              {line.passing ? <StreamHead points={line.points} at={0.74} color={C.warn} /> : null}
+              <StreamHead points={line.points} at={0.3} color={fieldColor} />
+              {line.passing ? <StreamHead points={line.points} at={0.74} color={fieldColor} /> : null}
             </g>
           ))}
-          <Arrow x1={bounds.x0} y1={cy} x2={svgNumber(cx - radius)} y2={cy} color={C.warn} width={1.8} />
-          <Arrow x1={svgNumber(cx + radius)} y1={cy} x2={bounds.x1} y2={cy} color={C.warn} width={1.8} />
+          <Arrow
+            x1={bounds.x0}
+            y1={cy}
+            x2={svgNumber(cx - radius)}
+            y2={cy}
+            color={fieldColor}
+            width={fieldWidth}
+          />
+          <Arrow
+            x1={svgNumber(cx + radius)}
+            y1={cy}
+            x2={bounds.x1}
+            y2={cy}
+            color={fieldColor}
+            width={fieldWidth}
+          />
         </g>
       ) : null}
     </g>
@@ -1021,70 +1053,143 @@ const SphereGeometry = memo(function SphereGeometry({
  */
 export function SphereInFieldFigure() {
   const gradientId = useId();
-  const cx = 260;
-  const cy = 150;
-  const R = 52;
-  const bounds = useMemo(() => ({ x0: 24, x1: 494, y0: 12, y1: 288 }), []);
-  const offsets = useMemo(() => [0.7, 1.15, 1.55, 1.8, 2.05], []);
-  const levels = useMemo(() => [0.85, 1.7, 2.55], []);
-  const theta = (42 * Math.PI) / 180;
+  const W = 720;
+  const H = 500;
+  const cx = W / 2;
+  const cy = H / 2;
+  const R = 88;
+
+  /**
+   * `SphereGeometry` рисува с оста $z$ водоравно. Завъртането на цялата група
+   * на $-90°$ я изправя вертикално, както е в условието. Затова границите тук
+   * са в незавъртяната рамка: `x` ограничава по височина, `y` по ширина.
+   */
+  const bounds = useMemo(() => ({ x0: 134, x1: 586, y0: -90, y1: 590 }), []);
+  const offsets = useMemo(() => [0.6, 1, 1.4, 1.75, 2.15, 2.6, 3.1, 3.6], []);
+  const levels = useMemo(() => [0.35, 0.7, 1.05, 1.45, 1.9, 2.4], []);
+  const labelled = [0.7, 1.45, 2.4];
+  const theta = (40 * Math.PI) / 180;
+
+  const grid = R / 2;
+  const gridX = Array.from({ length: 9 }, (_, index) => index - 4).map((k) => cx + k * grid);
+  const gridY = Array.from({ length: 11 }, (_, index) => index - 5).map((k) => cy + k * grid);
 
   return (
     <svg
-      viewBox="0 0 520 300"
+      viewBox={`0 0 ${W} ${H}`}
       className={STAGE_CLASS}
       aria-label="Силовите линии и еквипотенциалите около незаредена проводяща сфера в еднородно поле"
     >
-      <rect width={520} height={300} fill={STAGE_BG} />
+      <rect width={W} height={H} fill={STAGE_BG} />
 
-      <SphereGeometry
+      <g aria-hidden="true" opacity={0.5}>
+        {gridX.map((x) => (
+          <line key={`gx-${x}`} x1={x} y1={0} x2={x} y2={H} stroke={C.faint} strokeWidth={0.8} />
+        ))}
+        {gridY.map((y) => (
+          <line key={`gy-${y}`} x1={0} y1={y} x2={W} y2={y} stroke={C.faint} strokeWidth={0.8} />
+        ))}
+      </g>
+
+      {[26, W - 26].map((x) => (
+        <g key={x} opacity={0.7}>
+          {[78, 164, 250, 336, 422].map((y) => (
+            <Arrow key={y} x1={x} y1={y + 26} x2={x} y2={y - 26} color={C.mut} width={1.6} />
+          ))}
+        </g>
+      ))}
+
+      <g transform={`rotate(-90 ${cx} ${cy})`}>
+        <SphereGeometry
+          cx={cx}
+          cy={cy}
+          radius={R}
+          bounds={bounds}
+          offsets={offsets}
+          levels={levels}
+          gradientId={gradientId}
+          showField
+          showEquipotential
+          showCharge={false}
+          fieldColor={C.minus}
+          equipotentialColor={C.plus}
+          equipotentialOpacity={0.72}
+          fieldWidth={1.6}
+          sphereStroke={C.wire}
+          sphereInner={C.wire}
+          sphereOuter={C.wire}
+          sphereInnerOpacity={0.22}
+          sphereOuterOpacity={0.07}
+        />
+      </g>
+
+      {labelled.flatMap((level) => {
+        const distance = (equipotentialRadius(level) ?? 1) * R;
+        const value = level.toFixed(2).replace(/0$/, "").replace(".", "{,}");
+        return ([1, -1] as const).map((side) => (
+          <TexChip
+            key={`${level}-${side}`}
+            x={cx + 14}
+            y={svgNumber(cy - side * distance)}
+            tex={`${side > 0 ? "-" : "+"}${value}`}
+            color={C.plus}
+            width={30}
+            fontSize={11}
+            padY={3}
+          />
+        ));
+      })}
+
+      <SvgTex x={50} y={24} tex={String.raw`\vec E_0=E_0\hat z`} color={C.mut} width={98} fontSize={12.5} />
+
+      <line
+        x1={cx}
+        y1={cy}
+        x2={svgNumber(cx + R * Math.sin(theta))}
+        y2={svgNumber(cy - R * Math.cos(theta))}
+        stroke={C.ok}
+        strokeWidth={1.6}
+        strokeDasharray="4 4"
+      />
+      <AngleArc
         cx={cx}
         cy={cy}
-        radius={R}
-        bounds={bounds}
-        offsets={offsets}
-        levels={levels}
-        gradientId={gradientId}
-        showField
-        showEquipotential
-        showCharge={false}
+        a1={-Math.PI / 2}
+        a2={-Math.PI / 2 + theta}
+        r={34}
+        color={C.ok}
+        texLabel={String.raw`\theta`}
       />
 
-      <SvgTex x={18} y={20} tex={String.raw`\vec E_0`} color={C.warn} width={40} />
-      <SvgTex x={496} y={20} tex={String.raw`V=\mathrm{const}`} color={C.mut} width={100} anchor="end" />
-      <SvgTex x={470} y={132} tex="z" color={C.mut} width={13} anchor="middle" />
-
-      <line x1={cx} y1={cy} x2={svgNumber(cx + R)} y2={cy} stroke={C.faint} strokeWidth={1.5} strokeDasharray="5 4" />
-      <line
-        x1={cx}
-        y1={cy}
-        x2={svgNumber(cx + R * Math.cos(theta))}
-        y2={svgNumber(cy - R * Math.sin(theta))}
-        stroke={C.ok}
-        strokeWidth={2}
+      <SvgTex x={cx} y={cy - 10} tex="E=0" color={C.wire} width={54} anchor="middle" />
+      <SvgTex
+        x={cx}
+        y={cy + 14}
+        tex={String.raw`V=\mathrm{const}`}
+        color={C.wire}
+        width={92}
+        anchor="middle"
+        fontSize={13}
       />
-      <circle
-        cx={svgNumber(cx + R * Math.cos(theta))}
-        cy={svgNumber(cy - R * Math.sin(theta))}
-        r={5}
-        fill={C.ok}
-      />
-      <AngleArc cx={cx} cy={cy} a1={0} a2={-theta} r={28} color={C.ok} texLabel={String.raw`\theta`} />
 
       <line
         x1={cx}
         y1={cy}
-        x2={svgNumber(cx + R * Math.cos(3.578))}
-        y2={svgNumber(cy - R * Math.sin(3.578))}
-        stroke={C.wire}
-        strokeWidth={2}
+        x2={svgNumber(cx + R * 0.707)}
+        y2={svgNumber(cy + R * 0.707)}
+        stroke={C.mut}
+        strokeWidth={1.2}
+        strokeDasharray="3 3"
       />
-      <TexChip x={234} y={166} tex="R" color={C.wire} width={13} />
-      <circle cx={cx} cy={cy} r={3.5} fill={C.wire} />
-
-      <text x={cx} y={288} textAnchor="middle" {...CAP_LABEL}>
-        СФЕРА В ЕДНОРОДНО ПОЛЕ
-      </text>
+      <SvgTex
+        x={svgNumber(cx + R * 0.67)}
+        y={svgNumber(cy + R * 0.9)}
+        tex="R"
+        color={C.wire}
+        width={16}
+        anchor="middle"
+        fontSize={12.5}
+      />
     </svg>
   );
 }
