@@ -52,14 +52,11 @@ export function FigurePanel({
   eyebrow = "Схема към условието",
   title,
   caption,
-  extra,
   children,
 }: {
   eyebrow?: string;
   title: string;
   caption: ReactNode;
-  /** По избор: втори абзац за произхода на кривите, отделен от четенето на сцената. */
-  extra?: ReactNode;
   children: ReactNode;
 }) {
   return (
@@ -69,14 +66,7 @@ export function FigurePanel({
         <h3 className="mt-1 font-serif text-[22px] font-bold">{title}</h3>
       </div>
       {children}
-      <figcaption className="mt-3 text-[13.5px] leading-relaxed text-muted">
-        {caption}
-        {extra ? (
-          <span className="mt-2 block border-t border-rule pt-2 text-[13px] text-ink/70">
-            {extra}
-          </span>
-        ) : null}
-      </figcaption>
+      <figcaption className="mt-3 text-[13.5px] leading-relaxed text-muted">{caption}</figcaption>
     </figure>
   );
 }
@@ -841,6 +831,45 @@ function sphereField(r: number, theta: number) {
   return { radial, tangential, magnitude: Math.hypot(radial, tangential) };
 }
 
+/**
+ * Затворена област „отвъд еквипотенциалата $V=\mp L$“, готова за запълване.
+ *
+ * Наслагването на много такива области с ниска прозрачност дава плавен преход
+ * от стойността на потенциала, без нито един градиент: всяка следваща покрива
+ * по-малка площ, затова наситеността расте към ръба.
+ */
+function potentialBand(
+  level: number,
+  side: 1 | -1,
+  cx: number,
+  cy: number,
+  scale: number,
+  reachX: number,
+  reachY: number,
+) {
+  const points: string[] = [];
+  let firstY = 0;
+  let lastY = 0;
+  const steps = 200;
+  const span = Math.PI - 0.02;
+
+  for (let index = 0; index <= steps; index += 1) {
+    const theta = -span / 2 + (index / steps) * span;
+    const radius = equipotentialRadius(level / Math.cos(theta));
+    if (radius === null) continue;
+    const y = cy - radius * Math.sin(theta) * scale;
+    if (Math.abs(y - cy) > reachY) continue;
+    const x = cx + side * radius * Math.cos(theta) * scale;
+    if (points.length === 0) firstY = svgNumber(y);
+    lastY = svgNumber(y);
+    points.push(`${points.length === 0 ? "M" : "L"}${svgNumber(x)} ${svgNumber(y)}`);
+  }
+  if (points.length < 3) return null;
+
+  const far = svgNumber(cx + side * reachX);
+  return `${points.join(" ")} L${far} ${lastY} L${far} ${firstY} Z`;
+}
+
 interface SphereGeometryProps {
   cx: number;
   cy: number;
@@ -856,6 +885,10 @@ interface SphereGeometryProps {
   equipotentialColor?: string;
   equipotentialOpacity?: number;
   fieldWidth?: number;
+  /** Цветна карта на потенциала под всичко останало. */
+  showPotential?: boolean;
+  potentialAlpha?: number;
+  potentialReach?: { x: number; y: number };
   sphereStroke?: string;
   sphereInner?: string;
   sphereOuter?: string;
@@ -884,6 +917,9 @@ const SphereGeometry = memo(function SphereGeometry({
   equipotentialColor = C.mut,
   equipotentialOpacity = 0.5,
   fieldWidth = 1.8,
+  showPotential = false,
+  potentialAlpha = 0.075,
+  potentialReach = { x: 300, y: 420 },
   sphereStroke = C.wire,
   sphereInner = C.wire,
   sphereOuter = C.wire,
@@ -935,6 +971,18 @@ const SphereGeometry = memo(function SphereGeometry({
     return ticks;
   }, [cx, cy, radius]);
 
+  const bands = useMemo(() => {
+    if (!showPotential) return [];
+    const out: { key: string; d: string; color: string }[] = [];
+    for (const side of [1, -1] as const) {
+      for (let level = 0.2; level <= 2.85; level += 0.2) {
+        const d = potentialBand(level, side, cx, cy, radius, potentialReach.x, potentialReach.y);
+        if (d) out.push({ key: `p-${side}-${Math.round(level * 10)}`, d, color: side > 0 ? C.plus : C.minus });
+      }
+    }
+    return out;
+  }, [showPotential, cx, cy, radius, potentialReach]);
+
   return (
     <g>
       <defs>
@@ -943,6 +991,10 @@ const SphereGeometry = memo(function SphereGeometry({
           <stop offset="100%" stopColor={sphereOuter} stopOpacity={sphereOuterOpacity} />
         </radialGradient>
       </defs>
+
+      {bands.map((band) => (
+        <path key={band.key} d={band.d} fill={band.color} opacity={potentialAlpha} />
+      ))}
 
       {showEquipotential ? (
         <g>
@@ -980,6 +1032,8 @@ const SphereGeometry = memo(function SphereGeometry({
         </g>
       ) : null}
 
+      {/* Плътна основа: скрива цветната карта, за да чете проводникът като тяло. */}
+      <circle cx={cx} cy={cy} r={radius} fill={STAGE_BG} />
       <circle
         cx={cx}
         cy={cy}
@@ -1065,37 +1119,21 @@ export function SphereInFieldFigure() {
    * са в незавъртяната рамка: `x` ограничава по височина, `y` по ширина.
    *
    * Горната и долната ивица остават празни нарочно: там оста $z$ продължава
-   * извън полето на линиите и носи етикета си.
+   * извън полето на линиите, а легендата и етикетите имат къде да седнат.
    */
   const bounds = useMemo(() => ({ x0: 166, x1: 554, y0: -90, y1: 590 }), []);
   const offsets = useMemo(() => [0.6, 1, 1.4, 1.75, 2.15, 2.6, 3.1, 3.6], []);
-  const levels = useMemo(() => [0.35, 0.7, 1.05, 1.45, 1.9], []);
+  const levels = useMemo(() => [0.4, 0.8, 1.2, 1.6, 2], []);
+  const reach = useMemo(() => ({ x: 300, y: 420 }), []);
   const theta = (40 * Math.PI) / 180;
-
-  const grid = R / 2;
-  const gridX = Array.from({ length: 9 }, (_, index) => index - 4).map((k) => cx + k * grid);
-  const gridY = Array.from({ length: 11 }, (_, index) => index - 5).map((k) => cy + k * grid);
 
   return (
     <svg
       viewBox={`0 0 ${W} ${H}`}
       className={STAGE_CLASS}
-      aria-label="Силовите линии и еквипотенциалите около незаредена проводяща сфера в еднородно поле"
+      aria-label="Потенциалът като цветна карта, силовите линии и еквипотенциалите около незаредена проводяща сфера в еднородно поле"
     >
       <rect width={W} height={H} fill={STAGE_BG} />
-
-      <g aria-hidden="true" opacity={0.5}>
-        {gridX.map((x) => (
-          <line key={`gx-${x}`} x1={x} y1={0} x2={x} y2={H} stroke={C.faint} strokeWidth={0.8} />
-        ))}
-        {gridY.map((y) => (
-          <line key={`gy-${y}`} x1={0} y1={y} x2={W} y2={y} stroke={C.faint} strokeWidth={0.8} />
-        ))}
-      </g>
-
-      <line x1={cx} y1={H - 22} x2={cx} y2={30} stroke={C.mut} strokeWidth={1.4} strokeDasharray="6 5" />
-      <polygon points={`${cx},22 ${cx - 5},34 ${cx + 5},34`} fill={C.mut} />
-      <SvgTex x={cx + 14} y={30} tex="z" color={C.mut} width={14} fontSize={13} />
 
       <g transform={`rotate(-90 ${cx} ${cy})`}>
         <SphereGeometry
@@ -1109,10 +1147,13 @@ export function SphereInFieldFigure() {
           showField
           showEquipotential
           showCharge={false}
-          fieldColor={C.minus}
-          equipotentialColor={C.plus}
-          equipotentialOpacity={0.72}
-          fieldWidth={1.6}
+          showPotential
+          potentialAlpha={0.075}
+          potentialReach={reach}
+          fieldColor={C.wire}
+          equipotentialColor={C.warn}
+          equipotentialOpacity={0.85}
+          fieldWidth={1.8}
           sphereStroke={C.wire}
           sphereInner={C.wire}
           sphereOuter={C.wire}
@@ -1121,15 +1162,37 @@ export function SphereInFieldFigure() {
         />
       </g>
 
-      <SvgTex x={20} y={28} tex={String.raw`\vec E_0=E_0\hat z`} color={C.mut} width={98} fontSize={12.5} />
+      {/* Оста продължава само там, където няма осева силова линия под нея. */}
+      <line x1={cx} y1={54} x2={cx} y2={30} stroke={C.mut} strokeWidth={1.4} strokeDasharray="6 5" />
+      <line x1={cx} y1={H - 22} x2={cx} y2={446} stroke={C.mut} strokeWidth={1.4} strokeDasharray="6 5" />
+      <polygon points={`${cx},22 ${cx - 5},34 ${cx + 5},34`} fill={C.mut} />
+
+      <g>
+        <rect x={14} y={16} width={200} height={28} rx={6} fill={STAGE_BG} opacity={0.86} stroke={C.faint} />
+        <line x1={24} y1={30} x2={46} y2={30} stroke={C.wire} strokeWidth={2} />
+        <SvgTex x={52} y={30} tex={String.raw`\vec E`} color={C.wire} width={24} fontSize={12.5} />
+        <line x1={88} y1={30} x2={110} y2={30} stroke={C.warn} strokeWidth={1.8} strokeDasharray="5 4" />
+        <SvgTex x={116} y={30} tex={String.raw`V=\mathrm{const}`} color={C.warn} width={84} fontSize={12.5} />
+      </g>
+      <TexChip x={374} y={30} tex="z" color={C.mut} width={12} fontSize={12.5} padY={4} />
+      <TexChip
+        x={698}
+        y={30}
+        tex={String.raw`\vec E_0=E_0\hat z`}
+        color={C.mut}
+        width={92}
+        anchor="end"
+        fontSize={12.5}
+        padY={4}
+      />
 
       <line
         x1={cx}
         y1={cy}
         x2={svgNumber(cx + R * Math.sin(theta))}
         y2={svgNumber(cy - R * Math.cos(theta))}
-        stroke={C.ok}
-        strokeWidth={1.6}
+        stroke={C.mut}
+        strokeWidth={1.4}
         strokeDasharray="4 4"
       />
       <AngleArc
@@ -1138,7 +1201,7 @@ export function SphereInFieldFigure() {
         a1={-Math.PI / 2}
         a2={-Math.PI / 2 + theta}
         r={34}
-        color={C.ok}
+        color={C.wire}
         texLabel={String.raw`\theta`}
       />
 
@@ -1178,6 +1241,7 @@ export function SphereInFieldFigure() {
     </svg>
   );
 }
+
 function LayerToggle({
   label,
   color,
@@ -1334,13 +1398,13 @@ export function SphereFieldExplorer() {
         <div className="flex flex-wrap gap-2">
           <LayerToggle
             label="Силови линии"
-            color={C.warn}
+            color={C.wire}
             pressed={showField}
             onToggle={() => setShowField((value) => !value)}
           />
           <LayerToggle
             label="Еквипотенциали"
-            color={C.mut}
+            color={C.warn}
             dashed
             pressed={showEquipotential}
             onToggle={() => setShowEquipotential((value) => !value)}
@@ -1375,9 +1439,12 @@ export function SphereFieldExplorer() {
             showField={showField}
             showEquipotential={showEquipotential}
             showCharge={showCharge}
+            fieldColor={C.wire}
+            equipotentialColor={C.warn}
+            equipotentialOpacity={0.6}
           />
 
-          <SvgTex x={20} y={24} tex={String.raw`\vec E_0`} color={C.warn} width={40} />
+          <SvgTex x={20} y={24} tex={String.raw`\vec E_0`} color={C.wire} width={40} />
           <SvgTex x={700} y={24} tex="z" color={C.mut} width={13} anchor="end" />
 
           {inside ? null : (
