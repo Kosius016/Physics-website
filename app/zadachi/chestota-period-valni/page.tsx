@@ -136,7 +136,7 @@ export default function WaveHomeworkPage() {
             Точка се движи по окръжност с радиус <RichText text={String.raw`$R=0{,}25\,\mathrm{m}$`} /> и
             прави <RichText text="$3$" /> пълни обиколки за секунда.
           </p>
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>
               Намерете честотата <RichText text="$f$" />.
             </li>
@@ -167,17 +167,17 @@ export default function WaveHomeworkPage() {
             />
           }
         >
-          <SolutionPart label="a" title="Честотата се чете направо">
+          <SolutionPart label="а" title="Честотата се чете направо">
             <p>Честотата е броят пълни обиколки за единица време, тоест данните вече я дават.</p>
             <Formula latex={String.raw`f=3\ \mathrm{Hz}`} />
           </SolutionPart>
 
-          <SolutionPart label="b" title="Периодът е обратната стойност">
+          <SolutionPart label="б" title="Периодът е обратната стойност">
             <p>Периодът е времето за една обиколка.</p>
             <Formula latex={String.raw`T=\frac1f=\frac13=0{,}33\ \mathrm{s}`} />
           </SolutionPart>
 
-          <SolutionPart label="c" title={String.raw`Ъглова честота`}>
+          <SolutionPart label="в" title={String.raw`Ъглова честота`}>
             <p>
               За една обиколка ъгълът нараства с <RichText text={String.raw`$2\pi$`} />, затова
               ъгловата честота е <RichText text={String.raw`$2\pi$`} /> пъти честотата.
@@ -185,12 +185,12 @@ export default function WaveHomeworkPage() {
             <Formula latex={String.raw`\omega=2\pi f=6\pi=18{,}85\ \mathrm{rad/s}`} />
           </SolutionPart>
 
-          <SolutionPart label="d" title="Линейна скорост">
+          <SolutionPart label="г" title="Линейна скорост">
             <p>Линейната скорост е изминатата дъга за единица време.</p>
             <Formula latex={String.raw`v=R\omega=0{,}25\cdot6\pi=1{,}5\pi=4{,}71\ \mathrm{m/s}`} />
           </SolutionPart>
 
-          <SolutionPart label="e" title="Изминат ъгъл">
+          <SolutionPart label="д" title="Изминат ъгъл">
             <p>Ъгълът расте равномерно, значи е произведение на ъгловата честота и времето.</p>
             <Formula latex={String.raw`\theta=\omega t=6\pi\cdot0{,}40=2{,}4\pi=7{,}54\ \mathrm{rad}`} />
             <ResultBox>
@@ -207,7 +207,7 @@ export default function WaveHomeworkPage() {
             Колело се върти с ъглова честота{" "}
             <RichText text={String.raw`$\omega=8\pi\ \mathrm{rad/s}$`} />.
           </p>
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>Намерете честотата.</li>
             <li>Намерете периода.</li>
             <li>
@@ -227,19 +227,19 @@ export default function WaveHomeworkPage() {
             />
           }
         >
-          <SolutionPart label="a" title="Обръщаме връзката">
+          <SolutionPart label="а" title="Обръщаме връзката">
             <Formula latex={String.raw`f=\frac{\omega}{2\pi}=\frac{8\pi}{2\pi}=4\ \mathrm{Hz}`} />
           </SolutionPart>
-          <SolutionPart label="b" title="Период">
+          <SolutionPart label="б" title="Период">
             <Formula latex={String.raw`T=\frac1f=0{,}25\ \mathrm{s}`} />
           </SolutionPart>
-          <SolutionPart label="c" title="Брой завъртания">
+          <SolutionPart label="в" title="Брой завъртания">
             <p>Времето, разделено на времето за едно завъртане.</p>
             <Formula
               latex={String.raw`N=\frac{t}{T}=\frac{15}{0{,}25}=60\qquad\left(\text{или }N=ft=4\cdot15=60\right)`}
             />
           </SolutionPart>
-          <SolutionPart label="d" title="Изминат ъгъл">
+          <SolutionPart label="г" title="Изминат ъгъл">
             <Formula latex={String.raw`\theta=\omega t=8\pi\cdot0{,}125=\pi\ \mathrm{rad}=180^\circ`} />
             <ResultBox>
               <RichText
@@ -255,7 +255,7 @@ export default function WaveHomeworkPage() {
           <Formula
             latex={String.raw`R_1=0{,}10\,\mathrm{m},\ \ \omega_1=20\,\mathrm{rad/s};\qquad R_2=0{,}25\,\mathrm{m},\ \ \omega_2=8\,\mathrm{rad/s}`}
           />
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>Коя точка има по-голяма честота?</li>
             <li>Коя има по-голям период?</li>
             <li>Сравнете линейните им скорости.</li>
@@ -274,13 +274,13 @@ export default function WaveHomeworkPage() {
             />
           }
         >
-          <SolutionPart label="a" title="Честоти">
+          <SolutionPart label="а" title="Честоти">
             <Formula
               latex={String.raw`f_1=\frac{20}{2\pi}=3{,}18\ \mathrm{Hz},\qquad f_2=\frac{8}{2\pi}=1{,}27\ \mathrm{Hz}`}
             />
             <p>Първата точка има по-голяма честота.</p>
           </SolutionPart>
-          <SolutionPart label="b" title="Периоди">
+          <SolutionPart label="б" title="Периоди">
             <p>
               Периодът е обратно пропорционален на <RichText text={String.raw`$\omega$`} />, затова
               редът се обръща.
@@ -290,7 +290,7 @@ export default function WaveHomeworkPage() {
             />
             <p>Втората точка има по-голям период.</p>
           </SolutionPart>
-          <SolutionPart label="c" title="Линейни скорости">
+          <SolutionPart label="в" title="Линейни скорости">
             <Formula
               latex={String.raw`v_1=0{,}10\cdot20=2{,}0\ \mathrm{m/s},\qquad v_2=0{,}25\cdot8=2{,}0\ \mathrm{m/s}`}
             />
@@ -298,7 +298,7 @@ export default function WaveHomeworkPage() {
               Скоростите са равни, въпреки че всички останали величини се различават.
             </ResultBox>
           </SolutionPart>
-          <SolutionPart label="d" title="Кога съвпадат скоростите">
+          <SolutionPart label="г" title="Кога съвпадат скоростите">
             <p>
               Да, и предната подточка е точно такъв пример. Условието е произведението да
               съвпада.
@@ -322,7 +322,7 @@ export default function WaveHomeworkPage() {
             Махало извършва <RichText text="$24$" /> пълни трептения за{" "}
             <RichText text={String.raw`$12\,\mathrm{s}$`} />.
           </p>
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>Намерете честотата.</li>
             <li>Намерете периода.</li>
             <li>Намерете ъгловата честота.</li>
@@ -334,16 +334,16 @@ export default function WaveHomeworkPage() {
           revealAll
           hint={<RichText text={String.raw`Честотата е брой трептения, разделен на времето: $f=N/t$.`} />}
         >
-          <SolutionPart label="a" title="Честота">
+          <SolutionPart label="а" title="Честота">
             <Formula latex={String.raw`f=\frac{N}{t}=\frac{24}{12}=2\ \mathrm{Hz}`} />
           </SolutionPart>
-          <SolutionPart label="b" title="Период">
+          <SolutionPart label="б" title="Период">
             <Formula latex={String.raw`T=\frac1f=0{,}5\ \mathrm{s}`} />
           </SolutionPart>
-          <SolutionPart label="c" title="Ъглова честота">
+          <SolutionPart label="в" title="Ъглова честота">
             <Formula latex={String.raw`\omega=2\pi f=4\pi=12{,}57\ \mathrm{rad/s}`} />
           </SolutionPart>
-          <SolutionPart label="d" title="Трептения за минута">
+          <SolutionPart label="г" title="Трептения за минута">
             <Formula latex={String.raw`N=ft=2\cdot60=120`} />
             <ResultBox>
               <RichText
@@ -360,7 +360,7 @@ export default function WaveHomeworkPage() {
             честота <RichText text={String.raw`$\omega$`} />. Определете какво става с{" "}
             <RichText text="$T$" /> и <RichText text={String.raw`$\omega$`} />, ако:
           </p>
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>честотата стане два пъти по-голяма;</li>
             <li>честотата стане три пъти по-малка;</li>
             <li>периодът стане четири пъти по-голям;</li>
@@ -377,16 +377,16 @@ export default function WaveHomeworkPage() {
             />
           }
         >
-          <SolutionPart label="a" title={String.raw`Честотата се удвоява`}>
+          <SolutionPart label="а" title={String.raw`Честотата се удвоява`}>
             <Formula latex={String.raw`f\to2f\quad\Longrightarrow\quad T\to\frac T2,\qquad \omega\to2\omega`} />
           </SolutionPart>
-          <SolutionPart label="b" title="Честотата пада три пъти">
+          <SolutionPart label="б" title="Честотата пада три пъти">
             <Formula latex={String.raw`f\to\frac f3\quad\Longrightarrow\quad T\to3T,\qquad \omega\to\frac{\omega}{3}`} />
           </SolutionPart>
-          <SolutionPart label="c" title="Периодът расте четири пъти">
+          <SolutionPart label="в" title="Периодът расте четири пъти">
             <Formula latex={String.raw`T\to4T\quad\Longrightarrow\quad f\to\frac f4,\qquad \omega\to\frac{\omega}{4}`} />
           </SolutionPart>
-          <SolutionPart label="d" title="Ъгловата честота пада двойно">
+          <SolutionPart label="г" title="Ъгловата честота пада двойно">
             <Formula latex={String.raw`\omega\to\frac{\omega}{2}\quad\Longrightarrow\quad f\to\frac f2,\qquad T\to2T`} />
             <ResultBox>
               <RichText
@@ -399,7 +399,7 @@ export default function WaveHomeworkPage() {
         <ProblemTitle n={6} title={String.raw`Източник с $y(t)=4\sin(10\pi t)\ \mathrm{cm}$`} />
         <ProblemStatement>
           <p>Източник извършва хармонично трептене по закона от заглавието.</p>
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>
               Намерете амплитудата <RichText text="$A$" />.
             </li>
@@ -435,23 +435,23 @@ export default function WaveHomeworkPage() {
             />
           }
         >
-          <SolutionPart label="a" title="Амплитуда">
+          <SolutionPart label="а" title="Амплитуда">
             <p>Множителят пред синуса.</p>
             <Formula latex={String.raw`A=4\ \mathrm{cm}`} />
           </SolutionPart>
-          <SolutionPart label="b" title="Ъглова честота">
+          <SolutionPart label="б" title="Ъглова честота">
             <p>
               Множителят пред <RichText text="$t$" /> в аргумента.
             </p>
             <Formula latex={String.raw`\omega=10\pi=31{,}42\ \mathrm{rad/s}`} />
           </SolutionPart>
-          <SolutionPart label="c" title="Честота">
+          <SolutionPart label="в" title="Честота">
             <Formula latex={String.raw`f=\frac{\omega}{2\pi}=\frac{10\pi}{2\pi}=5\ \mathrm{Hz}`} />
           </SolutionPart>
-          <SolutionPart label="d" title="Период">
+          <SolutionPart label="г" title="Период">
             <Formula latex={String.raw`T=\frac1f=0{,}2\ \mathrm{s}`} />
           </SolutionPart>
-          <SolutionPart label="e" title="Стойностите в четирите момента">
+          <SolutionPart label="д" title="Стойностите в четирите момента">
             <p>
               Преди сметките забелязваме, че зададените моменти са точно четвъртини от периода:{" "}
               <RichText
@@ -468,7 +468,7 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
 \end{aligned}`}
             />
           </SolutionPart>
-          <SolutionPart label="f" title="Графиката">
+          <SolutionPart label="е" title="Графиката">
             <p>
               Два периода са <RichText text={String.raw`$0{,}4\,\mathrm{s}$`} />. Кривата тръгва от
               нулата нагоре и се повтаря два пъти, както в симулацията над решението.
@@ -491,7 +491,7 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
             <RichText text={String.raw`$v=12\,\mathrm{m/s}$`} />. Източникът извършва{" "}
             <RichText text="$4$" /> трептения за секунда.
           </p>
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>Намерете честотата.</li>
             <li>Намерете периода.</li>
             <li>Намерете дължината на вълната.</li>
@@ -509,16 +509,16 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
             />
           }
         >
-          <SolutionPart label="a" title="Честота">
+          <SolutionPart label="а" title="Честота">
             <Formula latex={String.raw`f=4\ \mathrm{Hz}`} />
           </SolutionPart>
-          <SolutionPart label="b" title="Период">
+          <SolutionPart label="б" title="Период">
             <Formula latex={String.raw`T=\frac1f=0{,}25\ \mathrm{s}`} />
           </SolutionPart>
-          <SolutionPart label="c" title="Дължина на вълната">
+          <SolutionPart label="в" title="Дължина на вълната">
             <Formula latex={String.raw`\lambda=vT=\frac vf=\frac{12}{4}=3\ \mathrm{m}`} />
           </SolutionPart>
-          <SolutionPart label="d" title="Колко се побират">
+          <SolutionPart label="г" title="Колко се побират">
             <Formula latex={String.raw`N=\frac{15}{3}=5`} />
             <ResultBox>
               Честотата е свойство на източника, скоростта е свойство на средата, а дължината на
@@ -533,7 +533,7 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
             Вълна се разпространява в една и съща среда със скорост{" "}
             <RichText text={String.raw`$20\,\mathrm{m/s}$`} />.
           </p>
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>
               Намерете <RichText text={String.raw`$\lambda$`} /> при{" "}
               <RichText text={String.raw`$f=2\,\mathrm{Hz}$`} />.
@@ -568,23 +568,23 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
             />
           }
         >
-          <SolutionPart label="a" title="Първата стойност">
+          <SolutionPart label="а" title="Първата стойност">
             <Formula latex={String.raw`\lambda=\frac{20}{2}=10\ \mathrm{m}`} />
           </SolutionPart>
-          <SolutionPart label="b" title="Втората стойност">
+          <SolutionPart label="б" title="Втората стойност">
             <Formula latex={String.raw`\lambda=\frac{20}{5}=4\ \mathrm{m}`} />
           </SolutionPart>
-          <SolutionPart label="c" title="Третата стойност">
+          <SolutionPart label="в" title="Третата стойност">
             <Formula latex={String.raw`\lambda=\frac{20}{10}=2\ \mathrm{m}`} />
           </SolutionPart>
-          <SolutionPart label="d" title="Видът на графиката">
+          <SolutionPart label="г" title="Видът на графиката">
             <p>
               Графиката е <strong>хипербола</strong>: при малки честоти върви високо и стръмно
               пада, а при големи се снишава и се доближава до оста, без да я достига. Трите
-              отчитания от подточки a, b и c са означени върху фигурата над решението.
+              отчитания от подточки а), б) и в) са означени върху фигурата над решението.
             </p>
           </SolutionPart>
-          <SolutionPart label="e" title="Каква е пропорционалността">
+          <SolutionPart label="д" title="Каква е пропорционалността">
             <Formula
               latex={String.raw`\lambda f=v=\mathrm{const}\quad\Longrightarrow\quad \lambda\propto\frac1f`}
             />
@@ -602,7 +602,7 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
             Скоростта на звука във въздуха приемете за{" "}
             <RichText text={String.raw`$v=340\,\mathrm{m/s}$`} />. Намерете дължината на вълната при:
           </p>
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>
               <RichText text={String.raw`$f=100\,\mathrm{Hz}$`} />;
             </li>
@@ -624,18 +624,18 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
             />
           }
         >
-          <SolutionPart label="a" title="Трите дължини">
+          <SolutionPart label="а" title="Трите дължини">
             <Formula
               latex={String.raw`\lambda_1=\frac{340}{100}=3{,}4\ \mathrm{m},\qquad \lambda_2=\frac{340}{500}=0{,}68\ \mathrm{m},\qquad \lambda_3=\frac{340}{1000}=0{,}34\ \mathrm{m}`}
             />
           </SolutionPart>
-          <SolutionPart label="b" title="Най-голям период">
+          <SolutionPart label="б" title="Най-голям период">
             <p>
               Най-ниската честота, тоест <RichText text={String.raw`$100\,\mathrm{Hz}$`} /> с{" "}
               <RichText text={String.raw`$T=0{,}01\,\mathrm{s}$`} />.
             </p>
           </SolutionPart>
-          <SolutionPart label="c" title="Най-голяма дължина и най-висок тон">
+          <SolutionPart label="в" title="Най-голяма дължина и най-висок тон">
             <p>
               Най-голяма дължина има пак <RichText text={String.raw`$100\,\mathrm{Hz}$`} />, и това не
               е съвпадение: при фиксирана скорост <RichText text={String.raw`$\lambda=vT$`} />, тоест{" "}
@@ -655,7 +655,7 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
             На снимка на водна повърхност разстоянието от първия до петия гребен е{" "}
             <RichText text={String.raw`$1{,}20\,\mathrm{m}$`} />.
           </p>
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>Колко пълни дължини на вълната има между първия и петия гребен?</li>
             <li>
               Намерете <RichText text={String.raw`$\lambda$`} />.
@@ -677,16 +677,16 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
             />
           }
         >
-          <SolutionPart label="a" title="Брой междини">
+          <SolutionPart label="а" title="Брой междини">
             <Formula latex={String.raw`N=5-1=4`} />
           </SolutionPart>
-          <SolutionPart label="b" title="Дължина на вълната">
+          <SolutionPart label="б" title="Дължина на вълната">
             <Formula latex={String.raw`\lambda=\frac{1{,}20}{4}=0{,}30\ \mathrm{m}`} />
           </SolutionPart>
-          <SolutionPart label="c" title="Скорост">
+          <SolutionPart label="в" title="Скорост">
             <Formula latex={String.raw`v=\lambda f=0{,}30\cdot2{,}5=0{,}75\ \mathrm{m/s}`} />
           </SolutionPart>
-          <SolutionPart label="d" title="Време за три метра">
+          <SolutionPart label="г" title="Време за три метра">
             <Formula latex={String.raw`t=\frac{s}{v}=\frac{3}{0{,}75}=4\ \mathrm{s}`} />
             <ResultBox>
               <RichText
@@ -706,7 +706,7 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
             <RichText text={String.raw`$\lambda_1$`} /> и <RichText text={String.raw`$\lambda_2$`} /> и
             отговорете:
           </p>
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>Променя ли се честотата при преминаването?</li>
             <li>Променя ли се периодът?</li>
             <li>Коя величина причинява промяната на дължината на вълната?</li>
@@ -721,7 +721,7 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
             />
           }
         >
-          <SolutionPart label="a" title="Двете дължини и честотата">
+          <SolutionPart label="а" title="Двете дължини и честотата">
             <Formula
               latex={String.raw`\lambda_1=\frac{10}{5}=2{,}0\ \mathrm{m},\qquad \lambda_2=\frac{6}{5}=1{,}2\ \mathrm{m}`}
             />
@@ -731,13 +731,13 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
               променяше, на границата щяха да се появяват или изчезват трептения, а няма откъде.
             </p>
           </SolutionPart>
-          <SolutionPart label="b" title="Периодът">
+          <SolutionPart label="б" title="Периодът">
             <p>
               Също не се променя, защото <RichText text="$T=1/f$" />. И в двете среди{" "}
               <RichText text={String.raw`$T=0{,}2\,\mathrm{s}$`} />.
             </p>
           </SolutionPart>
-          <SolutionPart label="c" title="Кое причинява промяната">
+          <SolutionPart label="в" title="Кое причинява промяната">
             <p>
               Промяната идва изцяло от <strong>скоростта</strong>, която е свойство на средата.
             </p>
@@ -758,7 +758,7 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
           <Formula
             latex={String.raw`y_1(t)=3\sin(4\pi t)\ \mathrm{cm},\qquad y_2(t)=3\sin\left(4\pi t+\frac{\pi}{2}\right)\ \mathrm{cm}`}
           />
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>
               Намерете <RichText text="$f$" /> и <RichText text="$T$" />.
             </li>
@@ -781,7 +781,7 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
             />
           }
         >
-          <SolutionPart label="a" title="Честота и период">
+          <SolutionPart label="а" title="Честота и период">
             <Formula
               latex={String.raw`\omega=4\pi\ \mathrm{rad/s}\quad\Longrightarrow\quad f=2\ \mathrm{Hz},\qquad T=0{,}5\ \mathrm{s}`}
             />
@@ -790,15 +790,15 @@ y(0{,}15)&=4\sin\tfrac{3\pi}{2}=-4\ \mathrm{cm}
               честота. Само затова изобщо има смисъл да говорим за постоянна фазова разлика.
             </p>
           </SolutionPart>
-          <SolutionPart label="b" title="Фазова разлика">
+          <SolutionPart label="б" title="Фазова разлика">
             <Formula latex={String.raw`\Delta\varphi=\frac\pi2-0=\frac\pi2=90^\circ`} />
           </SolutionPart>
-          <SolutionPart label="c" title="Част от периода">
+          <SolutionPart label="в" title="Част от периода">
             <Formula
               latex={String.raw`\frac{\Delta\varphi}{2\pi}=\frac14\quad\Longrightarrow\quad \Delta t=\frac T4=0{,}125\ \mathrm{s}`}
             />
           </SolutionPart>
-          <SolutionPart label="d" title="Коя е първа">
+          <SolutionPart label="г" title="Коя е първа">
             <Formula
               latex={String.raw`\begin{aligned}
 y_2:\quad &4\pi t+\frac\pi2=\frac\pi2\ \Longrightarrow\ t=0\\
@@ -811,7 +811,7 @@ y_1:\quad &4\pi t=\frac\pi2\ \Longrightarrow\ t=0{,}125\ \mathrm{s}
               />
             </ResultBox>
           </SolutionPart>
-          <SolutionPart label="e" title="Графиката">
+          <SolutionPart label="д" title="Графиката">
             <p>
               Двете криви са с еднаква форма и амплитуда, изместени с{" "}
               <RichText text="$T/4$" />. В симулацията поставете{" "}
@@ -829,7 +829,7 @@ y_1:\quad &4\pi t=\frac\pi2\ \Longrightarrow\ t=0{,}125\ \mathrm{s}
             закъснява спрямо нея с <RichText text={String.raw`$\Delta t=0{,}20\,\mathrm{s}$`} />.
             Използвайте <RichText text={String.raw`$\Delta\varphi=2\pi\dfrac{\Delta t}{T}$`} />.
           </p>
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>Намерете фазовата разлика.</li>
             <li>Конструктивна или деструктивна интерференция се получава при еднакви амплитуди?</li>
             <li>
@@ -849,12 +849,12 @@ y_1:\quad &4\pi t=\frac\pi2\ \Longrightarrow\ t=0{,}125\ \mathrm{s}
             />
           }
         >
-          <SolutionPart label="a" title="Фазова разлика">
+          <SolutionPart label="а" title="Фазова разлика">
             <Formula
               latex={String.raw`\Delta\varphi=2\pi\cdot\frac{0{,}20}{0{,}80}=\frac\pi2=90^\circ`}
             />
           </SolutionPart>
-          <SolutionPart label="b" title="Какъв вид интерференция">
+          <SolutionPart label="б" title="Какъв вид интерференция">
             <p>
               <strong>Нито едното, нито другото.</strong> Резултантната амплитуда е
             </p>
@@ -867,12 +867,12 @@ y_1:\quad &4\pi t=\frac\pi2\ \Longrightarrow\ t=0{,}125\ \mathrm{s}
               а деструктивна изисква <RichText text={String.raw`$\Delta\varphi=\pi,\ 3\pi,\dots$`} />
             </p>
           </SolutionPart>
-          <SolutionPart label="c" title="Закъснение за половин оборот на фазата">
+          <SolutionPart label="в" title="Закъснение за половин оборот на фазата">
             <Formula
               latex={String.raw`\Delta t=\frac{\Delta\varphi}{2\pi}\,T=\frac{\pi}{2\pi}\cdot0{,}80=\frac T2=0{,}40\ \mathrm{s}`}
             />
           </SolutionPart>
-          <SolutionPart label="d" title="Закъснение за пълен оборот">
+          <SolutionPart label="г" title="Закъснение за пълен оборот">
             <Formula latex={String.raw`\Delta t=\frac{2\pi}{2\pi}\cdot0{,}80=T=0{,}80\ \mathrm{s}`} />
             <ResultBox>
               Закъснение с цял период не се различава по нищо от липса на закъснение. Затова
@@ -887,7 +887,7 @@ y_1:\quad &4\pi t=\frac\pi2\ \Longrightarrow\ t=0{,}125\ \mathrm{s}
         <ProblemTitle n={14} title="Две еднакви вълни" />
         <ProblemStatement>
           <p>Намерете резултантната вълна и вида на интерференцията:</p>
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>
               <RichText text={String.raw`$y_1=2\sin\omega t$, $y_2=2\sin\omega t$`} />;
             </li>
@@ -915,7 +915,7 @@ y_1:\quad &4\pi t=\frac\pi2\ \Longrightarrow\ t=0{,}125\ \mathrm{s}
             />
           }
         >
-          <SolutionPart label="a" title="Еднакви фази">
+          <SolutionPart label="а" title="Еднакви фази">
             <Formula latex={String.raw`y=2\sin\omega t+2\sin\omega t=4\sin\omega t`} />
             <p>
               Амплитуда <RichText text="$4$" />, тоест <strong>конструктивна</strong>{" "}
@@ -923,7 +923,7 @@ y_1:\quad &4\pi t=\frac\pi2\ \Longrightarrow\ t=0{,}125\ \mathrm{s}
               <RichText text="$2$" /> и <RichText text="$2$" />.
             </p>
           </SolutionPart>
-          <SolutionPart label="b" title="Противоположни фази">
+          <SolutionPart label="б" title="Противоположни фази">
             <Formula
               latex={String.raw`y=2\sin\omega t+2\sin(\omega t+\pi)=2\sin\omega t-2\sin\omega t=0`}
             />
@@ -932,7 +932,7 @@ y_1:\quad &4\pi t=\frac\pi2\ \Longrightarrow\ t=0{,}125\ \mathrm{s}
               момент отклоненията са равни по големина и противоположни.
             </p>
           </SolutionPart>
-          <SolutionPart label="c" title="Четвърт период разлика">
+          <SolutionPart label="в" title="Четвърт период разлика">
             <p>
               С <RichText text={String.raw`$\alpha=\omega t$`} /> и{" "}
               <RichText text={String.raw`$\beta=\omega t+\frac\pi2$`} /> пресмятаме двата аргумента
@@ -950,7 +950,7 @@ y_1:\quad &4\pi t=\frac\pi2\ \Longrightarrow\ t=0{,}125\ \mathrm{s}
               между фазите на двете съставящи.
             </p>
           </SolutionPart>
-          <SolutionPart label="d" title="Трите случая като едно правило">
+          <SolutionPart label="г" title="Трите случая като едно правило">
             <Formula latex={String.raw`A_{\text{рез}}=2A\cos\frac{\Delta\varphi}{2}`} />
             <ul className="list-disc space-y-1.5 pl-6">
               <li>
@@ -979,7 +979,7 @@ y_1:\quad &4\pi t=\frac\pi2\ \Longrightarrow\ t=0{,}125\ \mathrm{s}
             <RichText text={String.raw`$\lambda=0{,}80\,\mathrm{m}$`} /> тръгват във фаза от два
             източника. Определете вида на интерференцията при разлика в пътищата:
           </p>
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>
               <RichText text={String.raw`$\Delta r=0$`} />;
             </li>
@@ -1006,15 +1006,15 @@ y_1:\quad &4\pi t=\frac\pi2\ \Longrightarrow\ t=0{,}125\ \mathrm{s}
             />
           }
         >
-          <SolutionPart label="a" title="Разликите в дължини на вълната">
+          <SolutionPart label="а" title="Разликите в дължини на вълната">
             <Formula
               latex={String.raw`\frac{\Delta r}{\lambda}:\quad 0,\qquad \frac12,\qquad 1,\qquad \frac32,\qquad \frac52`}
             />
           </SolutionPart>
-          <SolutionPart label="b" title="Съответните фазови разлики">
+          <SolutionPart label="б" title="Съответните фазови разлики">
             <Formula latex={String.raw`\Delta\varphi=2\pi\frac{\Delta r}{\lambda}:\quad 0,\qquad \pi,\qquad 2\pi,\qquad 3\pi,\qquad 5\pi`} />
           </SolutionPart>
-          <SolutionPart label="c" title="Видът във всеки случай">
+          <SolutionPart label="в" title="Видът във всеки случай">
             <ul className="list-disc space-y-1.5 pl-6">
               <li>
                 <RichText text={String.raw`$\Delta r=0$ и $\Delta r=0{,}80\,\mathrm{m}$: **конструктивна**.`} />
@@ -1026,7 +1026,7 @@ y_1:\quad &4\pi t=\frac\pi2\ \Longrightarrow\ t=0{,}125\ \mathrm{s}
               </li>
             </ul>
           </SolutionPart>
-          <SolutionPart label="d" title="Общото правило">
+          <SolutionPart label="г" title="Общото правило">
             <Formula
               latex={String.raw`\Delta r=k\lambda\ \Rightarrow\ \text{максимум},\qquad \Delta r=\left(k+\tfrac12\right)\lambda\ \Rightarrow\ \text{минимум}`}
             />
@@ -1047,7 +1047,7 @@ y_1:\quad &4\pi t=\frac\pi2\ \Longrightarrow\ t=0{,}125\ \mathrm{s}
             Дадени са <RichText text={String.raw`$y_1(t)=\sin(4\pi t)$`} /> и{" "}
             <RichText text={String.raw`$y_2(t)=\sin(6\pi t)$`} />.
           </p>
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>
               Намерете <RichText text="$f_1$" /> и <RichText text="$f_2$" />.
             </li>
@@ -1074,12 +1074,12 @@ y_1:\quad &4\pi t=\frac\pi2\ \Longrightarrow\ t=0{,}125\ \mathrm{s}
             />
           }
         >
-          <SolutionPart label="a" title="Честоти и периоди">
+          <SolutionPart label="а" title="Честоти и периоди">
             <Formula
               latex={String.raw`f_1=2\ \mathrm{Hz},\ T_1=0{,}5\ \mathrm{s};\qquad f_2=3\ \mathrm{Hz},\ T_2=\tfrac13=0{,}33\ \mathrm{s}`}
             />
           </SolutionPart>
-          <SolutionPart label="b" title="Стойностите в четирите момента">
+          <SolutionPart label="б" title="Стойностите в четирите момента">
             <Formula
               latex={String.raw`\begin{array}{c|c|c|c}
 t\ (\mathrm{s}) & y_1 & y_2 & y_1+y_2\\ \hline
@@ -1090,7 +1090,7 @@ t\ (\mathrm{s}) & y_1 & y_2 & y_1+y_2\\ \hline
 \end{array}`}
             />
           </SolutionPart>
-          <SolutionPart label="c" title="Възможна ли е постоянна интерференция">
+          <SolutionPart label="в" title="Възможна ли е постоянна интерференция">
             <p>
               Не. Конструктивната интерференция изисква <strong>постоянна</strong> фазова разлика,
               а тук тя расте с времето.
@@ -1104,7 +1104,7 @@ t\ (\mathrm{s}) & y_1 & y_2 & y_1+y_2\\ \hline
               <RichText text={String.raw`$2\pi$`} />.
             </p>
           </SolutionPart>
-          <SolutionPart label="d" title="Кога се връщат заедно">
+          <SolutionPart label="г" title="Кога се връщат заедно">
             <p>Търсим най-малкото време, което е цял брой периоди и на двете.</p>
             <Formula
               latex={String.raw`t=\mathrm{HOK}\left(0{,}5;\ \tfrac13\right)=1\ \mathrm{s}\qquad\left(1=2\cdot0{,}5=3\cdot\tfrac13\right)`}
@@ -1166,7 +1166,7 @@ t\ (\mathrm{s}) & y_1 & y_2 & y_1+y_2\\ \hline
             <RichText text={String.raw`$f_2=260\,\mathrm{Hz}$`} />, а честотата на биенията е{" "}
             <RichText text={String.raw`$f_{\text{биене}}=|f_1-f_2|$`} />.
           </p>
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>Намерете честотата на биенията.</li>
             <li>Намерете времето между два последователни максимума на силата на звука.</li>
             <li>
@@ -1191,16 +1191,16 @@ t\ (\mathrm{s}) & y_1 & y_2 & y_1+y_2\\ \hline
             />
           }
         >
-          <SolutionPart label="a" title="Честота на биенията">
+          <SolutionPart label="а" title="Честота на биенията">
             <Formula latex={String.raw`f_{\text{биене}}=|256-260|=4\ \mathrm{Hz}`} />
           </SolutionPart>
-          <SolutionPart label="b" title="Време между максимумите">
+          <SolutionPart label="б" title="Време между максимумите">
             <Formula latex={String.raw`T_{\text{биене}}=\frac{1}{f_{\text{биене}}}=0{,}25\ \mathrm{s}`} />
           </SolutionPart>
-          <SolutionPart label="c" title="Брой усилвания за десет секунди">
+          <SolutionPart label="в" title="Брой усилвания за десет секунди">
             <Formula latex={String.raw`N=f_{\text{биене}}\cdot t=4\cdot10=40`} />
           </SolutionPart>
-          <SolutionPart label="d" title="Когато честотите се изравняват">
+          <SolutionPart label="г" title="Когато честотите се изравняват">
             <p>
               Разликата намалява, значи биенията стават все по-редки, а времето между максимумите
               расте. В границата <RichText text={String.raw`$f_2\to256\,\mathrm{Hz}$`} /> имаме{" "}
@@ -1222,7 +1222,7 @@ t\ (\mathrm{s}) & y_1 & y_2 & y_1+y_2\\ \hline
           <p>
             Променливото напрежение има честота <RichText text={String.raw`$f=50\,\mathrm{Hz}$`} />.
           </p>
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>Намерете периода.</li>
             <li>Намерете ъгловата честота.</li>
             <li>
@@ -1246,19 +1246,19 @@ t\ (\mathrm{s}) & y_1 & y_2 & y_1+y_2\\ \hline
             />
           }
         >
-          <SolutionPart label="a" title="Период">
+          <SolutionPart label="а" title="Период">
             <Formula latex={String.raw`T=\frac1f=0{,}02\ \mathrm{s}=20\ \mathrm{ms}`} />
           </SolutionPart>
-          <SolutionPart label="b" title="Ъглова честота">
+          <SolutionPart label="б" title="Ъглова честота">
             <Formula latex={String.raw`\omega=2\pi f=100\pi=314\ \mathrm{rad/s}`} />
           </SolutionPart>
-          <SolutionPart label="c" title="Трептения за три секунди">
+          <SolutionPart label="в" title="Трептения за три секунди">
             <Formula latex={String.raw`N=ft=50\cdot3=150`} />
           </SolutionPart>
-          <SolutionPart label="d" title="Четвърт оборот на фазата">
+          <SolutionPart label="г" title="Четвърт оборот на фазата">
             <Formula latex={String.raw`\Delta t=\frac{\pi/2}{100\pi}=0{,}005\ \mathrm{s}=5\ \mathrm{ms}`} />
           </SolutionPart>
-          <SolutionPart label="e" title="Половин оборот на фазата">
+          <SolutionPart label="д" title="Половин оборот на фазата">
             <Formula latex={String.raw`\Delta t=\frac{\pi}{100\pi}=0{,}01\ \mathrm{s}=10\ \mathrm{ms}`} />
             <ResultBox>
               <RichText
@@ -1274,7 +1274,7 @@ t\ (\mathrm{s}) & y_1 & y_2 & y_1+y_2\\ \hline
           <Formula
             latex={String.raw`U_1(t)=10\sin(100\pi t)\ \mathrm{V},\qquad U_2(t)=6\sin\left(100\pi t+\frac\pi2\right)\ \mathrm{V}`}
           />
-          <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
             <li>Намерете амплитудите.</li>
             <li>Намерете честотите.</li>
             <li>Намерете периодите.</li>
@@ -1294,26 +1294,26 @@ t\ (\mathrm{s}) & y_1 & y_2 & y_1+y_2\\ \hline
             />
           }
         >
-          <SolutionPart label="a" title="Амплитуди">
+          <SolutionPart label="а" title="Амплитуди">
             <Formula latex={String.raw`U_{1,\max}=10\ \mathrm{V},\qquad U_{2,\max}=6\ \mathrm{V}`} />
           </SolutionPart>
-          <SolutionPart label="b" title="Честоти">
+          <SolutionPart label="б" title="Честоти">
             <Formula latex={String.raw`f_1=f_2=\frac{100\pi}{2\pi}=50\ \mathrm{Hz}`} />
           </SolutionPart>
-          <SolutionPart label="c" title="Периоди">
+          <SolutionPart label="в" title="Периоди">
             <Formula latex={String.raw`T_1=T_2=0{,}02\ \mathrm{s}`} />
           </SolutionPart>
-          <SolutionPart label="d" title="Фазова разлика">
+          <SolutionPart label="г" title="Фазова разлика">
             <Formula
               latex={String.raw`\Delta\varphi=\frac\pi2-0=\frac\pi2=90^\circ\quad(U_2\ \text{изпреварва}\ U_1)`}
             />
           </SolutionPart>
-          <SolutionPart label="e" title="Времево отместване">
+          <SolutionPart label="д" title="Времево отместване">
             <Formula
               latex={String.raw`\Delta t=\frac{\Delta\varphi}{\omega}=\frac{\pi/2}{100\pi}=0{,}005\ \mathrm{s}=\frac T4`}
             />
           </SolutionPart>
-          <SolutionPart label="f" title="Стойностите в началния момент">
+          <SolutionPart label="е" title="Стойностите в началния момент">
             <Formula
               latex={String.raw`U_1(0)=10\sin 0=0\ \mathrm{V},\qquad U_2(0)=6\sin\frac\pi2=6\ \mathrm{V}`}
             />

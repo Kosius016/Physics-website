@@ -76,7 +76,7 @@ export default function CapacitorProblemsPage() {
             положителната плоча на плосък кондензатор. Разстоянието е <RichText text="$d$" />,
             полето е еднородно и външната сила има големина <RichText text="$F=dqE$" />.
           </p>
-          <ol className="list-[lower-alpha] space-y-2 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-2 pl-6">
             <li>Изведете <RichText text={String.raw`$dA=\Delta V\,dq$`} /> от работата по пътя между плочите.</li>
             <li>Обяснете защо пълната работа не е <RichText text={String.raw`$Q\Delta V$`} />.</li>
             <li>Начертайте <RichText text={String.raw`$\Delta V(q)$`} /> при зареждане от <RichText text="$0$" /> до <RichText text="$Q$" />.</li>
@@ -122,7 +122,7 @@ export default function CapacitorProblemsPage() {
             />
           }
         >
-          <SolutionPart label="a" title="Работа за една малка порция заряд">
+          <SolutionPart label="а" title="Работа за една малка порция заряд">
             <p>
               При бавно пренасяне външната сила уравновесява електричната. Понеже полето е
               еднородно, силата е постоянна по целия път.
@@ -135,14 +135,14 @@ export default function CapacitorProblemsPage() {
             />
           </SolutionPart>
 
-          <SolutionPart label="b" title={String.raw`Защо не получаваме $Q\Delta V$?`}>
+          <SolutionPart label="б" title={String.raw`Защо не получаваме $Q\Delta V$?`}>
             <p>
               Потенциалната разлика не е постоянна. Тя започва от нула и расте с натрупването
               на заряд, така че първите порции се пренасят с по-малка работа от последните.
             </p>
           </SolutionPart>
 
-          <SolutionPart label="c" title="Графика на напрежението">
+          <SolutionPart label="в" title="Графика на напрежението">
             <p>
               От дефиницията <RichText text={String.raw`$C=q/\Delta V$`} /> следва{" "}
               <RichText text={String.raw`$\Delta V=q/C$`} />. Получаваме права през началото с наклон
@@ -150,7 +150,7 @@ export default function CapacitorProblemsPage() {
             </p>
           </SolutionPart>
 
-          <SolutionPart label="d" title="Лицето под правата">
+          <SolutionPart label="г" title="Лицето под правата">
             <p>Работата е интегралът под графиката, тоест лице на триъгълник.</p>
             <Formula
               latex={String.raw`U=A=\int_0^Q\frac{q}{C}\,dq
@@ -159,19 +159,19 @@ export default function CapacitorProblemsPage() {
             />
           </SolutionPart>
 
-          <SolutionPart label="e" title="Проверка със средното напрежение">
+          <SolutionPart label="д" title="Проверка със средното напрежение">
             <p>
               Средната стойност на линейно нарастваща величина е половината от крайната.
             </p>
             <Formula latex={String.raw`\langle\Delta V\rangle=\frac12\Delta V,\qquad U=\langle\Delta V\rangle Q=\frac12Q\Delta V`} />
           </SolutionPart>
 
-          <SolutionPart label="f" title="Трите форми на енергията">
+          <SolutionPart label="е" title="Трите форми на енергията">
             <p>Замествайки <RichText text={String.raw`$Q=C\Delta V$`} />, получаваме:</p>
             <Formula latex={String.raw`\boxed{U=\frac12Q\Delta V=\frac12C(\Delta V)^2=\frac{Q^2}{2C}}`} />
           </SolutionPart>
 
-          <SolutionPart label="g" title="Енергията е разпределена в полето">
+          <SolutionPart label="ж" title="Енергията е разпределена в полето">
             <p>
               За плосък кондензатор използваме <RichText text={String.raw`$C=\varepsilon_0S/d$`} /> и{" "}
               <RichText text={String.raw`$\Delta V=Ed$`} />.
@@ -196,7 +196,7 @@ export default function CapacitorProblemsPage() {
             <RichText text={String.raw`$L=1{,}0\,\mathrm m$`} />. Поставете <RichText text="$b=a+d$" /> и{" "}
             <RichText text="$x=d/a$" />.
           </p>
-          <ol className="list-[lower-alpha] space-y-2 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-2 pl-6">
             <li>Запишете точния капацитет чрез <RichText text="$x$" />.</li>
             <li>Разложете логаритъма и обърнете реда до член от ред <RichText text="$x^2$" />.</li>
             <li>Свържете водещия член с вътрешната площ, а линейната поправка със средния радиус.</li>
@@ -254,12 +254,12 @@ export default function CapacitorProblemsPage() {
             />
           }
         >
-          <SolutionPart label="a" title="Точната формула чрез малкия параметър">
+          <SolutionPart label="а" title="Точната формула чрез малкия параметър">
             <p>Понеже <RichText text="$b/a=(a+d)/a=1+x$" />, точната формула става:</p>
             <Formula latex={String.raw`\boxed{C=\frac{2\pi\varepsilon_0L}{\ln(1+x)}}`} />
           </SolutionPart>
 
-          <SolutionPart label="b" title="Обръщане на реда">
+          <SolutionPart label="б" title="Обръщане на реда">
             <p>Отделяме водещия множител <RichText text="$x$" />:</p>
             <Formula
               latex={String.raw`\ln(1+x)=x\left(1-\frac{x}{2}+\frac{x^2}{3}+O(x^3)\right)`}
@@ -278,7 +278,7 @@ export default function CapacitorProblemsPage() {
             />
           </SolutionPart>
 
-          <SolutionPart label="c" title="Вътрешна площ и среден радиус">
+          <SolutionPart label="в" title="Вътрешна площ и среден радиус">
             <p>Само водещият член дава плосък кондензатор с вътрешната цилиндрична площ.</p>
             <Formula latex={String.raw`C_{\text{вътр}}=\frac{2\pi\varepsilon_0aL}{d}=\frac{\varepsilon_0(2\pi aL)}{d}`} />
             <p>Добавянето на линейната поправка заменя <RichText text="$a$" /> със средния радиус.</p>
@@ -289,7 +289,7 @@ export default function CapacitorProblemsPage() {
             />
           </SolutionPart>
 
-          <SolutionPart label="d" title="Ред на относителните грешки">
+          <SolutionPart label="г" title="Ред на относителните грешки">
             <Formula
               latex={String.raw`\frac{C_{\text{вътр}}-C}{C}
               =\frac{\ln(1+x)}{x}-1
@@ -306,7 +306,7 @@ export default function CapacitorProblemsPage() {
             </ResultBox>
           </SolutionPart>
 
-          <SolutionPart label="e" title="Числена проверка">
+          <SolutionPart label="д" title="Числена проверка">
             <div className="overflow-x-auto rounded-[10px] border-[1.5px] border-ink bg-surface shadow-hard-sm">
               <table className="w-full min-w-[620px] border-collapse text-[13.5px]">
                 <thead className="bg-hl">
@@ -351,7 +351,7 @@ export default function CapacitorProblemsPage() {
             пробивно поле <RichText text={String.raw`$E_{\mathrm{crit}}=3{,}0\,\mathrm{MV/m}$`} />. Търсим{" "}
             радиуса <RichText text="$a$" />, който дава най-високо пробивно напрежение.
           </p>
-          <ol className="list-[lower-alpha] space-y-2 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-2 pl-6">
             <li>Изведете <RichText text="$E(r)$" /> от потенциалната разлика.</li>
             <li>Сравнете максималното поле при <RichText text={String.raw`$10\,\mathrm{kV}$`} /> за <RichText text={String.raw`$a=1{,}0\,\mathrm{mm}$`} /> и <RichText text={String.raw`$a=0{,}5\,\mathrm{mm}$`} />.</li>
             <li>Намерете аналитично радиуса за максимално пробивно напрежение.</li>
@@ -395,7 +395,7 @@ export default function CapacitorProblemsPage() {
             />
           }
         >
-          <SolutionPart label="a" title="Полето и мястото на максимума">
+          <SolutionPart label="а" title="Полето и мястото на максимума">
             <p>
               За коаксиален цилиндър <RichText text={String.raw`$E(r)=\lambda/(2\pi\varepsilon_0r)$`} />.
               Интегрирането между двата проводника дава:
@@ -411,7 +411,7 @@ export default function CapacitorProblemsPage() {
             </p>
           </SolutionPart>
 
-          <SolutionPart label="b" title="Проверка на идеята за по-тънко жило">
+          <SolutionPart label="б" title="Проверка на идеята за по-тънко жило">
             <Formula
               latex={String.raw`E_{\max}(a=1{,}0\,\mathrm{mm})
               =\frac{10^4}{10^{-3}\ln 10}
@@ -428,7 +428,7 @@ export default function CapacitorProblemsPage() {
             </p>
           </SolutionPart>
 
-          <SolutionPart label="c" title="Аналитичен максимум">
+          <SolutionPart label="в" title="Аналитичен максимум">
             <p>При пробив <RichText text={String.raw`$E(a)=E_{\mathrm{crit}}$`} />, следователно:</p>
             <Formula latex={String.raw`\Delta V_{\mathrm{crit}}(a)=E_{\mathrm{crit}}a\ln\frac ba`} />
             <Formula
@@ -443,7 +443,7 @@ export default function CapacitorProblemsPage() {
             </p>
           </SolutionPart>
 
-          <SolutionPart label="d" title="Числен резултат">
+          <SolutionPart label="г" title="Числен резултат">
             <Formula
               latex={String.raw`a_{\mathrm{opt}}=\frac{10\,\mathrm{mm}}{e}=3{,}68\,\mathrm{mm},\qquad
               \Delta V_{\max}=\frac{E_{\mathrm{crit}}b}{e}=11{,}0\,\mathrm{kV}`}
@@ -455,7 +455,7 @@ export default function CapacitorProblemsPage() {
             </p>
           </SolutionPart>
 
-          <SolutionPart label="e" title="Производствен допуск">
+          <SolutionPart label="д" title="Производствен допуск">
             <p>
               Нека <RichText text={String.raw`$a=y\,a_{\mathrm{opt}}$`} />. Нормализираното пробивно
               напрежение е:
@@ -483,12 +483,12 @@ export default function CapacitorProblemsPage() {
             <RichText text={String.raw`$d_2=3{,}0\,\mathrm{mm}$`} />.
           </p>
           <p className="font-semibold">Случай А: кондензаторът е изключен, <RichText text={String.raw`$Q=\mathrm{const}$`} />.</p>
-          <ol className="list-[lower-alpha] space-y-2 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-2 pl-6">
             <li>Намерете <RichText text={String.raw`$C_1,Q,C_2,\Delta V_2$`} /> и промяната на енергията.</li>
             <li>Намерете силата, външната работа и проверете баланса.</li>
           </ol>
           <p className="font-semibold">Случай Б: кондензаторът остава свързан, <RichText text={String.raw`$\Delta V=\mathrm{const}$`} />.</p>
-          <ol className="list-[lower-alpha] space-y-2 pl-6" start={3}>
+          <ol className="list-[bulgarian-alpha] space-y-2 pl-6" start={3}>
             <li>Намерете <RichText text="$C_2,Q_2$" /> и промяната на енергията.</li>
             <li>Намерете енергията, върната към източника, и външната работа.</li>
             <li>Проследете с думи всеки джаул.</li>
@@ -544,7 +544,7 @@ export default function CapacitorProblemsPage() {
             />
           }
         >
-          <SolutionPart label="A-a" title="Изключен кондензатор: начално и крайно състояние">
+          <SolutionPart label="А-а" title="Изключен кондензатор: начално и крайно състояние">
             <Formula
               latex={String.raw`C_1=\frac{\varepsilon_0S}{d_1}=88{,}5\,\mathrm{pF},\qquad
               Q=C_1\Delta V_1=88{,}5\,\mathrm{nC}`}
@@ -560,7 +560,7 @@ export default function CapacitorProblemsPage() {
             />
           </SolutionPart>
 
-          <SolutionPart label="A-b" title="Сила и външна работа">
+          <SolutionPart label="А-б" title="Сила и външна работа">
             <p>
               Върху едната плоча действа само полето на другата,{" "}
               <RichText text={String.raw`$E_{\text{чуждо}}=\sigma/(2\varepsilon_0)$`} />.
@@ -578,7 +578,7 @@ export default function CapacitorProblemsPage() {
             />
           </SolutionPart>
 
-          <SolutionPart label="Б-c" title="Свързан източник: зарядът и енергията намаляват">
+          <SolutionPart label="Б-в" title="Свързан източник: зарядът и енергията намаляват">
             <Formula
               latex={String.raw`C_2=29{,}5\,\mathrm{pF},\qquad
               Q_2=C_2\Delta V=29{,}5\,\mathrm{nC}`}
@@ -589,10 +589,10 @@ export default function CapacitorProblemsPage() {
             />
           </SolutionPart>
 
-          <SolutionPart label="Б-d" title="Източник и външна работа">
+          <SolutionPart label="Б-г" title="Източник и външна работа">
             <p>Към източника се връща заряд <RichText text={String.raw`$Q_1-Q_2=59{,}0\,\mathrm{nC}$`} />.</p>
             <Formula
-              latex={String.raw`E_{\text{към източника}}
+              latex={String.raw`U_{\text{към източника}}
               =\Delta V(Q_1-Q_2)=59{,}0\,\mu\mathrm J`}
             />
             <p>Работата на източника върху системата е отрицателна. От баланса:</p>
@@ -602,7 +602,7 @@ export default function CapacitorProblemsPage() {
             />
           </SolutionPart>
 
-          <SolutionPart label="Б-e" title="Проследяване на енергията">
+          <SolutionPart label="Б-д" title="Проследяване на енергията">
             <ResultBox>
               Външната сила внася <RichText text={String.raw`$29{,}5\,\mu\mathrm J$`} />. Полето губи{" "}
               още <RichText text={String.raw`$29{,}5\,\mu\mathrm J$`} />. Сборът{" "}
@@ -621,7 +621,7 @@ export default function CapacitorProblemsPage() {
             незареден. Свързваме едноименните плочи с проводници с общо съпротивление{" "}
             <RichText text="$R$" />.
           </p>
-          <ol className="list-[lower-alpha] space-y-2 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-2 pl-6">
             <li>Намерете крайното общо напрежение.</li>
             <li>Сравнете началната и крайната полева енергия.</li>
             <li>Интегрирайте <RichText text="$I^2R$" /> при дадения ток.</li>
@@ -665,7 +665,7 @@ export default function CapacitorProblemsPage() {
             />
           }
         >
-          <SolutionPart label="a" title="Крайно напрежение">
+          <SolutionPart label="а" title="Крайно напрежение">
             <p>
               Общият заряд е <RichText text={String.raw`$Q_{\text{общ}}=C\Delta V_0$`} />, а след
               свързването общият капацитет е <RichText text="$2C$" />.
@@ -673,7 +673,7 @@ export default function CapacitorProblemsPage() {
             <Formula latex={String.raw`\boxed{\Delta V_f=\frac{C\Delta V_0}{2C}=\frac{\Delta V_0}{2}}`} />
           </SolutionPart>
 
-          <SolutionPart label="b" title="Половината полева енергия липсва">
+          <SolutionPart label="б" title="Половината полева енергия липсва">
             <Formula
               latex={String.raw`U_i=\frac12C(\Delta V_0)^2,\qquad
               U_f=2\cdot\frac12C\left(\frac{\Delta V_0}{2}\right)^2
@@ -685,7 +685,7 @@ export default function CapacitorProblemsPage() {
             />
           </SolutionPart>
 
-          <SolutionPart label="c" title="Интегралът на джауловата топлина">
+          <SolutionPart label="в" title="Интегралът на джауловата топлина">
             <Formula
               latex={String.raw`I(t)=\frac{\Delta V_0}{R}\exp\left(-\frac{2t}{RC}\right)`}
             />
@@ -702,7 +702,7 @@ export default function CapacitorProblemsPage() {
             </p>
           </SolutionPart>
 
-          <SolutionPart label="d" title={String.raw`Сингулярната граница $R\to0$`}>
+          <SolutionPart label="г" title={String.raw`Сингулярната граница $R\to0$`}>
             <p>
               Когато <RichText text={String.raw`$R\to0$`} />, токът става все по-голям и все по-кратък,
               но пренесената енергия остава крайна. Реалната верига винаги има паразитно
@@ -712,7 +712,7 @@ export default function CapacitorProblemsPage() {
             </p>
           </SolutionPart>
 
-          <SolutionPart label="e" title={String.raw`Произволни $C_1$, $C_2$, $\Delta V_1$ и $\Delta V_2$`}>
+          <SolutionPart label="д" title={String.raw`Произволни $C_1$, $C_2$, $\Delta V_1$ и $\Delta V_2$`}>
             <p>При еднаква полярност запазването на заряда дава:</p>
             <Formula
               latex={String.raw`\Delta V_f=\frac{C_1\Delta V_1+C_2\Delta V_2}{C_1+C_2}`}
@@ -738,7 +738,7 @@ export default function CapacitorProblemsPage() {
             заряд <RichText text="$Q$" /> и дължина <RichText text="$L$" />. Използвайте
             плътността <RichText text={String.raw`$u=\varepsilon_0E^2/2$`} />.
           </p>
-          <ol className="list-[lower-alpha] space-y-2 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-2 pl-6">
             <li>Намерете енергията в тънък слой от <RichText text="$r$" /> до <RichText text="$r+dr$" />.</li>
             <li>Намерете дела на енергията между <RichText text="$a$" /> и <RichText text="$r$" />.</li>
             <li>Изведете радиуса, който съдържа половината енергия.</li>
@@ -782,7 +782,7 @@ export default function CapacitorProblemsPage() {
             />
           }
         >
-          <SolutionPart label="a" title="Енергия в тънък цилиндричен слой">
+          <SolutionPart label="а" title="Енергия в тънък цилиндричен слой">
             <p>
               Полето и обемът на слой с дебелина <RichText text="$dr$" /> са:
             </p>
@@ -801,7 +801,7 @@ export default function CapacitorProblemsPage() {
             </p>
           </SolutionPart>
 
-          <SolutionPart label="b" title="Дял от пълната енергия">
+          <SolutionPart label="б" title="Дял от пълната енергия">
             <p>Интегралът на <RichText text="$dr/r$" /> е логаритъм.</p>
             <Formula
               latex={String.raw`U(a<r'<r)\propto\ln\frac ra,\qquad
@@ -813,7 +813,7 @@ export default function CapacitorProblemsPage() {
             />
           </SolutionPart>
 
-          <SolutionPart label="c" title="Радиусът на половината енергия">
+          <SolutionPart label="в" title="Радиусът на половината енергия">
             <Formula
               latex={String.raw`\frac{\ln(r_{1/2}/a)}{\ln(b/a)}=\frac12
               \quad\Longrightarrow\quad
@@ -822,7 +822,7 @@ export default function CapacitorProblemsPage() {
             <Formula latex={String.raw`\boxed{r_{1/2}=\sqrt{ab}}`} />
           </SolutionPart>
 
-          <SolutionPart label="d" title={String.raw`Половината енергия в $0{,}99\%$ от обема`}>
+          <SolutionPart label="г" title={String.raw`Половината енергия в $0{,}99\%$ от обема`}>
             <Formula latex={String.raw`r_{1/2}=\sqrt{1\cdot100}\,\mathrm{mm}=10\,\mathrm{mm}`} />
             <Formula
               latex={String.raw`\frac{\mathcal V(a<r<r_{1/2})}{\mathcal V(a<r<b)}
@@ -832,7 +832,7 @@ export default function CapacitorProblemsPage() {
             />
           </SolutionPart>
 
-          <SolutionPart label="e" title="Сравнение с плоския кондензатор">
+          <SolutionPart label="д" title="Сравнение с плоския кондензатор">
             <p>
               При идеален плосък кондензатор полето е еднородно и{" "}
               <RichText text={String.raw`$u=\varepsilon_0E^2/2$`} /> е постоянно. Половината енергия е

@@ -260,7 +260,7 @@ export default function TaylorProblemsPage() {
             <p>
               Намерете <RichText text={String.raw`$\sqrt{101}$`} /> без калкулатор:
             </p>
-            <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+            <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
               <li>с два члена от реда;</li>
               <li>с три члена;</li>
               <li>
@@ -274,14 +274,14 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Търсете най-близкия точен квадрат. $101=100\cdot1{,}01$, тоест малкият параметър е $x=0{,}01$, а не $101$.`} />
             }
           >
-            <SolutionPart label="a" title="Изнасяме близката кръгла стойност">
+            <SolutionPart label="а" title="Изнасяме близката кръгла стойност">
               <Formula latex={String.raw`\sqrt{101}=\sqrt{100\cdot1{,}01}=10\sqrt{1+x},\qquad x=0{,}01`} />
               <p>
                 Това е цялата хитрост. Без изнасянето няма малък параметър и разгъване няма
                 откъде да започне.
               </p>
             </SolutionPart>
-            <SolutionPart label="b" title="Биномният ред при половинен показател">
+            <SolutionPart label="б" title="Биномният ред при половинен показател">
               <Formula
                 latex={String.raw`(1+x)^{1/2}=1+\frac{x}{2}-\frac{x^2}{8}+\frac{x^3}{16}-\cdots`}
               />
@@ -291,7 +291,7 @@ export default function TaylorProblemsPage() {
                 .
               </p>
             </SolutionPart>
-            <SolutionPart label="c" title="Два члена">
+            <SolutionPart label="в" title="Два члена">
               <Formula latex={String.raw`\sqrt{101}\approx10\left(1+\frac{0{,}01}{2}\right)=10\cdot1{,}005=10{,}05`} />
               <p>
                 Отклонението е <RichText text={String.raw`$+0{,}000124$`} />, тоест{" "}
@@ -300,7 +300,7 @@ export default function TaylorProblemsPage() {
                 <RichText text={String.raw`$10\cdot\frac{x^2}{8}=1{,}25\cdot10^{-4}$`} />.
               </p>
             </SolutionPart>
-            <SolutionPart label="d" title="Три члена">
+            <SolutionPart label="г" title="Три члена">
               <Formula
                 latex={String.raw`\sqrt{101}\approx10\left(1+0{,}005-\frac{0{,}0001}{8}\right)
                 =10\cdot1{,}0049875=10{,}049875`}
@@ -324,10 +324,10 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Най-близкият точен куб е $125=5^3$. Показателят вече е $\alpha=\tfrac13$, затова коефициентът пред $x^2$ не е $-\tfrac18$.`} />
             }
           >
-            <SolutionPart label="a" title="Изнасяме куба">
+            <SolutionPart label="а" title="Изнасяме куба">
               <Formula latex={String.raw`\sqrt[3]{126}=\sqrt[3]{125\cdot1{,}008}=5\,(1+x)^{1/3},\qquad x=0{,}008`} />
             </SolutionPart>
-            <SolutionPart label="b" title="Коефициентите при третичен показател">
+            <SolutionPart label="б" title="Коефициентите при третичен показател">
               <Formula
                 latex={String.raw`\frac{\alpha(\alpha-1)}{2}=\frac{\frac13\left(-\frac23\right)}{2}=-\frac19
                 \ \Longrightarrow\ (1+x)^{1/3}=1+\frac{x}{3}-\frac{x^2}{9}+\cdots`}
@@ -337,7 +337,7 @@ export default function TaylorProblemsPage() {
                 затова редът не бива да се запомня наизуст за един конкретен корен.
               </p>
             </SolutionPart>
-            <SolutionPart label="c" title="Двата отговора">
+            <SolutionPart label="в" title="Двата отговора">
               <Formula
                 latex={String.raw`5\left(1+\frac{0{,}008}{3}\right)=5{,}013333,\qquad
                 5\left(1+0{,}0026667-\frac{0{,}000064}{9}\right)=5{,}0132978`}
@@ -354,7 +354,7 @@ export default function TaylorProblemsPage() {
 
           <ProblemTitle n={3} title={String.raw`$\sin1^\circ$ и $\tan1^\circ$`} />
           <ProblemStatement>
-            <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+            <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
               <li>
                 Пресметнете <RichText text={String.raw`$\sin1^\circ$`} /> и{" "}
                 <RichText text={String.raw`$\tan1^\circ$`} /> с приближенията{" "}
@@ -373,10 +373,10 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Редовете важат само за ъгъл в **радиани**. Първата стъпка е $1^\circ=\pi/180$, а не $1$.`} />
             }
           >
-            <SolutionPart label="a" title="Преминаваме в радиани">
+            <SolutionPart label="а" title="Преминаваме в радиани">
               <Formula latex={String.raw`\theta=1^\circ=\frac{\pi}{180}=0{,}0174532925\ \mathrm{rad}`} />
             </SolutionPart>
-            <SolutionPart label="b" title="Само водещият член">
+            <SolutionPart label="б" title="Само водещият член">
               <p>
                 И двете приближения дават едно и също число{" "}
                 <RichText text={String.raw`$0{,}01745329$`} />, но точните стойности са{" "}
@@ -387,7 +387,7 @@ export default function TaylorProblemsPage() {
                 latex={String.raw`\delta_{\sin}=+0{,}0051\,\%,\qquad \delta_{\tan}=-0{,}0102\,\%`}
               />
             </SolutionPart>
-            <SolutionPart label="c" title="С кубичния член">
+            <SolutionPart label="в" title="С кубичния член">
               <Formula
                 latex={String.raw`\sin\theta\approx\theta-\frac{\theta^3}{6}=0{,}0174524064,\qquad
                 \tan\theta\approx\theta+\frac{\theta^3}{3}=0{,}0174550647`}
@@ -397,7 +397,7 @@ export default function TaylorProblemsPage() {
                 деветия.
               </p>
             </SolutionPart>
-            <SolutionPart label="d" title="Защо знаците са различни">
+            <SolutionPart label="г" title="Защо знаците са различни">
               <Formula
                 latex={String.raw`\frac{\theta}{\sin\theta}-1\approx+\frac{\theta^2}{6},\qquad
                 \frac{\theta}{\tan\theta}-1\approx-\frac{\theta^2}{3}`}
@@ -420,7 +420,7 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Редът за $e^x$ няма редуване на знаците, затова всички изхвърлени членове са положителни и приближението е винаги **отдолу**.`} />
             }
           >
-            <SolutionPart label="a" title="Три члена">
+            <SolutionPart label="а" title="Три члена">
               <Formula
                 latex={String.raw`e^{x}\approx1+x+\frac{x^2}{2}=1+0{,}1+0{,}005=1{,}105`}
               />
@@ -429,7 +429,7 @@ export default function TaylorProblemsPage() {
                 отрицателно, както се предвижда.
               </p>
             </SolutionPart>
-            <SolutionPart label="b" title="Четири члена">
+            <SolutionPart label="б" title="Четири члена">
               <Formula
                 latex={String.raw`e^{x}\approx1+x+\frac{x^2}{2}+\frac{x^3}{6}=1{,}105+0{,}000166\overline{6}=1{,}1051667`}
               />
@@ -481,17 +481,17 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Не съкращавайте наум. Запишете реда, разделете почленно на $x$ и чак тогава пуснете $x\to0$.`} />
             }
           >
-            <SolutionPart label="a" title="Записваме реда">
+            <SolutionPart label="а" title="Записваме реда">
               <Formula latex={String.raw`\sin x=x-\frac{x^3}{6}+\frac{x^5}{120}+O(x^7)`} />
             </SolutionPart>
-            <SolutionPart label="b" title="Делим почленно">
+            <SolutionPart label="б" title="Делим почленно">
               <Formula latex={String.raw`\frac{\sin x}{x}=1-\frac{x^2}{6}+\frac{x^4}{120}+O(x^6)`} />
               <p>
                 Дясната страна вече е обикновен многочлен: няма деление на нула и стойността
                 при <RichText text="$x=0$" /> се чете направо.
               </p>
             </SolutionPart>
-            <SolutionPart label="c" title="Пускаме границата">
+            <SolutionPart label="в" title="Пускаме границата">
               <ResultBox>
                 <RichText text={String.raw`$\lim\limits_{x\to0}\dfrac{\sin x}{x}=1$, защото всеки член с $x$ изчезва.`} />
               </ResultBox>
@@ -509,10 +509,10 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Редът за $\sin$ важи за целия аргумент. Заместете $x\to3x$ навсякъде, включително в кубичния член.`} />
             }
           >
-            <SolutionPart label="a" title="Разгъваме по аргумента">
+            <SolutionPart label="а" title="Разгъваме по аргумента">
               <Formula latex={String.raw`\sin 3x=3x-\frac{(3x)^3}{6}+O(x^5)=3x-\frac{9x^3}{2}+O(x^5)`} />
             </SolutionPart>
-            <SolutionPart label="b" title="Делим и пускаме границата">
+            <SolutionPart label="б" title="Делим и пускаме границата">
               <Formula latex={String.raw`\frac{\sin 3x}{x}=3-\frac{9x^2}{2}+O(x^4)\ \longrightarrow\ 3`} />
               <ResultBox>
                 <RichText text={String.raw`Границата е $3$. Обърнете внимание, че $(3x)^3=27x^3$, а не $3x^3$: това е най-честата грешка тук.`} />
@@ -533,13 +533,13 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Задачи 5 и 6 са частни случаи. Проверете отговора си с тях: $a=b=1$ трябва да върне $1$, а $a=3,\ b=1$ трябва да върне $3$.`} />
             }
           >
-            <SolutionPart label="a" title="Разгъваме и делим">
+            <SolutionPart label="а" title="Разгъваме и делим">
               <Formula
                 latex={String.raw`\frac{\sin(ax)}{bx}=\frac{ax-\dfrac{a^3x^3}{6}+O(x^5)}{bx}
                 =\frac{a}{b}-\frac{a^3x^2}{6b}+O(x^4)`}
               />
             </SolutionPart>
-            <SolutionPart label="b" title="Четем границата">
+            <SolutionPart label="б" title="Четем границата">
               <ResultBox>
                 <RichText text={String.raw`$\lim\limits_{x\to0}\dfrac{\sin(ax)}{bx}=\dfrac{a}{b}$. Проверка: при $a=3,\ b=1$ се връща отговорът на задача 6.`} />
               </ResultBox>
@@ -558,13 +558,13 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Единицата в реда за $\cos x$ се съкращава с единицата отпред. Остава водещ член от ред $x^2$, точно колкото е знаменателят.`} />
             }
           >
-            <SolutionPart label="a" title="Изваждаме от единица">
+            <SolutionPart label="а" title="Изваждаме от единица">
               <Formula
                 latex={String.raw`1-\cos x=1-\left(1-\frac{x^2}{2}+\frac{x^4}{24}+O(x^6)\right)
                 =\frac{x^2}{2}-\frac{x^4}{24}+O(x^6)`}
               />
             </SolutionPart>
-            <SolutionPart label="b" title="Делим и пускаме границата">
+            <SolutionPart label="б" title="Делим и пускаме границата">
               <Formula latex={String.raw`\frac{1-\cos x}{x^2}=\frac12-\frac{x^2}{24}+O(x^4)\ \longrightarrow\ \frac12`} />
               <ResultBox>
                 <RichText text={String.raw`Границата е $\tfrac12$. Тя се вижда и на зелената крива от фигурата в началото на раздела.`} />
@@ -584,10 +584,10 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Изваждането на $x$ убива водещия член. Първият оцелял е кубичният, затова знаменателят $x^3$ е точно на място.`} />
             }
           >
-            <SolutionPart label="a" title="Какво остава след изваждането">
+            <SolutionPart label="а" title="Какво остава след изваждането">
               <Formula latex={String.raw`\sin x-x=-\frac{x^3}{6}+\frac{x^5}{120}+O(x^7)`} />
             </SolutionPart>
-            <SolutionPart label="b" title="Делим и пускаме границата">
+            <SolutionPart label="б" title="Делим и пускаме границата">
               <Formula latex={String.raw`\frac{\sin x-x}{x^3}=-\frac16+\frac{x^2}{120}+O(x^4)\ \longrightarrow\ -\frac16`} />
               <ResultBox>
                 <RichText text={String.raw`Границата е $-\tfrac16$. Знакът е отрицателен, защото за малки положителни $x$ важи $\sin x<x$.`} />
@@ -607,16 +607,16 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Разгънете числителя и знаменателя поотделно до първия ненулев член. Ако и двата започват с $x^3$, отговорът е отношението на коефициентите.`} />
             }
           >
-            <SolutionPart label="a" title="Числителят">
+            <SolutionPart label="а" title="Числителят">
               <Formula latex={String.raw`x-\sin x=\frac{x^3}{6}-\frac{x^5}{120}+O(x^7)`} />
             </SolutionPart>
-            <SolutionPart label="b" title="Знаменателят">
+            <SolutionPart label="б" title="Знаменателят">
               <Formula
                 latex={String.raw`x(1-\cos x)=x\left(\frac{x^2}{2}-\frac{x^4}{24}+O(x^6)\right)
                 =\frac{x^3}{2}-\frac{x^5}{24}+O(x^7)`}
               />
             </SolutionPart>
-            <SolutionPart label="c" title="Съкращаваме водещата степен">
+            <SolutionPart label="в" title="Съкращаваме водещата степен">
               <Formula
                 latex={String.raw`\frac{x-\sin x}{x(1-\cos x)}
                 =\frac{\dfrac16-\dfrac{x^2}{120}+O(x^4)}{\dfrac12-\dfrac{x^2}{24}+O(x^4)}
@@ -640,13 +640,13 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Редът за $\ln(1+x)$ започва направо с $x$. Внимавайте: разгъването е около нула за $x$, а не за целия аргумент $1+x$.`} />
             }
           >
-            <SolutionPart label="a" title="Разгъваме и делим">
+            <SolutionPart label="а" title="Разгъваме и делим">
               <Formula
                 latex={String.raw`\frac{\ln(1+x)}{x}=\frac{x-\dfrac{x^2}{2}+\dfrac{x^3}{3}+O(x^4)}{x}
                 =1-\frac{x}{2}+\frac{x^2}{3}+O(x^3)`}
               />
             </SolutionPart>
-            <SolutionPart label="b" title="Четем границата">
+            <SolutionPart label="б" title="Четем границата">
               <ResultBox>
                 <RichText text={String.raw`Границата е $1$. Оттук следва и познатото приближение $\ln(1+x)\approx x$ при малки $x$, което се използва в термодинамиката и в оценките на грешка.`} />
               </ResultBox>
@@ -665,10 +665,10 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Пак изваждаме водещия член. Този път следващият е квадратичен, а не кубичен, затова знаменателят е $x^2$.`} />
             }
           >
-            <SolutionPart label="a" title="Какво остава след изваждането">
+            <SolutionPart label="а" title="Какво остава след изваждането">
               <Formula latex={String.raw`\ln(1+x)-x=-\frac{x^2}{2}+\frac{x^3}{3}+O(x^4)`} />
             </SolutionPart>
-            <SolutionPart label="b" title="Делим и пускаме границата">
+            <SolutionPart label="б" title="Делим и пускаме границата">
               <Formula latex={String.raw`\frac{\ln(1+x)-x}{x^2}=-\frac12+\frac{x}{3}+O(x^2)\ \longrightarrow\ -\frac12`} />
               <ResultBox>
                 <RichText text={String.raw`Границата е $-\tfrac12$. Сравнете със задача 9: там първата поправка беше кубична, тук е квадратична, защото $\ln$ няма симетрията на $\sin$.`} />
@@ -691,14 +691,14 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Числителят е нарочно построен така, че да убие и двата първи члена на $\sin x$. Затова редът трябва да се знае поне до $x^5$.`} />
             }
           >
-            <SolutionPart label="a" title="Изваждаме двата известни члена">
+            <SolutionPart label="а" title="Изваждаме двата известни члена">
               <Formula
                 latex={String.raw`\sin x-x+\frac{x^3}{6}
                 =\left(x-\frac{x^3}{6}+\frac{x^5}{120}-\frac{x^7}{5040}+\cdots\right)-x+\frac{x^3}{6}
                 =\frac{x^5}{120}-\frac{x^7}{5040}+\cdots`}
               />
             </SolutionPart>
-            <SolutionPart label="b" title="Делим и пускаме границата">
+            <SolutionPart label="б" title="Делим и пускаме границата">
               <Formula latex={String.raw`\frac{\sin x-x+\frac{x^3}{6}}{x^5}=\frac1{120}-\frac{x^2}{5040}+O(x^4)\ \longrightarrow\ \frac1{120}`} />
               <ResultBox>
                 <RichText text={String.raw`Границата е $\dfrac1{120}=\dfrac1{5!}$. Това не е съвпадение: коефициентът пред $x^n$ в реда на Маклорен е $f^{(n)}(0)/n!$.`} />
@@ -757,7 +757,7 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Малкият безразмерен параметър е $a/x\ll1$. Изнесете $x$ пред скоба, за да се появи изразът $\frac1{1-u}$.`} />
             }
           >
-            <SolutionPart label="a" title="Изнасяме мащаба">
+            <SolutionPart label="а" title="Изнасяме мащаба">
               <Formula
                 latex={String.raw`\Delta V(x)=\frac{kq}{x-a}=\frac{kq}{x\left(1-\dfrac{a}{x}\right)}
                 =\frac{kq}{x}\cdot\frac1{1-u},\qquad u=\frac{a}{x}\ll1`}
@@ -767,10 +767,10 @@ export default function TaylorProblemsPage() {
                 Самото <RichText text="$a$" /> е в метри и не става за разгъване.
               </p>
             </SolutionPart>
-            <SolutionPart label="b" title="Прилагаме геометричния ред">
+            <SolutionPart label="б" title="Прилагаме геометричния ред">
               <Formula latex={String.raw`\frac1{1-u}=1+u+u^2+O(u^3)`} />
             </SolutionPart>
-            <SolutionPart label="c" title="Връщаме се към величините">
+            <SolutionPart label="в" title="Връщаме се към величините">
               <Formula
                 latex={String.raw`\boxed{\ \Delta V(x)\approx\frac{kq}{x}\left(1+\frac{a}{x}+\frac{a^2}{x^2}\right)\ }`}
               />
@@ -788,7 +788,7 @@ export default function TaylorProblemsPage() {
               оста <RichText text="$x$" />, за <RichText text="$x>a$" />, потенциалът е
             </p>
             <Formula latex={String.raw`\Delta V(x)=kq\left(\frac1{x-a}-\frac1{x+a}\right)`} />
-            <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+            <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
               <li>
                 Намерете първия ненулев член при <RichText text={String.raw`$x\gg a$`} />.
               </li>
@@ -803,13 +803,13 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Разгънете и двете дроби по $u=a/x$. Втората се получава от първата със замяна $a\to-a$, тоест със смяна на знака при нечетните степени.`} />
             }
           >
-            <SolutionPart label="a" title="Двете разгъвания едно до друго">
+            <SolutionPart label="а" title="Двете разгъвания едно до друго">
               <Formula
                 latex={String.raw`\frac{1}{x-a}=\frac1x\left(1+u+u^2+u^3+\cdots\right),\qquad
                 \frac{1}{x+a}=\frac1x\left(1-u+u^2-u^3+\cdots\right)`}
               />
             </SolutionPart>
-            <SolutionPart label="b" title="Изваждаме: четните степени се убиват">
+            <SolutionPart label="б" title="Изваждаме: четните степени се убиват">
               <Formula
                 latex={String.raw`\Delta V(x)=\frac{kq}{x}\left[(1+u+u^2+u^3)-(1-u+u^2-u^3)\right]+\cdots
                 =\frac{kq}{x}\left(2u+2u^3+\cdots\right)`}
@@ -819,12 +819,12 @@ export default function TaylorProblemsPage() {
                 <RichText text="$1/x$" /> изчезва и водещото поведение е по-бързо спадащо.
               </p>
             </SolutionPart>
-            <SolutionPart label="c" title="Първият ненулев член">
+            <SolutionPart label="в" title="Първият ненулев член">
               <Formula
                 latex={String.raw`\Delta V(x)\approx\frac{kq}{x}\cdot\frac{2a}{x}=\frac{2kqa}{x^2}`}
               />
             </SolutionPart>
-            <SolutionPart label="d" title="Чрез диполния момент">
+            <SolutionPart label="г" title="Чрез диполния момент">
               <Formula latex={String.raw`\boxed{\ \Delta V(x)\approx\frac{kp}{x^2},\qquad p=2qa\ }`} />
               <ResultBox>
                 <RichText text={String.raw`Потенциалът на дипола спада като $1/x^2$, тоест по-бързо от този на единичен заряд. Отдалеч диполът не се вижда като заряд, а само като разделяне на заряд.`} />
@@ -850,12 +850,12 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Диференцирайте приближението, а не точния израз. Записът $x^{-2}$ прави производната по-безопасна от записа с дроб.`} />
             }
           >
-            <SolutionPart label="a" title="Диференцираме приближението">
+            <SolutionPart label="а" title="Диференцираме приближението">
               <Formula
                 latex={String.raw`E_x=-\frac{d}{dx}\left(kp\,x^{-2}\right)=-kp\cdot(-2)x^{-3}`}
               />
             </SolutionPart>
-            <SolutionPart label="b" title="Резултат и проверка на знака">
+            <SolutionPart label="б" title="Резултат и проверка на знака">
               <Formula latex={String.raw`\boxed{\ E_x\approx\frac{2kp}{x^3}\ }`} />
               <ResultBox>
                 <RichText text={String.raw`Полето спада като $1/x^3$, с една степен по-бързо от потенциала. Знакът е положителен: по положителната посока на оста най-близо е зарядът $+q$, затова полето сочи навън.`} />
@@ -876,7 +876,7 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`$x=\pm a$`} />. По оста потенциалът е
             </p>
             <Formula latex={String.raw`\Delta V(x)=kq\left(\frac1{x-a}+\frac1{x+a}\right)`} />
-            <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+            <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
               <li>
                 Намерете първите два ненулеви члена при{" "}
                 <RichText text={String.raw`$x\gg a$`} />.
@@ -892,13 +892,13 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Тук двете разгъвания се събират, а не се изваждат. Сравнете кои степени оцеляват със задача 15 и потърсете симетрията, преди да смятате.`} />
             }
           >
-            <SolutionPart label="a" title="Събираме двата реда">
+            <SolutionPart label="а" title="Събираме двата реда">
               <Formula
                 latex={String.raw`\Delta V(x)=\frac{kq}{x}\left[(1+u+u^2+u^3)+(1-u+u^2-u^3)\right]+\cdots
                 =\frac{kq}{x}\left(2+2u^2+\cdots\right)`}
               />
             </SolutionPart>
-            <SolutionPart label="b" title="Първите два ненулеви члена">
+            <SolutionPart label="б" title="Първите два ненулеви члена">
               <Formula
                 latex={String.raw`\boxed{\ \Delta V(x)\approx kq\left(\frac{2}{x}+\frac{2a^2}{x^3}\right)\ }`}
               />
@@ -907,7 +907,7 @@ export default function TaylorProblemsPage() {
                 началото. Първата поправка е от ред <RichText text={String.raw`$1/x^3$`} />.
               </p>
             </SolutionPart>
-            <SolutionPart label="c" title={String.raw`Защо няма член $1/x^2$`}>
+            <SolutionPart label="в" title={String.raw`Защо няма член $1/x^2$`}>
               <p>
                 Математически: при събирането нечетните степени на <RichText text="$u$" /> се
                 съкращават, а членът от ред <RichText text={String.raw`$1/x^2$`} /> идва
@@ -941,16 +941,16 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Изнесете $z$ изпод корена. Малкият параметър е $R^2/z^2$, а показателят е $\alpha=-\tfrac12$.`} />
             }
           >
-            <SolutionPart label="a" title="Изнасяме мащаба изпод корена">
+            <SolutionPart label="а" title="Изнасяме мащаба изпод корена">
               <Formula
                 latex={String.raw`\Delta V(z)=\frac{kQ}{z\sqrt{1+\dfrac{R^2}{z^2}}}
                 =\frac{kQ}{z}\left(1+w\right)^{-1/2},\qquad w=\frac{R^2}{z^2}\ll1`}
               />
             </SolutionPart>
-            <SolutionPart label="b" title="Биномен ред с половинен показател">
+            <SolutionPart label="б" title="Биномен ред с половинен показател">
               <Formula latex={String.raw`(1+w)^{-1/2}=1-\frac{w}{2}+\frac38w^2+O(w^3)`} />
             </SolutionPart>
-            <SolutionPart label="c" title="Първата поправка">
+            <SolutionPart label="в" title="Първата поправка">
               <Formula
                 latex={String.raw`\boxed{\ \Delta V(z)\approx\frac{kQ}{z}\left(1-\frac{R^2}{2z^2}\right)\ }`}
               />
@@ -973,7 +973,7 @@ export default function TaylorProblemsPage() {
           <ProblemStatement>
             <p>По оста на същия зареден пръстен електричното поле е</p>
             <Formula latex={String.raw`E(z)=k\frac{Qz}{(z^2+R^2)^{3/2}}`} />
-            <ol className="list-[lower-alpha] space-y-1.5 pl-6">
+            <ol className="list-[bulgarian-alpha] space-y-1.5 pl-6">
               <li>
                 Намерете приближението при <RichText text={String.raw`$z\ll R$`} /> до
                 най-нисък ненулев ред по <RichText text="$z$" />.
@@ -988,7 +988,7 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Тук голямата величина е $R$, а не $z$. Изнесете $R$ изпод скобата и разгънете по $z^2/R^2$.`} />
             }
           >
-            <SolutionPart label="a" title="Изнасяме правилния мащаб">
+            <SolutionPart label="а" title="Изнасяме правилния мащаб">
               <Formula
                 latex={String.raw`(z^2+R^2)^{3/2}=R^3\left(1+\frac{z^2}{R^2}\right)^{3/2}
                 \ \Longrightarrow\ E(z)=\frac{kQz}{R^3}\left(1+\frac{z^2}{R^2}\right)^{-3/2}`}
@@ -999,13 +999,13 @@ export default function TaylorProblemsPage() {
                 голям, и редът не се сходи.
               </p>
             </SolutionPart>
-            <SolutionPart label="b" title="Най-нисък ненулев ред">
+            <SolutionPart label="б" title="Най-нисък ненулев ред">
               <Formula
                 latex={String.raw`\left(1+\frac{z^2}{R^2}\right)^{-3/2}=1+O\!\left(\frac{z^2}{R^2}\right)
                 \ \Longrightarrow\ \boxed{\ E(z)\approx\frac{kQ}{R^3}\,z\ }`}
               />
             </SolutionPart>
-            <SolutionPart label="c" title="Какво означава линейната зависимост">
+            <SolutionPart label="в" title="Какво означава линейната зависимост">
               <ResultBox>
                 <RichText text={String.raw`Полето расте **линейно** с отместването от центъра: $E\propto z$.`} />
               </ResultBox>
@@ -1030,15 +1030,15 @@ export default function TaylorProblemsPage() {
               <RichText text={String.raw`Приложете биномния ред за $(1+w)^{-3/2}$ с $w=z^2/R^2$ и запазете и втория член.`} />
             }
           >
-            <SolutionPart label="a" title="Биномният ред с показател -3/2">
+            <SolutionPart label="а" title="Биномният ред с показател -3/2">
               <Formula latex={String.raw`(1+w)^{-3/2}=1-\frac32w+\frac{15}{8}w^2+O(w^3)`} />
             </SolutionPart>
-            <SolutionPart label="b" title="Връщаме мащаба">
+            <SolutionPart label="б" title="Връщаме мащаба">
               <Formula
                 latex={String.raw`\boxed{\ E(z)\approx\frac{kQ}{R^3}\,z\left(1-\frac32\frac{z^2}{R^2}\right)\ }`}
               />
             </SolutionPart>
-            <SolutionPart label="c" title="Физическата проверка">
+            <SolutionPart label="в" title="Физическата проверка">
               <p>
                 Поправката е отрицателна, тоест истинското поле изостава от правата линия.
                 Това трябва да е така: полето не може да расте неограничено, защото далеч от
