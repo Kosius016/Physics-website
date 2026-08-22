@@ -65,6 +65,16 @@ body {
   background-repeat: no-repeat;
 }
 
+/*
+ * Подточките в задачите се броят на кирилица: а), б), в), … Така списъкът в
+ * условието съвпада с кръгчетата в решението и с препратките в текста.
+ */
+@counter-style bulgarian-alpha {
+  system: alphabetic;
+  symbols: "а" "б" "в" "г" "д" "е" "ж" "з" "и" "к";
+  suffix: ") ";
+}
+
 /* KaTeX display блоковете да не добавят излишни отстояния в контейнера си */
 .katex-display {
   margin: 0;

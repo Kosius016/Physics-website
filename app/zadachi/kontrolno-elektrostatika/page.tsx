@@ -129,7 +129,7 @@ export default function ElectrostaticsExamPage() {
               <RichText text="Интегралната форма свързва величини за цяла затворена повърхност, а диференциалната казва нещо за една-единствена точка." />
             }
           >
-            <SolutionPart label="a" title="Интегралната форма">
+            <SolutionPart label="а" title="Интегралната форма">
               <Formula
                 latex={String.raw`\oint_S\vec E\cdot d\vec S=\frac{Q_{\text{вътр}}}{\varepsilon_0}
                 =\frac1{\varepsilon_0}\int_{\mathcal V}\rho\,d\mathcal V`}
@@ -141,7 +141,7 @@ export default function ElectrostaticsExamPage() {
               </p>
             </SolutionPart>
 
-            <SolutionPart label="b" title="Диференциалната форма">
+            <SolutionPart label="б" title="Диференциалната форма">
               <Formula latex={String.raw`\nabla\cdot\vec E=\frac{\rho}{\varepsilon_0}`} />
               <p>
                 Това е локално твърдение. Дивергенцията на полето в една точка се определя от
@@ -149,7 +149,7 @@ export default function ElectrostaticsExamPage() {
               </p>
             </SolutionPart>
 
-            <SolutionPart label="c" title="Преходът между двете">
+            <SolutionPart label="в" title="Преходът между двете">
               <p>Теоремата за дивергенцията превръща повърхностния интеграл в обемен:</p>
               <Formula
                 latex={String.raw`\oint_S\vec E\cdot d\vec S=\int_{\mathcal V}\nabla\cdot\vec E\,d\mathcal V`}
@@ -180,12 +180,12 @@ export default function ElectrostaticsExamPage() {
               <RichText text="Разгледайте два различни пътя от точка $1$ до точка $2$. Единият, изминат наобратно след другия, образува един затворен контур." />
             }
           >
-            <SolutionPart label="a" title="Нулева циркулация">
+            <SolutionPart label="а" title="Нулева циркулация">
               <p>В електростатиката полето е безвихрово:</p>
               <Formula latex={String.raw`\oint_C\vec E\cdot d\vec\ell=0,\qquad \nabla\times\vec E=\vec 0`} />
             </SolutionPart>
 
-            <SolutionPart label="b" title="Оттук следва независимостта от пътя">
+            <SolutionPart label="б" title="Оттук следва независимостта от пътя">
               <p>
                 Нека има два пътя от точка <RichText text="$1$" /> до точка{" "}
                 <RichText text="$2$" />. Първият, следван от втория в обратна посока, образува
@@ -196,15 +196,25 @@ export default function ElectrostaticsExamPage() {
               <p>зависи само от крайните точки, а не от начина, по който сме стигнали до тях.</p>
             </SolutionPart>
 
-            <SolutionPart label="c" title="Дефиниция на потенциала">
+            <SolutionPart label="в" title="Дефиниция на потенциала">
+              <p>
+                Понеже интегралът зависи само от двата края, на всяка точка може да се припише
+                число така, че разликата между числата на две точки да дава самия интеграл. Точно
+                това число е потенциалът:
+              </p>
               <Formula latex={String.raw`V(2)-V(1)=-\int_1^2\vec E\cdot d\vec\ell`} />
               <p>
                 Минусът е избран така, че полето да сочи натам, накъдето потенциалът намалява.
                 Точно затова положителният заряд се движи спонтанно към по-нисък потенциал.
               </p>
+              <p>
+                Сравнението с подточка б) затваря въпроса, от който тръгнахме: работата на полето
+                е зарядът, умножен по спада на потенциала.
+              </p>
+              <Formula latex={String.raw`A_{1\to2}=q\left[V(1)-V(2)\right]`} />
             </SolutionPart>
 
-            <SolutionPart label="d" title="Двете посоки на връзката">
+            <SolutionPart label="г" title="Двете посоки на връзката">
               <Formula
                 latex={String.raw`\vec E=-\nabla V,\qquad
                 V(\vec r)-V(\vec r_0)=-\int_{\vec r_0}^{\vec r}\vec E\cdot d\vec\ell`}
@@ -223,7 +233,7 @@ export default function ElectrostaticsExamPage() {
         <QuestionCard code="T3" title="Електричен дипол">
           <ProblemStatement>
             <p>
-              Какво е електричен дипол? Запишете дипълния момент{" "}
+              Какво е електричен дипол? Запишете диполния момент{" "}
               <RichText text={String.raw`$\vec p$`} /> на система от точкови заряди и потенциала
               на дипол на голямо разстояние от нея.
             </p>
@@ -237,7 +247,7 @@ export default function ElectrostaticsExamPage() {
               <RichText text="Идеалният дипол е границата, в която разстоянието клони към нула, а зарядът расте така, че произведението $q\ell$ да остане същото." />
             }
           >
-            <SolutionPart label="a" title="Определение">
+            <SolutionPart label="а" title="Определение">
               <p>
                 Идеален дипол се получава от заряди <RichText text="$+q$" /> и{" "}
                 <RichText text="$-q$" />, разделени от малък вектор{" "}
@@ -247,7 +257,7 @@ export default function ElectrostaticsExamPage() {
               <Formula latex={String.raw`\vec p=q\vec\ell`} />
             </SolutionPart>
 
-            <SolutionPart label="b" title="Система от точкови заряди">
+            <SolutionPart label="б" title="Система от точкови заряди">
               <Formula latex={String.raw`\vec p=\sum_i q_i\vec r_i`} />
               <p>
                 За неутрална система тази сума не зависи от избора на начало: преместването на
@@ -256,7 +266,7 @@ export default function ElectrostaticsExamPage() {
               </p>
             </SolutionPart>
 
-            <SolutionPart label="c" title="Потенциалът на голямо разстояние">
+            <SolutionPart label="в" title="Потенциалът на голямо разстояние">
               <p>Развитието на потенциала на локализирана система започва с</p>
               <Formula
                 latex={String.raw`V(\vec r)=\frac1{4\pi\varepsilon_0}
@@ -290,7 +300,7 @@ export default function ElectrostaticsExamPage() {
               <RichText text="Ако имаше тангенциална компонента, свободните заряди щяха да продължат да се движат. Използвайте тънка цилиндрична гаусова повърхност." />
             }
           >
-            <SolutionPart label="a" title="Полето вътре">
+            <SolutionPart label="а" title="Полето вътре">
               <p>
                 В проводника има свободни заряди. Ако в обема му съществуваше ненулево поле, върху
                 тях щеше да действа сила <RichText text={String.raw`$q\vec E$`} /> и те щяха да
@@ -299,7 +309,7 @@ export default function ElectrostaticsExamPage() {
               <Formula latex={String.raw`\vec E_{\text{вътре}}=\vec 0`} />
             </SolutionPart>
 
-            <SolutionPart label="b" title="Постоянен потенциал и нормално поле">
+            <SolutionPart label="б" title="Постоянен потенциал и нормално поле">
               <p>
                 От <RichText text={String.raw`$\vec E=-\nabla V$`} /> следва, че потенциалът е
                 постоянен в целия проводник. Тангенциалната компонента върху повърхността също
@@ -308,7 +318,7 @@ export default function ElectrostaticsExamPage() {
               </p>
             </SolutionPart>
 
-            <SolutionPart label="c" title="Гаусовата кутийка">
+            <SolutionPart label="в" title="Гаусовата кутийка">
               <p>
                 Избираме тънка цилиндрична повърхност с едната основа в проводника, а другата
                 непосредствено отвън. Страничният поток изчезва в границата на малка височина, а
@@ -345,7 +355,7 @@ export default function ElectrostaticsExamPage() {
               <RichText text="При едните молекули полето индуцира дипол, а при другите само подрежда частично вече съществуващи диполи. И в двата случая резултатът е подредба по посока на полето." />
             }
           >
-            <SolutionPart label="a" title="Двата механизма">
+            <SolutionPart label="а" title="Двата механизма">
               <p>
                 При неполярна молекула външното поле леко измества положителния и отрицателния
                 заряд в противоположни посоки и така индуцира диполен момент. При полярна молекула
@@ -354,7 +364,7 @@ export default function ElectrostaticsExamPage() {
               </p>
             </SolutionPart>
 
-            <SolutionPart label="b" title="Защо полето отслабва">
+            <SolutionPart label="б" title="Защо полето отслабва">
               <p>
                 Подредените диполи сочат по посока на външното поле. Собственото поле на един
                 дипол в пространството между двата му заряда обаче е насочено срещу неговия
@@ -367,7 +377,7 @@ export default function ElectrostaticsExamPage() {
               </p>
             </SolutionPart>
 
-            <SolutionPart label="c" title="Определение на проницаемостта">
+            <SolutionPart label="в" title="Определение на проницаемостта">
               <p>При напълно запълнен кондензатор със същата геометрия</p>
               <Formula latex={String.raw`C=\varepsilon_rC_0,\qquad \boxed{\varepsilon_r=\frac{C}{C_0}}`} />
             </SolutionPart>
@@ -378,7 +388,8 @@ export default function ElectrostaticsExamPage() {
           <ProblemStatement>
             <p>
               Плосък кондензатор е зареден и <strong>изолиран</strong>. В него се вкарва
-              диелектрична пластина. Как се изменят{" "}
+              диелектрична пластина, която запълва изцяло пространството между плочите. Как се
+              изменят{" "}
               <RichText text={String.raw`$Q$, $E$, $\Delta V$, $C$`} /> и енергията{" "}
               <RichText text="$U$" />? Отговорете на същия въпрос, ако кондензаторът остане
               свързан към батерия.
@@ -388,7 +399,7 @@ export default function ElectrostaticsExamPage() {
           <Solution
             hint={<RichText text="Решете първо коя величина е фиксирана във всеки от двата случая. Всичко останало следва от нея." />}
           >
-            <SolutionPart label="a" title="Общото за двата случая">
+            <SolutionPart label="а" title="Общото за двата случая">
               <p>
                 След вкарването капацитетът винаги става{" "}
                 <RichText text={String.raw`$C'=\varepsilon_rC_0$`} />. Това е чиста геометрия и
@@ -396,7 +407,7 @@ export default function ElectrostaticsExamPage() {
               </p>
             </SolutionPart>
 
-            <SolutionPart label="b" title="Изолиран кондензатор">
+            <SolutionPart label="б" title="Изолиран кондензатор">
               <p>
                 Зарядът няма къде да отиде, затова <RichText text="$Q$" /> е фиксиран. Свързаните
                 заряди отслабват полето <RichText text={String.raw`$\varepsilon_r$`} /> пъти, с
@@ -406,7 +417,7 @@ export default function ElectrostaticsExamPage() {
               <p>Загубената енергия отива в работата, с която пластината се втегля навътре.</p>
             </SolutionPart>
 
-            <SolutionPart label="c" title="Свързан към батерия">
+            <SolutionPart label="в" title="Свързан към батерия">
               <p>
                 Сега напрежението е фиксирано, следователно{" "}
                 <RichText text={String.raw`$E=\Delta V/d$`} /> остава същото, а батерията доставя
@@ -416,7 +427,7 @@ export default function ElectrostaticsExamPage() {
               <p>Енергията нараства, въпреки че полето остава същото.</p>
             </SolutionPart>
 
-            <SolutionPart label="d" title="Двата случая едно до друго">
+            <SolutionPart label="г" title="Двата случая едно до друго">
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[430px] border-collapse text-[14.5px]">
                   <thead>
@@ -507,7 +518,7 @@ export default function ElectrostaticsExamPage() {
               <RichText text="Помислете за минимум по всяка ос поотделно, както при обикновена функция на една променлива. После сравнете какво искат трите условия с това, което законът на Гаус казва за сбора на същите три втори производни." />
             }
           >
-            <SolutionPart label="a" title="Условието за равновесие">
+            <SolutionPart label="а" title="Условието за равновесие">
               <p>
                 Върху заряд <RichText text="$q$" /> в точка{" "}
                 <RichText text={String.raw`$\vec r_0$`} /> действа сила{" "}
@@ -524,11 +535,12 @@ export default function ElectrostaticsExamPage() {
               </p>
             </SolutionPart>
 
-            <SolutionPart label="b" title="Условието за устойчивост">
+            <SolutionPart label="б" title="Условието за устойчивост">
               <p>
                 Устойчиво равновесие означава, че при малко отместване се появява връщаща сила,
-                тоест потенциалната енергия <RichText text="$U=qV$" /> расте. Достатъчно е да
-                проверим поотделно по трите оси.
+                тоест потенциалната енергия <RichText text="$U=qV$" /> расте във всяка посока. За
+                доказателството стига едно необходимо условие: щом равновесието е устойчиво по
+                всички посоки, то е устойчиво и по всяка от трите оси поотделно.
               </p>
               <p>
                 Ако замразим <RichText text="$y$" /> и <RichText text="$z$" /> и мръднем само по{" "}
@@ -551,7 +563,7 @@ export default function ElectrostaticsExamPage() {
               </p>
             </SolutionPart>
 
-            <SolutionPart label="c" title="Какво казва законът на Гаус за същите производни">
+            <SolutionPart label="в" title="Какво казва законът на Гаус за същите производни">
               <p>
                 В празна област <RichText text={String.raw`$\rho=0$`} />, следователно{" "}
                 <RichText text={String.raw`$\nabla\cdot\vec E=0$`} />. Замествайки{" "}
@@ -566,7 +578,7 @@ export default function ElectrostaticsExamPage() {
               />
             </SolutionPart>
 
-            <SolutionPart label="d" title="Противоречието">
+            <SolutionPart label="г" title="Противоречието">
               <p>
                 Подточка б) иска три положителни числа. Подточка в) казва, че сборът им е нула. Три
                 положителни числа никога не дават сбор нула, затова поне едно от тях е отрицателно
@@ -600,7 +612,7 @@ export default function ElectrostaticsExamPage() {
               </FigurePanel>
             </SolutionPart>
 
-            <SolutionPart label="e" title="Изводът">
+            <SolutionPart label="д" title="Изводът">
               <p>
                 Няма точка в празна област, около която потенциалната енергия да расте във всички
                 посоки. Следователно потенциалът няма нито локален минимум, нито локален максимум
@@ -625,7 +637,7 @@ export default function ElectrostaticsExamPage() {
             расте линейно от центъра навън:
           </p>
           <Formula latex={String.raw`\rho(r)=\rho_0\frac rR,\qquad r\le R`} />
-          <ol className="list-[lower-alpha] space-y-2 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-2 pl-6">
             <li>
               Намерете пълния заряд <RichText text="$Q$" /> на сферата.
             </li>
@@ -641,7 +653,7 @@ export default function ElectrostaticsExamPage() {
             <li>
               Като използвате <RichText text={String.raw`$U=\frac{\varepsilon_0}2\int E^2\,d\mathcal V$`} />,
               покажете, че пълната електростатична енергия е{" "}
-              <RichText text={String.raw`$U=Q^2/7\pi\varepsilon_0R$`} />.
+              <RichText text={String.raw`$U=\frac{Q^2}{7\pi\varepsilon_0R}$`} />.
             </li>
           </ol>
         </ProblemStatement>
@@ -674,7 +686,7 @@ export default function ElectrostaticsExamPage() {
             <RichText text="Работете със сферични слоеве с обем $d\mathcal V=4\pi r^2\,dr$. За потенциала в центъра интегрирайте полето от $0$ до $\infty$ и разделете интеграла при $r=R$." />
           }
         >
-          <SolutionPart label="a" title="Пълен заряд">
+          <SolutionPart label="а" title="Пълен заряд">
             <Formula
               latex={String.raw`Q=\int_0^R\rho(r)\,4\pi r^2\,dr
               =\frac{4\pi\rho_0}{R}\int_0^Rr^3\,dr
@@ -683,7 +695,7 @@ export default function ElectrostaticsExamPage() {
             <Formula latex={String.raw`\boxed{Q=\pi\rho_0R^3}`} />
           </SolutionPart>
 
-          <SolutionPart label="b" title="Поле вътре и вън">
+          <SolutionPart label="б" title="Поле вътре и вън">
             <p>
               За гаусова сфера с радиус <RichText text="$r<R$" /> обграденият заряд е
             </p>
@@ -713,10 +725,10 @@ export default function ElectrostaticsExamPage() {
             </div>
           </SolutionPart>
 
-          <SolutionPart label="c" title="Потенциал в центъра">
+          <SolutionPart label="в" title="Потенциал в центъра">
             <p>
               При <RichText text={String.raw`$V(\infty)=0$`} /> потенциалът в центъра е работата на
-              полето по целия път навън:
+              полето върху единичен положителен заряд по целия път навън:
             </p>
             <Formula
               latex={String.raw`V(0)=\int_0^\infty E(r')\,dr'
@@ -732,7 +744,7 @@ export default function ElectrostaticsExamPage() {
             <Formula latex={String.raw`V(r)=\frac{Q}{12\pi\varepsilon_0R}\left(4-\frac{r^3}{R^3}\right),\qquad r\le R`} />
           </SolutionPart>
 
-          <SolutionPart label="d" title="Енергия на полето">
+          <SolutionPart label="г" title="Енергия на полето">
             <p>Разделяме интеграла на вътрешна и външна област:</p>
             <Formula
               latex={String.raw`U_{\text{вътр}}=\frac{\varepsilon_0}2\,4\pi\int_0^R
@@ -753,8 +765,8 @@ export default function ElectrostaticsExamPage() {
             />
             <Formula latex={String.raw`\boxed{U=\frac{Q^2}{7\pi\varepsilon_0R}}`} />
             <ResultBox>
-              Само една седма от енергията седи вътре в сферата. Полето вън спада бавно и носи
-              останалото, макар да изглежда по-слабо.
+              Само една осма от енергията седи вътре в сферата. Полето вън спада бавно и носи
+              останалите седем осми, макар да изглежда по-слабо.
             </ResultBox>
           </SolutionPart>
         </Solution>
@@ -771,7 +783,7 @@ export default function ElectrostaticsExamPage() {
             концентрични пръстени с радиус <RichText text="$r$" /> и широчина{" "}
             <RichText text={String.raw`$dr$`} />.
           </p>
-          <ol className="list-[lower-alpha] space-y-2 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-2 pl-6">
             <li>
               Покажете, че зарядът на един тесен пръстен е{" "}
               <RichText text={String.raw`$dq=\sigma2\pi r\,dr$`} />, и запишете приноса му{" "}
@@ -819,7 +831,7 @@ export default function ElectrostaticsExamPage() {
             <RichText text="Тръгнете от потенциала, не от полето: така избягвате разлагането по компоненти. Полето се получава накрая чрез $E_z=-dV/dz$." />
           }
         >
-          <SolutionPart label="a" title="Един пръстен и ролята на симетрията">
+          <SolutionPart label="а" title="Един пръстен и ролята на симетрията">
             <p>
               Тесният пръстен с радиус <RichText text="$r$" /> и широчина{" "}
               <RichText text={String.raw`$dr$`} /> има лице{" "}
@@ -841,7 +853,7 @@ export default function ElectrostaticsExamPage() {
             </p>
           </SolutionPart>
 
-          <SolutionPart label="b" title="Интегриране по всички пръстени">
+          <SolutionPart label="б" title="Интегриране по всички пръстени">
             <Formula
               latex={String.raw`V(z)=\frac{\sigma}{2\varepsilon_0}\int_0^R\frac{r\,dr}{\sqrt{r^2+z^2}}
               =\frac{\sigma}{2\varepsilon_0}\Big[\sqrt{r^2+z^2}\Big]_0^R`}
@@ -862,7 +874,7 @@ export default function ElectrostaticsExamPage() {
             </p>
           </SolutionPart>
 
-          <SolutionPart label="c" title="Двата гранични случая">
+          <SolutionPart label="в" title="Двата гранични случая">
             <p>
               Непосредствено над центъра, <RichText text={String.raw`$z\to0^+$`} />:
             </p>
@@ -894,7 +906,7 @@ export default function ElectrostaticsExamPage() {
             </div>
           </SolutionPart>
 
-          <SolutionPart label="d" title="Къде полето намалява наполовина">
+          <SolutionPart label="г" title="Къде полето намалява наполовина">
             <p>
               Поставяме <RichText text={String.raw`$E_z(z)=E_z(0^+)/2$`} />:
             </p>
@@ -913,16 +925,16 @@ export default function ElectrostaticsExamPage() {
         </Solution>
       </Section>
 
-      <Section id="slab" n="§7" title="Задача 3: диелектрик, вкаран наполовина">
+      <Section id="slab" n="§7" title="Задача 3: диелектрик, вкаран частично">
         <ProblemStatement>
           <p>
-            В началото кондензаторът е незареден. Той има правоъгълни плочи с дължина{" "}
+            Плосък кондензатор има правоъгълни плочи с дължина{" "}
             <RichText text="$L$" />, широчина <RichText text="$b$" /> и разстояние{" "}
             <RichText text="$d$" /> между тях. Пластина от диелектрик с относителна диелектрична
             проницаемост <RichText text={String.raw`$\varepsilon_r$`} /> е вкарана на дълбочина{" "}
             <RichText text="$x$" />. Ефектите от краищата се пренебрегват.
           </p>
-          <ol className="list-[lower-alpha] space-y-2 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-2 pl-6">
             <li>
               Обяснете защо двете части (с и без диелектрик) са свързани{" "}
               <strong>успоредно</strong>, и изведете{" "}
@@ -972,10 +984,10 @@ export default function ElectrostaticsExamPage() {
             <RichText text="Работата на батерията е $dA_{\text{бат}}=\Delta V_0\,dQ$ и тя не е нула. Точно тя прави отговора различен от простото „силата сочи натам, накъдето енергията намалява“." />
           }
         >
-          <SolutionPart label="a" title="Еквивалентен капацитет">
+          <SolutionPart label="а" title="Еквивалентен капацитет">
             <p>
               Границата между двете области е успоредна на полето. И двете области имат едни и същи
-              плочи и една и съща потенциална разлика, затова са свързани успоредно. Площите им са
+              плочи и една и съща потенциална разлика, затова са свързани успоредно. Лицата им са
             </p>
             <Formula latex={String.raw`S_{\text{д}}=bx,\qquad S_{\text{в}}=b(L-x)`} />
             <Formula
@@ -988,7 +1000,7 @@ export default function ElectrostaticsExamPage() {
             <Formula latex={String.raw`\boxed{\frac{dC}{dx}=\frac{\varepsilon_0b}{d}(\varepsilon_r-1)>0}`} />
           </SolutionPart>
 
-          <SolutionPart label="b" title="При постоянно напрежение">
+          <SolutionPart label="б" title="При постоянно напрежение">
             <Formula
               latex={String.raw`Q(x)=C(x)\Delta V_0
               =\frac{\varepsilon_0b\Delta V_0}{d}\left[L+(\varepsilon_r-1)x\right]`}
@@ -1003,7 +1015,7 @@ export default function ElectrostaticsExamPage() {
             </p>
           </SolutionPart>
 
-          <SolutionPart label="c" title="Силата при постоянно напрежение">
+          <SolutionPart label="в" title="Силата при постоянно напрежение">
             <p>
               За малко преместване <RichText text={String.raw`$dx$`} /> батерията извършва работа
             </p>
@@ -1027,7 +1039,7 @@ export default function ElectrostaticsExamPage() {
             </ResultBox>
           </SolutionPart>
 
-          <SolutionPart label="d" title="Изолиран кондензатор">
+          <SolutionPart label="г" title="Изолиран кондензатор">
             <p>
               Сега <RichText text="$Q_0$" /> е постоянен и няма работа от батерия. Енергията е
             </p>
@@ -1070,7 +1082,7 @@ export default function ElectrostaticsExamPage() {
             а вътре в нея е постоянен. Ъгълът <RichText text={String.raw`$\theta$`} /> се брои от
             оста <RichText text="$z$" />.
           </p>
-          <ol className="list-[lower-alpha] space-y-2 pl-6">
+          <ol className="list-[bulgarian-alpha] space-y-2 pl-6">
             <li>
               Проверете двете гранични условия: при <RichText text={String.raw`$r\to\infty$`} />{" "}
               полето клони към <RichText text={String.raw`$\vec E_0$`} />, а при{" "}
@@ -1122,10 +1134,10 @@ export default function ElectrostaticsExamPage() {
 
         <Solution
           hint={
-            <RichText text="Разделете потенциала на два члена: външното еднородно поле и коригиращ член. Сравнете втория с $V_{\text{дипол}}=p\cos\theta/4\pi\varepsilon_0r^2$." />
+            <RichText text="Разделете потенциала на два члена: външното еднородно поле и коригиращ член. Сравнете втория с $V_{\text{дипол}}=\frac{p\cos\theta}{4\pi\varepsilon_0r^2}$." />
           }
         >
-          <SolutionPart label="a" title="Граничните условия">
+          <SolutionPart label="а" title="Граничните условия">
             <Formula latex={String.raw`V(r,\theta)=-E_0r\cos\theta+E_0\frac{R^3}{r^2}\cos\theta`} />
             <p>
               При <RichText text={String.raw`$r\to\infty$`} /> вторият член намалява като{" "}
@@ -1145,7 +1157,7 @@ export default function ElectrostaticsExamPage() {
             </p>
           </SolutionPart>
 
-          <SolutionPart label="b" title="Индуцираният диполен момент">
+          <SolutionPart label="б" title="Индуцираният диполен момент">
             <p>Коригиращият член е</p>
             <Formula latex={String.raw`V_{\text{инд}}=E_0\frac{R^3}{r^2}\cos\theta`} />
             <p>Сравняваме го с потенциала на дипол, насочен по оста:</p>
@@ -1161,7 +1173,7 @@ export default function ElectrostaticsExamPage() {
             </p>
           </SolutionPart>
 
-          <SolutionPart label="c" title="Поле и повърхностна плътност">
+          <SolutionPart label="в" title="Поле и повърхностна плътност">
             <Formula
               latex={String.raw`E_r=-\frac{\partial V}{\partial r}
               =E_0\left(1+2\frac{R^3}{r^3}\right)\cos\theta`}
@@ -1189,7 +1201,7 @@ export default function ElectrostaticsExamPage() {
             </div>
           </SolutionPart>
 
-          <SolutionPart label="d" title="Пълен заряд и проверка на момента">
+          <SolutionPart label="г" title="Пълен заряд и проверка на момента">
             <p>
               С <RichText text={String.raw`$dS=R^2\sin\theta\,d\theta\,d\varphi$`} />:
             </p>
@@ -1213,7 +1225,7 @@ export default function ElectrostaticsExamPage() {
             <p>Съвпада с резултата от подточка б).</p>
           </SolutionPart>
 
-          <SolutionPart label="e" title="Максимално поле и гръмоотводът">
+          <SolutionPart label="д" title="Максимално поле и гръмоотводът">
             <p>
               На повърхността тангенциалната компонента е нула, така че{" "}
               <RichText text={String.raw`$|\vec E(R,\theta)|=3E_0|\cos\theta|$`} />. Максимумът е при
