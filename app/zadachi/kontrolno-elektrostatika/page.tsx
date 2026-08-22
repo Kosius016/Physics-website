@@ -1,8 +1,6 @@
 import Link from "next/link";
 import Formula from "@/components/Formula";
-import LessonNav from "@/components/LessonNav";
 import RichText from "@/components/RichText";
-import Section from "@/components/Section";
 import {
   Prereq,
   ProblemStatement,
@@ -29,18 +27,6 @@ export const metadata = {
     "Седем въпроса от теорията и четири задачи по електростатика с пълни решения, интерактивни графики и ясно означено ниво спрямо уроците в платформата.",
 };
 
-const NAV = [
-  { id: "gauss", n: "§1", label: "Гаус и потенциал" },
-  { id: "dipole", n: "§2", label: "Дипол и проводник" },
-  { id: "dielectric", n: "§3", label: "Диелектрици" },
-  { id: "earnshaw", n: "§4", label: "Ърншоу" },
-  { id: "sphere", n: "§5", label: "Сфера с плътност" },
-  { id: "disk", n: "§6", label: "Зареден диск" },
-  { id: "slab", n: "§7", label: "Пластина в кондензатор" },
-  { id: "induced", n: "§8", label: "Сфера във външно поле" },
-  { id: "recap", n: "§9", label: "Обобщение" },
-] as const;
-
 const LESSON = {
   potential: { label: "Потенциал", href: "/physics/elektrichestvo/potencial" },
   conductors: { label: "Проводници", href: "/physics/elektrichestvo/provodnici" },
@@ -49,6 +35,38 @@ const LESSON = {
   taylor: { label: "Редове на Тейлър", href: "/materiali/redove-na-teylar" },
   lightning: { label: "Статия: мълнията", href: "/statii/malniyata" },
 } as const;
+
+/** Заглавие на една от двете части: теорията и задачите. */
+function PartHeading({ id, eyebrow, title }: { id: string; eyebrow: string; title: string }) {
+  return (
+    <div id={id} className="scroll-mt-6 pt-14">
+      <p className="text-[11px] font-bold uppercase tracking-[.22em] text-minus">{eyebrow}</p>
+      <h2 className="mt-2 border-b-2 border-ink pb-2 font-serif text-[30px] font-bold leading-tight text-ink">
+        {title}
+      </h2>
+    </div>
+  );
+}
+
+/** Една задача от втората част: заглавие с тънка линия и съдържанието под него. */
+function ProblemSection({
+  id,
+  title,
+  children,
+}: {
+  id: string;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section id={id} className="scroll-mt-6 pt-12">
+      <h3 className="mb-5 border-b-[1.5px] border-rule pb-1.5 font-serif text-[24px] font-bold text-ink">
+        {title}
+      </h3>
+      {children}
+    </section>
+  );
+}
 
 function QuestionCard({
   code,
@@ -108,11 +126,9 @@ export default function ElectrostaticsExamPage() {
 
       </header>
 
-      <LessonNav items={NAV} />
+      <PartHeading id="teoriya" eyebrow="Част I" title="Теоретична част" />
 
-      {/* ─────────────────────────  Част I  ───────────────────────── */}
-
-      <Section id="gauss" n="§1" title="Закон на Гаус и потенциал">
+      <div className="mt-8">
         <QuestionCard code="T1" title="Двете форми на закона на Гаус">
           <ProblemStatement>
             <p>
@@ -227,9 +243,7 @@ export default function ElectrostaticsExamPage() {
             </SolutionPart>
           </Solution>
         </QuestionCard>
-      </Section>
 
-      <Section id="dipole" n="§2" title="Дипол и проводник в равновесие">
         <QuestionCard code="T3" title="Електричен дипол">
           <ProblemStatement>
             <p>
@@ -337,9 +351,7 @@ export default function ElectrostaticsExamPage() {
             </SolutionPart>
           </Solution>
         </QuestionCard>
-      </Section>
 
-      <Section id="dielectric" n="§3" title="Диелектрик между плочите">
         <QuestionCard code="T5" title="Поляризация на диелектрика">
           <ProblemStatement>
             <p>
@@ -497,9 +509,7 @@ export default function ElectrostaticsExamPage() {
             </SolutionPart>
           </Solution>
         </QuestionCard>
-      </Section>
 
-      <Section id="earnshaw" n="§4" title="Защо неподвижни заряди не могат да задържат заряд">
         <QuestionCard code="T7" title="Теорема на Ърншоу">
           <ProblemStatement>
             <p>
@@ -626,11 +636,11 @@ export default function ElectrostaticsExamPage() {
             </SolutionPart>
           </Solution>
         </QuestionCard>
-      </Section>
+      </div>
 
-      {/* ─────────────────────────  Част II  ───────────────────────── */}
+      <PartHeading id="zadachi" eyebrow="Част II" title="Задачи" />
 
-      <Section id="sphere" n="§5" title="Задача 1: сфера с растяща плътност">
+      <ProblemSection id="sphere" title="Задача 1: сфера с растяща плътност">
         <ProblemStatement>
           <p>
             Непроводяща сфера с радиус <RichText text="$R$" /> е заредена с обемна плътност, която
@@ -770,9 +780,9 @@ export default function ElectrostaticsExamPage() {
             </ResultBox>
           </SolutionPart>
         </Solution>
-      </Section>
+      </ProblemSection>
 
-      <Section id="disk" n="§6" title="Задача 2: от пръстен до диск">
+      <ProblemSection id="disk" title="Задача 2: от пръстен до диск">
         <ProblemStatement>
           <p>
             Тънък кръгъл <strong>изолиращ</strong> диск с радиус <RichText text="$R$" /> носи
@@ -923,9 +933,9 @@ export default function ElectrostaticsExamPage() {
             </ResultBox>
           </SolutionPart>
         </Solution>
-      </Section>
+      </ProblemSection>
 
-      <Section id="slab" n="§7" title="Задача 3: диелектрик, вкаран частично">
+      <ProblemSection id="slab" title="Задача 3: диелектрик, вкаран частично">
         <ProblemStatement>
           <p>
             Плосък кондензатор има правоъгълни плочи с дължина{" "}
@@ -1066,9 +1076,9 @@ export default function ElectrostaticsExamPage() {
             </div>
           </SolutionPart>
         </Solution>
-      </Section>
+      </ProblemSection>
 
-      <Section id="induced" n="§8" title="Задача 4: проводяща сфера във външно поле">
+      <ProblemSection id="induced" title="Задача 4: проводяща сфера във външно поле">
         <ProblemStatement>
           <p>
             Незаредена проводяща сфера с радиус <RichText text="$R$" /> е поставена в първоначално
@@ -1253,9 +1263,9 @@ export default function ElectrostaticsExamPage() {
             </ResultBox>
           </SolutionPart>
         </Solution>
-      </Section>
+      </ProblemSection>
 
-      <Section id="recap" n="§9" title="Какво трябва да остане след контролното">
+      <div id="recap" className="scroll-mt-6 pt-14">
         <div className="rounded-[10px] border-[1.5px] border-ink bg-ink px-5 py-5 text-white shadow-hard">
           <p className="text-[11px] font-bold uppercase tracking-[.18em] text-hl">Обобщение</p>
           <ul className="mt-3 list-disc space-y-2 pl-5 text-[15px]">
@@ -1299,7 +1309,7 @@ export default function ElectrostaticsExamPage() {
             Справочникът за преговор →
           </Link>
         </div>
-      </Section>
+      </div>
     </main>
   );
 }
