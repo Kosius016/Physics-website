@@ -724,7 +724,7 @@ function streamlineBranches(
   });
 }
 
-/** Обръща $r-R^3/r^2=A$ (в единици $R=1$) за $r\ge 1$; лявата страна расте монотонно. */
+/** Обръща $r-R^3/r^2=L$ (в единици $R=1$) за $r\ge 1$; лявата страна расте монотонно. */
 function equipotentialRadius(level: number) {
   if (level < 0) return null;
   let lo = 1;

@@ -131,8 +131,8 @@ export default function ElectrostaticsExamPage() {
           >
             <SolutionPart label="a" title="Интегралната форма">
               <Formula
-                latex={String.raw`\oint_S\vec E\cdot d\vec A=\frac{Q_{\text{вътр}}}{\varepsilon_0}
-                =\frac1{\varepsilon_0}\int_{\mathcal V}\rho\,dV`}
+                latex={String.raw`\oint_S\vec E\cdot d\vec S=\frac{Q_{\text{вътр}}}{\varepsilon_0}
+                =\frac1{\varepsilon_0}\int_{\mathcal V}\rho\,d\mathcal V`}
               />
               <p>
                 Тя свързва потока през цялата затворена повърхност с пълния заряд, ограден от
@@ -152,7 +152,7 @@ export default function ElectrostaticsExamPage() {
             <SolutionPart label="c" title="Преходът между двете">
               <p>Теоремата за дивергенцията превръща повърхностния интеграл в обемен:</p>
               <Formula
-                latex={String.raw`\oint_S\vec E\cdot d\vec A=\int_{\mathcal V}\nabla\cdot\vec E\,dV`}
+                latex={String.raw`\oint_S\vec E\cdot d\vec S=\int_{\mathcal V}\nabla\cdot\vec E\,d\mathcal V`}
               />
               <p>
                 Понеже равенството важи за произволен обем, а не за някакъв избран, двете
@@ -177,7 +177,7 @@ export default function ElectrostaticsExamPage() {
           <Prereq links={[LESSON.potential]} />
           <Solution
             hint={
-              <RichText text="Разгледайте два различни пътя от $A$ до $B$. Единият, изминат наобратно след другия, образува един затворен контур." />
+              <RichText text="Разгледайте два различни пътя от точка $1$ до точка $2$. Единият, изминат наобратно след другия, образува един затворен контур." />
             }
           >
             <SolutionPart label="a" title="Нулева циркулация">
@@ -187,16 +187,17 @@ export default function ElectrostaticsExamPage() {
 
             <SolutionPart label="b" title="Оттук следва независимостта от пътя">
               <p>
-                Нека има два пътя от <RichText text="$A$" /> до <RichText text="$B$" />. Първият,
-                следван от втория в обратна посока, образува затворен контур. Нулевата циркулация
-                означава, че интегралите по двата пътя са равни. Следователно работата
+                Нека има два пътя от точка <RichText text="$1$" /> до точка{" "}
+                <RichText text="$2$" />. Първият, следван от втория в обратна посока, образува
+                затворен контур. Нулевата циркулация означава, че интегралите по двата пътя са
+                равни. Следователно работата
               </p>
-              <Formula latex={String.raw`A_{A\to B}=q\int_A^B\vec E\cdot d\vec\ell`} />
+              <Formula latex={String.raw`A_{1\to2}=q\int_1^2\vec E\cdot d\vec\ell`} />
               <p>зависи само от крайните точки, а не от начина, по който сме стигнали до тях.</p>
             </SolutionPart>
 
             <SolutionPart label="c" title="Дефиниция на потенциала">
-              <Formula latex={String.raw`V(B)-V(A)=-\int_A^B\vec E\cdot d\vec\ell`} />
+              <Formula latex={String.raw`V(2)-V(1)=-\int_1^2\vec E\cdot d\vec\ell`} />
               <p>
                 Минусът е избран така, че полето да сочи натам, накъдето потенциалът намалява.
                 Точно затова положителният заряд се движи спонтанно към по-нисък потенциал.
@@ -314,7 +315,7 @@ export default function ElectrostaticsExamPage() {
                 вътрешната основа има нулев поток, защото там полето е нула.
               </p>
               <Formula
-                latex={String.raw`E_nA=\frac{\sigma A}{\varepsilon_0}
+                latex={String.raw`E_nS=\frac{\sigma S}{\varepsilon_0}
                 \quad\Longrightarrow\quad
                 \boxed{E_n=\frac{\sigma}{\varepsilon_0}}`}
               />
@@ -638,7 +639,7 @@ export default function ElectrostaticsExamPage() {
               <RichText text={String.raw`$V(\infty)=0$`} />.
             </li>
             <li>
-              Като използвате <RichText text={String.raw`$U=\frac{\varepsilon_0}2\int E^2\,dV$`} />,
+              Като използвате <RichText text={String.raw`$U=\frac{\varepsilon_0}2\int E^2\,d\mathcal V$`} />,
               покажете, че пълната електростатична енергия е{" "}
               <RichText text={String.raw`$U=Q^2/7\pi\varepsilon_0R$`} />.
             </li>
@@ -670,7 +671,7 @@ export default function ElectrostaticsExamPage() {
 
         <Solution
           hint={
-            <RichText text="Работете със сферични слоеве с обем $dV=4\pi r^2\,dr$. За потенциала в центъра интегрирайте полето от $0$ до $\infty$ и разделете интеграла при $r=R$." />
+            <RichText text="Работете със сферични слоеве с обем $d\mathcal V=4\pi r^2\,dr$. За потенциала в центъра интегрирайте полето от $0$ до $\infty$ и разделете интеграла при $r=R$." />
           }
         >
           <SolutionPart label="a" title="Пълен заряд">
@@ -687,7 +688,7 @@ export default function ElectrostaticsExamPage() {
               За гаусова сфера с радиус <RichText text="$r<R$" /> обграденият заряд е
             </p>
             <Formula
-              latex={String.raw`Q_{\text{вътр}}(r)=\frac{4\pi\rho_0}{R}\int_0^rs^3\,ds
+              latex={String.raw`Q_{\text{вътр}}(r)=\frac{4\pi\rho_0}{R}\int_0^r r'^3\,dr'
               =\frac{\pi\rho_0r^4}{R}=Q\frac{r^4}{R^4}`}
             />
             <p>
@@ -718,13 +719,13 @@ export default function ElectrostaticsExamPage() {
               полето по целия път навън:
             </p>
             <Formula
-              latex={String.raw`V(0)=\int_0^\infty E(s)\,ds
-              =\int_0^RE_{\text{вътре}}(s)\,ds+\int_R^\infty E_{\text{вън}}(s)\,ds`}
+              latex={String.raw`V(0)=\int_0^\infty E(r')\,dr'
+              =\int_0^RE_{\text{вътре}}(r')\,dr'+\int_R^\infty E_{\text{вън}}(r')\,dr'`}
             />
             <Formula
-              latex={String.raw`\int_0^R\frac{Qs^2}{4\pi\varepsilon_0R^4}\,ds=\frac{Q}{12\pi\varepsilon_0R},
+              latex={String.raw`\int_0^R\frac{Q\,r'^2}{4\pi\varepsilon_0R^4}\,dr'=\frac{Q}{12\pi\varepsilon_0R},
               \qquad
-              \int_R^\infty\frac{Q}{4\pi\varepsilon_0s^2}\,ds=\frac{Q}{4\pi\varepsilon_0R}`}
+              \int_R^\infty\frac{Q}{4\pi\varepsilon_0r'^2}\,dr'=\frac{Q}{4\pi\varepsilon_0R}`}
             />
             <Formula latex={String.raw`\boxed{V(0)=\frac{Q}{3\pi\varepsilon_0R}=\frac{\rho_0R^2}{3\varepsilon_0}}`} />
             <p>За проверка целият вътрешен потенциал може да се запише като</p>
@@ -822,9 +823,9 @@ export default function ElectrostaticsExamPage() {
             <p>
               Тесният пръстен с радиус <RichText text="$r$" /> и широчина{" "}
               <RichText text={String.raw`$dr$`} /> има лице{" "}
-              <RichText text={String.raw`$dA=2\pi r\,dr$`} />. Понеже плътността е постоянна,
+              <RichText text={String.raw`$dS=2\pi r\,dr$`} />. Понеже плътността е постоянна,
             </p>
-            <Formula latex={String.raw`dq=\sigma\,dA=\sigma2\pi r\,dr`} />
+            <Formula latex={String.raw`dq=\sigma\,dS=\sigma2\pi r\,dr`} />
             <p>
               Всички елементи на пръстена са на едно и също разстояние{" "}
               <RichText text={String.raw`$s=\sqrt{r^2+z^2}$`} /> от <RichText text="$P$" />, затова
@@ -976,7 +977,7 @@ export default function ElectrostaticsExamPage() {
               Границата между двете области е успоредна на полето. И двете области имат едни и същи
               плочи и една и съща потенциална разлика, затова са свързани успоредно. Площите им са
             </p>
-            <Formula latex={String.raw`A_{\text{д}}=bx,\qquad A_{\text{в}}=b(L-x)`} />
+            <Formula latex={String.raw`S_{\text{д}}=bx,\qquad S_{\text{в}}=b(L-x)`} />
             <Formula
               latex={String.raw`C_{\text{д}}=\frac{\varepsilon_0\varepsilon_rbx}{d},\qquad
               C_{\text{в}}=\frac{\varepsilon_0b(L-x)}{d}`}
@@ -1190,7 +1191,7 @@ export default function ElectrostaticsExamPage() {
 
           <SolutionPart label="d" title="Пълен заряд и проверка на момента">
             <p>
-              С <RichText text={String.raw`$dA=R^2\sin\theta\,d\theta\,d\varphi$`} />:
+              С <RichText text={String.raw`$dS=R^2\sin\theta\,d\theta\,d\varphi$`} />:
             </p>
             <Formula
               latex={String.raw`Q_{\text{инд}}=3\varepsilon_0E_0R^2\int_0^{2\pi}d\varphi
@@ -1202,7 +1203,7 @@ export default function ElectrostaticsExamPage() {
               <RichText text="$z$" />:
             </p>
             <Formula
-              latex={String.raw`p_z=\int z\,dq=\int (R\cos\theta)\,\sigma(\theta)\,dA
+              latex={String.raw`p_z=\int z\,dq=\int (R\cos\theta)\,\sigma(\theta)\,dS
               =3\varepsilon_0E_0R^3\int_0^{2\pi}d\varphi\int_0^\pi\cos^2\theta\sin\theta\,d\theta`}
             />
             <p>
