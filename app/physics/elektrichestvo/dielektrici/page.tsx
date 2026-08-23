@@ -17,7 +17,7 @@ import {
 } from "@/components/interactives/TeacherMode";
 
 export const metadata = {
-  title: "Диелектрици: поляризация, капацитет и енергия · STEM Платформа",
+  title: "Диелектрици: поляризация, капацитет и енергия · SingularityLab",
 };
 
 /** Изнасяне на широките сцени в дясното поле на голям екран. */

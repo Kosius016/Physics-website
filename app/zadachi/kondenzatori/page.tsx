@@ -23,7 +23,7 @@ import {
 } from "@/components/materiali/CapacitorProblemLabs";
 
 export const metadata = {
-  title: "Задачи за кондензатори с решения · STEM Платформа",
+  title: "Задачи за кондензатори с решения · SingularityLab",
   description:
     "Шест трудни задачи за плосък и коаксиален кондензатор с пълни решения, графики и интерактивни симулации.",
 };

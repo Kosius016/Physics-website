@@ -19,7 +19,7 @@ import {
 } from "@/components/interactives/TeacherMode";
 
 export const metadata = {
-  title: "Проводници в електростатично равновесие · STEM Платформа",
+  title: "Проводници в електростатично равновесие · SingularityLab",
 };
 
 const SECTION_NAV = [

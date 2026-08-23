@@ -20,6 +20,7 @@
   --color-warn: #8a6206;
 
   --font-sans: var(--font-rubik), ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-brand: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --font-serif: Georgia, "Times New Roman", serif;
 
   --shadow-hard: 4px 4px 0 var(--color-rule);

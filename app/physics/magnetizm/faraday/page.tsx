@@ -13,7 +13,7 @@ import PredictionQuestion from "@/components/interactives/PredictionQuestion";
 import { TeacherModeProvider, TeacherModeToggle, TeacherNote } from "@/components/interactives/TeacherMode";
 
 export const metadata = {
-  title: "Законът на Фарадей — индукция от променящ се поток · STEM Платформа",
+  title: "Законът на Фарадей — индукция от променящ се поток · SingularityLab",
   description:
     "Как променящото се магнитно поле поражда ЕДН и ток без батерия: закон на Фарадей, двигателно ЕДН, закон на Ленц, индуцирани полета, генератори, двигатели и вихрови токове.",
 };

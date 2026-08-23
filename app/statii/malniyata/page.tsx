@@ -12,7 +12,7 @@ import {
 } from "@/components/articles/LightningFigures";
 
 export const metadata = {
-  title: "Мълнията: най-познатата загадка в небето · STEM Платформа",
+  title: "Мълнията: най-познатата загадка в небето · SingularityLab",
   description:
     "Въздухът е изолатор, но въпреки това бурята прекарва ток през километри от него. Как точно започва мълнията още е отворен въпрос.",
 };

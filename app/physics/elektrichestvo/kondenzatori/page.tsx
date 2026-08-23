@@ -23,7 +23,7 @@ import {
 } from "@/components/interactives/TeacherMode";
 
 export const metadata = {
-  title: "Кондензатори: капацитет, свързване и енергия · STEM Платформа",
+  title: "Кондензатори: капацитет, свързване и енергия · SingularityLab",
 };
 
 const SECTION_NAV = [

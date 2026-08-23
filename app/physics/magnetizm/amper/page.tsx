@@ -11,7 +11,7 @@ import SolenoidAmpere from "@/components/interactives/SolenoidAmpere";
 import { TeacherModeProvider, TeacherModeToggle, TeacherNote } from "@/components/interactives/TeacherMode";
 
 export const metadata = {
-  title: "Законът на Ампер — извеждане чрез симетрия · STEM Платформа",
+  title: "Законът на Ампер — извеждане чрез симетрия · SingularityLab",
 };
 
 const SECTION_NAV = [

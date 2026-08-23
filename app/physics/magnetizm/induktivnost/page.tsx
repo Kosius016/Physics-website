@@ -24,7 +24,7 @@ import {
 } from "@/components/interactives/TeacherMode";
 
 export const metadata = {
-  title: "Индуктивност - токът има електромагнитна инерция · STEM Платформа",
+  title: "Индуктивност - токът има електромагнитна инерция · SingularityLab",
   description:
     "Самоиндукция, RL контури, енергия на магнитното поле, взаимна индуктивност и LC/RLC трептения с пълни извеждания и интерактивни SVG модели.",
 };

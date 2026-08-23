@@ -1,7 +1,7 @@
 import CourseBrowser from "@/components/CourseBrowser";
 
 export const metadata = {
-  title: "Уроци · STEM Платформа",
+  title: "Уроци · SingularityLab",
 };
 
 export default async function PhysicsIndexPage({

@@ -16,7 +16,7 @@ import {
 } from "@/components/interactives/TeacherMode";
 
 export const metadata = {
-  title: "Матрици: езикът на трансформациите · STEM Платформа",
+  title: "Матрици: езикът на трансформациите · SingularityLab",
 };
 
 const SECTION_NAV = [

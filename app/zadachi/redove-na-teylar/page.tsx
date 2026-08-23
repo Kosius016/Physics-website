@@ -19,7 +19,7 @@ import {
 import type { RichTextString } from "@/lib/types";
 
 export const metadata = {
-  title: "Задачи: редове на Тейлър и Маклорен · STEM Платформа",
+  title: "Задачи: редове на Тейлър и Маклорен · SingularityLab",
   description:
     "Двадесет задачи с пълни решения: пресмятания без калкулатор, граници чрез редове и приложения в електростатиката.",
 };

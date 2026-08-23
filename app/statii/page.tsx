@@ -2,7 +2,7 @@ import Link from "next/link";
 import { articles } from "@/lib/articles";
 
 export const metadata = {
-  title: "Статии · STEM Платформа",
+  title: "Статии · SingularityLab",
   description: "Научнопопулярни статии: физиката зад познатите явления, разказана в дълбочина.",
 };
 

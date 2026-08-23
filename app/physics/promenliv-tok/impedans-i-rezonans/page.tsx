@@ -32,7 +32,7 @@ import {
 } from "@/components/interactives/TeacherMode";
 
 export const metadata = {
-  title: "Променлив ток: реактанс, импеданс и резонанс · STEM Платформа",
+  title: "Променлив ток: реактанс, импеданс и резонанс · SingularityLab",
   description:
     "От LC трептенията към принудените: фаза, фазори, извеждане на X_C, X_L, Z, резонанс, ефективни стойности и мощност, с интерактивни SVG лаборатории.",
 };

@@ -17,7 +17,7 @@ import {
 } from "@/components/interactives/TeacherMode";
 
 export const metadata = {
-  title: "Векторно и смесено произведение · STEM Платформа",
+  title: "Векторно и смесено произведение · SingularityLab",
   description: "Геометричен и координатен урок за векторно произведение, нормали, площи и смесено произведение.",
 };
 

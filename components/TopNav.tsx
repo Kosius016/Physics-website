@@ -19,10 +19,27 @@ export default function TopNav() {
   return (
     <header className="border-b-2 border-ink bg-surface">
       <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-6 px-5">
-        <Link href="/physics" className="py-4 text-[18px] font-extrabold tracking-tight text-ink">
-          STEM <span className="text-plus">Платформа</span>
+        <Link
+          href="/physics"
+          aria-label="SingularityLab — начало"
+          className="flex items-center gap-2 py-3 text-ink"
+        >
+          <img
+            src="/brand/mark-ink.svg"
+            width="42"
+            height="42"
+            alt=""
+            aria-hidden="true"
+            className="h-10 w-10 shrink-0"
+          />
+          <span className="font-brand text-[19px] font-extrabold tracking-[-0.025em] sm:text-[21px]">
+            Singularity<span className="text-plus">Lab</span>
+          </span>
         </Link>
-        <nav className="flex overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <nav
+          aria-label="Основна навигация"
+          className="flex overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
           {TABS.map((tab) => {
             const active =
               tab.href === "/physics"

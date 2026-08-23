@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import { ChargedSphereGraph, PotentialMap } from "@/components/interactives/PotentialVisualizations";
 import { TeacherModeProvider, TeacherModeToggle, TeacherNote } from "@/components/interactives/TeacherMode";
 
-export const metadata = { title: "Електростатичен потенциал · STEM Платформа" };
+export const metadata = { title: "Електростатичен потенциал · SingularityLab" };
 
 const NAV = [
   { id: "motivation", n: "§1", label: "Защо потенциал" },

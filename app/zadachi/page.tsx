@@ -2,7 +2,7 @@ import Link from "next/link";
 import RichText from "@/components/RichText";
 
 export const metadata = {
-  title: "Задачи · STEM Платформа",
+  title: "Задачи · SingularityLab",
   description: "Тематични серии със сбити условия, указания и решения стъпка по стъпка.",
 };
 

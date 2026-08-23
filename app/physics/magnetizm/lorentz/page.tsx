@@ -9,7 +9,7 @@ import ParticleDeflectionLab from "@/components/interactives/ParticleDeflectionL
 import PredictionQuestion from "@/components/interactives/PredictionQuestion";
 import { TeacherModeProvider, TeacherModeToggle, TeacherNote } from "@/components/interactives/TeacherMode";
 
-export const metadata = { title: "Силата на Лоренц — как полето отклонява заряд · STEM Платформа" };
+export const metadata = { title: "Силата на Лоренц — как полето отклонява заряд · SingularityLab" };
 
 const NAV = [
   { id: "meaning", n: "§1", label: "Какво е B" },

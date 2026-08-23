@@ -26,7 +26,7 @@
 ## 2. Скелет на страницата
 
 ```tsx
-export const metadata = { title: "… · STEM Платформа" };
+export const metadata = { title: "… · SingularityLab" };
 
 const SECTION_NAV = [
   { id: "idea", n: "§1", label: "Идеята" },

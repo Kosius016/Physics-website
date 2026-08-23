@@ -3,7 +3,7 @@ import Link from "next/link";
 import FieldAtlas from "@/components/materiali/FieldAtlas";
 
 export const metadata = {
-  title: "Материали за преговор · STEM Платформа",
+  title: "Материали за преговор · SingularityLab",
   description:
     "Кратки, структурирани материали за преговор по физика с интерактивни графики, справочници и самопроверка.",
 };

@@ -7,7 +7,7 @@ import ParallelWireForce from "@/components/interactives/ParallelWireForce";
 import PredictionQuestion from "@/components/interactives/PredictionQuestion";
 import { TeacherModeProvider, TeacherModeToggle, TeacherNote } from "@/components/interactives/TeacherMode";
 
-export const metadata={title:"Сила между два успоредни проводника · STEM Платформа"};
+export const metadata={title:"Сила между два успоредни проводника · SingularityLab"};
 const NAV=[{id:"idea",n:"§1",label:"Механизмът"},{id:"derive",n:"§2",label:"Извеждане"},{id:"direction",n:"§3",label:"Посока"},{id:"pair",n:"§4",label:"Двойката"},{id:"applications",n:"§5",label:"Приложения"},{id:"problems",n:"§6",label:"Задачи"},{id:"recap",n:"§7",label:"Обобщение"}] as const;
 
 const tasks=[

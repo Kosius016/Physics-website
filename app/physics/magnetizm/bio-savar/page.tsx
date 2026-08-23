@@ -18,7 +18,7 @@ import {
 } from "@/components/interactives/TeacherMode";
 
 export const metadata = {
-  title: "Закон на Био-Савар — геометрията зад формулата · STEM Платформа",
+  title: "Закон на Био-Савар — геометрията зад формулата · SingularityLab",
 };
 
 const SECTION_NAV = [

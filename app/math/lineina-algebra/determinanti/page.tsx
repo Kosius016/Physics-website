@@ -16,7 +16,7 @@ import {
 } from "@/components/interactives/TeacherMode";
 
 export const metadata = {
-  title: "Детерминанти: площта на трансформацията · STEM Платформа",
+  title: "Детерминанти: площта на трансформацията · SingularityLab",
 };
 
 const SECTION_NAV = [

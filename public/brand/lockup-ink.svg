@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 140" width="640" height="140" role="img" aria-label="SingularityLab">
+
+  <g transform="translate(6 20) scale(1)">
+    <g fill="none" stroke="#1b2430" stroke-width="5" stroke-linecap="round" transform="scale(1)">
+      <path d="M6 20 H44 L74 50"></path>
+      <path d="M6 35 H44 L74 50"></path>
+      <path d="M6 50 H74"></path>
+      <path d="M6 65 H44 L74 50"></path>
+      <path d="M6 80 H44 L74 50"></path>
+    </g>
+    <circle cx="80" cy="50" r="9" fill="#c94a3d"></circle>
+  </g>
+  <text x="118" y="88" font-family="Archivo, system-ui, sans-serif" font-weight="800" font-size="72" letter-spacing="-1.8" fill="#1b2430">Singularity<tspan fill="#c94a3d">Lab</tspan></text>
+</svg>

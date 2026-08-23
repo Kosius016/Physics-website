@@ -1,7 +1,7 @@
 import PracticumBrowser from "@/components/PracticumBrowser";
 
 export const metadata = {
-  title: "Практикум · STEM Платформа",
+  title: "Практикум · SingularityLab",
   description: "Ръководства за учебни експерименти, демонстрации и измервания.",
 };
 
