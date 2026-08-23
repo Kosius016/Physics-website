@@ -15,6 +15,8 @@ export interface CourseLessonEntry {
   title: string;
   /** Линк към урока; липсва → урокът предстои. */
   href?: string;
+  /** ISO дата за секциите „Последно добавени“ и бъдещи каталози. */
+  publishedAt?: string;
   /** Черновите се виждат само при локална разработка. */
   draft?: boolean;
 }
@@ -32,6 +34,7 @@ const physics11: CourseSection[] = [
         number: "1.1",
         title: "Движение под ъгъл към хоризонта",
         href: "/physics/kinematika/dvizhenie-pod-agal",
+        publishedAt: "2026-07-12",
         draft: true,
       },
       { number: "1.2", title: "Свободно падане и хвърляне нагоре" },
@@ -106,11 +109,13 @@ const physicsUni: CourseSection[] = [
         number: "3.1",
         title: "Законът на Фарадей — индукция от променящ се поток",
         href: "/physics/magnetizm/faraday",
+        publishedAt: "2026-07-21",
       },
       {
         number: "3.2",
         title: "Индуктивност: токът има електромагнитна инерция",
         href: "/physics/magnetizm/induktivnost",
+        publishedAt: "2026-07-25",
       },
     ],
   },
@@ -121,6 +126,7 @@ const physicsUni: CourseSection[] = [
         number: "4.1",
         title: "Променлив ток: от фазата до импеданса и резонанса",
         href: "/physics/promenliv-tok/impedans-i-rezonans",
+        publishedAt: "2026-08-18",
       },
     ],
   },
@@ -144,6 +150,7 @@ const mathUni: CourseSection[] = [
         number: "1.3",
         title: "Векторно и смесено произведение",
         href: "/math/lineina-algebra/vektorno-proizvedenie",
+        publishedAt: "2026-07-14",
       },
     ],
   },
@@ -169,4 +176,47 @@ export function getCourseMap(subject: Subject, level: Level): CourseSection[] {
       lessons: section.lessons.filter((lesson) => !lesson.draft),
     }))
     .filter((section) => section.lessons.length > 0);
+}
+
+export interface CourseLessonSummary extends CourseLessonEntry {
+  subject: Subject;
+  level: Level;
+  section: string;
+  href: string;
+}
+
+export function getLessonCount(subject: Subject, level: Level): number {
+  return getCourseMap(subject, level).reduce(
+    (total, section) => total + section.lessons.filter((lesson) => lesson.href).length,
+    0,
+  );
+}
+
+export function getSubjectLessonCount(subject: Subject): number {
+  return LEVELS.reduce((total, level) => total + getLessonCount(subject, level), 0);
+}
+
+export function getRecentLessons(limit = 3): CourseLessonSummary[] {
+  const lessons: CourseLessonSummary[] = [];
+
+  for (const subject of SUBJECTS) {
+    for (const level of LEVELS) {
+      for (const section of getCourseMap(subject, level)) {
+        for (const lesson of section.lessons) {
+          if (!lesson.href || !lesson.publishedAt) continue;
+          lessons.push({
+            ...lesson,
+            subject,
+            level,
+            section: section.title,
+            href: lesson.href,
+          });
+        }
+      }
+    }
+  }
+
+  return lessons
+    .sort((a, b) => b.publishedAt!.localeCompare(a.publishedAt!))
+    .slice(0, limit);
 }

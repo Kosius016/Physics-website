@@ -10,9 +10,12 @@ export default async function PhysicsIndexPage({
   searchParams: Promise<{ level?: string; subject?: string }>;
 }) {
   const { level, subject } = await searchParams;
+  const initialLevel =
+    level === "university" ? "Университетско" : level === "12" ? "12. клас" : "11. клас";
+
   return (
     <CourseBrowser
-      initialLevel={level === "university" ? "Университетско" : "11. клас"}
+      initialLevel={initialLevel}
       initialSubject={subject === "math" ? "Математика" : "Физика"}
     />
   );
