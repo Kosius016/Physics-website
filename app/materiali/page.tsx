@@ -1,10 +1,10 @@
 import Link from "next/link";
 import {
   MATERIAL_FILTERS,
-  getMaterialCount,
-  getMaterialsByKind,
+  getMaterials,
   type MaterialCatalogItem,
   type MaterialKind,
+  type MaterialLevel,
 } from "@/lib/materialCatalog";
 
 export const metadata = {
@@ -33,8 +33,26 @@ function normalizeFilter(value: string | string[] | undefined): "all" | Material
     : "all";
 }
 
-function filterHref(value: "all" | MaterialKind) {
-  return value === "all" ? "/materiali" : `/materiali?type=${value}`;
+function normalizeSubject(value: string | string[] | undefined): "physics" | "math" {
+  const candidate = Array.isArray(value) ? value[0] : value;
+  return candidate === "math" ? "math" : "physics";
+}
+
+function normalizeLevel(value: string | string[] | undefined): MaterialLevel {
+  const candidate = Array.isArray(value) ? value[0] : value;
+  return candidate === "11" || candidate === "12" || candidate === "university"
+    ? candidate
+    : "university";
+}
+
+function filterHref(
+  value: "all" | MaterialKind,
+  subject: "physics" | "math",
+  level: MaterialLevel,
+) {
+  const params = new URLSearchParams({ subject, level });
+  if (value !== "all") params.set("type", value);
+  return `/materiali?${params.toString()}`;
 }
 
 function MaterialCard({ item }: { item: MaterialCatalogItem }) {
@@ -94,11 +112,28 @@ function MaterialCard({ item }: { item: MaterialCatalogItem }) {
 export default async function MaterialsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ type?: string | string[] }>;
+  searchParams: Promise<{
+    type?: string | string[];
+    subject?: string | string[];
+    level?: string | string[];
+  }>;
 }) {
-  const { type } = await searchParams;
+  const { type, subject, level } = await searchParams;
   const activeFilter = normalizeFilter(type);
-  const visibleMaterials = getMaterialsByKind(activeFilter);
+  const activeSubject = normalizeSubject(subject);
+  const activeLevel = normalizeLevel(level);
+  const subjectLabel = activeSubject === "math" ? "Математика" : "Физика";
+  const levelLabel =
+    activeLevel === "11"
+      ? "11. клас"
+      : activeLevel === "12"
+        ? "12. клас"
+        : "университетско ниво";
+  const visibleMaterials = getMaterials({
+    kind: activeFilter,
+    subject: subjectLabel,
+    level: activeLevel,
+  });
 
   return (
     <main className="mx-auto max-w-[1040px] px-5 pb-24">
@@ -124,7 +159,7 @@ export default async function MaterialsPage({
           return (
             <Link
               key={filter.value}
-              href={filterHref(filter.value)}
+              href={filterHref(filter.value, activeSubject, activeLevel)}
               aria-current={active ? "page" : undefined}
               className={
                 active
@@ -133,9 +168,6 @@ export default async function MaterialsPage({
               }
             >
               {filter.label}
-              <span className={`ml-2 tabular-nums ${active ? "text-white/70" : "text-muted"}`}>
-                {getMaterialCount(filter.value)}
-              </span>
             </Link>
           );
         })}
@@ -155,11 +187,17 @@ export default async function MaterialsPage({
           {SECTION_TITLES[activeFilter]}
         </h2>
 
-        <div className="grid gap-[18px] md:grid-cols-2">
-          {visibleMaterials.map((item) => (
-            <MaterialCard key={`${item.kind}-${item.id}`} item={item} />
-          ))}
-        </div>
+        {visibleMaterials.length > 0 ? (
+          <div className="grid gap-[18px] md:grid-cols-2">
+            {visibleMaterials.map((item) => (
+              <MaterialCard key={`${item.kind}-${item.id}`} item={item} />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-[10px] border-[1.5px] border-dashed border-rule bg-surface px-6 py-14 text-center text-[15px] text-muted">
+            Съдържанието за {subjectLabel}, {levelLabel} се подготвя.
+          </div>
+        )}
       </section>
     </main>
   );

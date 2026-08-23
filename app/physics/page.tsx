@@ -15,8 +15,8 @@ export default async function PhysicsIndexPage({
 
   return (
     <CourseBrowser
-      initialLevel={initialLevel}
-      initialSubject={subject === "math" ? "Математика" : "Физика"}
+      level={initialLevel}
+      subject={subject === "math" ? "Математика" : "Физика"}
     />
   );
 }

@@ -94,7 +94,7 @@ export default function ElectrostaticsExamPage() {
   return (
     <main className="mx-auto max-w-3xl px-5 pb-24">
       <header className="pb-2 pt-11">
-        <Link href="/materiali?type=zadachi" className="text-[13px] font-semibold text-minus hover:underline">
+        <Link href="/materiali?subject=physics&level=university&type=zadachi" className="text-[13px] font-semibold text-minus hover:underline">
           Задачи / Електростатика
         </Link>
         <p className="mt-6 text-[11px] font-bold uppercase tracking-[.22em] text-minus">
@@ -1299,7 +1299,7 @@ export default function ElectrostaticsExamPage() {
           </ul>
         </div>
         <div className="mt-6 flex flex-wrap gap-4 text-[14.5px] font-semibold">
-          <Link href="/materiali?type=zadachi" className="text-minus hover:underline">
+          <Link href="/materiali?subject=physics&level=university&type=zadachi" className="text-minus hover:underline">
             ← Всички задачи
           </Link>
           <Link href="/zadachi/kondenzatori" className="text-minus hover:underline">

@@ -1,6 +1,7 @@
 import { practicumPreviews } from "./practicum";
 
 export type MaterialKind = "pregovor" | "zadachi" | "praktikum";
+export type MaterialLevel = "11" | "12" | "university";
 
 export interface MaterialCatalogItem {
   id: string;
@@ -8,6 +9,7 @@ export interface MaterialCatalogItem {
   title: string;
   summary: string;
   subject: "Физика" | "Математика";
+  level: MaterialLevel;
   topic: string;
   meta: readonly string[];
   href?: string;
@@ -31,6 +33,7 @@ const publishedMaterials: readonly MaterialCatalogItem[] = [
     summary:
       "Величини, закони, условия за приложимост, стандартни резултати, стратегии за задачи и типични грешки.",
     subject: "Физика",
+    level: "university",
     topic: "Електричество и магнетизъм",
     meta: ["40–50 мин преговор", "14 секции", "10 въпроса"],
     href: "/materiali/elektrichestvo-i-magnetizam",
@@ -42,6 +45,7 @@ const publishedMaterials: readonly MaterialCatalogItem[] = [
     summary:
       "От електростатичното равновесие и теоремата на Гаус до избора между фиксиран заряд и фиксиран потенциал.",
     subject: "Физика",
+    level: "university",
     topic: "Електростатика",
     meta: ["15–20 мин преговор", "3 интерактива", "7 въпроса"],
     href: "/materiali/provodnitsi-kondenzatori-dielektritsi",
@@ -53,6 +57,7 @@ const publishedMaterials: readonly MaterialCatalogItem[] = [
     summary:
       "Реално контролно с пълни решения и ясна връзка към уроците, върху които стъпва всяка задача.",
     subject: "Физика",
+    level: "university",
     topic: "Електростатика",
     meta: ["7 въпроса", "4 задачи", "Пълни решения"],
     href: "/zadachi/kontrolno-elektrostatika",
@@ -64,6 +69,7 @@ const publishedMaterials: readonly MaterialCatalogItem[] = [
     summary:
       "Енергия, пробив, плоско приближение и енергийни баланси с решения стъпка по стъпка.",
     subject: "Физика",
+    level: "university",
     topic: "Електростатика",
     meta: ["6 задачи", "6 интерактивни проверки", "Водени решения"],
     href: "/zadachi/kondenzatori",
@@ -75,6 +81,7 @@ const publishedMaterials: readonly MaterialCatalogItem[] = [
     summary:
       "От въртеливо движение към честота, дължина и скорост на вълната, фаза, интерференция и биения.",
     subject: "Физика",
+    level: "university",
     topic: "Трептения и вълни",
     meta: ["20 задачи", "5 интерактивни проверки", "Водени решения"],
     href: "/zadachi/chestota-period-valni",
@@ -86,6 +93,7 @@ const publishedMaterials: readonly MaterialCatalogItem[] = [
     summary:
       "Стандартни редове, граници и приложения за потенциала на дипол, двойка заряди и зареден пръстен.",
     subject: "Математика",
+    level: "university",
     topic: "Анализ и електростатика",
     meta: ["20 задачи", "4 графики", "Водени решения"],
     href: "/zadachi/redove-na-teylar",
@@ -97,6 +105,7 @@ const publishedMaterials: readonly MaterialCatalogItem[] = [
     summary:
       "Доказателства и решения за Лагранж, BAC–CAB, Якоби, Бине–Коши, смесено произведение и Вандермонд.",
     subject: "Математика",
+    level: "university",
     topic: "Линейна алгебра",
     meta: ["10 задачи", "Доказателства", "Пълни решения"],
     href: "/zadachi/lineina-algebra-tazhdestva",
@@ -109,6 +118,7 @@ const plannedPracticums: readonly MaterialCatalogItem[] = practicumPreviews.map(
   title: guide.title,
   summary: guide.summary,
   subject: guide.subject,
+  level: "university",
   topic: guide.topic,
   meta: [guide.difficulty, guide.equipment, "Скоро"],
 }));
@@ -118,10 +128,17 @@ export const materialCatalog: readonly MaterialCatalogItem[] = [
   ...plannedPracticums,
 ];
 
-export function getMaterialsByKind(kind: "all" | MaterialKind) {
-  return kind === "all" ? materialCatalog : materialCatalog.filter((item) => item.kind === kind);
-}
-
-export function getMaterialCount(kind: "all" | MaterialKind) {
-  return getMaterialsByKind(kind).length;
+export function getMaterials({
+  kind,
+  subject,
+  level,
+}: {
+  kind: "all" | MaterialKind;
+  subject: MaterialCatalogItem["subject"];
+  level: MaterialLevel;
+}) {
+  return materialCatalog.filter(
+    (item) =>
+      (kind === "all" || item.kind === kind) && item.subject === subject && item.level === level,
+  );
 }
