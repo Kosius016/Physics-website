@@ -54,7 +54,7 @@ export default function LinearAlgebraIdentityProblemSetPage() {
           aria-label="Път до problem set"
           className="flex flex-wrap items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.2em] text-muted"
         >
-          <Link href="/zadachi" className="transition-colors hover:text-minus">
+          <Link href="/materiali?type=zadachi" className="transition-colors hover:text-minus">
             Задачи
           </Link>
           <span aria-hidden="true">·</span>
@@ -115,7 +115,7 @@ export default function LinearAlgebraIdentityProblemSetPage() {
       </Section>
 
       <div className="mt-12 flex flex-wrap items-center justify-between gap-3 border-t-2 border-ink pt-5">
-        <Link href="/zadachi" className="font-semibold text-minus hover:underline">
+        <Link href="/materiali?type=zadachi" className="font-semibold text-minus hover:underline">
           ← Всички problem sets
         </Link>
         <Link href="/math/lineina-algebra/vektorno-proizvedenie" className="font-semibold text-minus hover:underline">

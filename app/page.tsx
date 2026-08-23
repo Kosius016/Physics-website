@@ -33,7 +33,7 @@ export default function HomePage() {
               Разгледай темите
             </Link>
             <Link
-              href="/zadachi"
+              href="/materiali?type=zadachi"
               className="rounded-[10px] border-[1.5px] border-ink bg-surface px-6 py-3 text-[16px] font-bold text-ink shadow-hard transition-colors hover:bg-hl active:translate-x-px active:translate-y-px active:shadow-none"
             >
               Решавай задачи

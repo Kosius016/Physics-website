@@ -1,148 +1,166 @@
-import Image from "next/image";
 import Link from "next/link";
-import FieldAtlas from "@/components/materiali/FieldAtlas";
+import {
+  MATERIAL_FILTERS,
+  getMaterialCount,
+  getMaterialsByKind,
+  type MaterialCatalogItem,
+  type MaterialKind,
+} from "@/lib/materialCatalog";
 
 export const metadata = {
-  title: "Материали за преговор · SingularityLab",
+  title: "Материали · SingularityLab",
   description:
-    "Кратки, структурирани материали за преговор по физика с интерактивни графики, справочници и самопроверка.",
+    "Материали за преговор, задачи с решения и практически ръководства по физика и математика.",
 };
 
-export default function MaterialsPage() {
+const KIND_LABELS: Record<MaterialKind, string> = {
+  pregovor: "Преговор",
+  zadachi: "Задачи",
+  praktikum: "Практикум",
+};
+
+const SECTION_TITLES: Record<"all" | MaterialKind, string> = {
+  all: "Всички материали",
+  pregovor: "Материали за преговор",
+  zadachi: "Задачи с решения",
+  praktikum: "Практикуми",
+};
+
+function normalizeFilter(value: string | string[] | undefined): "all" | MaterialKind {
+  const candidate = Array.isArray(value) ? value[0] : value;
+  return candidate === "pregovor" || candidate === "zadachi" || candidate === "praktikum"
+    ? candidate
+    : "all";
+}
+
+function filterHref(value: "all" | MaterialKind) {
+  return value === "all" ? "/materiali" : `/materiali?type=${value}`;
+}
+
+function MaterialCard({ item }: { item: MaterialCatalogItem }) {
+  const content = (
+    <>
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="rounded-full border-[1.5px] border-ink bg-paper px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[0.08em] text-ink">
+          {KIND_LABELS[item.kind]}
+        </span>
+        <span className="text-[11.5px] font-semibold text-muted">
+          {item.subject} · {item.topic}
+        </span>
+      </div>
+
+      <h2
+        className={`mt-4 font-serif text-[23px] font-bold leading-[1.12] text-ink sm:text-[26px] ${
+          item.href ? "transition-colors group-hover:text-minus" : ""
+        }`}
+      >
+        {item.title}
+      </h2>
+      <p className="mt-3 flex-1 text-[14.5px] leading-relaxed text-muted">{item.summary}</p>
+
+      <div className="mt-5 flex flex-wrap gap-x-3 gap-y-2 text-[12px] font-semibold text-ink">
+        {item.meta.map((meta) => (
+          <span key={meta} className="rounded-full bg-hl px-2.5 py-1">
+            {meta}
+          </span>
+        ))}
+      </div>
+
+      <p className="mt-5 text-[13px] font-bold text-minus">
+        {item.href
+          ? item.kind === "zadachi"
+            ? "Отворете задачите →"
+            : "Отворете материала →"
+          : "Подготвя се"}
+      </p>
+    </>
+  );
+
+  const cardClass =
+    "group flex min-h-[290px] flex-col rounded-[11px] border-[1.5px] border-ink bg-surface p-5 shadow-hard sm:p-6";
+
+  return item.href ? (
+    <Link
+      href={item.href}
+      className={`${cardClass} transition-transform hover:-translate-x-0.5 hover:-translate-y-0.5`}
+    >
+      {content}
+    </Link>
+  ) : (
+    <article className={cardClass}>{content}</article>
+  );
+}
+
+export default async function MaterialsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string | string[] }>;
+}) {
+  const { type } = await searchParams;
+  const activeFilter = normalizeFilter(type);
+  const visibleMaterials = getMaterialsByKind(activeFilter);
+
   return (
-    <main className="mx-auto max-w-5xl px-5 pb-24">
+    <main className="mx-auto max-w-[1040px] px-5 pb-24">
       <header className="max-w-3xl pb-8 pt-12">
-        <p className="text-[11px] font-bold uppercase tracking-[.22em] text-minus">
+        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-minus">
           Библиотека
         </p>
         <h1 className="mt-2 font-serif text-[clamp(38px,7vw,58px)] font-bold leading-[1.04] text-ink">
-          Материали за <span className="text-plus">преговор</span>
+          Материали за учене и практика
         </h1>
-        <p className="mt-4 max-w-2xl text-[17px] text-muted">
-          Стегнати карти на темите, формули с точните условия за приложимост, стратегии за
-          задачи и интерактивна самопроверка.
+        <p className="mt-4 max-w-2xl text-[17px] leading-relaxed text-muted">
+          Преговор, задачи с пълни решения и практически ръководства на едно място.
+          Изберете вида материал, който Ви трябва сега.
         </p>
       </header>
 
-      <section aria-labelledby="materials-heading">
+      <nav
+        aria-label="Филтър по вид материал"
+        className="flex flex-wrap gap-2 border-y-[1.5px] border-rule py-4"
+      >
+        {MATERIAL_FILTERS.map((filter) => {
+          const active = activeFilter === filter.value;
+          return (
+            <Link
+              key={filter.value}
+              href={filterHref(filter.value)}
+              aria-current={active ? "page" : undefined}
+              className={
+                active
+                  ? "rounded-full border-[1.5px] border-ink bg-ink px-4 py-2 text-[13px] font-bold text-white shadow-hard-sm"
+                  : "rounded-full border-[1.5px] border-ink bg-surface px-4 py-2 text-[13px] font-semibold text-ink transition-colors hover:bg-hl"
+              }
+            >
+              {filter.label}
+              <span className={`ml-2 tabular-nums ${active ? "text-white/70" : "text-muted"}`}>
+                {getMaterialCount(filter.value)}
+              </span>
+            </Link>
+          );
+        })}
+      </nav>
+
+      <section aria-labelledby="materials-heading" className="pt-9">
         <h2
           id="materials-heading"
-          className="mb-5 border-b-2 border-ink pb-1.5 font-serif text-[26px] font-bold"
+          className="mb-5 border-b-2 border-ink pb-1.5 font-serif text-[26px] font-bold text-ink"
         >
-          <span className="mr-2.5 align-[0.15em] text-[0.62em] tracking-[0.1em] text-muted">
+          <span
+            aria-hidden="true"
+            className="mr-2.5 align-[0.15em] text-[0.62em] tracking-[0.1em] text-muted"
+          >
             §1
           </span>
-          Налични материали
+          {SECTION_TITLES[activeFilter]}
         </h2>
 
-        <Link
-          href="/materiali/elektrichestvo-i-magnetizam"
-          className="group mb-6 grid overflow-hidden rounded-[12px] border-[1.5px] border-ink bg-surface shadow-hard transition-transform hover:-translate-y-0.5 md:grid-cols-[1.15fr_.85fr]"
-        >
-          <div className="p-6 sm:p-8">
-            <div className="flex flex-wrap gap-2">
-              <span className="rounded-full border-[1.5px] border-plus bg-plus/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-plus">
-                Ново
-              </span>
-              <span className="rounded-full border-[1.5px] border-rule px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-muted">
-                Физика · Електричество и магнетизъм
-              </span>
-            </div>
-            <h3 className="mt-5 font-serif text-[clamp(28px,5vw,38px)] font-bold leading-[1.08]">
-              Електричество и магнетизъм: голям справочник
-            </h3>
-            <p className="mt-3 max-w-xl text-[15.5px] text-muted">
-              Всички величини с дефинициите им, законите с условията за приложимост,
-              стандартните резултати, стратегиите за задачи и типичните грешки.
-            </p>
-            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] font-semibold text-ink">
-              <span>40-50 мин преговор</span>
-              <span>14 секции</span>
-              <span>10 въпроса</span>
-            </div>
-          </div>
-
-          <div className="relative isolate flex min-h-[22rem] flex-col justify-between overflow-hidden border-t-[1.5px] border-ink bg-hl px-6 py-6 md:min-h-0 md:border-l-[1.5px] md:border-t-0">
-            <FieldAtlas className="absolute inset-0 -z-10 h-full w-full transition-transform duration-500 group-hover:scale-[1.025]" />
-            <ul className="space-y-1.5 text-[13.5px] font-semibold text-ink">
-              {[
-                "Заряд, поле, поток и потенциал",
-                "Проводници, кондензатори, диелектрици",
-                "Лоренц, Био-Савар, Ампер",
-                "Фарадей, Ленц, индуктивност",
-                "Вериги: RC срещу RL",
-              ].map((item) => (
-                <li key={item} className="flex gap-2">
-                  <span aria-hidden="true" className="text-minus">
-                    ·
-                  </span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-5">
-              <p className="text-[10px] font-bold uppercase tracking-[.18em] text-muted">
-                Червената нишка
-              </p>
-              <p className="mt-1 font-serif text-[19px] font-bold leading-tight text-ink">
-                Две полета, шест въпроса
-              </p>
-              <span className="mt-3 inline-block text-[14px] font-bold text-minus">
-                Отворете материала <span aria-hidden="true">→</span>
-              </span>
-            </div>
-          </div>
-        </Link>
-
-        <Link
-          href="/materiali/provodnitsi-kondenzatori-dielektritsi"
-          className="group grid overflow-hidden rounded-[12px] border-[1.5px] border-ink bg-surface shadow-hard transition-transform hover:-translate-y-0.5 md:grid-cols-[1.15fr_.85fr]"
-        >
-          <div className="p-6 sm:p-8">
-            <div className="flex flex-wrap gap-2">
-              <span className="rounded-full border-[1.5px] border-rule px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-muted">
-                Физика · Електростатика
-              </span>
-            </div>
-            <h3 className="mt-5 font-serif text-[clamp(28px,5vw,38px)] font-bold leading-[1.08]">
-              Проводници, кондензатори и диелектрици
-            </h3>
-            <p className="mt-3 max-w-xl text-[15.5px] text-muted">
-              От електростатичното равновесие и теоремата на Гаус до избора между фиксиран
-              заряд и фиксиран потенциал.
-            </p>
-            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] font-semibold text-ink">
-              <span>15-20 мин преговор</span>
-              <span>3 интерактива</span>
-              <span>7 въпроса</span>
-            </div>
-          </div>
-
-          <div className="flex min-h-[22rem] flex-col border-t-[1.5px] border-ink bg-hl md:min-h-0 md:border-l-[1.5px] md:border-t-0">
-            <div className="relative min-h-48 flex-1 overflow-hidden border-b-[1.5px] border-ink">
-              <Image
-                src="/images/materiali/capacitor-grounded-sphere.png"
-                alt="Стилизирана схема на кондензатор с диелектрик и заземена сфера"
-                fill
-                sizes="(min-width: 768px) 42vw, 100vw"
-                className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.025]"
-              />
-            </div>
-            <div className="bg-hl px-5 py-4">
-              <p className="text-[10px] font-bold uppercase tracking-[.18em] text-muted">
-                Ключов въпрос
-              </p>
-              <p className="mt-1 font-serif text-[20px] font-bold leading-tight text-ink">
-                Зарядът или потенциалът е постоянен?
-              </p>
-              <span className="mt-3 inline-block text-[14px] font-bold text-minus">
-                Отворете материала <span aria-hidden="true">→</span>
-              </span>
-            </div>
-          </div>
-        </Link>
+        <div className="grid gap-[18px] md:grid-cols-2">
+          {visibleMaterials.map((item) => (
+            <MaterialCard key={`${item.kind}-${item.id}`} item={item} />
+          ))}
+        </div>
       </section>
-
     </main>
   );
 }

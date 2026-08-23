@@ -94,7 +94,7 @@ export default function TaylorProblemsPage() {
     <TeacherModeProvider>
       <main className="mx-auto max-w-3xl px-5 pb-24">
         <header className="pb-2 pt-11">
-          <Link href="/zadachi" className="text-[13px] font-semibold text-minus hover:underline">
+          <Link href="/materiali?type=zadachi" className="text-[13px] font-semibold text-minus hover:underline">
             Задачи / Математични методи
           </Link>
           <p className="mt-6 text-[11px] font-bold uppercase tracking-[.22em] text-minus">
@@ -1138,7 +1138,7 @@ export default function TaylorProblemsPage() {
           </div>
 
           <div className="mt-7 flex flex-wrap gap-4 text-[14.5px] font-semibold">
-            <Link href="/zadachi" className="text-minus hover:underline">
+            <Link href="/materiali?type=zadachi" className="text-minus hover:underline">
               ← Всички серии задачи
             </Link>
             <Link href="/physics/elektrichestvo/potencial" className="text-minus hover:underline">
