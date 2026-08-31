@@ -587,7 +587,7 @@ function ClampFigure(phase: number) {
         <>
           <line x1={cx + 74} y1={cy + 30} x2={396} y2={cy + 30} stroke={C.ok} strokeWidth={2.2} />
           <circle cx={410} cy={cy + 30} r={16} fill="none" stroke={C.ok} strokeWidth={2.2} />
-          <SvgTex x={410} y={cy + 22} tex="\\text{A}" color={C.ok} fontSize={13} width={20} anchor="middle" />
+          <SvgTex x={410} y={cy + 22} tex="\text{A}" color={C.ok} fontSize={13} width={20} anchor="middle" />
         </>
       )}
       {phase >= 2 && (

@@ -15,7 +15,7 @@ import {
   useClock,
   type Cell,
 } from "./acPlot";
-import { BTN_PRI, BTN_SEC, C, DRAWING_FONT_FAMILY, PANEL_CLASS, STAGE_CLASS } from "./svg";
+import { BTN_PRI, BTN_SEC, C, PANEL_CLASS, STAGE_CLASS } from "./svg";
 
 /**
  * Интерактивите към §4-§7: ядрото и общият поток, отношението на навивките
@@ -112,11 +112,15 @@ function FluxLoop({ phase, opacity = 1 }: { phase: number; opacity?: number }) {
 
 /* ============================================================ §4 и §5 */
 
+/** Навивките, които сцената реално рисува: readout лентата ползва същите. */
+const N1_DRAWN = 8;
+const N2_DRAWN = 5;
+
 const PHASE_CAPTIONS = [
   "Голо ядро. Ламелите се виждат по горното рамо: те ще станат важни чак в §8.",
   "Първичната намотка създава поток, който ядрото затваря в себе си.",
   "Вторичната намотка обхваща **същия** поток. Между двете няма проводник.",
-  "Всяка навивка от двете страни вижда едно и също $d\\Phi/dt$. Оттам излиза отношението.",
+  "Всяка навивка от двете страни вижда едно и също $d\\Phi/dt$. Осем навивки срещу пет дават $v_2/v_1=5/8=0{,}63$: отношението на напреженията е отношението на навивките.",
 ];
 
 /**
@@ -133,7 +137,8 @@ export function CoreFluxScene() {
 
   const tau = playing ? turns : manual;
   const flux = Math.sin(2 * Math.PI * tau);
-  const dflux = Math.cos(2 * Math.PI * tau);
+  // ЕДН на **една** навивка: то е общото за двете страни
+  const perTurn = Math.cos(2 * Math.PI * tau);
 
   const W = 560;
   const H = 300;
@@ -147,8 +152,8 @@ export function CoreFluxScene() {
           <Core dim={phase === 0} />
           {phase >= 1 && <FluxLoop phase={tau} opacity={phase === 1 ? 1 : 0.85} />}
 
-          {phase >= 1 && <Winding cx={CORE.x + CORE.t / 2} n={8} color={C.warn} />}
-          {phase >= 2 && <Winding cx={CORE.x + CORE.w - CORE.t / 2} n={5} color={C.ok} />}
+          {phase >= 1 && <Winding cx={CORE.x + CORE.t / 2} n={N1_DRAWN} color={C.warn} />}
+          {phase >= 2 && <Winding cx={CORE.x + CORE.w - CORE.t / 2} n={N2_DRAWN} color={C.ok} />}
 
           {/* изводи */}
           {phase >= 1 && (
@@ -166,8 +171,8 @@ export function CoreFluxScene() {
 
           {phase >= 3 && (
             <>
-              <SvgTex x={62} y={132} tex="v_1,\ N_1" color={C.warn} fontSize={14.5} width={62} />
-              <SvgTex x={498} y={132} tex="v_2,\ N_2" color={C.ok} fontSize={14.5} width={62} anchor="end" />
+              <SvgTex x={62} y={128} tex="v_1,\ N_1=8" color={C.warn} fontSize={14} width={76} />
+              <SvgTex x={498} y={128} tex="v_2,\ N_2=5" color={C.ok} fontSize={14} width={76} anchor="end" />
               <SvgTex
                 x={CORE.x + CORE.w / 2}
                 y={CORE.y + CORE.h / 2 - 12}
@@ -196,9 +201,9 @@ export function CoreFluxScene() {
       <Readouts
         cells={[
           { label: "Поток", tex: `\\Phi/\\Phi_{\\max}=${dec(flux)}`, color: C.minus },
-          { label: "Скорост на промяна", tex: `d\\Phi/dt\\ \\propto\\ ${dec(dflux)}` },
-          { label: "Първично", tex: `v_1\\ \\propto\\ ${dec(dflux)}`, color: C.warn },
-          { label: "Вторично", tex: `v_2\\ \\propto\\ ${dec(dflux)}`, color: C.ok },
+          { label: "ЕДН на навивка", tex: `d\\Phi/dt\\ \\propto\\ ${dec(perTurn)}` },
+          { label: "Първично, 8 навивки", tex: `v_1\\ \\propto\\ ${dec(N1_DRAWN * perTurn)}`, color: C.warn },
+          { label: "Вторично, 5 навивки", tex: `v_2\\ \\propto\\ ${dec(N2_DRAWN * perTurn)}`, color: C.ok },
         ]}
         cols={4}
       />
@@ -284,18 +289,28 @@ export function TurnsRatioLab() {
   const p1 = v1 * i1;
 
   const W = 620;
-  const H = 320;
+  const H = 328;
 
   /*
-   * Мощността като площ: височината на правоъгълника е напрежението,
-   * широчината е токът. Двата правоъгълника имат **еднаква площ** и различна
-   * форма - точно това е размяната, която трансформаторът извършва.
+   * Размяната се показва с две огледални двойки ленти, а не с „еднаква площ“:
+   * при отношение 19:1 правоъгълник с вярна площ става невидима нишка, а
+   * клампването ѝ би направило картината невярна. Всяка двойка е нормирана
+   * към своя максимум, затова дългото и късото се разменят между редовете
+   * при всяко отношение.
    */
-  const baseLine = 286;
-  const areaPx = 4200; // пиксели², еднакви за двете страни
-  const hi = Math.max(v1, v2);
-  const hOf = (v: number) => Math.max(6, (v / hi) * 92);
-  const wOf = (v: number) => areaPx / hOf(v);
+  const barX = 132;
+  const barW = 372;
+  const vMax = Math.max(v1, v2, 1e-9);
+  const iMax = Math.max(i1, i2, 1e-9);
+  const rows = [
+    { y: 208, tex: "V_1", value: v1, max: vMax, color: C.warn },
+    { y: 232, tex: "V_2", value: v2, max: vMax, color: C.ok },
+    { y: 274, tex: "I_1", value: i1, max: iMax, color: C.warn },
+    { y: 298, tex: "I_2", value: i2, max: iMax, color: C.ok },
+  ];
+
+  /** Пълна скала на ватметъра: закръглена нагоре до цяла декада. */
+  const pFull = p1 > 0 ? 10 ** Math.ceil(Math.log10(p1)) : 1;
 
   const cells: Cell[] = [
     { label: "Отношение", tex: `N_2/N_1=${dec(ratio, ratio < 0.1 ? 3 : 2)}` },
@@ -326,72 +341,67 @@ export function TurnsRatioLab() {
           {[
             { cx: 440, label: "P_1", color: C.warn, value: p1 },
             { cx: 552, label: "P_2", color: C.ok, value: p2 },
-          ].map((m) => (
-            <g key={m.label}>
-              <circle cx={m.cx} cy={104} r={38} fill="none" stroke={m.color} strokeWidth={2.4} />
-              <line
-                x1={m.cx}
-                y1={104}
-                x2={m.cx + 27 * Math.cos(Math.PI * (1 - Math.min(1, m.value / 400)))}
-                y2={104 + 27 * Math.sin(-Math.PI * (1 - Math.min(1, m.value / 400)))}
-                stroke={C.wire}
-                strokeWidth={2.4}
-              />
-              <circle cx={m.cx} cy={104} r={3.4} fill={C.wire} />
-              <SvgTex x={m.cx} y={152} tex={m.label} color={m.color} fontSize={14} width={26} anchor="middle" />
-            </g>
-          ))}
-          <text
-            x={496}
-            y={182}
-            textAnchor="middle"
-            fill={C.mut}
-            fontFamily={DRAWING_FONT_FAMILY}
-            fontSize={11.5}
-            fontWeight={600}
-            letterSpacing="0.07em"
-          >
-            ЕДНА И СЪЩА СТРЕЛКА
-          </text>
+          ].map((m) => {
+            const frac = Math.min(1, m.value / pFull);
+            const ang = Math.PI * (1 - frac); // 180° при нула, 0° при пълна скала
+            return (
+              <g key={m.label}>
+                <circle cx={m.cx} cy={104} r={38} fill="none" stroke={m.color} strokeWidth={2.4} />
+                {Array.from({ length: 6 }, (_, k) => {
+                  const a = Math.PI * (1 - k / 5);
+                  return (
+                    <line
+                      key={k}
+                      x1={m.cx + 31 * Math.cos(a)}
+                      y1={104 - 31 * Math.sin(a)}
+                      x2={m.cx + 37 * Math.cos(a)}
+                      y2={104 - 37 * Math.sin(a)}
+                      stroke={C.faint}
+                      strokeWidth={1.6}
+                    />
+                  );
+                })}
+                <line
+                  x1={m.cx}
+                  y1={104}
+                  x2={m.cx + 28 * Math.cos(ang)}
+                  y2={104 - 28 * Math.sin(ang)}
+                  stroke={C.wire}
+                  strokeWidth={2.4}
+                />
+                <circle cx={m.cx} cy={104} r={3.4} fill={C.wire} />
+                <SvgTex x={m.cx} y={150} tex={m.label} color={m.color} fontSize={14} width={26} anchor="middle" />
+              </g>
+            );
+          })}
 
-          {/* мощността като площ: еднаква площ, различна форма */}
-          <line x1={40} y1={baseLine} x2={W - 40} y2={baseLine} stroke={C.faint} strokeWidth={1.4} />
-          {[
-            { x: 76, v: v1, tex: "V_1", texI: "I_1", color: C.warn },
-            { x: 330, v: v2, tex: "V_2", texI: "I_2", color: C.ok },
-          ].map((b) => (
-            <g key={b.tex}>
+          {/* две огледални двойки: дългото и късото си сменят местата */}
+          {rows.map((r) => (
+            <g key={r.tex}>
+              <line
+                x1={barX}
+                y1={r.y + 7}
+                x2={barX + barW}
+                y2={r.y + 7}
+                stroke={C.faint}
+                strokeWidth={1}
+                opacity={0.5}
+              />
               <rect
-                x={b.x}
-                y={baseLine - hOf(b.v)}
-                width={Math.min(210, wOf(b.v))}
-                height={hOf(b.v)}
-                fill={b.color}
-                opacity={0.34}
-                stroke={b.color}
-                strokeWidth={2}
+                x={barX}
+                y={r.y}
+                width={Math.max(2, (r.value / r.max) * barW)}
+                height={14}
+                rx={3}
+                fill={r.color}
+                opacity={0.85}
               />
-              <SvgTex
-                x={b.x - 8}
-                y={baseLine - hOf(b.v) / 2 - 10}
-                tex={b.tex}
-                color={b.color}
-                fontSize={13}
-                width={26}
-                anchor="end"
-              />
-              <SvgTex
-                x={b.x + Math.min(210, wOf(b.v)) / 2}
-                y={baseLine + 6}
-                tex={b.texI}
-                color={b.color}
-                fontSize={13}
-                width={26}
-                anchor="middle"
-              />
+              <SvgTex x={barX - 12} y={r.y - 2} tex={r.tex} color={r.color} fontSize={13} width={26} anchor="end" />
             </g>
           ))}
-          <SvgTex x={W - 54} y={196} tex="V_1I_1=V_2I_2" color={C.wire} fontSize={15} width={112} anchor="end" />
+          <line x1={barX - 40} y1={253} x2={barX + barW} y2={253} stroke={C.faint} strokeWidth={1.2} />
+
+          <SvgTex x={496} y={176} tex="V_1I_1=V_2I_2" color={C.wire} fontSize={15} width={112} anchor="middle" />
         </svg>
       </StageScroll>
 
@@ -464,6 +474,9 @@ export function TurnsRatioLab() {
       </div>
 
       <p className="mt-3 text-[13.5px] leading-relaxed text-muted">
+        <RichText text="**Двата ватметъра показват една и съща стрелка.** Долните ленти са две огледални двойки: щом напрежението е дълго отгоре и късо отдолу, при токовете е точно обратното. Всяка двойка е нормирана към своя максимум." />
+      </p>
+      <p className="mt-2 text-[13.5px] leading-relaxed text-muted">
         <RichText text="Плъзгачът за товара в най-лявото си положение означава празен ход. В идеалния модел тогава по първичната не тече нищо; истинският намагнитващ ток идва в §8." />
       </p>
     </div>
@@ -485,8 +498,8 @@ export function NoDCLab() {
   const [t, setT] = useState(1.6);
 
   const W = 620;
-  const H = 330;
-  const box = { x: 76, y: 34, w: 470, h: 74 };
+  const H = 300;
+  const box = { x: 76, y: 26, w: 470, h: 74 };
   const tMax = 4;
 
   const closed = (x: number) => x >= 1;
@@ -548,18 +561,7 @@ export function NoDCLab() {
             );
           })}
 
-          <SvgTex x={box.x + box.w + 18} y={box.y + 210} tex="t" color={C.mut} fontSize={13} width={16} />
-          <text
-            x={96}
-            y={318}
-            fill={C.mut}
-            fontFamily={DRAWING_FONT_FAMILY}
-            fontSize={12}
-          >
-            {dc
-              ? "ЕДН има само в мига на включване; после потокът застива."
-              : "Потокът никога не застива, затова вторичната не млъква."}
-          </text>
+          <SvgTex x={box.x + box.w + 18} y={box.y + 258} tex="t" color={C.mut} fontSize={13} width={16} />
         </svg>
       </StageScroll>
 

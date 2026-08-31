@@ -551,7 +551,7 @@ export function GridCascade({ compact = false }: { compact?: boolean }) {
   const loss = i * i * REF_R_PER_100KM;
 
   const W = 904;
-  const H = 250;
+  const H = 176;
   const blockW = 130;
   const gap = (W - 38 - stages.length * blockW) / (stages.length - 1);
   const centerOf = (n: number) => 19 + blockW / 2 + n * (blockW + gap);
@@ -570,14 +570,14 @@ export function GridCascade({ compact = false }: { compact?: boolean }) {
             const up = stages[n + 1].kv > s.kv;
             return (
               <g key={`link-${n}`}>
-                <line x1={x0} y1={110} x2={x1} y2={110} stroke={C.wire} strokeWidth={2.2} />
-                <circle cx={xm - 7} cy={110} r={10} fill="none" stroke={C.warn} strokeWidth={2.2} />
-                <circle cx={xm + 7} cy={110} r={10} fill="none" stroke={C.ok} strokeWidth={2.2} />
+                <line x1={x0} y1={104} x2={x1} y2={104} stroke={C.wire} strokeWidth={2.2} />
+                <circle cx={xm - 7} cy={104} r={10} fill="none" stroke={C.warn} strokeWidth={2.2} />
+                <circle cx={xm + 7} cy={104} r={10} fill="none" stroke={C.ok} strokeWidth={2.2} />
                 <polygon
                   points={
                     up
-                      ? `${xm},${76} ${xm - 6},${88} ${xm + 6},${88}`
-                      : `${xm},${88} ${xm - 6},${76} ${xm + 6},${76}`
+                      ? `${xm},${70} ${xm - 6},${82} ${xm + 6},${82}`
+                      : `${xm},${82} ${xm - 6},${70} ${xm + 6},${70}`
                   }
                   fill={up ? C.ok : C.minus}
                 />
@@ -605,7 +605,7 @@ export function GridCascade({ compact = false }: { compact?: boolean }) {
               >
                 <rect
                   x={cx - blockW / 2}
-                  y={62}
+                  y={56}
                   width={blockW}
                   height={96}
                   rx={8}
@@ -616,7 +616,7 @@ export function GridCascade({ compact = false }: { compact?: boolean }) {
                 />
                 <text
                   x={cx}
-                  y={86}
+                  y={80}
                   textAnchor="middle"
                   fill={on ? C.ok : C.mut}
                   fontFamily={DRAWING_FONT_FAMILY}
@@ -628,7 +628,7 @@ export function GridCascade({ compact = false }: { compact?: boolean }) {
                 </text>
                 <SvgTex
                   x={cx}
-                  y={106}
+                  y={100}
                   tex={s.kv >= 1 ? `${s.kv}\\,\\mathrm{kV}` : `${dec(s.kv, 1)}\\,\\mathrm{kV}`}
                   color={on ? C.wire : C.mut}
                   fontSize={17}
@@ -639,16 +639,6 @@ export function GridCascade({ compact = false }: { compact?: boolean }) {
             );
           })}
 
-          <text
-            x={W / 2}
-            y={196}
-            textAnchor="middle"
-            fill={C.mut}
-            fontFamily={DRAWING_FONT_FAMILY}
-            fontSize={12.5}
-          >
-            Изберете ниво, за да видите какъв ток изисква то.
-          </text>
         </svg>
       </StageScroll>
 
@@ -656,10 +646,17 @@ export function GridCascade({ compact = false }: { compact?: boolean }) {
         cells={[
           { label: "Ниво", tex: `V=${active.kv >= 1 ? dec(active.kv, 0) : dec(active.kv, 1)}\\,\\mathrm{kV}`, color: C.warn },
           { label: "Нужен ток", tex: `I=${dec(i, 0)}\\,\\mathrm A` },
-          { label: "Загуба на 100 km", tex: `P_{\\text{зг}}=${watts(loss)}`, color: C.plus },
           {
-            label: "Дял от пренасяното",
-            tex: `${dec(Math.min(999999, (loss / (mw * 1e6)) * 100), 1)}\\,\\%`,
+            label: "Загуба на 100 km",
+            tex: loss > mw * 1e6 ? `\\text{невъзможно}` : `P_{\\text{зг}}=${watts(loss)}`,
+            color: C.plus,
+          },
+          {
+            label: "Спрямо пренасяното",
+            tex:
+              loss > mw * 1e6
+                ? `\\times${dec(loss / (mw * 1e6), 0)}\\ \\text{повече}`
+                : `${dec((loss / (mw * 1e6)) * 100, 2)}\\,\\%`,
             color: loss > mw * 1e6 ? C.plus : C.ok,
           },
         ]}

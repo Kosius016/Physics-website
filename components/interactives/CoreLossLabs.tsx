@@ -4,7 +4,7 @@ import { useState } from "react";
 import RichText from "@/components/RichText";
 import SvgTex from "./SvgTex";
 import { RangeControl, Readouts, Stage, StageScroll, Toggle, dec, useClock } from "./acPlot";
-import { C, DRAWING_FONT_FAMILY, PANEL_CLASS, STAGE_CLASS } from "./svg";
+import { C, PANEL_CLASS, STAGE_CLASS } from "./svg";
 
 /**
  * Загубите в ядрото (§8): вихрови токове и хистерезис.
@@ -25,7 +25,7 @@ type Mode = "eddy" | "hysteresis";
  */
 function EddyScene({ n, phase }: { n: number; phase: number }) {
   const x0 = 168;
-  const y0 = 56;
+  const y0 = 62;
   const w = 240;
   const h = 196;
   const lam = w / n;
@@ -57,8 +57,10 @@ function EddyScene({ n, phase }: { n: number; phase: number }) {
                 rx={Math.min(10, lam / 3)}
                 fill="none"
                 stroke={C.plus}
-                strokeWidth={Math.max(1.2, Math.min(2.6, lam / 12))}
-                opacity={0.92}
+                /* токът във всеки контур пада с дебелината на ламелата: контурите
+                   стават повече, но всеки от тях е видимо по-слаб */
+                strokeWidth={1.3 + 1.9 / n}
+                opacity={0.32 + 0.68 / n}
               />
             )}
             {lam > 26 && (
@@ -75,16 +77,16 @@ function EddyScene({ n, phase }: { n: number; phase: number }) {
         );
       })}
       <SvgTex
-        x={x0 + w / 2}
-        y={y0 - 26}
-        tex="\Phi\ \text{навън}"
+        x={x0 + w / 2 - 20}
+        y={y0 - 36}
+        tex="\Phi"
         color={C.minus}
-        fontSize={13.5}
-        width={72}
-        anchor="middle"
+        fontSize={14}
+        width={20}
+        anchor="end"
       />
-      <circle cx={x0 + w / 2} cy={y0 - 4} r={7} fill="none" stroke={C.minus} strokeWidth={2} />
-      <circle cx={x0 + w / 2} cy={y0 - 4} r={2.4} fill={C.minus} />
+      <circle cx={x0 + w / 2} cy={y0 - 28} r={8} fill="none" stroke={C.minus} strokeWidth={2} />
+      <circle cx={x0 + w / 2} cy={y0 - 28} r={2.6} fill={C.minus} />
     </g>
   );
 }
@@ -131,9 +133,9 @@ function loopArea(m: Material): number {
 
 function HysteresisScene({ material, phase }: { material: Material; phase: number }) {
   const cx = 288;
-  const cy = 152;
+  const cy = 154;
   const rx = 132;
-  const ry = 96;
+  const ry = 94;
 
   const toScene = ([hx, b]: readonly [number, number]) => `${(cx + hx * rx).toFixed(1)},${(cy - b * ry).toFixed(1)}`;
   const up = loopBranch(material, true).map(toScene).join(" L ");
@@ -157,15 +159,6 @@ function HysteresisScene({ material, phase }: { material: Material; phase: numbe
       <SvgTex x={cx + 10} y={cy - ry - 34} tex="B" color={C.mut} fontSize={13.5} width={20} />
 
       <circle cx={cx + hNow * rx} cy={cy - bNow * ry} r={5.6} fill={C.ok} stroke={C.wire} strokeWidth={1.4} />
-      <SvgTex
-        x={cx}
-        y={cy + ry + 34}
-        tex="\text{площта}=\text{загуба за цикъл}"
-        color={C.plus}
-        fontSize={13}
-        width={188}
-        anchor="middle"
-      />
     </g>
   );
 }
@@ -182,13 +175,17 @@ export function CoreLossLab() {
   const { turns } = useClock(playing, 0.3);
 
   const W = 576;
-  const H = 320;
+  const H = 288;
 
   const material = MATERIALS[matIndex];
   const refArea = loopArea(MATERIALS[0]);
   const area = loopArea(material);
-  // мащаб: трансформаторната ламарина губи около 40 J/m³ на цикъл
-  const perCycle = (area / refArea) * 40;
+  /*
+   * Мащаб: студено валцувана трансформаторна ламарина при около 1,5 T губи
+   * приблизително 90 J/m³ на цикъл. Стойността е ориентировъчна и служи да
+   * даде верния порядък, а не каталожна точност.
+   */
+  const perCycle = (area / refArea) * 90;
   const hystPower = perCycle * freq * (volume / 1000);
 
   return (
@@ -214,7 +211,7 @@ export function CoreLossLab() {
             { label: "Ламели", tex: `n=${n}` },
             { label: "Загуба спрямо масивно", tex: `1/n^2=${dec((1 / n ** 2) * 100, 1)}\\,\\%`, color: C.plus },
             { label: "Дебелина на ламела", tex: `d/d_0=${dec(1 / n, 3)}` },
-            { label: "Индуциран контур", tex: `\\mathcal E\\ \\propto\\ d`, color: C.mut },
+            { label: "Индуциран контур", tex: `\\mathcal E\\ \\propto\\ d` },
           ]}
           cols={4}
         />
@@ -234,7 +231,7 @@ export function CoreLossLab() {
         <RichText
           text={
             mode === "eddy"
-              ? "Разрязването не намалява потока, а дължината на пътя, по който индуцираният ток може да обиколи. Всяка ламела обхваща по-малък поток и има по-голямо съпротивление, затова загубата пада с **квадрата** на броя ламели."
+              ? "Синият кръг горе е потокът $\\Phi$, насочен към нас. Разрязването не го намалява, а скъсява пътя, по който индуцираният ток може да обиколи. Всяка ламела обхваща по-малък поток и има по-голямо съпротивление, затова контурите стават повече, но всеки от тях е **по-слаб**, а общата загуба пада с квадрата на броя ламели."
               : `Точката обикаля цикъла веднъж за период. Защрихованата площ е енергията, разсеяна за **един** цикъл и **един кубичен метър**; умножена по честотата и обема, тя дава мощност. Затова ядрата се правят от ${material.label.toLowerCase()} само когато цикълът е тесен.`
           }
         />
@@ -324,19 +321,27 @@ export function LossBreakdown() {
   const iron = 1100;
   const input = out + copper + iron;
   const eta = out / input;
+  const loss = copper + iron;
 
   const W = 620;
-  const H = 200;
+  const H = 268;
   const left = 96;
   const right = 556;
-  const top = 52;
-  const band = 92;
+  const span = right - left;
 
-  const fOut = out / input;
-  const fCu = copper / input;
-  const hOut = Math.max(2, fOut * band);
-  const hCu = Math.max(1.4, fCu * band);
-  const hFe = Math.max(1.4, band - hOut - hCu);
+  /*
+   * Горната лента е целият енергиен баланс, но при 98,5 % КПД загубите са
+   * нишка от два пиксела. Затова тя се разгъва втори път долу, с обявен
+   * множител на увеличението: иначе етикетите падат върху зелената лента.
+   */
+  const top = 56;
+  const band = 34;
+  const wOut = (out / input) * span;
+  const wLoss = Math.max(2, span - wOut);
+  const zoom = Math.round(span / wLoss);
+
+  const low = 158;
+  const cuFrac = copper / loss;
 
   return (
     <div className={PANEL_CLASS}>
@@ -345,39 +350,57 @@ export function LossBreakdown() {
           <Stage w={W} h={H} title="КЪДЕ ОТИВА ПОДАДЕНАТА МОЩНОСТ" />
 
           <line x1={left - 8} y1={top} x2={left - 8} y2={top + band} stroke={C.warn} strokeWidth={3} />
-          <SvgTex x={left - 8} y={top - 12} tex="P_1" color={C.warn} fontSize={13.5} width={24} anchor="middle" />
+          <SvgTex x={left - 8} y={top - 22} tex="P_1" color={C.warn} fontSize={13.5} width={24} anchor="middle" />
 
-          <rect x={left} y={top} width={right - left} height={hOut} fill={C.ok} opacity={0.82} />
-          <rect x={left} y={top + hOut} width={right - left - 130} height={hCu} fill={C.plus} opacity={0.86} />
-          <rect x={left} y={top + hOut + hCu} width={right - left - 250} height={hFe} fill={C.minus} opacity={0.8} />
+          <rect x={left} y={top} width={wOut} height={band} fill={C.ok} opacity={0.82} />
+          <rect x={left + wOut} y={top} width={wLoss} height={band} fill={C.plus} opacity={0.9} />
+          <SvgTex x={left + wOut / 2} y={top + 6} tex="P_2" color={C.wire} fontSize={14} width={24} anchor="middle" />
 
-          <SvgTex x={right - 6} y={top - 12} tex="P_2" color={C.ok} fontSize={13.5} width={24} anchor="end" />
+          {/* разгъването на нишката */}
+          <g stroke={C.plus} strokeWidth={1.3} strokeDasharray="4 4" fill="none">
+            <path d={`M ${left + wOut} ${top + band} L ${left} ${low}`} />
+            <path d={`M ${right} ${top + band} L ${right} ${low}`} />
+          </g>
+          <SvgTex x={right - 16} y={top + band + 30} tex={`\\times${zoom}`} color={C.mut} fontSize={12.5} width={40} anchor="end" />
+
+          <rect x={left} y={low} width={span * cuFrac} height={band} fill={C.plus} opacity={0.85} />
+          <rect x={left + span * cuFrac} y={low} width={span * (1 - cuFrac)} height={band} fill={C.minus} opacity={0.8} />
           <SvgTex
-            x={right - 118}
-            y={top + hOut + hCu / 2 - 9}
+            x={left + (span * cuFrac) / 2}
+            y={low + 8}
             tex="I^2R"
-            color={C.plus}
+            color={C.wire}
             fontSize={13}
             width={34}
+            anchor="middle"
           />
           <SvgTex
-            x={right - 238}
-            y={top + hOut + hCu + hFe / 2 - 9}
-            tex="\text{ядро}"
-            color={C.minus}
+            x={left + span * cuFrac + (span * (1 - cuFrac)) / 2}
+            y={low + 8}
+            tex="P_{\text{Fe}}"
+            color={C.wire}
             fontSize={13}
-            width={40}
+            width={34}
+            anchor="middle"
           />
-          <text
-            x={W / 2}
-            y={H - 16}
-            textAnchor="middle"
-            fill={C.mut}
-            fontFamily={DRAWING_FONT_FAMILY}
-            fontSize={12}
-          >
-            Загубите в ядрото не зависят от товара, медните растат с квадрата му.
-          </text>
+          <SvgTex
+            x={left + (span * cuFrac) / 2}
+            y={low + band + 12}
+            tex="\propto k^2"
+            color={C.plus}
+            fontSize={12.5}
+            width={44}
+            anchor="middle"
+          />
+          <SvgTex
+            x={left + span * cuFrac + (span * (1 - cuFrac)) / 2}
+            y={low + band + 12}
+            tex="\text{постоянни}"
+            color={C.minus}
+            fontSize={12.5}
+            width={86}
+            anchor="middle"
+          />
         </svg>
       </StageScroll>
 
