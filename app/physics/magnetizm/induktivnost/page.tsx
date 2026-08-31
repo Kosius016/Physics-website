@@ -265,7 +265,7 @@ export default function InductanceLessonPage() {
               повърхността на витка <RichText text="$k$" /> измерва каква част от
               магнитното поле я пресича:
             </p>
-            <Formula latex={String.raw`\Phi_k=\int_{S_k}\vec B\cdot d\vec A`} />
+            <Formula latex={String.raw`\Phi_k=\int_{S_k}\vec B\cdot d\vec S`} />
             <p>
               Намотката обаче има много витки. За закона на Фарадей трябва да съберем
               потока през всяка от тях. Тази сума наричаме{" "}
@@ -365,7 +365,7 @@ export default function InductanceLessonPage() {
             <p>
               <strong>Дадено:</strong> дълга цилиндрична намотка (соленоид) с{" "}
               <RichText text="$N$" /> навивки, дължина <RichText text="$\ell$" /> и
-              напречно сечение <RichText text="$A$" />. Вътре няма феромагнитна сърцевина,
+              напречно сечение <RichText text="$S$" />. Вътре няма феромагнитна сърцевина,
               затова магнитната проницаемост е приблизително{" "}
               <RichText text="$\mu_0$" />.
             </p>
@@ -388,18 +388,18 @@ export default function InductanceLessonPage() {
               latex={String.raw`B\ell=\mu_0NI\quad\Longrightarrow\quad B=\mu_0\frac{N}{\ell}I=\mu_0nI`}
             />
             <Formula
-              latex={String.raw`\Phi_B=BA=\mu_0nIA=\mu_0\frac{N}{\ell}IA`}
+              latex={String.raw`\Phi_B=BS=\mu_0nIS=\mu_0\frac{N}{\ell}IS`}
             />
             <Formula
-              latex={String.raw`L=\frac{N\Phi_B}{I}=\mu_0\frac{N^2}{\ell}A`}
+              latex={String.raw`L=\frac{N\Phi_B}{I}=\mu_0\frac{N^2}{\ell}S`}
             />
             <p>
               За <RichText text="$N=300$" />,{" "}
               <RichText text="$\ell=25{,}0\,\mathrm{cm}$" /> и{" "}
-              <RichText text="$A=4{,}00\,\mathrm{cm^2}$" />:
+              <RichText text="$S=4{,}00\,\mathrm{cm^2}$" />:
             </p>
             <Formula
-              latex={String.raw`\ell=0{,}250\,\mathrm m,\qquad A=4{,}00\times10^{-4}\,\mathrm{m^2}`}
+              latex={String.raw`\ell=0{,}250\,\mathrm m,\qquad S=4{,}00\times10^{-4}\,\mathrm{m^2}`}
             />
             <Formula
               latex={String.raw`L=(4\pi\times10^{-7})\frac{300^2}{25{,}0\times10^{-2}}(4{,}00\times10^{-4})=1{,}81\times10^{-4}\,\mathrm H=0{,}181\,\mathrm{mH}`}
@@ -412,11 +412,11 @@ export default function InductanceLessonPage() {
               latex={String.raw`\mathcal E_L=-L\frac{dI}{dt}=-(1{,}81\times10^{-4})(-50{,}0)=9{,}05\,\mathrm{mV}`}
             />
             <p>
-              Понеже <RichText text="$N=n\ell$" /> и <RichText text="$V=A\ell$" />,
+              Понеже <RichText text="$N=n\ell$" /> и <RichText text="$\mathcal V=S\ell$" />,
               същият резултат може да се запише:
             </p>
             <Formula
-              latex={String.raw`L=\mu_0n^2A\ell=\mu_0n^2V`}
+              latex={String.raw`L=\mu_0n^2S\ell=\mu_0n^2\mathcal V`}
             />
             <p>
               <strong>Тълкуване.</strong> Положителното{" "}
@@ -775,20 +775,20 @@ export default function InductanceLessonPage() {
               Формулата <RichText text="$U_B=\tfrac12LI^2$" /> приписва една обща енергия
               на цялата верига, но не казва къде в пространството се намира тя. За да
               отговорим, използваме дългата намотка от пример 1, защото полето ѝ е почти
-              равномерно в обем <RichText text="$V$" />. За нея{" "}
-              <RichText text="$L=\mu_0n^2V$" /> и{" "}
+              равномерно в обем <RichText text="$\mathcal V$" />. За нея{" "}
+              <RichText text="$L=\mu_0n^2\mathcal V$" /> и{" "}
               <RichText text="$B=\mu_0nI$" />, следователно{" "}
               <RichText text="$I=B/(\mu_0n)$" />. Замествайки в енергията:
             </p>
             <Formula
-              latex={String.raw`U_B=\frac12LI^2=\frac12\mu_0n^2V\left(\frac{B}{\mu_0n}\right)^2=\frac{B^2}{2\mu_0}V`}
+              latex={String.raw`U_B=\frac12LI^2=\frac12\mu_0n^2\mathcal V\left(\frac{B}{\mu_0n}\right)^2=\frac{B^2}{2\mu_0}\mathcal V`}
             />
             <p>
               Ако еднакво поле изпълва обема, енергията на единица обем -{" "}
               <strong>плътността на магнитната енергия</strong> - е:
             </p>
             <Formula
-              latex={String.raw`u_B\equiv\frac{U_B}{V}=\frac{B^2}{2\mu_0}`}
+              latex={String.raw`u_B\equiv\frac{U_B}{\mathcal V}=\frac{B^2}{2\mu_0}`}
             />
             <p>
               Използвахме дълга намотка само защото равномерното ѝ поле прави сметката
@@ -1022,7 +1022,7 @@ export default function InductanceLessonPage() {
             <p>
               Първичната намотка се моделира като дълга намотка с дължина{" "}
               <RichText text="$\ell$" />, <RichText text="$N_{\mathrm B}$" /> навивки,
-              площ <RichText text="$A$" /> и ток <RichText text="$I$" />. Намотката в
+              площ <RichText text="$S$" /> и ток <RichText text="$I$" />. Намотката в
               дръжката има <RichText text="$N_{\mathrm H}$" /> навивки и обгръща почти
               цялото поле на основата.
             </p>
@@ -1030,7 +1030,7 @@ export default function InductanceLessonPage() {
               latex={String.raw`B=\mu_0\frac{N_{\mathrm B}}{\ell}I`}
             />
             <Formula
-              latex={String.raw`M=\frac{N_{\mathrm H}\Phi_{\mathrm{BH}}}{I}=\frac{N_{\mathrm H}BA}{I}=\mu_0\frac{N_{\mathrm B}N_{\mathrm H}}{\ell}A`}
+              latex={String.raw`M=\frac{N_{\mathrm H}\Phi_{\mathrm{BH}}}{I}=\frac{N_{\mathrm H}BS}{I}=\mu_0\frac{N_{\mathrm B}N_{\mathrm H}}{\ell}S`}
             />
             <p>
               Променливият ток в основата поражда ЕДН в дръжката без метален контакт.
@@ -1706,7 +1706,7 @@ export default function InductanceLessonPage() {
               <li>
                 <strong>Геометрична мярка:</strong>{" "}
                 <RichText text="$L=\lambda/I$" />; за дълга намотка без магнитна сърцевина{" "}
-                <RichText text="$L=\mu_0N^2A/\ell=\mu_0n^2V$" />.
+                <RichText text="$L=\mu_0N^2S/\ell=\mu_0n^2\mathcal V$" />.
               </li>
               <li>
                 <strong>RL отговор:</strong> при включване{" "}

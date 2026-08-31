@@ -128,6 +128,13 @@ const physicsUni: CourseSection[] = [
         href: "/physics/promenliv-tok/impedans-i-rezonans",
         publishedAt: "2026-08-18",
       },
+      {
+        number: "4.2",
+        title: "Трансформаторът и преносът на електроенергия",
+        href: "/physics/promenliv-tok/transformator",
+        publishedAt: "2026-08-31",
+      },
+      { number: "4.3", title: "Изправители и филтри: от мрежовото AC до гладко DC" },
     ],
   },
 ];

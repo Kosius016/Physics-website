@@ -2096,11 +2096,17 @@ export default function AlternatingCurrentLessonPage() {
               Естественото продължение е <strong>трансформаторът и преносът на енергия</strong>:
               защо електроенергията се разпределя с променлив ток, как взаимната индуктивност от
               главата за индуктивността позволява напрежението да се променя почти без загуби и
-              защо преносът на далечни разстояния се прави при високо напрежение. Оттам следват и{" "}
+              защо преносът на далечни разстояния се прави при високо напрежение. След него идват{" "}
               <strong>изправителите и филтрите</strong>, за които §9 вече даде цялата нужна
               честотна логика.
             </p>
-            <p className="mt-3">
+            <p className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5">
+              <Link
+                href="/physics/promenliv-tok/transformator"
+                className="font-semibold text-minus underline decoration-2 underline-offset-2 hover:text-ink"
+              >
+                Напред към трансформатора и преноса
+              </Link>
               <Link
                 href="/physics/magnetizm/induktivnost"
                 className="font-semibold text-minus underline decoration-2 underline-offset-2 hover:text-ink"

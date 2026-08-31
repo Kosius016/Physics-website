@@ -525,7 +525,7 @@ export function WirelessChargerDiagram() {
         />
         <SvgTex x={452} y={112} tex="N_{\mathrm H}" color={C.ok} fontSize={15} width={48} />
         <SvgTex x={452} y={264} tex="N_{\mathrm B}" color={C.warn} fontSize={15} width={48} />
-        <SvgTex x={320} y={185} tex="A" color={C.mut} fontSize={16} width={24} anchor="middle" />
+        <SvgTex x={320} y={185} tex="S" color={C.mut} fontSize={16} width={24} anchor="middle" />
         <Arrow
           x1={142}
           y1={266}
