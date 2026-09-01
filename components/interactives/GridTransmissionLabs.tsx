@@ -685,3 +685,197 @@ export function GridCascade({ compact = false }: { compact?: boolean }) {
     </div>
   );
 }
+
+/* ================================================================= §2 */
+
+/** Специфично съпротивление на мед при стайна температура, Ω·m. */
+const RHO_CU = 1.68e-8;
+
+/** Пръстените на картата са по декади, иначе 22 m и 20 km не се побират заедно. */
+const RING_DECADES = [0, 1, 2, 3, 4, 5, 6] as const;
+const RING_LABELS: Record<number, string> = {
+  0: "1\\,\\mathrm m",
+  1: "10\\,\\mathrm m",
+  2: "100\\,\\mathrm m",
+  3: "1\\,\\mathrm{km}",
+  4: "10\\,\\mathrm{km}",
+  5: "100\\,\\mathrm{km}",
+  6: "1000\\,\\mathrm{km}",
+};
+
+/** Разстоянието в метри, готово за $…$. */
+function metres(value: number): string {
+  if (value >= 1e3) return `${dec(value / 1e3, value >= 1e4 ? 0 : 1)}\\,\\mathrm{km}`;
+  return `${dec(value, value < 100 ? 1 : 0)}\\,\\mathrm m`;
+}
+
+/**
+ * Докъде стига токът: обхватът на една централа при зададено напрежение.
+ *
+ * Питаме обратното на обичайния въпрос. Вместо „каква е загубата на
+ * тази линия“ питаме „колко дълга може да бъде линията, ако загубата
+ * не бива да надхвърли даден дял“. Отговорът при $110\,\mathrm V$ е
+ * шокиращо малък и точно това отваря главата.
+ *
+ * Радиалната скала е логаритмична и пръстените са означени, защото
+ * иначе двадесет метра и двадесет километра не се побират в едно платно.
+ */
+export function DCRangeLab() {
+  const [logV, setLogV] = useState(Math.log10(110));
+  const [mm2, setMm2] = useState(240);
+  const [lossPct, setLossPct] = useState(10);
+  const [kw, setKw] = useState(400);
+
+  const v = 10 ** logV;
+  const i = (kw * 1e3) / v;
+  // допустимото съпротивление на линията при зададен дял на загубата
+  const rMax = ((lossPct / 100) * kw * 1e3) / i ** 2;
+  const reach = (rMax * mm2 * 1e-6) / (2 * RHO_CU);
+
+  // почти квадратно платно: кръгова фигура в широк правоъгълник оставя
+  // четвърт празно поле отстрани
+  const W = 420;
+  const H = 350;
+  const cx = 210;
+  const cy = 172;
+  const rPx = 145;
+  const perDecade = rPx / 6;
+  // log10 на метрите, ограничен до платното
+  const decades = Math.max(0, Math.min(6, Math.log10(Math.max(1, reach))));
+  const offMap = reach > 1e6;
+
+  return (
+    <div className={PANEL_CLASS}>
+      <StageScroll minWidth={380} maxWidth={470}>
+        <svg viewBox={`0 0 ${W} ${H}`} className={STAGE_CLASS} aria-label="Обхват на централата при дадено напрежение">
+          <Stage w={W} h={H} title="ДОКЪДЕ СТИГА ЕДНА ЦЕНТРАЛА" />
+
+          {RING_DECADES.map((d) => (
+            <g key={d}>
+              <circle
+                cx={cx}
+                cy={cy}
+                r={d * perDecade}
+                fill="none"
+                stroke={C.faint}
+                strokeWidth={1}
+                strokeDasharray="3 5"
+              />
+              {d > 0 && (
+                /* Означенията се редят надолу по вертикала: по хоризонтала
+                   съседните се застъпват, а нагоре най-външното удря
+                   заглавието на сцената. */
+                <SvgTex
+                  x={cx + 8}
+                  y={cy + d * perDecade - 7}
+                  tex={RING_LABELS[d]}
+                  color={C.mut}
+                  fontSize={10.5}
+                  width={56}
+                />
+              )}
+            </g>
+          ))}
+
+          {/* обхватът */}
+          <circle
+            cx={cx}
+            cy={cy}
+            r={Math.max(3, decades * perDecade)}
+            fill={offMap ? C.ok : C.plus}
+            fillOpacity={0.2}
+            stroke={offMap ? C.ok : C.plus}
+            strokeWidth={2.6}
+          />
+
+          {/* централата */}
+          <rect x={cx - 15} y={cy - 15} width={30} height={30} rx={5} fill="none" stroke={C.warn} strokeWidth={2.4} />
+          <SourceSymbol x={cx} y={cy} r={9} color={C.warn} />
+
+        </svg>
+      </StageScroll>
+
+      <Readouts
+        cells={[
+          { label: "Напрежение", tex: `V=${volts(v)}`, color: C.warn },
+          { label: "Нужен ток", tex: `I=${dec(i, i < 100 ? 1 : 0)}\\,\\mathrm A` },
+          { label: "Допустимо съпротивление", tex: `R_{\\max}=${dec(rMax, rMax < 1 ? 4 : 1)}\\,\\Omega` },
+          {
+            label: "Обхват",
+            tex: offMap ? "\\text{хиляди километри}" : `\\ell_{\\max}=${metres(reach)}`,
+            color: offMap ? C.ok : C.plus,
+          },
+        ]}
+        cols={4}
+      />
+
+      <p aria-live="polite" className="mt-3 text-[13.5px] leading-relaxed text-ink/90">
+        <RichText
+          text={
+            reach < 60
+              ? "**Кварталът трябва да е в двора на централата.** При това напрежение токът е толкова голям, че проводникът изяжда позволената загуба още преди да е излязъл от улицата."
+              : reach < 3000
+                ? "Обхватът вече се мери в стотици метри, но една централа на квартал остава единственият възможен модел."
+                : "При това напрежение разстоянието спира да бъде ограничението. Проблемът се премества другаде: как да върнем напрежението надолу за потребителя."
+          }
+        />
+      </p>
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        {[
+          { label: "110 V (Едисън)", v: 110 },
+          { label: "20 kV", v: 20e3 },
+          { label: "100 kV", v: 100e3 },
+        ].map((p) => (
+          <button key={p.label} type="button" className={BTN_SEC} onClick={() => setLogV(Math.log10(p.v))}>
+            {p.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        <RangeControl
+          label="Напрежение на линията"
+          value={logV}
+          min={Math.log10(100)}
+          max={Math.log10(400e3)}
+          step={0.005}
+          valueTex={`V=${volts(v)}`}
+          onChange={setLogV}
+          accent="accent-warn"
+        />
+        <RangeControl
+          label="Мощност на квартала"
+          value={kw}
+          min={50}
+          max={2000}
+          step={50}
+          valueTex={`P=${dec(kw, 0)}\\,\\mathrm{kW}`}
+          onChange={setKw}
+        />
+        <RangeControl
+          label="Сечение на проводника"
+          value={mm2}
+          min={60}
+          max={1000}
+          step={20}
+          valueTex={`S_{\\text{пр}}=${dec(mm2, 0)}\\,\\mathrm{mm^2}`}
+          onChange={setMm2}
+        />
+        <RangeControl
+          label="Допустима загуба"
+          value={lossPct}
+          min={2}
+          max={30}
+          step={1}
+          valueTex={`${dec(lossPct, 0)}\\,\\%`}
+          onChange={setLossPct}
+        />
+      </div>
+
+      <p className="mt-3 text-[13.5px] leading-relaxed text-muted">
+        <RichText text="Проводникът е меден, два са и обхватът е разстоянието, при което загубата тъкмо достига позволения дял. Пръстените са по декади, иначе двадесет метра и двадесет километра не се побират в едно платно." />
+      </p>
+    </div>
+  );
+}
