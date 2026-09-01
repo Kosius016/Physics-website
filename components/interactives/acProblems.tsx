@@ -175,7 +175,7 @@ function InductorFigure(phase: number) {
       {phase >= 1 && bar(268, 1, C.ok, "60\\,\\mathrm{Hz}")}
       {phase >= 2 && bar(340, 0.01, C.minus, "6\\,\\mathrm{kHz}")}
       {phase >= 3 && (
-        <SvgTex x={166} y={140} tex="I_{\mathrm{rms}}=\dfrac{V_{\mathrm{rms}}}{\omega L}" color={C.mut} fontSize={13} width={120} anchor="middle" />
+        <SvgTex x={166} y={140} tex="I_{\text{ср.кв.}}=\dfrac{V_{\text{ср.кв.}}}{\omega L}" color={C.mut} fontSize={13} width={170} anchor="middle" />
       )}
     </g>
   );
@@ -289,19 +289,19 @@ export const acProblems: GuidedProblemData[] = [
   {
     title: "Настройка на резонанс",
     statement:
-      "**Търсен капацитет.** Последователна верига има $R=150\\,\\Omega$ и $L=20{,}0\\,\\mathrm{mH}$ и се захранва с $V_{\\mathrm{rms}}=20{,}0\\,\\mathrm{V}$ при $\\omega=5000\\,\\mathrm{s^{-1}}$. Какъв капацитет прави тока максимален и колко е той тогава?",
+      "**Търсен капацитет.** Последователна верига има $R=150\\,\\Omega$ и $L=20{,}0\\,\\mathrm{mH}$ и се захранва с $V_{\\text{ср.кв.}}=20{,}0\\,\\mathrm{V}$ при $\\omega=5000\\,\\mathrm{s^{-1}}$. Какъв капацитет прави тока максимален и колко е той тогава?",
     figure: ReactanceFigure,
     figureHeight: 270,
     figureCaption: (phase) =>
       phase >= 3
-        ? String.raw`Пресичането е при $\omega_0=5000\,\mathrm{s^{-1}}$: точно там $Z=R$ и токът е $I_{\mathrm{rms}}=0{,}133\,\mathrm{A}$.`
+        ? String.raw`Пресичането е при $\omega_0=5000\,\mathrm{s^{-1}}$: точно там $Z=R$ и токът е $I_{\text{ср.кв.}}=0{,}133\,\mathrm{A}$.`
         : phase >= 2
           ? String.raw`Търсеният капацитет е този, при който двете криви се пресичат точно при работната честота.`
           : phase >= 1
             ? String.raw`Двете зависимости вървят в противоположни посоки: $X_L$ расте линейно, $X_C$ спада като $1/\omega$.`
             : String.raw`Само $X_L=\omega L$ е известна: тя не зависи от търсения капацитет.`,
     directionQuestion: {
-      prompt: "Кое условие прави тока максимален при фиксирани $V_{\\mathrm{rms}}$, $R$, $L$ и $\\omega$?",
+      prompt: "Кое условие прави тока максимален при фиксирани $V_{\\text{ср.кв.}}$, $R$, $L$ и $\\omega$?",
       options: [
         {
           text: "$X_L=X_C$, защото тогава $Z=\\sqrt{R^2+0}=R$ е възможно най-малко",
@@ -374,10 +374,10 @@ export const acProblems: GuidedProblemData[] = [
       },
       {
         text: "Токът е максималният възможен за тази верига.",
-        latex: String.raw`I_{\mathrm{rms}}=\frac{V_{\mathrm{rms}}}{R}=\frac{20{,}0}{150}=0{,}133\ \mathrm{A}`,
+        latex: String.raw`I_{\text{ср.кв.}}=\frac{V_{\text{ср.кв.}}}{R}=\frac{20{,}0}{150}=0{,}133\ \mathrm{A}`,
       },
       {
-        text: "Забележете, че върху $L$ и върху $C$ пада по $I_{\\mathrm{rms}}X=13{,}3\\,\\mathrm{V}$ - равни и противоположни, затова се унищожават взаимно.",
+        text: "Забележете, че върху $L$ и върху $C$ пада по $I_{\\text{ср.кв.}}X=13{,}3\\,\\mathrm{V}$ - равни и противоположни, затова се унищожават взаимно.",
       },
     ],
     teacherNotes: [
@@ -389,7 +389,7 @@ export const acProblems: GuidedProblemData[] = [
   {
     title: "Бобина при две различни честоти",
     statement:
-      "**Само бобина.** Върху бобина с $L=25{,}0\\,\\mathrm{mH}$ е приложено $V_{\\mathrm{rms}}=150\\,\\mathrm{V}$. Намерете $X_L$ и $I_{\\mathrm{rms}}$ при $f=60{,}0\\,\\mathrm{Hz}$, а после при $f=6{,}00\\,\\mathrm{kHz}$.",
+      "**Само бобина.** Върху бобина с $L=25{,}0\\,\\mathrm{mH}$ е приложено $V_{\\text{ср.кв.}}=150\\,\\mathrm{V}$. Намерете $X_L$ и $I_{\\text{ср.кв.}}$ при $f=60{,}0\\,\\mathrm{Hz}$, а после при $f=6{,}00\\,\\mathrm{kHz}$.",
     figure: InductorFigure,
     figureHeight: 250,
     figureCaption: (phase) =>
@@ -406,7 +406,7 @@ export const acProblems: GuidedProblemData[] = [
         {
           text: "Намалява сто пъти, защото $X_L=\\omega L$ расте пропорционално на честотата",
           correct: true,
-          why: "$I_{\\mathrm{rms}}=V_{\\mathrm{rms}}/(\\omega L)$: токът е обратно пропорционален на $\\omega$, значи стократното $\\omega$ дава стократно по-малък ток.",
+          why: "$I_{\\text{ср.кв.}}=V_{\\text{ср.кв.}}/(\\omega L)$: токът е обратно пропорционален на $\\omega$, значи стократното $\\omega$ дава стократно по-малък ток.",
         },
         {
           text: "Нараства сто пъти, защото по-бързата промяна бута повече заряд",
@@ -455,7 +455,7 @@ export const acProblems: GuidedProblemData[] = [
     },
     hints: [
       "$X_L=2\\pi fL$.",
-      "За чисто индуктивна верига $Z=X_L$, значи $I_{\\mathrm{rms}}=V_{\\mathrm{rms}}/X_L$.",
+      "За чисто индуктивна верига $Z=X_L$, значи $I_{\\text{ср.кв.}}=V_{\\text{ср.кв.}}/X_L$.",
     ],
     steps: [
       {
@@ -464,11 +464,11 @@ export const acProblems: GuidedProblemData[] = [
       },
       {
         text: "Ефективен ток при същата честота.",
-        latex: String.raw`I_{\mathrm{rms}}=\frac{V_{\mathrm{rms}}}{X_L}=\frac{150}{9{,}42}=15{,}9\ \mathrm{A}`,
+        latex: String.raw`I_{\text{ср.кв.}}=\frac{V_{\text{ср.кв.}}}{X_L}=\frac{150}{9{,}42}=15{,}9\ \mathrm{A}`,
       },
       {
         text: "При 6,00 kHz честотата е сто пъти по-голяма.",
-        latex: String.raw`X_L=2\pi(6{,}00\times10^{3})(25{,}0\times10^{-3})=942\ \Omega\quad\Longrightarrow\quad I_{\mathrm{rms}}=0{,}159\ \mathrm{A}`,
+        latex: String.raw`X_L=2\pi(6{,}00\times10^{3})(25{,}0\times10^{-3})=942\ \Omega\quad\Longrightarrow\quad I_{\text{ср.кв.}}=0{,}159\ \mathrm{A}`,
       },
       {
         text: "И в двата случая средната мощност е нула: при $\\phi=90^\\circ$ имаме $\\cos\\phi=0$. Бобината взема енергия за четвърт период и я връща през следващата четвърт.",
@@ -490,14 +490,14 @@ export const acProblems: GuidedProblemData[] = [
           <>
             <rect x={96} y={140} width={110} height={q(30 + 60)} rx={6} fill={C.plus} fillOpacity={0.18} stroke={C.plus} strokeWidth={1.6} />
             <SvgTex x={151} y={186} tex="P_{\mathrm{avg}}" color={C.plus} fontSize={13} width={62} anchor="middle" />
-            <SvgTex x={151} y={252} tex="V_{\mathrm{rms}}I_{\mathrm{rms}}\cos\phi" color={C.mut} fontSize={12.5} width={130} anchor="middle" />
+            <SvgTex x={151} y={252} tex="V_{\text{ср.кв.}}I_{\text{ср.кв.}}\cos\phi" color={C.mut} fontSize={12.5} width={190} anchor="middle" />
           </>
         )}
         {phase >= 2 && (
           <>
             <rect x={274} y={140} width={110} height={q(30 + 60)} rx={6} fill={C.ok} fillOpacity={0.18} stroke={C.ok} strokeWidth={1.6} />
             <SvgTex x={329} y={186} tex="P_{\mathrm{avg}}" color={C.ok} fontSize={13} width={62} anchor="middle" />
-            <SvgTex x={329} y={252} tex="I_{\mathrm{rms}}^2R" color={C.mut} fontSize={12.5} width={70} anchor="middle" />
+            <SvgTex x={329} y={252} tex="I_{\text{ср.кв.}}^2R" color={C.mut} fontSize={12.5} width={104} anchor="middle" />
           </>
         )}
         {phase >= 3 && (
@@ -508,11 +508,11 @@ export const acProblems: GuidedProblemData[] = [
     figureHeight: 280,
     figureCaption: (phase) =>
       phase >= 3
-        ? String.raw`И двата пътя дават $18{,}1\,\mathrm{W}$. Съвпадението не е случайно: $V_{\mathrm{rms}}\cos\phi$ е точно проекцията на $\vec V$ върху $\vec I$, тоест $V_R$.`
+        ? String.raw`И двата пътя дават $18{,}1\,\mathrm{W}$. Съвпадението не е случайно: $V_{\text{ср.кв.}}\cos\phi$ е точно проекцията на $\vec V$ върху $\vec I$, тоест $V_R$.`
         : phase >= 2
           ? String.raw`Вторият израз брои само нагряването в резистора.`
           : phase >= 1
-            ? String.raw`Първият израз тръгва от източника: $P_{\mathrm{avg}}=V_{\mathrm{rms}}I_{\mathrm{rms}}\cos\phi$.`
+            ? String.raw`Първият израз тръгва от източника: $P_{\mathrm{avg}}=V_{\text{ср.кв.}}I_{\text{ср.кв.}}\cos\phi$.`
             : undefined,
     directionQuestion: {
       prompt: "Кои елементи от тази верига участват в средната мощност за цял период?",
@@ -541,12 +541,12 @@ export const acProblems: GuidedProblemData[] = [
       explanation: "Затова $\\cos\\phi$ се нарича фактор на мощността: той отсява активната част.",
     },
     additionQuestion: {
-      prompt: "Защо $V_{\\mathrm{rms}}I_{\\mathrm{rms}}\\cos\\phi$ и $I_{\\mathrm{rms}}^2R$ дават едно и също число?",
+      prompt: "Защо $V_{\\text{ср.кв.}}I_{\\text{ср.кв.}}\\cos\\phi$ и $I_{\\text{ср.кв.}}^2R$ дават едно и също число?",
       options: [
         {
           text: "Защото от фазорния триъгълник $V_0\\cos\\phi=V_R=I_0R$",
           correct: true,
-          why: "Проекцията на $\\vec V$ върху посоката на тока е точно $\\vec V_R$. Заместването на $V_{\\mathrm{rms}}\\cos\\phi$ с $I_{\\mathrm{rms}}R$ превръща единия израз в другия.",
+          why: "Проекцията на $\\vec V$ върху посоката на тока е точно $\\vec V_R$. Заместването на $V_{\\text{ср.кв.}}\\cos\\phi$ с $I_{\\text{ср.кв.}}R$ превръща единия израз в другия.",
         },
         {
           text: "Съвпадение при тези конкретни числа",
@@ -561,36 +561,36 @@ export const acProblems: GuidedProblemData[] = [
         {
           text: "Защото средната стойност на $\\cos(2\\omega t-\\phi)$ е нула",
           correct: false,
-          why: "Това е вярно и е причината осцилиращият член да отпадне, но то дава първия израз; равенството с $I^2_{\\mathrm{rms}}R$ идва от геометрията.",
+          why: "Това е вярно и е причината осцилиращият член да отпадне, но то дава първия израз; равенството с $I^2_{\\text{ср.кв.}}R$ идва от геометрията.",
         },
       ],
       explanation:
         "Един и същ факт се вижда двояко: през енергията на източника и през нагряването на резистора.",
     },
     hints: [
-      "$V_{\\mathrm{rms}}=V_0/\\sqrt2$ и $I_{\\mathrm{rms}}=I_0/\\sqrt2$.",
+      "$V_{\\text{ср.кв.}}=V_0/\\sqrt2$ и $I_{\\text{ср.кв.}}=I_0/\\sqrt2$.",
       "$\\cos(-34{,}0^\\circ)=\\cos(34{,}0^\\circ)=0{,}829$ - знакът на фазата не влияе на мощността.",
     ],
     steps: [
       {
         text: "Ефективни стойности.",
-        latex: String.raw`V_{\mathrm{rms}}=\frac{150}{\sqrt2}=106\ \mathrm{V},\qquad I_{\mathrm{rms}}=\frac{0{,}292}{\sqrt2}=0{,}206\ \mathrm{A}`,
+        latex: String.raw`V_{\text{ср.кв.}}=\frac{150}{\sqrt2}=106\ \mathrm{V},\qquad I_{\text{ср.кв.}}=\frac{0{,}292}{\sqrt2}=0{,}206\ \mathrm{A}`,
       },
       {
         text: "Първи път: през фактора на мощността.",
-        latex: String.raw`P_{\mathrm{avg}}=V_{\mathrm{rms}}I_{\mathrm{rms}}\cos\phi=(106)(0{,}206)(0{,}829)=18{,}1\ \mathrm{W}`,
+        latex: String.raw`P_{\mathrm{avg}}=V_{\text{ср.кв.}}I_{\text{ср.кв.}}\cos\phi=(106)(0{,}206)(0{,}829)=18{,}1\ \mathrm{W}`,
       },
       {
         text: "Втори път: през нагряването на резистора.",
-        latex: String.raw`P_{\mathrm{avg}}=I_{\mathrm{rms}}^2R=(0{,}206)^2(425)=18{,}1\ \mathrm{W}`,
+        latex: String.raw`P_{\mathrm{avg}}=I_{\text{ср.кв.}}^2R=(0{,}206)^2(425)=18{,}1\ \mathrm{W}`,
       },
       {
         text: "Съвпадението е следствие от геометрията, не от числата.",
-        latex: String.raw`V_{\mathrm{rms}}\cos\phi=V_{R,\mathrm{rms}}=I_{\mathrm{rms}}R\quad\Longrightarrow\quad V_{\mathrm{rms}}I_{\mathrm{rms}}\cos\phi=I_{\mathrm{rms}}^2R`,
+        latex: String.raw`V_{\text{ср.кв.}}\cos\phi=V_{R,\text{ср.кв.}}=I_{\text{ср.кв.}}R\quad\Longrightarrow\quad V_{\text{ср.кв.}}I_{\text{ср.кв.}}\cos\phi=I_{\text{ср.кв.}}^2R`,
       },
     ],
     teacherNotes: [
-      "Ако някой сметне $V_{\\mathrm{rms}}I_{\\mathrm{rms}}=21{,}8\\,\\mathrm{VA}$ и го нарече мощност, това е удобен момент за разликата между пълна и активна мощност.",
+      "Ако някой сметне $V_{\\text{ср.кв.}}I_{\\text{ср.кв.}}=21{,}8\\,\\mathrm{VA}$ и го нарече мощност, това е удобен момент за разликата между пълна и активна мощност.",
       "Практическа връзка: заводите с много електродвигатели добавят кондензатори, за да върнат $\\cos\\phi$ близо до единица - същият ток пренася повече полезна мощност.",
     ],
   },

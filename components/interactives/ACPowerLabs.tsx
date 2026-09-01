@@ -147,10 +147,10 @@ export function RMSVisualizer() {
               <SvgTex
                 x={s.box.x + s.box.w + 8}
                 y={s.sy(1 / Math.SQRT2) - 16}
-                tex="I_{\mathrm{rms}}"
+                tex="I_{\text{ср.кв.}}"
                 color={C.minus}
                 fontSize={12.5}
-                width={40}
+                width={64}
               />
             </>
           )}
@@ -161,7 +161,7 @@ export function RMSVisualizer() {
         items={[
           { color: C.ok, tex: "$i(t)/I_0$" },
           { color: C.plus, tex: "$i^2(t)/I_0^2$" },
-          { color: C.minus, tex: "$I_{\\mathrm{rms}}/I_0=0{,}707$" },
+          { color: C.minus, tex: "$I_{\\text{ср.кв.}}/I_0=0{,}707$" },
         ]}
       />
 
@@ -200,7 +200,7 @@ export function RMSVisualizer() {
         cells={[
           { label: "Средно на тока", tex: `\\langle i\\rangle=0`, color: "var(--color-muted)" },
           { label: "Средно на квадрата", tex: `\\langle i^2\\rangle=${dec(meanSq, 2)}\\,\\mathrm{A^2}`, color: "var(--color-plus)" },
-          { label: "Ефективен ток", tex: `I_{\\mathrm{rms}}=${dec(irms, 3)}\\,\\mathrm{A}`, color: "var(--color-minus)" },
+          { label: "Ефективен ток", tex: `I_{\\text{ср.кв.}}=${dec(irms, 3)}\\,\\mathrm{A}`, color: "var(--color-minus)" },
           { label: "Средна мощност", tex: `\\langle P\\rangle=${dec(power, 1)}\\,\\mathrm{W}`, color: "var(--color-ok)" },
         ]}
       />
@@ -342,7 +342,7 @@ export function PowerVisualizer() {
           },
           {
             label: "Ефективни стойности",
-            tex: `V_{\\mathrm{rms}}I_{\\mathrm{rms}}=${dec((v0 * i0) / 2, 2)}\\,\\mathrm{VA}`,
+            tex: `V_{\\text{ср.кв.}}I_{\\text{ср.кв.}}=${dec((v0 * i0) / 2, 2)}\\,\\mathrm{VA}`,
             color: "var(--color-muted)",
           },
           {

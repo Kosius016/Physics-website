@@ -651,7 +651,7 @@ export default function FaradayLessonPage() {
             <Formula latex={String.raw`\mathcal{E}_{\max}=NAB(2\pi f)=8(0{,}0900)(0{,}500)(2\pi)(60{,}0)\approx136\ \mathrm{V}`} />
             <Formula latex={String.raw`I_{\max}=\frac{\mathcal{E}_{\max}}{R}=\frac{136}{12{,}0}\approx11{,}3\ \mathrm{A}`} />
             <p className="text-[15.5px] text-muted">
-              Това е максималната моментна стойност; „ефективната“ (RMS), която мери волтметърът, е{" "}
+              Това е максималната моментна стойност; средната квадратична, която мери волтметърът, е{" "}
               <RichText text="$\mathcal{E}_{\max}/\sqrt2$" />. При товар през намотката тече ток →
               полето създава противодействащ момент → турбината харчи повече „гориво“. Пак запазване
               на енергията.
