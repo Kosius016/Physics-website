@@ -38,15 +38,15 @@ export default function LessonPhoto({
           fill
           placeholder="blur"
           sizes="(max-width: 768px) calc(100vw - 40px), 728px"
-          className="object-cover saturate-[.82] contrast-[1.05] sepia-[.08]"
+          className="object-cover saturate-[.92] contrast-[1.03] sepia-[.03]"
         />
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/40 via-transparent to-white/5"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/20 via-transparent to-transparent"
         />
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-[.12] mix-blend-soft-light"
+          className="pointer-events-none absolute inset-0 opacity-[.06] mix-blend-soft-light"
           style={{
             backgroundImage: "url('/images/photo-grain.svg')",
             backgroundRepeat: "repeat",

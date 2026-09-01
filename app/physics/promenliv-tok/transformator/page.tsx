@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Formula from "@/components/Formula";
+import LessonPhoto from "@/components/LessonPhoto";
 import LessonNav from "@/components/LessonNav";
 import Quiz from "@/components/Quiz";
 import RichText from "@/components/RichText";
@@ -20,6 +21,10 @@ import {
   TeacherModeToggle,
   TeacherNote,
 } from "@/components/interactives/TeacherMode";
+import dalekoprovodPhoto from "@/public/images/physics/transformator/dalekoprovod.webp";
+import podstantsiaPhoto from "@/public/images/physics/transformator/podstantsia.webp";
+import trafopostPhoto from "@/public/images/physics/transformator/trafopost.webp";
+import yadroLameliPhoto from "@/public/images/physics/transformator/yadro-lameli.webp";
 
 export const metadata = {
   title: "Трансформаторът и преносът на електроенергия · SingularityLab",
@@ -441,7 +446,7 @@ const CHECK_QUESTIONS: QuizQuestion[] = [
 export default function TransformerLesson() {
   return (
     <TeacherModeProvider>
-      <main className="mx-auto max-w-3xl px-5 pb-24">
+      <main className="mx-auto max-w-3xl overflow-x-hidden px-5 pb-24 xl:overflow-x-visible">
         <header className="pt-11 pb-2">
           <p className="text-[12px] font-bold uppercase tracking-[0.16em] text-muted">
             <Link href="/materiali" className="hover:text-ink">
@@ -484,6 +489,16 @@ export default function TransformerLesson() {
               сметката да продиктува всичко останало.
             </p>
           </div>
+
+          <LessonPhoto
+            src={dalekoprovodPhoto}
+            alt="Три стълба на преносна линия за 400 киловолта край Бъйкой, Румъния, с дълги изолаторни вериги и проводници."
+            caption="При напрежение 400 киловолта изолаторите са дълги, фазите стоят далеч една от друга, а сервитутът под линията е широк. Това е видимата цена на малкия ток и малките загуби по проводниците."
+            credit="Root FileSystem"
+            creditHref="https://commons.wikimedia.org/wiki/File:Dead-end_pylon_triple_400_kV_B%C4%83icoi_D_RO_2017.jpg"
+            license="CC BY-SA 2.0"
+            licenseHref="https://creativecommons.org/licenses/by-sa/2.0/"
+          />
 
           <Wide>
             <div className="mt-6">
@@ -974,6 +989,16 @@ export default function TransformerLesson() {
             неговата физика: първо защо изобщо работи, после какво определя отношението, после
             какво става с тока, и накрая къде реалният уред се отклонява от идеалния.
           </p>
+
+          <LessonPhoto
+            src={podstantsiaPhoto}
+            alt="Мощен силов трансформатор в подстанция с високи проходни изолатори и големи радиатори за охлаждане."
+            caption="Няма ротор и няма механична предавка. Високите елементи отгоре са проходни изолатори, а пакетът от ребра отстрани отвежда топлината от оставащите загуби."
+            credit="Yoshieslunchbox"
+            creditHref="https://commons.wikimedia.org/wiki/File:Substation_Power_Transformer_1.jpg"
+            license="CC BY-SA 4.0"
+            licenseHref="https://creativecommons.org/licenses/by-sa/4.0/"
+          />
         </Section>
 
         <Section id="core" n="§7" title="Две намотки, един променлив поток">
@@ -1391,6 +1416,17 @@ export default function TransformerLesson() {
             <RichText text="$n$" /> пъти по-малък поток и има по-голямо съпротивление, затова
             общата загуба пада като <RichText text="$1/n^2$" />.
           </p>
+
+          <LessonPhoto
+            src={yadroLameliPhoto}
+            alt="Два разглобени малки трансформатора с видими медни намотки и отделени E- и I-образни стоманени ламели."
+            caption="Това, което схемата рисува като плътна рамка, всъщност е пакет от много тънки E- и I-образни листове. Изолацията между листовете прекъсва широките контури на вихровите токове."
+            credit="Pedalito"
+            creditHref="https://commons.wikimedia.org/wiki/File:Trafo_auseinanderbauen_seitlich_auseinandergezogen.jpg"
+            license="CC0 1.0"
+            licenseHref="https://creativecommons.org/publicdomain/zero/1.0/"
+          />
+
           <p className="mt-3 text-ink/90">
             <strong>Хистерезисът</strong> е цената на самото преобръщане на намагнитването.
             Енергията за един цикъл и единица обем е площта на цикъла, затова:
@@ -1570,6 +1606,16 @@ export default function TransformerLesson() {
             <strong>колкото по-ниско е напрежението, толкова по-къса е линията</strong>. Преносът е
             стотици километри, разпределението десетки, а последната стъпка е триста метра.
           </p>
+
+          <LessonPhoto
+            src={trafopostPhoto}
+            alt="Разпределителен трансформатор върху два дървени стълба с три високоволтови извода и охлаждащи ребра."
+            caption="Последната трансформаторна степен захранва само местната нисковолтова мрежа. Затова след нея проводниците могат да носят голям ток, но вече само на кратко разстояние до потребителите."
+            credit="ZngZng"
+            creditHref="https://commons.wikimedia.org/wiki/File:Pole_transformer_2.jpg"
+            license="CC BY-SA 4.0"
+            licenseHref="https://creativecommons.org/licenses/by-sa/4.0/"
+          />
 
           <div className="my-5 overflow-hidden rounded-[10px] border-[1.5px] border-ink">
             <table className="w-full text-[15px]">
