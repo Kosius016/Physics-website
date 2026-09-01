@@ -303,7 +303,7 @@ const CHECK_QUESTIONS: QuizQuestion[] = [
       {
         text: "Средната мощност е отрицателна",
         correct: false,
-        why: "В $P_{\\mathrm{avg}}=V_{\\mathrm{rms}}I_{\\mathrm{rms}}\\cos\\phi$ влиза косинусът, а той е четен: знакът на $\\phi$ не влияе.",
+        why: "В $P_{\\mathrm{avg}}=V_{\\text{ср.кв.}}I_{\\text{ср.кв.}}\\cos\\phi$ влиза косинусът, а той е четен: знакът на $\\phi$ не влияе.",
       },
     ],
     explanation: "Знакът на $\\phi$ носи една-единствена информация: кой от двата максимума идва пръв.",
@@ -360,7 +360,7 @@ const CHECK_QUESTIONS: QuizQuestion[] = [
       },
     ],
     explanation:
-      "Оттук идва разликата между пълна мощност $V_{\\mathrm{rms}}I_{\\mathrm{rms}}$ и активна $V_{\\mathrm{rms}}I_{\\mathrm{rms}}\\cos\\phi$.",
+      "Оттук идва разликата между пълна мощност $V_{\\text{ср.кв.}}I_{\\text{ср.кв.}}$ и активна $V_{\\text{ср.кв.}}I_{\\text{ср.кв.}}\\cos\\phi$.",
   },
   {
     question: "Защо средната мощност в идеална бобина е точно нула?",
@@ -1881,15 +1881,16 @@ export default function AlternatingCurrentLessonPage() {
           </p>
           <Formula latex={String.raw`\langle\sin^2\omega t\rangle=\frac12-\frac12\langle\cos2\omega t\rangle=\frac12\qquad\Longrightarrow\qquad \langle P\rangle=\frac12I_0^2R`} />
           <p className="mt-3 text-ink/90">
-            Сега дефинираме <RichText text="$I_{\mathrm{rms}}$" /> като{" "}
+            Сега дефинираме <RichText text="$I_{\text{ср.кв.}}$" /> като{" "}
             <strong>онзи постоянен ток, който би нагрявал същия резистор със същата средна
             мощност</strong>:
           </p>
-          <Formula latex={String.raw`I_{\mathrm{rms}}^2R=\frac12I_0^2R\qquad\Longrightarrow\qquad \boxed{I_{\mathrm{rms}}=\frac{I_0}{\sqrt2}}\qquad\text{и аналогично}\qquad \boxed{V_{\mathrm{rms}}=\frac{V_0}{\sqrt2}}`} />
+          <Formula latex={String.raw`I_{\text{ср.кв.}}^2R=\frac12I_0^2R\qquad\Longrightarrow\qquad \boxed{I_{\text{ср.кв.}}=\frac{I_0}{\sqrt2}}\qquad\text{и аналогично}\qquad \boxed{V_{\text{ср.кв.}}=\frac{V_0}{\sqrt2}}`} />
 
           <Callout>
-            Съкращението rms идва от <em>root mean square</em>: корен от средното на квадрата,
-            изпълнено точно в този ред. Множителят{" "}
+            Името <strong>средна квадратична стойност</strong> описва самата сметка: вдига се
+            на квадрат, взема се средното, вади се корен, точно в този ред. На английски е
+            <em>root mean square</em>, откъдето идва и означението rms в чуждата литература. Множителят{" "}
             <RichText text="$1/\sqrt2\approx0{,}707$" /> обаче <strong>не е универсален</strong>:
             той идва от <RichText text="$\langle\sin^2\rangle=1/2$" /> и важи само за синусоида.
             Между другото, „напрежение <RichText text="$230\,\mathrm V$" /> в контакта“ е тъкмо
@@ -1920,15 +1921,15 @@ export default function AlternatingCurrentLessonPage() {
           </p>
           <Formula latex={String.raw`\langle P\rangle=\frac{V_0I_0}{2}\cos\phi`} />
           <p className="mt-3 text-ink/90">
-            Заместваме <RichText text="$V_0=\sqrt2\,V_{\mathrm{rms}}$" /> и{" "}
-            <RichText text="$I_0=\sqrt2\,I_{\mathrm{rms}}$" />, при което двойката{" "}
+            Заместваме <RichText text="$V_0=\sqrt2\,V_{\text{ср.кв.}}$" /> и{" "}
+            <RichText text="$I_0=\sqrt2\,I_{\text{ср.кв.}}$" />, при което двойката{" "}
             <RichText text="$\sqrt2$" /> изяжда двойката в знаменателя:
           </p>
-          <Formula latex={String.raw`\boxed{P_{\mathrm{avg}}=V_{\mathrm{rms}}I_{\mathrm{rms}}\cos\phi}`} />
+          <Formula latex={String.raw`\boxed{P_{\mathrm{avg}}=V_{\text{ср.кв.}}I_{\text{ср.кв.}}\cos\phi}`} />
           <p className="mt-3 text-ink/90">
             Множителят <RichText text="$\boxed{\cos\phi}$" /> се нарича{" "}
             <strong>фактор на мощността</strong>. Произведението{" "}
-            <RichText text="$V_{\mathrm{rms}}I_{\mathrm{rms}}$" /> без него се нарича пълна
+            <RichText text="$V_{\text{ср.кв.}}I_{\text{ср.кв.}}$" /> без него се нарича пълна
             мощност и се мери във волт-ампери, за да не се бърка с активната мощност във ватове.
           </p>
 
@@ -1953,7 +1954,7 @@ export default function AlternatingCurrentLessonPage() {
                     <RichText text="$0$" />
                   </td>
                   <td className="px-4 py-2 text-ink/90">
-                    <RichText text="$V_{\mathrm{rms}}I_{\mathrm{rms}}$" /> (максимална)
+                    <RichText text="$V_{\text{ср.кв.}}I_{\text{ср.кв.}}$" /> (максимална)
                   </td>
                 </tr>
                 <tr>
@@ -1998,9 +1999,9 @@ export default function AlternatingCurrentLessonPage() {
             в §10. Проекцията на <RichText text="$\vec V$" /> върху посоката на тока е точно{" "}
             <RichText text="$\vec V_R$" />:
           </p>
-          <Formula latex={String.raw`V_{\mathrm{rms}}\cos\phi=V_{R,\mathrm{rms}}=I_{\mathrm{rms}}R`} />
+          <Formula latex={String.raw`V_{\text{ср.кв.}}\cos\phi=V_{R,\text{ср.кв.}}=I_{\text{ср.кв.}}R`} />
           <p className="mt-3 text-ink/90">Заместваме в израза за средната мощност:</p>
-          <Formula latex={String.raw`P_{\mathrm{avg}}=V_{\mathrm{rms}}I_{\mathrm{rms}}\cos\phi=I_{\mathrm{rms}}^2R`} />
+          <Formula latex={String.raw`P_{\mathrm{avg}}=V_{\text{ср.кв.}}I_{\text{ср.кв.}}\cos\phi=I_{\text{ср.кв.}}^2R`} />
           <Callout>
             <strong>Цялата средна мощност, доставена от източника, се разсейва в резистора.</strong>{" "}
             Точно както в постояннотокова верига. Реактивните елементи не участват в баланса за цял
@@ -2052,7 +2053,7 @@ export default function AlternatingCurrentLessonPage() {
             <Formula latex={String.raw`\text{(3)}\quad i=C\frac{dv}{dt}\ \ \Longrightarrow\ \ X_C=\frac{1}{\omega C};\qquad v=L\frac{di}{dt}\ \ \Longrightarrow\ \ X_L=\omega L`} />
             <Formula latex={String.raw`\text{(4)}\quad Z=\sqrt{R^2+(X_L-X_C)^2},\qquad \tan\phi=\frac{X_L-X_C}{R}`} />
             <Formula latex={String.raw`\text{(5)}\quad X_L=X_C\ \ \Longrightarrow\ \ \omega_0=\frac{1}{\sqrt{LC}},\qquad Z=R,\qquad I_0=\frac{V_0}{R}`} />
-            <Formula latex={String.raw`\text{(6)}\quad V_{\mathrm{rms}}=\frac{V_0}{\sqrt2},\qquad I_{\mathrm{rms}}=\frac{I_0}{\sqrt2},\qquad P_{\mathrm{avg}}=V_{\mathrm{rms}}I_{\mathrm{rms}}\cos\phi=I_{\mathrm{rms}}^2R`} />
+            <Formula latex={String.raw`\text{(6)}\quad V_{\text{ср.кв.}}=\frac{V_0}{\sqrt2},\qquad I_{\text{ср.кв.}}=\frac{I_0}{\sqrt2},\qquad P_{\mathrm{avg}}=V_{\text{ср.кв.}}I_{\text{ср.кв.}}\cos\phi=I_{\text{ср.кв.}}^2R`} />
           </div>
 
           <ul className="mt-6 list-disc space-y-2 pl-5 text-ink/90">
