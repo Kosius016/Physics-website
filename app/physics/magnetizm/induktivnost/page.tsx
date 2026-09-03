@@ -621,11 +621,9 @@ export default function InductanceLessonPage() {
             формулата: <RichText text="$[L/R]=\mathrm s$" />.
           </Callout>
 
-          <Wide>
-            <div className="mt-6">
-              <RLCircuitLab />
-            </div>
-          </Wide>
+          <div className="mt-6">
+            <RLCircuitLab />
+          </div>
 
           <Example number="2" title="Колко бързо нараства токът?">
             <p>
@@ -1002,11 +1000,9 @@ export default function InductanceLessonPage() {
             />
           </Derivation>
 
-          <Wide>
-            <div className="mt-6">
-              <MutualInductanceLab />
-            </div>
-          </Wide>
+          <div className="mt-6">
+            <MutualInductanceLab />
+          </div>
 
           <Example number="5" title="Безконтактно зарядно за електрическа четка">
             <div className="mx-auto mb-5 max-w-xl">
@@ -1097,6 +1093,15 @@ export default function InductanceLessonPage() {
             </p>
           </div>
 
+          <Callout>
+            <strong>Защо на схемата няма батерия?</strong> Батерията е нужна само преди
+            началото на трептенето: тя зарежда кондензатора и внася началната енергия. При{" "}
+            <RichText text="$t=0$" /> я изключваме и затваряме контура само през{" "}
+            <RichText text="$L$" /> и <RichText text="$C$" />. Така наблюдаваме свободни{" "}
+            <RichText text="$LC$" /> трептения. Ако батерията остане свързана, тя непрекъснато
+            обменя енергия с веригата и вече разглеждаме захранвана, а не свободна система.
+          </Callout>
+
           <div className="mx-auto mt-6 max-w-2xl">
             <OscillationCircuitDiagram mode="lc" />
           </div>
@@ -1110,7 +1115,7 @@ export default function InductanceLessonPage() {
                   correct: true,
                 },
                 {
-                  text: "$|q|=Q_{\max}$ и енергията е в кондензатора",
+                  text: "$|q|=Q_{\\max}$ и енергията е в кондензатора",
                   correct: false,
                 },
                 { text: "Енергията е загубена като топлина", correct: false },
@@ -1208,29 +1213,106 @@ export default function InductanceLessonPage() {
             />
             <p>
               двата корена са <RichText text="$s=+i\omega$" /> и{" "}
-              <RichText text="$s=-i\omega$" />. Съответните комплексни експоненти са
-              свързани със синус и косинус чрез формулата на Ойлер:
+              <RichText text="$s=-i\omega$" />. Връщаме всеки корен в пробната функция{" "}
+              <RichText text="$q=e^{st}$" /> и получаваме две комплексни решения:
             </p>
             <Formula
-              latex={String.raw`e^{i\theta}=\cos\theta+i\sin\theta,\qquad e^{-i\theta}=\cos\theta-i\sin\theta`}
+              latex={String.raw`q_+(t)=e^{i\omega t},\qquad q_-(t)=e^{-i\omega t}`}
             />
             <p>
-              Когато съберем комплексно решение и неговото комплексно спрегнато, имагинерните
-              части се унищожават. Така получаваме общото <em>реално</em> решение:
+              Уравнението е линейно и от втори ред, затова общото комплексно решение е линейна
+              комбинация на двете независими решения:
             </p>
+            <Formula
+              latex={String.raw`q_{\mathrm c}(t)=C_+e^{i\omega t}+C_-e^{-i\omega t}`}
+            />
+            <p>
+              Понеже комплексното спрягане сменя знака пред <RichText text="$i$" />, имаме:
+            </p>
+            <Formula
+              latex={String.raw`\left(e^{i\omega t}\right)^*=e^{-i\omega t}`}
+            />
+            <p>
+              Физическият заряд трябва да е реален. Затова избираме втория член да бъде
+              комплексно спрегнат на първия, което изисква:
+            </p>
+            <Formula
+              latex={String.raw`C_-=C_+^*`}
+            />
+            <p>Тогава действително:</p>
+            <Formula
+              latex={String.raw`C_-e^{-i\omega t}=\left(C_+e^{i\omega t}\right)^*`}
+            />
+            <Formula
+              latex={String.raw`\begin{aligned}q(t)&=C_+e^{i\omega t}+\left(C_+e^{i\omega t}\right)^*\\[2pt]&=2\operatorname{Re}\left(C_+e^{i\omega t}\right).\end{aligned}`}
+            />
+            <p>
+              Това със сигурност е реално. Сега записваме произволното комплексно число{" "}
+              <RichText text="$C_+$" /> чрез неговите реална и имагинерна част:
+            </p>
+            <Formula
+              latex={String.raw`C_+=u+iv,\qquad u,v\in\mathbb R`}
+            />
+            <p>Неговото комплексно спрегнато е:</p>
+            <Formula
+              latex={String.raw`C_-=C_+^*=u-iv`}
+            />
+            <p>Замествайки формулите на Ойлер:</p>
+            <Formula
+              latex={String.raw`e^{i\omega t}=\cos\omega t+i\sin\omega t,\qquad e^{-i\omega t}=\cos\omega t-i\sin\omega t`}
+            />
+            <Formula
+              latex={String.raw`\begin{aligned}q(t)&=(u+iv)e^{i\omega t}+(u-iv)e^{-i\omega t}\\[2pt]&=2u\cos\omega t-2v\sin\omega t.\end{aligned}`}
+            />
+            <p>Искаме крайният резултат да бъде в обичайната форма:</p>
             <Formula
               latex={String.raw`q(t)=A\cos\omega t+B\sin\omega t`}
             />
-            <p>
-              Същата комбинация може да се опише с една амплитуда и една фаза:
-            </p>
+            <p>Затова просто преименуваме двете реални константи:</p>
             <Formula
-              latex={String.raw`q(t)=Q_{\max}\cos(\omega t+\phi),\qquad Q_{\max}=\sqrt{A^2+B^2}`}
+              latex={String.raw`A\equiv2u,\qquad B\equiv-2v`}
             />
             <p>
-              Това не е ново решение, а друг запис на същите две константи. По-точно{" "}
-              <RichText text="$A=Q_{\max}\cos\phi$" /> и{" "}
-              <RichText text="$B=-Q_{\max}\sin\phi$" />. Диференцирането дава тока:
+              Получихме общото реално решение с двете необходими константи{" "}
+              <RichText text="$A$" /> и <RichText text="$B$" />. Вместо тях можем да използваме
+              амплитуда <RichText text="$Q_{\max}\ge0$" /> и начална фаза{" "}
+              <RichText text="$\phi$" />. За да видим връзката, разтваряме косинуса на сбор:
+            </p>
+            <Formula
+              latex={String.raw`Q_{\max}\cos(\omega t+\phi)=Q_{\max}\cos\phi\cos\omega t-Q_{\max}\sin\phi\sin\omega t`}
+            />
+            <p>
+              За да бъде това същата функция като{" "}
+              <RichText text="$A\cos\omega t+B\sin\omega t$" /> за всеки момент, коефициентите
+              пред косинуса и синуса трябва да съвпадат:
+            </p>
+            <Formula
+              latex={String.raw`A=Q_{\max}\cos\phi,\qquad B=-Q_{\max}\sin\phi`}
+            />
+            <p>
+              Повдигаме двете равенства на квадрат и ги събираме. Тригонометричното тъждество{" "}
+              <RichText text="$\cos^2\phi+\sin^2\phi=1$" /> премахва фазата:
+            </p>
+            <Formula
+              latex={String.raw`A^2+B^2=Q_{\max}^2\left(\cos^2\phi+\sin^2\phi\right)=Q_{\max}^2`}
+            />
+            <p>
+              Амплитудата е неотрицателна, затова вземаме положителния квадратен корен:
+            </p>
+            <Formula
+              latex={String.raw`Q_{\max}=\sqrt{A^2+B^2}`}
+            />
+            <p>
+              Ако <RichText text="$A=B=0$" />, решението е{" "}
+              <RichText text="$q(t)=0$" /> и фазата няма значение. Във всички други случаи
+              получаваме същото решение, само записано чрез амплитуда и фаза:
+            </p>
+            <Formula
+              latex={String.raw`q(t)=Q_{\max}\cos(\omega t+\phi)`}
+            />
+            <p>
+              Това не е ново решение, а друг запис на същите две реални константи.
+              Диференцирането дава тока:
             </p>
             <Formula
               latex={String.raw`I(t)=\frac{dq}{dt}=-\omega Q_{\max}\sin(\omega t+\phi)`}
@@ -1286,11 +1368,9 @@ export default function InductanceLessonPage() {
             </p>
           </Derivation>
 
-          <Wide>
-            <div className="mt-6">
-              <LCEnergyLab />
-            </div>
-          </Wide>
+          <div className="mt-6">
+            <LCEnergyLab />
+          </div>
 
           <Example number="6" title="Трептения в LC верига">
             <p>
@@ -1489,15 +1569,41 @@ export default function InductanceLessonPage() {
               latex={String.raw`Ls^2+Rs+\frac1C=0`}
             />
             <p>
-              Въвеждаме:
+              Първо делим на <RichText text="$L$" />, после прилагаме формулата за корените на
+              квадратно уравнение:
+            </p>
+            <Formula
+              latex={String.raw`s^2+\frac RLs+\frac1{LC}=0`}
+            />
+            <Formula
+              latex={String.raw`\begin{aligned}s&=\frac{-R/L\pm\sqrt{(R/L)^2-4/(LC)}}{2}\\[2pt]&=-\frac{R}{2L}\pm\sqrt{\left(\frac{R}{2L}\right)^2-\frac1{LC}}.\end{aligned}`}
+            />
+            <p>
+              За по-кратък запис въвеждаме коефициента на затихване{" "}
+              <RichText text="$\alpha$" /> и собствената ъглова честота{" "}
+              <RichText text="$\omega_0$" />:
             </p>
             <Formula
               latex={String.raw`\alpha=\frac{R}{2L},\qquad\omega_0=\frac1{\sqrt{LC}},\qquad s=-\alpha\pm\sqrt{\alpha^2-\omega_0^2}`}
             />
             <p>
               <strong>Подкритично затихване</strong>,{" "}
-              <RichText text="$R<R_c$" />: корените са комплексни,
-              <RichText text="$s=-\alpha\pm i\omega_d$" />, където:
+              <RichText text="$R<R_c$" />: корените са комплексни, защото{" "}
+              <RichText text="$\alpha^2-\omega_0^2<0$" />. Дефинираме:
+            </p>
+            <Formula
+              latex={String.raw`\omega_d\equiv\sqrt{\omega_0^2-\alpha^2},\qquad\sqrt{\alpha^2-\omega_0^2}=i\omega_d`}
+            />
+            <p>
+              Така <RichText text="$s_\pm=-\alpha\pm i\omega_d$" />. Поставяме двата корена
+              обратно в <RichText text="$e^{st}$" /> и образуваме линейната им комбинация:
+            </p>
+            <Formula
+              latex={String.raw`\begin{aligned}q_{\mathrm c}(t)&=C_+e^{(-\alpha+i\omega_d)t}+C_-e^{(-\alpha-i\omega_d)t}\\[2pt]&=e^{-\alpha t}\left(C_+e^{i\omega_dt}+C_-e^{-i\omega_dt}\right).\end{aligned}`}
+            />
+            <p>
+              Както при <RichText text="$LC$" /> контура, избираме комплексно спрегнати
+              коефициенти и прилагаме формулите на Ойлер. Реалното решение е:
             </p>
             <Formula
               latex={String.raw`q(t)=e^{-\alpha t}\left(A\cos\omega_dt+B\sin\omega_dt\right)`}
@@ -1509,9 +1615,7 @@ export default function InductanceLessonPage() {
             <Formula
               latex={String.raw`q(t)=Q_{\max}e^{-Rt/(2L)}\cos(\omega_dt+\phi)`}
             />
-            <p>
-              Ъгловата честота на затихващото трептене е:
-            </p>
+            <p>След заместване на определенията ъгловата честота е:</p>
             <Formula
               latex={String.raw`\omega_d=\sqrt{\omega_0^2-\alpha^2}=\left[\frac1{LC}-\left(\frac{R}{2L}\right)^2\right]^{1/2}`}
             />
@@ -1519,7 +1623,13 @@ export default function InductanceLessonPage() {
               Фазата <RichText text="$\phi$" /> се определя от <em>двете</em> начални
               условия. Например за{" "}
               <RichText text="$q(0)=Q_0$" /> и{" "}
-              <RichText text="$I(0)=0$" /> точният реален запис е:
+              <RichText text="$I(0)=q'(0)=0$" /> първо намираме коефициентите:
+            </p>
+            <Formula
+              latex={String.raw`q(0)=A=Q_0,\qquad q'(0)=-\alpha A+\omega_dB=0\quad\Longrightarrow\quad B=\frac{\alpha}{\omega_d}Q_0`}
+            />
+            <p>
+              Следователно точният реален запис е:
             </p>
             <Formula
               latex={String.raw`q(t)=Q_0e^{-\alpha t}\left(\cos\omega_dt+\frac{\alpha}{\omega_d}\sin\omega_dt\right)`}
@@ -1533,16 +1643,23 @@ export default function InductanceLessonPage() {
             <p>
               <strong>Критично затихване</strong>,{" "}
               <RichText text="$R=R_c$" />: двата корена съвпадат,
-              <RichText text="$s=-\omega_0$" />, и:
+              <RichText text="$s=-\omega_0$" />.
+            </p>
+            <p>
+              Един експоненциален член би дал само една константа, но уравнението е от втори
+              ред. При двоен корен второто независимо решение е{" "}
+              <RichText text="$te^{-\omega_0t}$" /> (директното заместване го проверява), затова:
             </p>
             <Formula
               latex={String.raw`q(t)=(A+Bt)e^{-\omega_0t}`}
             />
             <p>
               За същите начални условия <RichText text="$q(0)=Q_0$" /> и{" "}
-              <RichText text="$I(0)=0$" /> получаваме{" "}
-              <RichText text="$A=Q_0$" /> и <RichText text="$B=\omega_0Q_0$" />:
+              <RichText text="$I(0)=0$" />:
             </p>
+            <Formula
+              latex={String.raw`q(0)=A=Q_0,\qquad q'(0)=B-\omega_0A=0\quad\Longrightarrow\quad B=\omega_0Q_0`}
+            />
             <Formula latex={String.raw`q(t)=Q_0(1+\omega_0t)e^{-\omega_0t}`} />
             <p>
               <strong>Свръхкритично затихване</strong>,{" "}
@@ -1559,9 +1676,14 @@ export default function InductanceLessonPage() {
                 <p>
                   Ако означим <RichText text="$\delta=\sqrt{\alpha^2-\omega_0^2}$" /> и
                   наложим <RichText text="$q(0)=Q_0$" />,{" "}
-                  <RichText text="$I(0)=0$" />, получаваме две линейни уравнения за{" "}
-                  <RichText text="$A$" /> и <RichText text="$B$" />. Решението им е:
+                  <RichText text="$I(0)=0$" />, двата корена са{" "}
+                  <RichText text="$s_1=-\alpha+\delta$" /> и{" "}
+                  <RichText text="$s_2=-\alpha-\delta$" />. Началните условия дават:
                 </p>
+                <Formula
+                  latex={String.raw`A+B=Q_0,\qquad(-\alpha+\delta)A+(-\alpha-\delta)B=0`}
+                />
+                <p>Решаваме тази система и получаваме:</p>
                 <Formula
                   latex={String.raw`A=\frac{\alpha+\delta}{2\delta}Q_0,\qquad B=-\frac{\alpha-\delta}{2\delta}Q_0`}
                 />
@@ -1594,11 +1716,9 @@ export default function InductanceLessonPage() {
             голямото съпротивление всъщност забавя последната част на процеса.
           </Callout>
 
-          <Wide>
-            <div className="mt-6">
-              <RLCDampingLab />
-            </div>
-          </Wide>
+          <div className="mt-6">
+            <RLCDampingLab />
+          </div>
 
           <Example number="7" title="Кой режим ще наблюдаваме?">
             <p>

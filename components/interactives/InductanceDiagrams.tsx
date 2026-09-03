@@ -1,10 +1,18 @@
 import RichText from "@/components/RichText";
 import SvgTex from "./SvgTex";
-import { Arrow, C, CurrentSymbol, STAGE_BG, STAGE_CLASS } from "./svg";
+import {
+  Arrow,
+  C,
+  CurrentSymbol,
+  DRAWING_FONT_FAMILY,
+  STAGE_BG,
+  STAGE_CLASS,
+} from "./svg";
 
 const W = 640;
 const H = 340;
 const q = (value: number) => Math.round(value * 100) / 100;
+const DRAWING_STYLE = { fontFamily: DRAWING_FONT_FAMILY } as const;
 
 function Stage({ title }: { title: string }) {
   return (
@@ -37,8 +45,8 @@ function Stage({ title }: { title: string }) {
         y="30"
         fill={C.mut}
         fontSize="12"
-        fontWeight="800"
-        letterSpacing="0.06em"
+        fontWeight="600"
+        letterSpacing="0.035em"
       >
         {title}
       </text>
@@ -142,6 +150,7 @@ export function BasicInductorCircuitDiagram() {
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className={`${STAGE_CLASS} select-none`}
+        style={DRAWING_STYLE}
         role="img"
         aria-label="Последователна верига с батерия, резистор и намотка и избрана положителна посока на тока"
       >
@@ -180,7 +189,7 @@ export function BasicInductorCircuitDiagram() {
           texLabelWidth={62}
           texLabelAnchor="middle"
         />
-        <text x="320" y="310" textAnchor="middle" fill={C.mut} fontSize="12" fontWeight="800">
+        <text x="320" y="310" textAnchor="middle" fill={C.mut} fontSize="12" fontWeight="600">
           ЗНАКЪТ НА ЕДН СЕ ОПРЕДЕЛЯ ОТ ИЗБРАНАТА ПОСОКА НА ТОКА
         </text>
       </svg>
@@ -199,6 +208,7 @@ export function SwitchingRLCircuitDiagram() {
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className={`${STAGE_CLASS} select-none`}
+        style={DRAWING_STYLE}
         role="img"
         aria-label="RL верига с двупозиционен ключ за включване към батерия и разреждане през резистор"
       >
@@ -227,7 +237,7 @@ export function SwitchingRLCircuitDiagram() {
           strokeLinecap="round"
         />
         <SvgTex x={151} y={77} tex="1" color={C.plus} fontSize={15} width={18} anchor="middle" />
-        <SvgTex x={151} y={217} tex="2" color={C.minus} fontSize={15} width={18} anchor="middle" />
+        <SvgTex x={178} y={217} tex="2" color={C.minus} fontSize={15} width={18} anchor="middle" />
         <SvgTex x={340} y={139} tex="R" color={C.warn} fontSize={16} width={24} anchor="middle" />
         <SvgTex x={466} y={139} tex="L" color={C.minus} fontSize={16} width={24} anchor="middle" />
         <Arrow
@@ -241,7 +251,7 @@ export function SwitchingRLCircuitDiagram() {
           texLabelDy={-10}
           texLabelWidth={46}
         />
-        <text x="320" y="319" textAnchor="middle" fill={C.mut} fontSize="12" fontWeight="800">
+        <text x="320" y="319" textAnchor="middle" fill={C.mut} fontSize="12" fontWeight="600">
           1 · НАРАСТВАНЕ С ИЗТОЧНИК    2 · ЗАТИХВАНЕ В ЗАТВОРЕН КОНТУР
         </text>
       </svg>
@@ -262,6 +272,7 @@ export function OscillationCircuitDiagram({ mode }: { mode: "lc" | "rlc" }) {
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className={`${STAGE_CLASS} select-none`}
+        style={DRAWING_STYLE}
         role="img"
         aria-label={`${hasResistance ? "RLC" : "LC"} контур с означени заряд, ток и напрежения`}
       >
@@ -318,6 +329,7 @@ export function CoaxialCableDiagram() {
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className={`${STAGE_CLASS} select-none`}
+        style={DRAWING_STYLE}
         role="img"
         aria-label="Напречно сечение на коаксиален кабел с радиуси a и b и магнитно поле между проводниците"
       >
@@ -424,7 +436,7 @@ export function CoaxialCableDiagram() {
           fontSize={16}
           width={24}
         />
-        <text x="480" y="310" textAnchor="middle" fill={C.mut} fontSize="12" fontWeight="800">
+        <text x="480" y="310" textAnchor="middle" fill={C.mut} fontSize="12" fontWeight="600">
           РАДИАЛНА ИВИЦА
         </text>
       </svg>
@@ -442,6 +454,7 @@ export function WirelessChargerDiagram() {
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className={`${STAGE_CLASS} select-none`}
+        style={DRAWING_STYLE}
         role="img"
         aria-label="Разделени първична намотка в основата и вторична намотка в дръжката на безконтактно зарядно"
       >
@@ -537,10 +550,10 @@ export function WirelessChargerDiagram() {
           texLabelDy={-14}
           texLabelWidth={52}
         />
-        <text x="174" y="77" fill={C.ok} fontSize="12" fontWeight="800">
+        <text x="174" y="77" fill={C.ok} fontSize="12" fontWeight="600">
           ДРЪЖКА · ВТОРИЧНА
         </text>
-        <text x="174" y="238" fill={C.warn} fontSize="12" fontWeight="800">
+        <text x="174" y="238" fill={C.warn} fontSize="12" fontWeight="600">
           ОСНОВА · ПЪРВИЧНА
         </text>
       </svg>

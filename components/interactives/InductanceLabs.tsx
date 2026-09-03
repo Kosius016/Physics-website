@@ -3,13 +3,23 @@
 import { useEffect, useRef, useState } from "react";
 import RichText from "@/components/RichText";
 import SvgTex from "./SvgTex";
-import { Arrow, BTN_PRI, BTN_SEC, C, PANEL_CLASS, STAGE_BG, STAGE_CLASS } from "./svg";
+import {
+  Arrow,
+  BTN_PRI,
+  BTN_SEC,
+  C,
+  DRAWING_FONT_FAMILY,
+  PANEL_CLASS,
+  STAGE_BG,
+  STAGE_CLASS,
+} from "./svg";
 
 const W = 720;
 const H = 360;
 const MU_0 = 4 * Math.PI * 1e-7;
 const q = (value: number) => Math.round(value * 1000) / 1000;
 const bg = (value: number, digits = 2) => value.toFixed(digits).replace(".", "{,}");
+const DRAWING_STYLE = { fontFamily: DRAWING_FONT_FAMILY } as const;
 
 function Stage({ title }: { title: string }) {
   return (
@@ -42,8 +52,8 @@ function Stage({ title }: { title: string }) {
         y="30"
         fill={C.mut}
         fontSize="12"
-        fontWeight="800"
-        letterSpacing="0.06em"
+        fontWeight="600"
+        letterSpacing="0.035em"
       >
         {title}
       </text>
@@ -158,6 +168,7 @@ export function SelfInductionLab() {
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className={`${STAGE_CLASS} select-none`}
+        style={DRAWING_STYLE}
         role="img"
         aria-label="Самоиндукция в соленоид при нарастващ или намаляващ ток"
       >
@@ -225,7 +236,7 @@ export function SelfInductionLab() {
           />
         )}
         <SvgTex x={512} y={183} tex="L" color={C.warn} fontSize={17} width={22} />
-        <text x="370" y="326" textAnchor="middle" fill={C.mut} fontSize="12" fontWeight="800">
+        <text x="370" y="326" textAnchor="middle" fill={C.mut} fontSize="12" fontWeight="600">
           ОБРАТНОТО ЕДН СЕ ПРОТИВОПОСТАВЯ НА ПРОМЯНАТА
         </text>
       </svg>
@@ -353,6 +364,7 @@ export function RLCircuitLab() {
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className={`${STAGE_CLASS} select-none`}
+        style={DRAWING_STYLE}
         role="img"
         aria-label="Графика на тока във времето при включване и изключване на RL контур"
       >
@@ -584,6 +596,7 @@ export function MagneticEnergyLab() {
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className={`${STAGE_CLASS} select-none`}
+        style={DRAWING_STYLE}
         role="img"
         aria-label="Енергия в магнитното поле на соленоид"
       >
@@ -645,7 +658,7 @@ export function MagneticEnergyLab() {
           texLabelAnchor="start"
         />
         <SvgTex x={535} y={180} tex="V=A\ell" color={C.mut} fontSize={15} width={66} />
-        <text x="385" y="316" textAnchor="middle" fill={C.mut} fontSize="12" fontWeight="800">
+        <text x="385" y="316" textAnchor="middle" fill={C.mut} fontSize="12" fontWeight="600">
           ЕНЕРГИЯТА Е В ПОЛЕТО, НЕ В ЖИЦАТА
         </text>
       </svg>
@@ -709,6 +722,7 @@ export function MutualInductanceLab() {
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className={`${STAGE_CLASS} select-none`}
+        style={DRAWING_STYLE}
         role="img"
         aria-label="Две намотки с взаимна индуктивност и променливо разстояние"
       >
@@ -775,7 +789,7 @@ export function MutualInductanceLab() {
           width={42}
           anchor="middle"
         />
-        <text x="360" y="326" textAnchor="middle" fill={C.mut} fontSize="12" fontWeight="800">
+        <text x="360" y="326" textAnchor="middle" fill={C.mut} fontSize="12" fontWeight="600">
           ПО-БЛИЗКИ НАМОТКИ → ПОВЕЧЕ СВЪРЗАН ПОТОК
         </text>
       </svg>
@@ -906,6 +920,7 @@ export function LCEnergyLab() {
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className={`${STAGE_CLASS} select-none`}
+        style={DRAWING_STYLE}
         role="img"
         aria-label="LC контур с прехвърляне на енергия между кондензатора и индуктора"
       >
@@ -1023,7 +1038,7 @@ export function LCEnergyLab() {
           width={58}
           anchor="middle"
         />
-        <text x="529" y="326" textAnchor="middle" fill={C.mut} fontSize="12" fontWeight="800">
+        <text x="529" y="326" textAnchor="middle" fill={C.mut} fontSize="12" fontWeight="600">
           СУМАТА ОСТАВА ПОСТОЯННА
         </text>
       </svg>
@@ -1156,6 +1171,7 @@ export function RLCDampingLab() {
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className={`${STAGE_CLASS} select-none`}
+        style={DRAWING_STYLE}
         role="img"
         aria-label="Зарядът в RLC контур при подкритично, критично и свръхкритично затихване"
       >
