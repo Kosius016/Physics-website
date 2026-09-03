@@ -16,7 +16,7 @@ import {
 import { BTN_SEC, C, DRAWING_FONT_FAMILY, PANEL_CLASS, STAGE_CLASS } from "./svg";
 
 /**
- * Интерактиви към §2, §3 и §10 на урока за трансформатора и преноса.
+ * Интерактиви към §1, §2, §5 и §12 на урока за трансформатора и преноса.
  *
  * Общият модел е **еднофазен еквивалент с два проводника**: това е обявено
  * и в текста на урока, защото реалната мрежа е трифазна. Целта на опростения
@@ -44,316 +44,8 @@ function volts(value: number): string {
   return `${dec(value, 0)}\\,\\mathrm V`;
 }
 
-/* ----------------------------------------------------- моделът на линията */
 
-interface LineInputs {
-  /** Напрежение **при товара**, kV. */
-  kv: number;
-  /** Доставена мощност, MW. */
-  mw: number;
-  /** Дължина на линията, km. */
-  km: number;
-  /** Сечение на един проводник, mm². */
-  mm2: number;
-}
-
-interface LineResult {
-  r: number;
-  i: number;
-  loss: number;
-  drop: number;
-  send: number;
-  input: number;
-  eta: number;
-  /** Дял на загубата от подадената мощност: 0…1. */
-  frac: number;
-}
-
-/**
- * Решава линията при зададено напрежение **при товара**.
- *
- * Съзнателно не фиксираме напрежението на източника: тогава токът не е
- * $I=P/V$ и трябва да се решава делител. Границата на предаваната мощност
- * при фиксиран източник е изведена отделно в текста на урока.
- */
-function solveLine({ kv, mw, km, mm2 }: LineInputs): LineResult {
-  const r = (2 * RHO_AL * km * 1e3) / (mm2 * 1e-6);
-  const i = (mw * 1e6) / (kv * 1e3);
-  const loss = i * i * r;
-  const drop = i * r;
-  const input = mw * 1e6 + loss;
-  return {
-    r,
-    i,
-    loss,
-    drop,
-    send: kv * 1e3 + drop,
-    input,
-    eta: (mw * 1e6) / input,
-    frac: loss / input,
-  };
-}
-
-/* ============================================================ §2, §3 */
-
-const V_PRESETS = [
-  { kv: 20, label: "20 kV" },
-  { kv: 220, label: "220 kV" },
-  { kv: 400, label: "400 kV" },
-] as const;
-
-/**
- * Лабораторията за далекопровода.
- *
- * Долната лента е енергийна: широчината ѝ е **делът**, не абсолютната
- * мощност, затова картината остава четима и при 0,4 %, и при 62 % загуба.
- * Абсолютните стойности стоят в readout лентата.
- */
-export function TransmissionLossLab() {
-  const [logKv, setLogKv] = useState(Math.log10(20));
-  const [mw, setMw] = useState(20);
-  const [km, setKm] = useState(150);
-  const [mm2, setMm2] = useState(240);
-
-  const kv = 10 ** logKv;
-  const v = solveLine({ kv, mw, km, mm2 });
-
-  const W = 660;
-  const H = 330;
-
-  // ред A: физическата картина
-  const lineLeft = 96;
-  const lineRight = 564;
-  const topWire = 76;
-  const botWire = 116;
-
-  // ред B: енергийната лента
-  const bandTop = 196;
-  const bandH = 76;
-  const bandLeft = 110;
-  const bandRight = 556;
-  const bandBottom = bandTop + bandH;
-  // хайрлайн, за да остане видима и нищожната загуба
-  const lossH = Math.max(1.2, v.frac * bandH);
-  const split = bandBottom - lossH;
-
-  const glow = Math.min(1, v.frac * 1.7);
-  const lossBiggerThanDelivered = v.loss > mw * 1e6;
-
-  const cells: Cell[] = [
-    { label: "Ток в линията", tex: `I=${dec(v.i, 0)}\\,\\mathrm A`, color: C.warn },
-    { label: "Съпротивление", tex: `R_{\\text{лин}}=${dec(v.r, 1)}\\,\\Omega` },
-    { label: "Загуба", tex: `P_{\\text{зг}}=${watts(v.loss)}`, color: C.plus },
-    {
-      label: "Дял от подаденото",
-      tex: `${dec(v.frac * 100, 1)}\\,\\%`,
-      color: v.frac > 0.05 ? C.plus : C.ok,
-    },
-    { label: "Спад по линията", tex: `\\Delta V_{\\text{лин}}=${volts(v.drop)}` },
-    { label: "В началото", tex: `V_{\\text{нач}}=${volts(v.send)}` },
-    { label: "Подадено", tex: `P_{\\text{вх}}=${watts(v.input)}` },
-    { label: "КПД на преноса", tex: `\\eta=${dec(v.eta * 100, 1)}\\,\\%`, color: C.ok },
-  ];
-
-  return (
-    <div className={PANEL_CLASS}>
-      <StageScroll minWidth={620}>
-        <svg viewBox={`0 0 ${W} ${H}`} className={STAGE_CLASS} aria-label="Далекопровод и енергиен баланс">
-          <Stage w={W} h={H} title="ЕДНОФАЗЕН ЕКВИВАЛЕНТ · ДВА ПРОВОДНИКА" />
-
-          {/* ---------------------------------------------- ред A: линията */}
-          <rect x={26} y={52} width={70} height={88} rx={6} fill="none" stroke={C.warn} strokeWidth={2.2} />
-          <SourceSymbol x={61} y={96} r={17} color={C.warn} />
-          <text
-            x={61}
-            y={158}
-            textAnchor="middle"
-            fill={C.mut}
-            fontFamily={DRAWING_FONT_FAMILY}
-            fontSize={11.5}
-            fontWeight={600}
-            letterSpacing="0.08em"
-          >
-            ЦЕНТРАЛА
-          </text>
-
-          <rect x={564} y={52} width={70} height={88} rx={6} fill="none" stroke={C.ok} strokeWidth={2.2} />
-          {[0, 1, 2].map((i) => (
-            <rect
-              key={i}
-              x={577 + i * 16}
-              y={82 + (i % 2) * 12}
-              width={11}
-              height={44 - (i % 2) * 12}
-              fill="none"
-              stroke={C.ok}
-              strokeWidth={1.6}
-            />
-          ))}
-          <text
-            x={599}
-            y={158}
-            textAnchor="middle"
-            fill={C.mut}
-            fontFamily={DRAWING_FONT_FAMILY}
-            fontSize={11.5}
-            fontWeight={600}
-            letterSpacing="0.08em"
-          >
-            ГРАД
-          </text>
-
-          {/* нагряването на проводниците: прозрачност по дела на загубата */}
-          {[topWire, botWire].map((y) => (
-            <g key={y}>
-              <line x1={lineLeft} y1={y} x2={lineRight} y2={y} stroke={C.plus} strokeWidth={7} opacity={glow * 0.55} />
-              <line x1={lineLeft} y1={y} x2={lineRight} y2={y} stroke={C.wire} strokeWidth={2.4} />
-            </g>
-          ))}
-
-          {/* променливият ток няма постоянна посока: двупосочна стрелка */}
-          <g stroke={C.warn} strokeWidth={2} fill={C.warn}>
-            <line x1={296} y1={96} x2={364} y2={96} />
-            <polygon points="296,96 308,91 308,101" />
-            <polygon points="364,96 352,91 352,101" />
-          </g>
-          <SvgTex x={330} y={80} tex="I" color={C.warn} fontSize={14} width={14} anchor="middle" />
-          <SvgTex
-            x={330}
-            y={132}
-            tex="R_{\text{лин}}"
-            color={C.mut}
-            fontSize={13}
-            width={54}
-            anchor="middle"
-          />
-
-          {/* ---------------------------------------- ред B: енергийна лента */}
-          <line x1={bandLeft - 6} y1={bandTop} x2={bandLeft - 6} y2={bandBottom} stroke={C.warn} strokeWidth={3} />
-          <SvgTex
-            x={bandLeft - 6}
-            y={bandTop - 12}
-            tex="P_{\text{вх}}"
-            color={C.warn}
-            fontSize={13.5}
-            width={46}
-            anchor="middle"
-          />
-
-          {/* доставеното */}
-          <path
-            d={`M ${bandLeft} ${bandTop} L ${bandRight} ${bandTop} L ${bandRight} ${split} L ${bandLeft} ${split} Z`}
-            fill={C.ok}
-            opacity={0.82}
-          />
-          <SvgTex x={505} y={bandTop - 12} tex="P" color={C.ok} fontSize={13.5} width={16} anchor="middle" />
-
-          {/* загубеното: отклонява се надолу и излиза от сцената */}
-          <path
-            d={`M ${bandLeft} ${split}
-                L 250 ${split}
-                C 300 ${split} 322 ${H - 12} 336 ${H - 2}
-                L 278 ${H - 2}
-                C 262 ${H - 12} 250 ${bandBottom} 205 ${bandBottom}
-                L ${bandLeft} ${bandBottom} Z`}
-            fill={C.plus}
-            opacity={0.86}
-          />
-          <SvgTex
-            x={352}
-            y={H - 22}
-            tex="P_{\text{зг}}=I^2R_{\text{лин}}"
-            color={C.plus}
-            fontSize={13.5}
-            width={112}
-          />
-        </svg>
-      </StageScroll>
-
-      <Readouts cells={cells} cols={4} />
-
-      <p aria-live="polite" className="mt-3 text-[13.5px] leading-relaxed text-muted">
-        {lossBiggerThanDelivered ? (
-          <RichText
-            text={`При това напрежение линията разсейва **повече мощност, отколкото стига до града**: за да получи товарът $${watts(
-              mw * 1e6,
-            )}$, централата трябва да подаде $${watts(v.input)}$.`}
-          />
-        ) : (
-          <RichText text="Зелената лента е доставената мощност, червената е разсеяната в проводниците. Широчините са дялове от подаденото, затова картината остава четима и при нищожна загуба." />
-        )}
-      </p>
-
-      <Legend
-        items={[
-          { color: C.ok, tex: "$P$ до товара" },
-          { color: C.plus, tex: "$P_{\\text{зг}}$ в топлина" },
-          { color: C.warn, tex: "$P_{\\text{вх}}$ от централата" },
-        ]}
-      />
-
-      <div className="mt-4 flex flex-wrap gap-2">
-        {V_PRESETS.map((p) => (
-          <button
-            key={p.kv}
-            type="button"
-            className={BTN_SEC}
-            onClick={() => {
-              setLogKv(Math.log10(p.kv));
-              setMw(20);
-              setKm(150);
-              setMm2(240);
-            }}
-          >
-            {p.label}
-          </button>
-        ))}
-      </div>
-
-      <div className="mt-4 grid gap-4 sm:grid-cols-2">
-        <RangeControl
-          label="Напрежение при товара"
-          value={logKv}
-          min={Math.log10(1)}
-          max={Math.log10(400)}
-          step={0.005}
-          valueTex={`V=${dec(kv, kv < 10 ? 2 : 0)}\\,\\mathrm{kV}`}
-          onChange={setLogKv}
-          accent="accent-warn"
-        />
-        <RangeControl
-          label="Доставена мощност"
-          value={mw}
-          min={2}
-          max={50}
-          step={1}
-          valueTex={`P=${dec(mw, 0)}\\,\\mathrm{MW}`}
-          onChange={setMw}
-        />
-        <RangeControl
-          label="Дължина на линията"
-          value={km}
-          min={20}
-          max={400}
-          step={10}
-          valueTex={`\\ell=${dec(km, 0)}\\,\\mathrm{km}`}
-          onChange={setKm}
-        />
-        <RangeControl
-          label="Сечение на проводника"
-          value={mm2}
-          min={60}
-          max={800}
-          step={20}
-          valueTex={`S_{\\text{пр}}=${dec(mm2, 0)}\\,\\mathrm{mm^2}`}
-          onChange={setMm2}
-        />
-      </div>
-    </div>
-  );
-}
-
-/* ================================================================= §3 */
+/* ================================================================= §5 */
 
 const DECADE_LABELS: Record<number, string> = {
   4: "100\\,\\mathrm{kW}",
@@ -512,7 +204,134 @@ export function LossVsVoltagePlot() {
   );
 }
 
-/* ================================================================ §10 */
+/* ================================================================= §1 */
+
+/**
+ * Начална задача, без да издава решението с 400 kV и цялата каскада.
+ *
+ * Ученикът отдалечава квартала, докато и двата края остават при историческите
+ * 110 V. Червеният ореол показва само, че по линията възниква проблем; точната
+ * сметка и причината идват в §2.
+ */
+export function OpeningReachLab() {
+  const [logDistance, setLogDistance] = useState(Math.log10(20));
+  const distance = 10 ** logDistance;
+  // При същите числа като §2 загубата е 10 % приблизително при 22 m.
+  const lossRelativeToLoad = (distance / 22) * 0.1;
+  const glow = Math.min(1, Math.log10(1 + lossRelativeToLoad * 8) / 2.2);
+
+  const status =
+    lossRelativeToLoad < 0.12
+      ? "\\text{още приемливо}"
+      : lossRelativeToLoad < 1
+        ? "\\text{силно нагряване}"
+        : "\\text{невъзможен пренос}";
+
+  const W = 620;
+  const H = 230;
+  const left = 92;
+  const right = 528;
+
+  return (
+    <div className={PANEL_CLASS}>
+      <StageScroll minWidth={540} maxWidth={680}>
+        <svg
+          viewBox={`0 0 ${W} ${H}`}
+          className={STAGE_CLASS}
+          aria-label="Начална задача: кварталът се отдалечава от 110-волтова централа"
+        >
+          <Stage w={W} h={H} title="КОЛКО ДАЛЕЧ МОЖЕ ДА Е КВАРТАЛЪТ?" />
+
+          <rect x={42} y={70} width={100} height={92} rx={8} fill="none" stroke={C.warn} strokeWidth={2.4} />
+          <SourceSymbol x={92} y={112} r={20} color={C.warn} />
+          <text x={92} y={184} textAnchor="middle" fill={C.mut} fontFamily={DRAWING_FONT_FAMILY} fontSize={11.5} fontWeight={700}>
+            ЦЕНТРАЛА · 110 V
+          </text>
+
+          <rect x={478} y={70} width={100} height={92} rx={8} fill="none" stroke={C.ok} strokeWidth={2.4} />
+          {[0, 1, 2].map((i) => (
+            <rect
+              key={i}
+              x={497 + i * 19}
+              y={101 + (i % 2) * 10}
+              width={13}
+              height={38 - (i % 2) * 10}
+              fill="none"
+              stroke={C.ok}
+              strokeWidth={1.8}
+            />
+          ))}
+          <text x={528} y={184} textAnchor="middle" fill={C.mut} fontFamily={DRAWING_FONT_FAMILY} fontSize={11.5} fontWeight={700}>
+            КВАРТАЛ · 110 V
+          </text>
+
+          {[94, 132].map((y) => (
+            <g key={y}>
+              <line x1={left + 50} y1={y} x2={right - 50} y2={y} stroke={C.plus} strokeWidth={12} opacity={glow * 0.5} />
+              <line x1={left + 50} y1={y} x2={right - 50} y2={y} stroke={C.wire} strokeWidth={2.5} />
+            </g>
+          ))}
+          <SvgTex x={310} y={76} tex="?" color={glow > 0.35 ? C.plus : C.warn} fontSize={22} width={24} anchor="middle" />
+          <SvgTex x={310} y={148} tex="\\ell" color={C.mut} fontSize={14} width={20} anchor="middle" />
+        </svg>
+      </StageScroll>
+
+      <Readouts
+        cells={[
+          { label: "В двата края", tex: "V=110\\,\\mathrm V", color: C.warn },
+          { label: "Разстояние", tex: `\\ell=${metres(distance)}` },
+          { label: "Проводник", tex: "S=240\\,\\mathrm{mm^2}" },
+          { label: "Линията", tex: status, color: lossRelativeToLoad < 0.12 ? C.ok : C.plus },
+        ]}
+        cols={4}
+      />
+
+      <p aria-live="polite" className="mt-3 text-[13.5px] leading-relaxed text-ink/90">
+        {lossRelativeToLoad < 0.12
+          ? "На няколко десетки метра системата още изглежда възможна."
+          : lossRelativeToLoad < 1
+            ? "Само няколко улици по-далеч проводниците вече поглъщат голям дял от подаденото."
+            : "Градът е твърде далеч: със 110 V линията би се нагрявала повече, отколкото захранва товара."}
+      </p>
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        {[
+          { label: "22 m · дворът", distance: 22 },
+          { label: "1 km · квартал", distance: 1_000 },
+          { label: "150 km · друг град", distance: 150_000 },
+        ].map((preset) => (
+          <button
+            key={preset.distance}
+            type="button"
+            className={BTN_SEC}
+            onClick={() => setLogDistance(Math.log10(preset.distance))}
+          >
+            {preset.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-4">
+        <RangeControl
+          label="Отдалечи квартала"
+          value={logDistance}
+          min={Math.log10(20)}
+          max={Math.log10(150_000)}
+          step={0.01}
+          valueTex={`\\ell=${metres(distance)}`}
+          onChange={setLogDistance}
+          accent="accent-warn"
+        />
+      </div>
+
+      <p className="mt-3 text-[13.5px] leading-relaxed text-muted">
+        Тук умишлено още не показваме решението. Следващата секция ще изведе числата зад червения ореол.
+      </p>
+    </div>
+  );
+}
+
+/* ================================================================ §12 */
 
 interface Stage2 {
   cap: string;
@@ -537,7 +356,7 @@ const REF_R_PER_100KM = (2 * RHO_AL * 1e5) / (240 * 1e-6);
  * Не е калкулатор на истински далекопровод: показва какво прави **едно и
  * също** пренасяне на мощност през еднакъв референтен проводник при всяко
  * от нивата. Така единствената променлива остава напрежението, точно както
- * в §3.
+ * в §5.
  */
 export function GridCascade({ compact = false }: { compact?: boolean }) {
   const [selected, setSelected] = useState(1);

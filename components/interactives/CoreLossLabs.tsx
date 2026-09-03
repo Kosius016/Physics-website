@@ -7,13 +7,8 @@ import { RangeControl, Readouts, Stage, StageScroll, Toggle, dec, useClock } fro
 import { C, PANEL_CLASS, STAGE_CLASS } from "./svg";
 
 /**
- * Загубите в ядрото (§8): вихрови токове и хистерезис.
- *
- * Двата режима живеят в един компонент, защото са две страни на един и същ
- * въпрос - къде отива процентът, който не стига до вторичната намотка.
+ * Загубите от вихрови токове в проводящото ядро.
  */
-
-type Mode = "eddy" | "hysteresis";
 
 /* ------------------------------------------------------- вихрови токове */
 
@@ -76,14 +71,15 @@ function EddyScene({ n, phase }: { n: number; phase: number }) {
           </g>
         );
       })}
+      {/* Вдясно от кръгчето: вляво заглавието на сцената стига дотук и се застъпва. */}
       <SvgTex
-        x={x0 + w / 2 - 20}
-        y={y0 - 36}
+        x={x0 + w / 2 + 20}
+        y={y0 - 28}
         tex="\Phi"
         color={C.minus}
         fontSize={14}
         width={20}
-        anchor="end"
+        anchor="start"
       />
       <circle cx={x0 + w / 2} cy={y0 - 28} r={8} fill="none" stroke={C.minus} strokeWidth={2} />
       <circle cx={x0 + w / 2} cy={y0 - 28} r={2.6} fill={C.minus} />
@@ -91,102 +87,15 @@ function EddyScene({ n, phase }: { n: number; phase: number }) {
   );
 }
 
-/* ------------------------------------------------------------ хистерезис */
-
-interface Material {
-  key: string;
-  label: string;
-  /** Полуширина на цикъла (коерцитивност), в мащаб 0…1. */
-  hc: number;
-  /** Насищане. */
-  bs: number;
-}
-
-const MATERIALS: Material[] = [
-  { key: "gost", label: "Трансформаторна ламарина", hc: 0.08, bs: 0.92 },
-  { key: "steel", label: "Обикновена стомана", hc: 0.32, bs: 0.86 },
-  { key: "hard", label: "Твърд магнит", hc: 0.74, bs: 0.78 },
-];
-
-/** Горният и долният клон на цикъла: изместен tanh, затова площта е реална. */
-function loopBranch(m: Material, up: boolean, samples = 120) {
-  const k = 3.4;
-  return Array.from({ length: samples + 1 }, (_, i) => {
-    const hx = -1 + (2 * i) / samples;
-    const b = m.bs * Math.tanh(k * (hx + (up ? m.hc : -m.hc)));
-    return [hx, b] as const;
-  });
-}
-
-/** Площта на цикъла по трапецното правило: тя е загубата за един цикъл. */
-function loopArea(m: Material): number {
-  const up = loopBranch(m, true, 240);
-  const down = loopBranch(m, false, 240);
-  let area = 0;
-  for (let i = 1; i < up.length; i += 1) {
-    const dh = up[i][0] - up[i - 1][0];
-    const gap = (down[i][1] - up[i][1] + (down[i - 1][1] - up[i - 1][1])) / 2;
-    area += gap * dh;
-  }
-  return Math.abs(area);
-}
-
-function HysteresisScene({ material, phase }: { material: Material; phase: number }) {
-  const cx = 288;
-  const cy = 154;
-  const rx = 132;
-  const ry = 94;
-
-  const toScene = ([hx, b]: readonly [number, number]) => `${(cx + hx * rx).toFixed(1)},${(cy - b * ry).toFixed(1)}`;
-  const up = loopBranch(material, true).map(toScene).join(" L ");
-  const down = loopBranch(material, false).map(toScene).join(" L ");
-  const area = `M ${up} L ${loopBranch(material, false).slice().reverse().map(toScene).join(" L ")} Z`;
-
-  // въртящата се точка: H обикаля синусоидално, B следва съответния клон
-  const hNow = Math.sin(2 * Math.PI * phase);
-  const goingUp = Math.cos(2 * Math.PI * phase) > 0;
-  const bNow = material.bs * Math.tanh(3.4 * (hNow + (goingUp ? material.hc : -material.hc)));
-
-  return (
-    <g>
-      <path d={area} fill={C.plus} opacity={0.22} />
-      <path d={`M ${up}`} fill="none" stroke={C.warn} strokeWidth={2.6} />
-      <path d={`M ${down}`} fill="none" stroke={C.warn} strokeWidth={2.6} />
-
-      <line x1={cx - rx - 22} y1={cy} x2={cx + rx + 22} y2={cy} stroke={C.mut} strokeWidth={1.4} />
-      <line x1={cx} y1={cy - ry - 26} x2={cx} y2={cy + ry + 22} stroke={C.mut} strokeWidth={1.4} />
-      <SvgTex x={cx + rx + 26} y={cy + 16} tex="H" color={C.mut} fontSize={13.5} width={20} />
-      <SvgTex x={cx + 10} y={cy - ry - 34} tex="B" color={C.mut} fontSize={13.5} width={20} />
-
-      <circle cx={cx + hNow * rx} cy={cy - bNow * ry} r={5.6} fill={C.ok} stroke={C.wire} strokeWidth={1.4} />
-    </g>
-  );
-}
-
 /* ------------------------------------------------------------ обвивката */
 
 export function CoreLossLab() {
-  const [mode, setMode] = useState<Mode>("eddy");
   const [n, setN] = useState(1);
-  const [matIndex, setMatIndex] = useState(0);
-  const [freq, setFreq] = useState(50);
-  const [volume, setVolume] = useState(2.5);
   const [playing, setPlaying] = useState(true);
   const { turns } = useClock(playing, 0.3);
 
   const W = 576;
   const H = 288;
-
-  const material = MATERIALS[matIndex];
-  const refArea = loopArea(MATERIALS[0]);
-  const area = loopArea(material);
-  /*
-   * Мащаб: студено валцувана трансформаторна ламарина при около 1,5 T губи
-   * приблизително 90 J/m³ на цикъл. Стойността е ориентировъчна и служи да
-   * даде верния порядък, а не каталожна точност.
-   */
-  const perCycle = (area / refArea) * 90;
-  const hystPower = perCycle * freq * (volume / 1000);
 
   return (
     <div className={PANEL_CLASS}>
@@ -194,134 +103,65 @@ export function CoreLossLab() {
         <svg
           viewBox={`0 0 ${W} ${H}`}
           className={STAGE_CLASS}
-          aria-label={mode === "eddy" ? "Вихрови токове в ядрото" : "Хистерезисен цикъл"}
+          aria-label="Вихрови токове в плътно и ламелирано ядро"
         >
-          <Stage w={W} h={H} title={mode === "eddy" ? "СЕЧЕНИЕ НА ЯДРОТО" : "ХИСТЕРЕЗИСЕН ЦИКЪЛ"} />
-          {mode === "eddy" ? (
-            <EddyScene n={n} phase={playing ? turns : 0.1} />
-          ) : (
-            <HysteresisScene material={material} phase={playing ? turns : 0.12} />
-          )}
+          <Stage w={W} h={H} title="ОТ ПЛЪТНО ЯДРО КЪМ ЛАМЕЛИ" />
+          <EddyScene n={n} phase={playing ? turns : 0.1} />
         </svg>
       </StageScroll>
 
-      {mode === "eddy" ? (
-        <Readouts
-          cells={[
-            { label: "Ламели", tex: `n=${n}` },
-            { label: "Загуба спрямо масивно", tex: `1/n^2=${dec((1 / n ** 2) * 100, 1)}\\,\\%`, color: C.plus },
-            { label: "Дебелина на ламела", tex: `d/d_0=${dec(1 / n, 3)}` },
-            { label: "Индуциран контур", tex: `\\mathcal E\\ \\propto\\ d` },
-          ]}
-          cols={4}
-        />
-      ) : (
-        <Readouts
-          cells={[
-            { label: "Загуба за цикъл", tex: `w=${dec(perCycle, 0)}\\,\\mathrm{J/m^3}`, color: C.plus },
-            { label: "Честота", tex: `f=${dec(freq, 0)}\\,\\mathrm{Hz}` },
-            { label: "Обем на ядрото", tex: `\\mathcal V=${dec(volume, 1)}\\,\\mathrm{dm^3}` },
-            { label: "Мощност", tex: `P=w f\\mathcal V=${dec(hystPower, 1)}\\,\\mathrm W`, color: C.plus },
-          ]}
-          cols={4}
-        />
-      )}
+      <Readouts
+        cells={[
+          { label: "Ламели", tex: `n=${n}` },
+          { label: "Загуба спрямо масивно", tex: `1/n^2=${dec((1 / n ** 2) * 100, 1)}\\,\\%`, color: C.plus },
+          { label: "Дебелина на ламела", tex: `d/d_0=${dec(1 / n, 3)}` },
+          { label: "Индуциран контур", tex: `\\mathcal E\\ \\propto\\ d` },
+        ]}
+        cols={4}
+      />
 
       <p aria-live="polite" className="mt-3 text-[13.5px] leading-relaxed text-ink/90">
         <RichText
-          text={
-            mode === "eddy"
-              ? "Синият кръг горе е потокът $\\Phi$, насочен към нас. Разрязването не го намалява, а скъсява пътя, по който индуцираният ток може да обиколи. Всяка ламела обхваща по-малък поток и има по-голямо съпротивление, затова контурите стават повече, но всеки от тях е **по-слаб**, а общата загуба пада с квадрата на броя ламели."
-              : `Точката обикаля цикъла веднъж за период. Защрихованата площ е енергията, разсеяна за **един** цикъл и **един кубичен метър**; умножена по честотата и обема, тя дава мощност. Затова ядрата се правят от ${material.label.toLowerCase()} само когато цикълът е тесен.`
-          }
+          text="Синият кръг горе е потокът $\\Phi$, насочен към нас. Разрязването не го намалява, а прекъсва широкия път на тока. Всяка изолирана ламела обхваща по-малка площ и допуска само по-малък контур, затова общото нагряване рязко намалява."
         />
       </p>
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        <Toggle on={mode === "eddy"} onChange={() => setMode("eddy")}>
-          Вихрови токове
-        </Toggle>
-        <Toggle on={mode === "hysteresis"} onChange={() => setMode("hysteresis")}>
-          Хистерезис
-        </Toggle>
         <Toggle on={playing} onChange={setPlaying}>
           {playing ? "Спри" : "Пусни"}
         </Toggle>
       </div>
 
-      {mode === "eddy" ? (
-        <div className="mt-4">
-          <RangeControl
-            label="Брой ламели"
-            value={n}
-            min={1}
-            max={12}
-            step={1}
-            valueTex={`n=${n}`}
-            onChange={setN}
-            accent="accent-warn"
-          />
-        </div>
-      ) : (
-        <>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {MATERIALS.map((m, i) => (
-              <button
-                key={m.key}
-                type="button"
-                aria-pressed={i === matIndex}
-                onClick={() => setMatIndex(i)}
-                className={
-                  i === matIndex
-                    ? "cursor-pointer rounded-full border-[1.5px] border-ink bg-ink px-3 py-1 text-[12.5px] font-bold text-white"
-                    : "cursor-pointer rounded-full border-[1.5px] border-rule bg-surface px-3 py-1 text-[12.5px] font-semibold text-muted transition-colors hover:border-ink hover:text-ink"
-                }
-              >
-                {m.label}
-              </button>
-            ))}
-          </div>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            <RangeControl
-              label="Честота"
-              value={freq}
-              min={16}
-              max={400}
-              step={1}
-              valueTex={`f=${dec(freq, 0)}\\,\\mathrm{Hz}`}
-              onChange={setFreq}
-              accent="accent-warn"
-            />
-            <RangeControl
-              label="Обем на ядрото"
-              value={volume}
-              min={0.2}
-              max={20}
-              step={0.1}
-              valueTex={`\\mathcal V=${dec(volume, 1)}\\,\\mathrm{dm^3}`}
-              onChange={setVolume}
-            />
-          </div>
-        </>
-      )}
+      <div className="mt-4">
+        <RangeControl
+          label="Брой изолирани ламели"
+          value={n}
+          min={1}
+          max={12}
+          step={1}
+          valueTex={`n=${n}`}
+          onChange={setN}
+          accent="accent-warn"
+        />
+      </div>
     </div>
   );
 }
 
 /* ------------------------------------------------ разпределение на загубите */
 
-/** Санки лента за §8: къде отива подадената мощност в реален трансформатор. */
+/** Санки лента за §10: къде отива подадената мощност в реален трансформатор. */
 export function LossBreakdown() {
   const [loadFrac, setLoadFrac] = useState(1);
 
-  // медните загуби растат с квадрата на товара, стоманените са постоянни
+  // медните загуби растат с квадрата на товара, вихровите в ядрото са почти постоянни
   const rated = 500e3;
   const out = rated * loadFrac;
   const copper = 6500 * loadFrac ** 2;
-  const iron = 1100;
-  const input = out + copper + iron;
+  const core = 1100;
+  const input = out + copper + core;
   const eta = out / input;
-  const loss = copper + iron;
+  const loss = copper + core;
 
   const W = 620;
   const H = 268;
@@ -377,7 +217,7 @@ export function LossBreakdown() {
           <SvgTex
             x={left + span * cuFrac + (span * (1 - cuFrac)) / 2}
             y={low + 8}
-            tex="P_{\text{Fe}}"
+            tex="P_{\text{ядро}}"
             color={C.wire}
             fontSize={13}
             width={34}
@@ -408,7 +248,7 @@ export function LossBreakdown() {
         cells={[
           { label: "Отдадена мощност", tex: `P_2=${dec(out / 1e3, 0)}\\,\\mathrm{kW}`, color: C.ok },
           { label: "Медни загуби", tex: `P_{\\text{Cu}}=${dec(copper, 0)}\\,\\mathrm W`, color: C.plus },
-          { label: "Загуби в ядрото", tex: `P_{\\text{Fe}}=${dec(iron, 0)}\\,\\mathrm W`, color: C.minus },
+          { label: "Вихрови токове в ядрото", tex: `P_{\\text{ядро}}=${dec(core, 0)}\\,\\mathrm W`, color: C.minus },
           { label: "КПД", tex: `\\eta=${dec(eta * 100, 2)}\\,\\%`, color: C.ok },
         ]}
         cols={4}

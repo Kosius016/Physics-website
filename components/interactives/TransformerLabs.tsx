@@ -18,12 +18,12 @@ import {
 import { BTN_PRI, BTN_SEC, C, PANEL_CLASS, STAGE_CLASS } from "./svg";
 
 /**
- * Интерактивите към §4-§7: ядрото и общият поток, отношението на навивките
+ * Интерактивите към §7 и §9: ядрото и общият поток, отношението на навивките
  * с товар и опитът с постоянен ток.
  *
  * Държат се разделени, а не като един компонент с превключвател за режим,
- * защото всяка секция иска своята фигура в своя момент: в §4 контрол за
- * товар още не значи нищо, а в §7 селекторът AC/DC е самата поанта.
+ * защото всяка секция иска своята фигура в своя момент: в §7 контрол за
+ * товар още не значи нищо.
  */
 
 /* ------------------------------------------------- общо: ядро и намотки */
@@ -110,30 +110,57 @@ function FluxLoop({ phase, opacity = 1 }: { phase: number; opacity?: number }) {
   );
 }
 
-/* ============================================================ §4 и §5 */
+/* ================================================================= §7 */
 
 /** Навивките, които сцената реално рисува: readout лентата ползва същите. */
 const N1_DRAWN = 8;
 const N2_DRAWN = 5;
 
 const PHASE_CAPTIONS = [
-  "Голо ядро. Ламелите се виждат по горното рамо: те ще станат важни чак в §8.",
-  "Първичната намотка създава поток, който ядрото затваря в себе си.",
-  "Вторичната намотка обхваща **същия** поток. Между двете няма проводник.",
+  "Най-простият опит е очевиден: две намотки една до друга във въздуха. Първичната наистина създава променлив поток и във вторичната наистина се появява ЕДН.",
+  "Грешката е в свързването: почти целият поток се затваря около първата намотка и пропуска втората. Напрежение има, но $k\\ll1$ и така не се пренася голяма мощност.",
+  "Решението е общ феромагнитен път. За магнитния поток той е много по-лесен път от въздуха, затова разсеяният поток намалява и $k$ се доближава до 1.",
+  "Двете медни намотки остават електрически отделени. Ядрото ги държи и води потока, но е изолирано от проводниците и не е проводящ мост между двете вериги.",
   "Всяка навивка от двете страни вижда едно и също $d\\Phi/dt$. Осем навивки срещу пет дават $v_2/v_1=5/8=0{,}63$: отношението на напреженията е отношението на навивките.",
 ];
 
+/** Разсеяният поток при първия, въздушен вариант на устройството. */
+function AirFlux({ phase }: { phase: number }) {
+  const cx = CORE.x + CORE.t / 2;
+  const cy = CORE.y + CORE.h / 2;
+  return (
+    <g fill="none" stroke={C.minus} strokeDasharray="10 8" strokeDashoffset={-phase * 20}>
+      {[
+        { rx: 48, ry: 54, opacity: 0.9 },
+        { rx: 78, ry: 76, opacity: 0.72 },
+        { rx: 116, ry: 98, opacity: 0.55 },
+        { rx: 244, ry: 122, opacity: 0.3 },
+      ].map((loop) => (
+        <ellipse
+          key={loop.rx}
+          cx={cx}
+          cy={cy}
+          rx={loop.rx}
+          ry={loop.ry}
+          strokeWidth={2.1}
+          opacity={loop.opacity}
+        />
+      ))}
+    </g>
+  );
+}
+
 /**
- * Фазовата сцена към §4-§5: ядро → първична и поток → вторична → етикети.
+ * Фазовата сцена към §7: ядро → първична и поток → вторична → етикети.
  *
  * Потокът е анимиран, но има и плъзгач за фазата, за да е достъпно
  * състоянието и без движение.
  */
 export function CoreFluxScene() {
-  const [phase, setPhase] = useState(3);
+  const [phase, setPhase] = useState(0);
   const [playing, setPlaying] = useState(true);
   const [manual, setManual] = useState(0);
-  const { turns, setTurns } = useClock(playing && phase >= 1, 0.28);
+  const { turns, setTurns } = useClock(playing, 0.28);
 
   const tau = playing ? turns : manual;
   const flux = Math.sin(2 * Math.PI * tau);
@@ -147,27 +174,27 @@ export function CoreFluxScene() {
     <div className={PANEL_CLASS}>
       <StageScroll minWidth={520} maxWidth={620}>
         <svg viewBox={`0 0 ${W} ${H}`} className={STAGE_CLASS} aria-label="Две намотки върху общо ядро">
-          <Stage w={W} h={H} title="ОБЩ МАГНИТЕН ПОТОК" />
+          <Stage
+            w={W}
+            h={H}
+            title={phase < 2 ? "ПЪРВИ ОПИТ: ДВЕ НАМОТКИ ВЪВ ВЪЗДУХ" : "РЕШЕНИЕ: ОБЩ МАГНИТЕН ПЪТ"}
+          />
 
-          <Core dim={phase === 0} />
-          {phase >= 1 && <FluxLoop phase={tau} opacity={phase === 1 ? 1 : 0.85} />}
+          {phase < 2 ? <AirFlux phase={tau} /> : <Core />}
+          {phase >= 2 && <FluxLoop phase={tau} opacity={0.9} />}
 
-          {phase >= 1 && <Winding cx={CORE.x + CORE.t / 2} n={N1_DRAWN} color={C.warn} />}
-          {phase >= 2 && <Winding cx={CORE.x + CORE.w - CORE.t / 2} n={N2_DRAWN} color={C.ok} />}
+          <Winding cx={CORE.x + CORE.t / 2} n={N1_DRAWN} color={C.warn} />
+          <Winding cx={CORE.x + CORE.w - CORE.t / 2} n={N2_DRAWN} color={C.ok} opacity={phase < 2 ? 0.72 : 1} />
 
           {/* изводи */}
-          {phase >= 1 && (
-            <g stroke={C.warn} strokeWidth={2.4} fill="none">
-              <path d={`M ${CORE.x + CORE.t / 2 - 26} 108 H 58`} />
-              <path d={`M ${CORE.x + CORE.t / 2 - 26} 200 H 58`} />
-            </g>
-          )}
-          {phase >= 2 && (
-            <g stroke={C.ok} strokeWidth={2.4} fill="none">
-              <path d={`M ${CORE.x + CORE.w - CORE.t / 2 + 26} 108 H 502`} />
-              <path d={`M ${CORE.x + CORE.w - CORE.t / 2 + 26} 200 H 502`} />
-            </g>
-          )}
+          <g stroke={C.warn} strokeWidth={2.4} fill="none">
+            <path d={`M ${CORE.x + CORE.t / 2 - 26} 108 H 58`} />
+            <path d={`M ${CORE.x + CORE.t / 2 - 26} 200 H 58`} />
+          </g>
+          <g stroke={C.ok} strokeWidth={2.4} fill="none" opacity={phase < 2 ? 0.72 : 1}>
+            <path d={`M ${CORE.x + CORE.w - CORE.t / 2 + 26} 108 H 502`} />
+            <path d={`M ${CORE.x + CORE.w - CORE.t / 2 + 26} 200 H 502`} />
+          </g>
 
           {phase >= 3 && (
             <>
@@ -184,7 +211,7 @@ export function CoreFluxScene() {
               />
             </>
           )}
-          {phase >= 1 && phase < 3 && (
+          {phase >= 2 && phase < 3 && (
             <SvgTex
               x={CORE.x + CORE.w / 2}
               y={CORE.y + CORE.h / 2 - 12}
@@ -195,16 +222,29 @@ export function CoreFluxScene() {
               anchor="middle"
             />
           )}
+          {phase === 1 && (
+            <>
+              <SvgTex x={126} y={44} tex="\\Phi_1" color={C.minus} fontSize={14} width={30} anchor="middle" />
+              <SvgTex x={414} y={44} tex="\\Phi_2\\ll\\Phi_1" color={C.ok} fontSize={13.5} width={82} anchor="middle" />
+            </>
+          )}
         </svg>
       </StageScroll>
 
       <Readouts
-        cells={[
-          { label: "Поток", tex: `\\Phi/\\Phi_{\\max}=${dec(flux)}`, color: C.minus },
-          { label: "ЕДН на навивка", tex: `d\\Phi/dt\\ \\propto\\ ${dec(perTurn)}` },
-          { label: "Първично, 8 навивки", tex: `v_1\\ \\propto\\ ${dec(N1_DRAWN * perTurn)}`, color: C.warn },
-          { label: "Вторично, 5 навивки", tex: `v_2\\ \\propto\\ ${dec(N2_DRAWN * perTurn)}`, color: C.ok },
-        ]}
+        cells={phase < 2
+          ? [
+              { label: "Свързване", tex: "k\\approx0{,}2", color: C.plus },
+              { label: "Поток на първичната", tex: `\\Phi_1/\\Phi_{\\max}=${dec(flux)}`, color: C.minus },
+              { label: "През вторичната", tex: "\\Phi_2\\approx0{,}2\\Phi_1", color: C.ok },
+              { label: "Резултат", tex: "\\text{силно разсейване}", color: C.plus },
+            ]
+          : [
+              { label: "Свързване", tex: "k\\approx0{,}98", color: C.ok },
+              { label: "Общ поток", tex: `\\Phi/\\Phi_{\\max}=${dec(flux)}`, color: C.minus },
+              { label: "ЕДН на навивка", tex: `d\\Phi/dt\\ \\propto\\ ${dec(perTurn)}` },
+              { label: "Вторично, 5 навивки", tex: `v_2\\ \\propto\\ ${dec(N2_DRAWN * perTurn)}`, color: C.ok },
+            ]}
         cols={4}
       />
 
@@ -216,11 +256,11 @@ export function CoreFluxScene() {
         <button type="button" className={BTN_SEC} onClick={() => setPhase((p) => Math.max(0, p - 1))} disabled={phase === 0}>
           Назад
         </button>
-        <button type="button" className={BTN_PRI} onClick={() => setPhase((p) => Math.min(3, p + 1))} disabled={phase === 3}>
-          Следваща стъпка
+        <button type="button" className={BTN_PRI} onClick={() => setPhase((p) => Math.min(4, p + 1))} disabled={phase === 4}>
+          {phase === 0 ? "Открий проблема" : phase === 1 ? "Покажи решението" : "Следваща стъпка"}
         </button>
-        <span className="text-[13px] font-semibold text-muted">Фаза {phase + 1} от 4</span>
-        {phase >= 1 && (
+        <span className="text-[13px] font-semibold text-muted">Стъпка {phase + 1} от 5</span>
+        {phase >= 0 && (
           <Toggle
             on={playing}
             onChange={(on) => {
@@ -251,7 +291,7 @@ export function CoreFluxScene() {
   );
 }
 
-/* ============================================================ §5 и §6 */
+/* ============================================================ §8 и §9 */
 
 interface TurnsPreset {
   label: string;
@@ -271,9 +311,9 @@ const TURNS_PRESETS: TurnsPreset[] = [
 /**
  * Отношението на навивките с товар: двата ватметъра показват едно и също.
  *
- * Моделът тук е **идеалният** трансформатор, точно както в §6 на урока:
+ * Моделът тук е **идеалният** трансформатор, точно както в §9 на урока:
  * без загуби и без ток на празен ход. Реалният ток на празен ход се въвежда
- * чак в §8, за да не се смесват двата модела.
+ * чак в §10, за да не се смесват двата модела.
  */
 export function TurnsRatioLab() {
   const [n1, setN1] = useState(2300);
@@ -477,138 +517,7 @@ export function TurnsRatioLab() {
         <RichText text="**Двата ватметъра показват една и съща стрелка.** Долните ленти са две огледални двойки: щом напрежението е дълго отгоре и късо отдолу, при токовете е точно обратното. Всяка двойка е нормирана към своя максимум." />
       </p>
       <p className="mt-2 text-[13.5px] leading-relaxed text-muted">
-        <RichText text="Плъзгачът за товара в най-лявото си положение означава празен ход. В идеалния модел тогава по първичната не тече нищо; истинският намагнитващ ток идва в §8." />
-      </p>
-    </div>
-  );
-}
-
-/* ================================================================= §7 */
-
-/**
- * Опитът с постоянен ток.
- *
- * Три реда: положение на ключа, поток през ядрото и вторично напрежение.
- * При DC се вижда единственият импулс - в мига на включване - а после
- * първичният ток пълзи към стойност, ограничена само от съпротивлението
- * на медта.
- */
-export function NoDCLab() {
-  const [dc, setDc] = useState(true);
-  const [t, setT] = useState(1.6);
-
-  const W = 620;
-  const H = 300;
-  const box = { x: 76, y: 26, w: 470, h: 74 };
-  const tMax = 4;
-
-  const closed = (x: number) => x >= 1;
-  // при DC: поток по e^{-…} нарастване; при AC: синусоида след включване
-  const fluxAt = (x: number) => {
-    if (!closed(x)) return 0;
-    if (dc) return 1 - Math.exp(-(x - 1) * 3.2);
-    return Math.sin(2 * Math.PI * 2.2 * (x - 1));
-  };
-  const v2At = (x: number) => {
-    if (!closed(x)) return 0;
-    if (dc) return 3.2 * Math.exp(-(x - 1) * 3.2);
-    return Math.cos(2 * Math.PI * 2.2 * (x - 1)) * 1.05;
-  };
-  const i1At = (x: number) => {
-    if (!closed(x)) return 0;
-    if (dc) return 1 - Math.exp(-(x - 1) * 3.2);
-    return Math.sin(2 * Math.PI * 2.2 * (x - 1) - Math.PI / 2) * 0.28 + 0.28;
-  };
-
-  const rows = [
-    { y: box.y, label: "\\text{ключ}", color: C.mut, fn: (x: number) => (closed(x) ? 1 : 0), max: 1.25 },
-    { y: box.y + 96, label: "\\Phi", color: C.minus, fn: fluxAt, max: 1.35 },
-    { y: box.y + 192, label: "v_2", color: C.ok, fn: v2At, max: 3.4 },
-  ];
-
-  return (
-    <div className={PANEL_CLASS}>
-      <StageScroll minWidth={580}>
-        <svg viewBox={`0 0 ${W} ${H}`} className={STAGE_CLASS} aria-label="Трансформатор при постоянен и при променлив ток">
-          <Stage w={W} h={H} title={dc ? "ПОСТОЯНЕН ТОК" : "ПРОМЕНЛИВ ТОК"} />
-
-          {rows.map((row) => {
-            const s = scaler({ ...box, y: row.y }, tMax, row.max, row.label === "\\text{ключ}" ? -0.2 : -row.max);
-            return (
-              <g key={row.label}>
-                <line x1={box.x} y1={s.y0} x2={box.x + box.w + 14} y2={s.y0} stroke={C.mut} strokeWidth={1.4} />
-                <line
-                  x1={s.sx(1)}
-                  y1={row.y - 4}
-                  x2={s.sx(1)}
-                  y2={row.y + box.h}
-                  stroke={C.warn}
-                  strokeWidth={1.6}
-                  strokeDasharray="4 4"
-                />
-                <path d={s.path(row.fn, 400)} fill="none" stroke={row.color} strokeWidth={2.6} />
-                <SvgTex
-                  x={box.x - 10}
-                  y={row.y + 18}
-                  tex={row.label}
-                  color={row.color}
-                  fontSize={13.5}
-                  width={54}
-                  anchor="end"
-                />
-                <circle cx={s.sx(t)} cy={s.sy(row.fn(t))} r={4.6} fill={row.color} />
-              </g>
-            );
-          })}
-
-          <SvgTex x={box.x + box.w + 18} y={box.y + 258} tex="t" color={C.mut} fontSize={13} width={16} />
-        </svg>
-      </StageScroll>
-
-      <Readouts
-        cells={[
-          { label: "Режим", tex: dc ? "\\text{DC}" : "\\text{AC}", color: dc ? C.plus : C.ok },
-          { label: "Поток", tex: `\\Phi/\\Phi_{\\max}=${dec(fluxAt(t))}`, color: C.minus },
-          { label: "Вторично напрежение", tex: `v_2\\ \\propto\\ ${dec(v2At(t))}`, color: C.ok },
-          {
-            label: "Първичен ток",
-            tex: dc && t > 1.9 ? "\\text{ограничен само от }R_{\\text{нам}}" : `i_1\\ \\propto\\ ${dec(i1At(t))}`,
-            color: dc && t > 1.9 ? C.plus : C.warn,
-          },
-        ]}
-        cols={4}
-      />
-
-      <div className="mt-4 flex flex-wrap items-center gap-2">
-        <Toggle on={dc} onChange={() => setDc(true)}>
-          Постоянно напрежение
-        </Toggle>
-        <Toggle on={!dc} onChange={() => setDc(false)}>
-          Променливо напрежение
-        </Toggle>
-      </div>
-
-      <div className="mt-4">
-        <RangeControl
-          label="Момент от опита"
-          value={t}
-          min={0}
-          max={tMax}
-          step={0.01}
-          valueTex={`t/t_0=${dec(t)}`}
-          onChange={setT}
-          accent="accent-warn"
-        />
-      </div>
-
-      <p aria-live="polite" className="mt-3 text-[13.5px] leading-relaxed text-ink/90">
-        <RichText
-          text={
-            dc
-              ? "Жълтата пунктирана линия е моментът на включване. Само там потокът се мени, само там вторичната дава напрежение. След това $d\\Phi/dt\\to0$, а първичният ток расте, докато го спре единствено съпротивлението на намотката."
-              : "Тук потокът се мени непрекъснато, затова и вторичното напрежение не изчезва. Реактансът $X_L$ държи първичния ток малък."
-          }
-        />
+        <RichText text="Плъзгачът за товара в най-лявото си положение означава празен ход. В идеалния модел тогава по първичната не тече нищо; истинският намагнитващ ток идва в §10." />
       </p>
     </div>
   );

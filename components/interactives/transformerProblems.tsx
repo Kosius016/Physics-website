@@ -3,7 +3,7 @@ import SvgTex from "./SvgTex";
 import { Arrow, C } from "./svg";
 
 /**
- * Водените задачи към урока за трансформатора и преноса (§12).
+ * Водените задачи към урока за трансформатора и преноса (§14).
  *
  * Редът, който GuidedProblem налага, е спазен: първо въпрос за характера на
  * задачата, после въпрос за това кое остава инвариантно, и чак тогава
@@ -413,7 +413,7 @@ function EfficiencyFigure(phase: number) {
           <SvgTex
             x={left + width * cuFrac + (width * (1 - cuFrac)) / 2}
             y={158}
-            tex={String.raw`P_{\text{Fe}}`}
+            tex={String.raw`P_{\text{ядро}}`}
             color={C.wire}
             fontSize={13}
             width={40}
@@ -485,7 +485,7 @@ export const realTransformer: GuidedProblemData = {
       {
         text: "Нищо, защото без товар трансформаторът не консумира",
         correct: false,
-        why: "Консумира. Потокът в ядрото се преобръща сто пъти в секунда и всяко преобръщане струва енергия за хистерезис и вихрови токове.",
+        why: "Консумира. Променящият се поток индуцира вихрови токове в проводящото ядро и те го нагряват дори без товар.",
       },
       {
         text: "Сумата от двата вида загуби",
@@ -525,7 +525,7 @@ export const realTransformer: GuidedProblemData = {
   },
   hints: [
     "Приемете $\\cos\\varphi=1$, тоест номиналната отдадена мощност е $500\\,\\mathrm{kW}$.",
-    "Загубите в ядрото са постоянни: $P_{\\text{Fe}}=1{,}55\\,\\mathrm{kW}$ при всеки товар.",
+    "Загубите в ядрото са постоянни: $P_{\\text{ядро}}=1{,}55\\,\\mathrm{kW}$ при всеки товар.",
     "Медните са $P_{\\text{Cu}}(k)=k^2\\cdot5{,}95\\,\\mathrm{kW}$, където $k$ е делът от номиналния товар.",
   ],
   steps: [
@@ -547,7 +547,7 @@ export const realTransformer: GuidedProblemData = {
     },
     {
       text: "КПД е по-висок при половин товар. Максимумът е там, където двата вида загуби се изравнят:",
-      latex: String.raw`k^2P_{\text{Cu,ном}}=P_{\text{Fe}}\ \Longrightarrow\ k=\sqrt{\frac{1{,}55}{5{,}95}}=0{,}51`,
+      latex: String.raw`k^2P_{\text{Cu,ном}}=P_{\text{ядро}}\ \Longrightarrow\ k=\sqrt{\frac{1{,}55}{5{,}95}}=0{,}51`,
     },
   ],
   teacherNotes: [
