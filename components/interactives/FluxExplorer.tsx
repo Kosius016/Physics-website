@@ -25,7 +25,7 @@ export default function FluxExplorer() {
   const rx = Math.max(2, Math.abs(cosT) * R); // видимата ширина ∝ |cos θ|
 
   const area = Math.PI * Math.pow(radiusCm / 100, 2); // m²
-  const fluxMilli = B * area * cosT * 1000; // mWb
+  const flux = B * area * cosT; // T·m²
 
   // Нормалата към контура сключва ъгъл θ с полето (полето е хоризонтално →).
   const nLen = R + 14;
@@ -85,7 +85,7 @@ export default function FluxExplorer() {
         </div>
         <div className="min-w-0 bg-surface px-3 py-2.5">
           <dt className="text-[10.5px] font-bold uppercase tracking-wide text-muted"><RichText text="$\Phi_B=BA\cos\theta$" /></dt>
-          <dd className="mt-0.5 text-[15px] font-bold tabular-nums text-warn" style={{ color: C.warn }}><RichText text={`$\\Phi_B=${fluxMilli.toFixed(2)}\\,\\mathrm{mWb}$`} /></dd>
+          <dd className="mt-0.5 text-[15px] font-bold tabular-nums text-warn" style={{ color: C.warn }}><RichText text={`$\\Phi_B=${flux.toFixed(3)}\\,\\mathrm{T\\,m^2}$`} /></dd>
         </div>
       </dl>
 

@@ -190,8 +190,8 @@ export default function FaradayLessonPage() {
             <p>
               При <RichText text="$\theta=0$" /> (поле перпендикулярно на равнината на контура)
               потокът е максимален; при <RichText text="$\theta=90^\circ$" /> полето лежи в
-              равнината и <RichText text="$\Phi_B=0$" />. Единица за поток: тесла·квадратен метър ={" "}
-              <strong>вебер</strong> (Wb).
+              равнината и <RichText text="$\Phi_B=0$" />. Единицата за поток, която използваме, е{" "}
+              <RichText text="$\mathrm{T\,m^2}$" />.
             </p>
           </div>
 
@@ -289,7 +289,7 @@ export default function FaradayLessonPage() {
             <p>
               Резултатът е сравним с батерия — толкова силна индукция дава дори умерено поле при
               много навивки. Проверка на единиците:{" "}
-              <RichText text="$[\mathrm{T\cdot m^2/s}]=[\mathrm{Wb/s}]=[\mathrm V]$" />. ✓
+              <RichText text="$[\mathrm{T\cdot m^2/s}]=[\mathrm V]$" />. ✓
             </p>
             <Callout>
               <strong>Ами токът?</strong> Ако краищата не са свързани в затворена верига — токът е{" "}

@@ -225,7 +225,7 @@ export function SlidingRodLab() {
 
       <Readout
         cells={[
-          { label: "Поток", tex: `$\\Phi_B=${flux.toFixed(2)}\\,\\mathrm{Wb}$`, tone: "text-minus" },
+          { label: "Поток", tex: `$\\Phi_B=${flux.toFixed(2)}\\,\\mathrm{T\\,m^2}$`, tone: "text-minus" },
           { label: "ЕДН", tex: `$|\\mathcal{E}|=${emf.toFixed(2)}\\,\\mathrm{V}$`, tone: "text-ok" },
           { label: "Ток", tex: `$I=${current.toFixed(2)}\\,\\mathrm{A}$`, tone: "text-ok" },
           { label: "Спирачна сила", tex: `$F_B=${force.toFixed(2)}\\,\\mathrm{N}$`, tone: "text-plus" },
