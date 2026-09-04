@@ -25,15 +25,17 @@ export default function CourseBrowser({
             <section
               key={section.title}
               id={
-                section.title === "Електричество"
-                  ? "electricity"
-                  : section.title === "Магнетизъм"
-                    ? "magnetism"
-                    : section.title === "Променлив ток"
-                      ? "ac"
-                      : section.title === "Линейна алгебра"
-                        ? "linear-algebra"
-                        : undefined
+                section.title === "Механика · Кинематика"
+                  ? "kinematics"
+                  : section.title === "Електричество"
+                    ? "electricity"
+                    : section.title === "Магнетизъм"
+                      ? "magnetism"
+                      : section.title === "Променлив ток"
+                        ? "ac"
+                        : section.title === "Линейна алгебра"
+                          ? "linear-algebra"
+                          : undefined
               }
               className="mb-10 scroll-mt-24"
             >
