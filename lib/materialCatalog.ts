@@ -27,6 +27,30 @@ export const MATERIAL_FILTERS: readonly {
 
 const publishedMaterials: readonly MaterialCatalogItem[] = [
   {
+    id: "kod-na-rezistorite",
+    kind: "pregovor",
+    title: "Цветен код и стойности на резисторите",
+    summary:
+      "Интерактивен декодер за четири и пет ленти, множители, толеранс и проверка с мултицет.",
+    subject: "Физика",
+    level: "university",
+    topic: "Електрични вериги",
+    meta: ["10 мин преговор", "Интерактивен декодер", "3 упражнения"],
+    href: "/materiali/kod-na-rezistorite",
+  },
+  {
+    id: "rezistorni-verigi",
+    kind: "zadachi",
+    title: "Резисторни вериги: пресметнете, сглобете, измерете",
+    summary:
+      "Последователни, успоредни и мостови мрежи с breadboard монтажи, мултицет, диагностика и безкрайна стълба.",
+    subject: "Физика",
+    level: "university",
+    topic: "Електрични вериги",
+    meta: ["6 задачи", "3 интерактивни схеми", "Breadboard и мултицет"],
+    href: "/zadachi/rezistorni-verigi",
+  },
+  {
     id: "elektrichestvo-i-magnetizam",
     kind: "pregovor",
     title: "Електричество и магнетизъм: голям справочник",
