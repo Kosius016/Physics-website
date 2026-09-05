@@ -470,6 +470,35 @@ export default function PlaneMotionLessonPage() {
             <PathDisplacementLab />
           </Figure>
 
+          <div className="mt-6">
+            <PredictionQuestion
+              prompt={String.raw`Робот за доставки се движи по права улица: първо изминава $240\,\mathrm{m}$ на запад, а след това $650\,\mathrm{m}$ на изток. Избираме изток за положителна посока. Какви са изминатият път и преместването?`}
+              options={[
+                {
+                  text: String.raw`$s=890\,\mathrm{m}$ и $\Delta x=+410\,\mathrm{m}$`,
+                  correct: true,
+                  why: String.raw`Пътят събира дължините на двата участъка: $240+650=890\,\mathrm{m}$. Преместването отчита и посоката: $-240+650=+410\,\mathrm{m}$.`,
+                },
+                {
+                  text: String.raw`$s=410\,\mathrm{m}$ и $\Delta x=+410\,\mathrm{m}$`,
+                  correct: false,
+                  why: String.raw`$410\,\mathrm{m}$ е промяната на положението, не дължината на целия изминат маршрут.`,
+                },
+                {
+                  text: String.raw`$s=890\,\mathrm{m}$ и $\Delta x=-410\,\mathrm{m}$`,
+                  correct: false,
+                  why: "Крайното положение е на изток от началното. При избраната положителна посока преместването има знак плюс.",
+                },
+                {
+                  text: String.raw`$s=650\,\mathrm{m}$ и $\Delta x=+240\,\mathrm{m}$`,
+                  correct: false,
+                  why: "Тези числа са дължините на отделните участъци. Нито едно не описва целия път или крайната промяна на положението.",
+                },
+              ]}
+              explanation="При движение напред и назад пътят се събира без знаци, а преместването е алгебричната сума на промените в координатата."
+            />
+          </div>
+
           <div className="space-y-3 text-[17px] leading-relaxed text-ink/90">
             <p>
               Затвореният маршрут е крайният случай, който изяснява всичко: тялото е обиколило цялата

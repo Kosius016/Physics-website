@@ -22,18 +22,18 @@ import {
  */
 
 const BASIS: { key: "i" | "j" | "k"; v: V3; tex: string }[] = [
-  { key: "i", v: [1, 0, 0], tex: String.raw`\vec i` },
-  { key: "j", v: [0, 1, 0], tex: String.raw`\vec j` },
-  { key: "k", v: [0, 0, 1], tex: String.raw`\vec k` },
+  { key: "i", v: [1, 0, 0], tex: String.raw`\hat i` },
+  { key: "j", v: [0, 1, 0], tex: String.raw`\hat j` },
+  { key: "k", v: [0, 0, 1], tex: String.raw`\hat k` },
 ];
 
 const ANSWERS = [
-  { key: "+i", tex: String.raw`+\vec i`, v: [1, 0, 0] as V3 },
-  { key: "-i", tex: String.raw`-\vec i`, v: [-1, 0, 0] as V3 },
-  { key: "+j", tex: String.raw`+\vec j`, v: [0, 1, 0] as V3 },
-  { key: "-j", tex: String.raw`-\vec j`, v: [0, -1, 0] as V3 },
-  { key: "+k", tex: String.raw`+\vec k`, v: [0, 0, 1] as V3 },
-  { key: "-k", tex: String.raw`-\vec k`, v: [0, 0, -1] as V3 },
+  { key: "+i", tex: String.raw`+\hat i`, v: [1, 0, 0] as V3 },
+  { key: "-i", tex: String.raw`-\hat i`, v: [-1, 0, 0] as V3 },
+  { key: "+j", tex: String.raw`+\hat j`, v: [0, 1, 0] as V3 },
+  { key: "-j", tex: String.raw`-\hat j`, v: [0, -1, 0] as V3 },
+  { key: "+k", tex: String.raw`+\hat k`, v: [0, 0, 1] as V3 },
+  { key: "-k", tex: String.raw`-\hat k`, v: [0, 0, -1] as V3 },
   { key: "0", tex: String.raw`\vec 0`, v: [0, 0, 0] as V3 },
 ];
 
@@ -55,8 +55,8 @@ function explain(aKey: string, bKey: string): string {
   const forward = CYCLE[(CYCLE.indexOf(aKey) + 1) % 3] === bKey;
   const third = CYCLE.find((c) => c !== aKey && c !== bKey);
   return forward
-    ? String.raw`Двойката $\vec ${aKey}\to\vec ${bKey}$ върви напред по цикъла $\vec i\to\vec j\to\vec k\to\vec i$, затова знакът е плюс: резултатът е $+\vec ${third}$.`
-    : String.raw`Двойката $\vec ${aKey}\to\vec ${bKey}$ върви назад по цикъла $\vec i\to\vec j\to\vec k\to\vec i$. Размяната на реда обръща знака, затова резултатът е $-\vec ${third}$.`;
+    ? String.raw`Двойката $\hat ${aKey}\to\hat ${bKey}$ върви напред по цикъла $\hat i\to\hat j\to\hat k\to\hat i$, затова знакът е плюс: резултатът е $+\hat ${third}$.`
+    : String.raw`Двойката $\hat ${aKey}\to\hat ${bKey}$ върви назад по цикъла $\hat i\to\hat j\to\hat k\to\hat i$. Размяната на реда обръща знака, затова резултатът е $-\hat ${third}$.`;
 }
 
 export default function RightHandCross() {

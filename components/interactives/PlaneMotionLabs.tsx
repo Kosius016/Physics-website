@@ -23,6 +23,7 @@ import {
   DRAWING_FONT_FAMILY,
   PANEL_CLASS,
   STAGE_CLASS,
+  TexChip,
   svgPoint,
 } from "./svg";
 
@@ -140,7 +141,7 @@ export function PointMassLab() {
           role="img"
           aria-label="Сравнение между размера на тялото и разстоянието, върху което следим движението му"
         >
-          <Stage w={PM_W} h={PM_H} title="РАЗМЕР НА ТЯЛОТО СПРЯМО РАЗСТОЯНИЕТО" />
+          <Stage w={PM_W} h={PM_H} title="КОГА ИЗПОЛЗВАМЕ МОДЕЛА МАТЕРИАЛНА ТОЧКА" />
 
           <text
             x={PM_W - 20}
@@ -404,7 +405,7 @@ export function FrameOfReferenceLab() {
           role="img"
           aria-label="Изглед отгоре: топка се търкаля право надолу в движещ се вагон, гледана от перона и от вагона"
         >
-          <Stage w={FR_W} h={FR_H} title="ЕДНО ДВИЖЕНИЕ · ДВЕ ОТПРАВНИ СИСТЕМИ" />
+          <Stage w={FR_W} h={FR_H} title="ТРАЕКТОРИЯ НА ТОПКАТА СПРЯМО ВАГОНА И ПЕРОНА" />
 
           {/* ---------------- изглед от перона ---------------- */}
           <text
@@ -695,7 +696,7 @@ export function RadiusVectorLab() {
           onPointerUp={() => (dragging.current = false)}
           onPointerCancel={() => (dragging.current = false)}
         >
-          <Stage w={RV_W} h={RV_H} title="ПОЛОЖЕНИЕТО КАТО ВЕКТОР · ВЛАЧЕТЕ ТОЧКАТА" />
+          <Stage w={RV_W} h={RV_H} title="РАДИУС-ВЕКТОР НА ТОЧКА В РАВНИНАТА" />
 
           {/* оси */}
           <line x1={RV_O.x} y1={RV_O.y} x2={RV_W - 30} y2={RV_O.y} stroke={C.mut} strokeWidth={1.8} />
@@ -810,14 +811,14 @@ const DI_H = 270;
  */
 export function DisplacementInvarianceDiagram() {
   const left = {
-    origin: { x: 52, y: 210 },
-    p1: { x: 103, y: 171 },
-    p2: { x: 235, y: 88 },
+    origin: { x: 70, y: 210 },
+    p1: { x: 118, y: 94 },
+    p2: { x: 244, y: 144 },
   };
   const right = {
-    origin: { x: 456, y: 210 },
-    p1: { x: 393, y: 171 },
-    p2: { x: 525, y: 88 },
+    origin: { x: 470, y: 210 },
+    p1: { x: 384, y: 94 },
+    p2: { x: 510, y: 144 },
   };
 
   return (
@@ -827,9 +828,9 @@ export function DisplacementInvarianceDiagram() {
           viewBox={`0 0 ${DI_W} ${DI_H}`}
           className={STAGE_CLASS + " select-none"}
           role="img"
-          aria-label="Едно и също преместване между положения 1 и 2 в две координатни системи с различни начала O и O прим"
+          aria-label="Преместването между положения 1 и 2 при координатни системи с различни начала O и O прим"
         >
-          <Stage w={DI_W} h={DI_H} title="ЕДНО ПРЕМЕСТВАНЕ · ДВЕ НАЧАЛА" />
+          <Stage w={DI_W} h={DI_H} title="ПРЕМЕСТВАНЕ ПРИ РАЗЛИЧЕН ИЗБОР НА НАЧАЛО" />
           <line x1={310} y1={44} x2={310} y2={226} stroke={C.faint} strokeWidth={1} opacity={0.55} />
 
           {/* Първа координатна система. */}
@@ -839,16 +840,16 @@ export function DisplacementInvarianceDiagram() {
           <SvgTex x={left.origin.x + 10} y={51} tex="y" color={C.mut} fontSize={11.5} width={18} />
           <SvgTex x={left.origin.x - 10} y={left.origin.y + 18} tex="O" color={C.mut} fontSize={12.5} width={20} anchor="middle" />
 
-          <Arrow x1={left.origin.x} y1={left.origin.y} x2={left.p1.x} y2={left.p1.y} color={C.minus} width={1.8} />
-          <Arrow x1={left.origin.x} y1={left.origin.y} x2={left.p2.x} y2={left.p2.y} color={C.minus} width={1.8} />
-          <SvgTex x={78} y={181} tex={String.raw`\vec r_1`} color={C.minus} fontSize={12.5} width={30} anchor="middle" />
-          <SvgTex x={140} y={143} tex={String.raw`\vec r_2`} color={C.minus} fontSize={12.5} width={30} anchor="middle" />
+          <Arrow x1={left.origin.x} y1={left.origin.y} x2={left.p1.x} y2={left.p1.y} color={C.minus} width={1.6} dashed />
+          <Arrow x1={left.origin.x} y1={left.origin.y} x2={left.p2.x} y2={left.p2.y} color={C.minus} width={1.6} dashed />
+          <TexChip x={78} y={146} tex={String.raw`\vec r_1`} color={C.minus} fontSize={12.5} width={30} anchor="middle" padX={4} padY={3} />
+          <TexChip x={169} y={184} tex={String.raw`\vec r_2`} color={C.minus} fontSize={12.5} width={30} anchor="middle" padX={4} padY={3} />
 
           <Arrow x1={left.p1.x} y1={left.p1.y} x2={left.p2.x} y2={left.p2.y} color={C.ok} width={3} />
-          <SvgTex x={169} y={112} tex={String.raw`\Delta\vec r`} color={C.ok} fontSize={13} width={42} anchor="middle" />
+          <TexChip x={181} y={108} tex={String.raw`\Delta\vec r`} color={C.ok} fontSize={13} width={42} anchor="middle" padX={4} padY={3} />
           <circle cx={left.p1.x} cy={left.p1.y} r={5.5} fill={C.wire} stroke={C.minus} strokeWidth={1.8} />
           <circle cx={left.p2.x} cy={left.p2.y} r={5.5} fill={C.wire} stroke={C.minus} strokeWidth={1.8} />
-          <SvgTex x={left.p1.x - 9} y={left.p1.y - 15} tex="1" color={C.wire} fontSize={11.5} width={16} anchor="middle" />
+          <SvgTex x={left.p1.x - 8} y={left.p1.y - 15} tex="1" color={C.wire} fontSize={11.5} width={16} anchor="middle" />
           <SvgTex x={left.p2.x + 10} y={left.p2.y - 12} tex="2" color={C.wire} fontSize={11.5} width={16} anchor="middle" />
 
           {/* Втората система има изместено начало, но същите две положения. */}
@@ -858,13 +859,13 @@ export function DisplacementInvarianceDiagram() {
           <SvgTex x={right.origin.x + 10} y={51} tex="y'" color={C.mut} fontSize={11.5} width={22} />
           <SvgTex x={right.origin.x - 11} y={right.origin.y + 18} tex="O'" color={C.mut} fontSize={12.5} width={24} anchor="middle" />
 
-          <Arrow x1={right.origin.x} y1={right.origin.y} x2={right.p1.x} y2={right.p1.y} color={C.minus} width={1.8} />
-          <Arrow x1={right.origin.x} y1={right.origin.y} x2={right.p2.x} y2={right.p2.y} color={C.minus} width={1.8} />
-          <SvgTex x={425} y={181} tex={String.raw`\vec r_1\,'`} color={C.minus} fontSize={12.5} width={34} anchor="middle" />
-          <SvgTex x={497} y={142} tex={String.raw`\vec r_2\,'`} color={C.minus} fontSize={12.5} width={34} anchor="middle" />
+          <Arrow x1={right.origin.x} y1={right.origin.y} x2={right.p1.x} y2={right.p1.y} color={C.minus} width={1.6} dashed />
+          <Arrow x1={right.origin.x} y1={right.origin.y} x2={right.p2.x} y2={right.p2.y} color={C.minus} width={1.6} dashed />
+          <TexChip x={410} y={165} tex={String.raw`\vec r_1\,'`} color={C.minus} fontSize={12.5} width={34} anchor="middle" padX={4} padY={3} />
+          <TexChip x={512} y={184} tex={String.raw`\vec r_2\,'`} color={C.minus} fontSize={12.5} width={34} anchor="middle" padX={4} padY={3} />
 
           <Arrow x1={right.p1.x} y1={right.p1.y} x2={right.p2.x} y2={right.p2.y} color={C.ok} width={3} />
-          <SvgTex x={459} y={112} tex={String.raw`\Delta\vec r`} color={C.ok} fontSize={13} width={42} anchor="middle" />
+          <TexChip x={447} y={108} tex={String.raw`\Delta\vec r`} color={C.ok} fontSize={13} width={42} anchor="middle" padX={4} padY={3} />
           <circle cx={right.p1.x} cy={right.p1.y} r={5.5} fill={C.wire} stroke={C.minus} strokeWidth={1.8} />
           <circle cx={right.p2.x} cy={right.p2.y} r={5.5} fill={C.wire} stroke={C.minus} strokeWidth={1.8} />
           <SvgTex x={right.p1.x - 9} y={right.p1.y - 15} tex="1" color={C.wire} fontSize={11.5} width={16} anchor="middle" />
@@ -1272,7 +1273,7 @@ export function CoordinateMotionLab() {
           role="img"
           aria-label="Движение в равнината и едновременните графики на двете координати като функции на времето"
         >
-          <Stage w={CM_W} h={CM_H} title="ЕДНО ДВИЖЕНИЕ В РАВНИНАТА · ДВЕ КООРДИНАТИ ВЪВ ВРЕМЕТО" />
+          <Stage w={CM_W} h={CM_H} title="КООРДИНАТИ И ТРАЕКТОРИЯ НА ДВИЖЕЩА СЕ ТОЧКА" />
 
           {/* --- равнината --- */}
           {Array.from({ length: CM_M + 1 }, (_, i) => (

@@ -131,20 +131,20 @@ export default function CrossProductLessonPage() {
             </p>
             <Formula latex={String.raw`\boxed{\vec b\times\vec a=-(\vec a\times\vec b)}`} />
             <h3 className="pt-2 font-serif text-[21px] font-bold text-ink">Базисният цикъл</h3>
-            <Formula latex={String.raw`\vec i\times\vec j=\vec k,\qquad \vec j\times\vec k=\vec i,\qquad \vec k\times\vec i=\vec j`} />
+            <Formula latex={String.raw`\hat i\times\hat j=\hat k,\qquad \hat j\times\hat k=\hat i,\qquad \hat k\times\hat i=\hat j`} />
             <p className="text-ink/90">
-              Движение напред по цикъла <RichText text={String.raw`$\vec i\to\vec j\to\vec k\to\vec i$`} /> дава
+              Движение напред по цикъла <RichText text={String.raw`$\hat i\to\hat j\to\hat k\to\hat i$`} /> дава
               плюс. Назад дава минус. Вектор по себе си дава нула:
-              <RichText text={String.raw`$\ \vec i\times\vec i=\vec0$`} />.
+              <RichText text={String.raw`$\ \hat i\times\hat i=\vec0$`} />.
             </p>
             <PredictionQuestion
-              prompt={String.raw`Без координатна сметка: накъде сочи $\vec k\times\vec j$?`}
+              prompt={String.raw`Без координатна сметка: накъде сочи $\hat k\times\hat j$?`}
               options={[
-                { text: String.raw`$-\vec i$, тоест обратно на положителната ос $x$`, correct: true },
-                { text: String.raw`$+\vec i$, по положителната ос $x$`, correct: false },
+                { text: String.raw`$-\hat i$, тоест обратно на положителната ос $x$`, correct: true },
+                { text: String.raw`$+\hat i$, по положителната ос $x$`, correct: false },
                 { text: String.raw`$\vec0$, защото множителите са перпендикулярни`, correct: false },
               ]}
-              explanation={String.raw`$\vec j\times\vec k=\vec i$ е напред по цикъла. Размяната на реда обръща знака, следователно $\vec k\times\vec j=-\vec i$. Нулев вектор се получава при **успоредни** множители, не при перпендикулярни.`}
+              explanation={String.raw`$\hat j\times\hat k=\hat i$ е напред по цикъла. Размяната на реда обръща знака, следователно $\hat k\times\hat j=-\hat i$. Нулев вектор се получава при **успоредни** множители, не при перпендикулярни.`}
             />
             <p className="text-ink/90">
               Тренажорът долу дава двойката, вие давате посоката. Сцената дорисува резултата чак
@@ -180,7 +180,7 @@ export default function CrossProductLessonPage() {
               <RichText text={String.raw`$\ \vec b=(b_1,b_2,b_3)$`} />. Всяка компонента на новия
               вектор е детерминанта <RichText text="$2\times2$" />: ориентираната площ на съответната координатна проекция:
             </p>
-            <Formula latex={String.raw`\vec a\times\vec b=\begin{vmatrix}\vec i&\vec j&\vec k\\a_1&a_2&a_3\\b_1&b_2&b_3\end{vmatrix}`} />
+            <Formula latex={String.raw`\vec a\times\vec b=\begin{vmatrix}\hat i&\hat j&\hat k\\a_1&a_2&a_3\\b_1&b_2&b_3\end{vmatrix}`} />
             <p className="text-ink/90">
               Разгъваме формално по първия ред със знаците <RichText text="$+\;- \;+$" />:
             </p>
@@ -201,7 +201,7 @@ export default function CrossProductLessonPage() {
           <TeacherNote>
             <ul className="list-disc space-y-1.5 pl-5">
               <li>
-                Записът с <RichText text={String.raw`$\vec i,\vec j,\vec k$`} /> на първия ред е
+                Записът с <RichText text={String.raw`$\hat i,\hat j,\hat k$`} /> на първия ред е
                 мнемоника, не същинска детерминанта: първият ред съдържа вектори, не числа. Кажете
                 го веднъж честно, вместо ученикът да го открие сам и да се обърка.
               </li>

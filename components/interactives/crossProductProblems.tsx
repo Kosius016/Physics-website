@@ -151,13 +151,13 @@ export const crossProductProblems: GuidedProblemData[] = [
         "Повторното четене намира същата грешка, която сте направили. Скаларните произведения са **независима** проверка: перпендикулярността следва от дефиницията, затова всяко ненулево число издава сметката.",
     },
     hints: [
-      "Запишете детерминантата с $\\vec i,\\vec j,\\vec k$ на първия ред и разгънете със знаците $+\\ -\\ +$.",
+      "Запишете детерминантата с $\\hat i,\\hat j,\\hat k$ на първия ред и разгънете със знаците $+\\ -\\ +$.",
       "Средната компонента носи минус пред минора: $-(a_1b_3-a_3b_1)$.",
     ],
     steps: [
       {
         text: "Записваме формалната детерминанта и разгъваме по първия ред:",
-        latex: String.raw`\vec a\times\vec b=\begin{vmatrix}\vec i&\vec j&\vec k\\2&-1&3\\1&4&-2\end{vmatrix}=(-10,\;7,\;9)`,
+        latex: String.raw`\vec a\times\vec b=\begin{vmatrix}\hat i&\hat j&\hat k\\2&-1&3\\1&4&-2\end{vmatrix}=(-10,\;7,\;9)`,
       },
       {
         text: "Проверяваме с двете скаларни произведения:",
@@ -304,7 +304,7 @@ export const crossProductProblems: GuidedProblemData[] = [
       texA: String.raw`\vec r`,
       texB: String.raw`\vec F`,
       texResult: String.raw`\vec\tau`,
-      finalTex: String.raw`\vec\tau=12\,\vec k\ \mathrm{N\,m}`,
+      finalTex: String.raw`\vec\tau=12\,\hat k\ \mathrm{N\,m}`,
     }),
     figureCaption: (phase) =>
       phase >= 2
@@ -320,7 +320,7 @@ export const crossProductProblems: GuidedProblemData[] = [
         { text: "По $-z$, обратно на оста на въртене", correct: false },
       ],
       explanation:
-        "От цикъла: $\\vec i\\times\\vec j=\\vec k$. Моментът **никога** не сочи по силата: той сочи по оста, около която силата върти тялото.",
+        "От цикъла: $\\hat i\\times\\hat j=\\hat k$. Моментът **никога** не сочи по силата: той сочи по оста, около която силата върти тялото.",
     },
     additionQuestion: {
       prompt: "Коя част от силата всъщност върти тялото?",
@@ -334,12 +334,12 @@ export const crossProductProblems: GuidedProblemData[] = [
     },
     hints: [
       "Тук не е нужна пълната сметка: и двата вектора лежат по координатни оси.",
-      "Използвайте базисния цикъл $\\vec i\\times\\vec j=\\vec k$ и изнесете числата отпред.",
+      "Използвайте базисния цикъл $\\hat i\\times\\hat j=\\hat k$ и изнесете числата отпред.",
     ],
     steps: [
       {
         text: "И двата вектора са по оси, затова използваме направо цикъла:",
-        latex: String.raw`\vec\tau=(0{,}30\,\vec i)\times(40\,\vec j)=0{,}30\cdot40\,(\vec i\times\vec j)=12\,\vec k`,
+        latex: String.raw`\vec\tau=(0{,}30\,\hat i)\times(40\,\hat j)=0{,}30\cdot40\,(\hat i\times\hat j)=12\,\hat k`,
       },
       {
         text: "Резултатът с мерна единица:",
@@ -351,7 +351,7 @@ export const crossProductProblems: GuidedProblemData[] = [
     ],
     teacherNotes: [
       "Честа грешка: моментът да се сочи по посоката на силата. Диагностика: „ако бутнете вратата, накъде сочи оста на въртене?“",
-      "Свържете със знака: обратното въртене би дало $-\\vec k$, тоест размяна на реда $\\vec F\\times\\vec r$.",
+      "Свържете със знака: обратното въртене би дало $-\\hat k$, тоест размяна на реда $\\vec F\\times\\vec r$.",
     ],
   },
   {
@@ -380,7 +380,7 @@ export const crossProductProblems: GuidedProblemData[] = [
         { text: "По $+z$, заедно с полето", correct: false },
       ],
       explanation:
-        "От цикъла $\\vec k\\times\\vec i=\\vec j$ следва, че $\\vec i\\times\\vec k=-\\vec j$: двойката $x\\to z$ върви **назад** по цикъла, затова знакът е минус.",
+        "От цикъла $\\hat k\\times\\hat i=\\hat j$ следва, че $\\hat i\\times\\hat k=-\\hat j$: двойката $x\\to z$ върви **назад** по цикъла, затова знакът е минус.",
     },
     additionQuestion: {
       prompt: "Какво се променя, ако зарядът е отрицателен?",
