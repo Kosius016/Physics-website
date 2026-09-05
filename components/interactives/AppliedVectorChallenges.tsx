@@ -1,6 +1,8 @@
+import type { ReactNode } from "react";
 import Formula from "@/components/Formula";
 import RichText from "@/components/RichText";
 import ProgressiveSolution from "@/components/materiali/ProgressiveSolution";
+import { ChallengeFigureView, challengeFigures } from "./appliedVectorFigures";
 import { TeacherNote } from "./TeacherMode";
 
 interface ChallengeStep {
@@ -105,7 +107,7 @@ const CHALLENGES: Challenge[] = [
   },
 ];
 
-function Step({ step, index }: { step: ChallengeStep; index: number }) {
+function Step({ step, index, children }: { step: ChallengeStep; index: number; children?: ReactNode }) {
   return (
     <div className="space-y-2">
       <p className="text-[15.5px] leading-relaxed text-ink/90">
@@ -113,6 +115,7 @@ function Step({ step, index }: { step: ChallengeStep; index: number }) {
         <strong className="text-ink"><RichText text={step.lead} /></strong>{step.text ? <> <RichText text={step.text} /></> : null}
       </p>
       {step.latex ? <Formula latex={step.latex} /> : null}
+      {children}
     </div>
   );
 }
@@ -124,20 +127,31 @@ export default function AppliedVectorChallenges() {
         <h3 className="font-serif text-[23px] font-bold text-ink">Приложни предизвикателства</h3>
         <p className="mt-1 text-[15px] text-muted">Шест задачи за самостоятелна работа с постепенно разкриване на решенията.</p>
       </div>
-      {CHALLENGES.map((challenge, index) => (
-        <article key={challenge.title} className="rounded-[10px] border-[1.5px] border-ink bg-surface px-5 py-5 shadow-hard-sm">
-          <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-plus">Задача {index + 4}</p>
-          <h4 className="mt-1 font-serif text-[21px] font-bold text-ink">{challenge.title}</h4>
-          <p className="mt-3 text-[16px] leading-relaxed text-ink/90"><RichText text={challenge.statement} /></p>
-          <div className="mt-4 rounded-r-lg border-l-4 border-warn bg-hl px-4 py-3 text-[14.5px] leading-relaxed text-ink/90">
-            <strong className="text-ink">Преди смятане:</strong> {challenge.prediction}
-          </div>
-          <ProgressiveSolution hint={<RichText text={challenge.hint} />}>
-            {challenge.steps.map((step, stepIndex) => <Step key={step.lead} step={step} index={stepIndex} />)}
-          </ProgressiveSolution>
-          <TeacherNote title="Диагностичен въпрос"><p>{challenge.teacherNote}</p></TeacherNote>
-        </article>
-      ))}
+      {CHALLENGES.map((challenge, index) => {
+        const figure = challengeFigures[challenge.title];
+        const lastStep = challenge.steps.length - 1;
+        return (
+          <article key={challenge.title} className="rounded-[10px] border-[1.5px] border-ink bg-surface px-5 py-5 shadow-hard-sm">
+            <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-plus">Задача {index + 4}</p>
+            <h4 className="mt-1 font-serif text-[21px] font-bold text-ink">{challenge.title}</h4>
+            <p className="mt-3 text-[16px] leading-relaxed text-ink/90"><RichText text={challenge.statement} /></p>
+            {/* Чертежът под условието показва само даденото. */}
+            {figure ? <ChallengeFigureView fig={figure} /> : null}
+            <div className="mt-4 rounded-r-lg border-l-4 border-warn bg-hl px-4 py-3 text-[14.5px] leading-relaxed text-ink/90">
+              <strong className="text-ink">Преди смятане:</strong> {challenge.prediction}
+            </div>
+            <ProgressiveSolution hint={<RichText text={challenge.hint} />}>
+              {challenge.steps.map((step, stepIndex) => (
+                <Step key={step.lead} step={step} index={stepIndex}>
+                  {/* Завършеният чертеж идва заедно с последната стъпка. */}
+                  {figure && stepIndex === lastStep ? <ChallengeFigureView fig={figure} final /> : null}
+                </Step>
+              ))}
+            </ProgressiveSolution>
+            <TeacherNote title="Диагностичен въпрос"><p>{challenge.teacherNote}</p></TeacherNote>
+          </article>
+        );
+      })}
     </div>
   );
 }
