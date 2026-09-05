@@ -4,8 +4,9 @@ import LessonNav from "@/components/LessonNav";
 import RichText from "@/components/RichText";
 import Section from "@/components/Section";
 import PredictionQuestion from "@/components/interactives/PredictionQuestion";
+import AppliedVectorChallenges from "@/components/interactives/AppliedVectorChallenges";
 import VectorProblemSet from "@/components/interactives/VectorProblemSet";
-import { ForceResultantLab, VectorAdditionLab, VectorComponentsLab, VectorOperationsLab } from "@/components/interactives/VectorLabs";
+import { DroneWindSimulation, ForceResultantLab, VectorAdditionLab, VectorComponentsLab, VectorOperationsLab } from "@/components/interactives/VectorLabs";
 import { TeacherModeProvider, TeacherModeToggle, TeacherNote } from "@/components/interactives/TeacherMode";
 
 export const metadata = {
@@ -69,6 +70,10 @@ export default function VectorsLessonPage() {
       <P text="**Правило на успоредника:** поставете двата вектора с общо начало и достройте успоредник. Диагоналът от общото начало е сумата. Двете правила дават еднакъв резултат, защото срещуположните страни на успоредника са равни и успоредни: те са точно пренесените стрелки от триъгълника." />
       <P text="Двата маршрута по страните стигат до един и същ връх. Затова размяната на реда не променя сумата. Това свойство се нарича комутативност." />
       <Formula latex={String.raw`\vec a+\vec b=\vec b+\vec a`} />
+      <h3 className="mt-9 font-serif text-[23px] font-bold text-ink">Симулация: дрон във вятър</h3>
+      <P text={String.raw`Дронът управлява скоростта си спрямо въздуха, но наблюдателят на земята вижда сумата от тази скорост и скоростта на вятъра. Променете двата вектора и проследете действителната траектория за $10\,\mathrm{s}$.`} />
+      <Figure><DroneWindSimulation /></Figure>
+      <P text={String.raw`Тук събирането има пряк физически смисъл: $\vec v_{\text{земя}}=\vec v_{\text{въздух}}+\vec v_{\text{вятър}}$. При страничен вятър дронът не се движи по посоката, в която сочи носът му. За да следва зададен маршрут, автопилотът трябва да избере компенсиращ курс.`} />
       <TeacherNote><p>Поискайте ученикът да посочи началото и края на сумата. Честа грешка е да се свържат двата върха при общо начало: това построява разлика, а не сума.</p></TeacherNote>
     </Section>
     <Section id="operations" n="§4" title="Изваждане и умножение с число">
@@ -122,6 +127,7 @@ export default function VectorsLessonPage() {
     <Section id="problems" n="§7" title="Водени задачи">
       <P text="За всяка задача първо огледайте геометрията, изберете знаците и предвидете как се комбинират приносите. След двата въпроса отворете решението стъпка по стъпка и сравнете със своя запис по двете оси." />
       <Figure><VectorProblemSet /></Figure>
+      <AppliedVectorChallenges />
     </Section>
     <Section id="recap" n="§8" title="Обобщение">
       <ul className="list-disc space-y-3 pl-5 text-[17px] leading-relaxed"><li>Векторната величина изисква големина и посока и се събира по векторните правила.</li><li>При триъгълника поставяме началото на втория вектор в края на първия; при успоредника сумата е диагоналът от общото начало.</li><li>Изваждането добавя противоположния вектор, затова обръща и двете му компоненти.</li><li>Компонентите са числа със знак по избраните оси; компонентните вектори са приносите по тези оси.</li><li><RichText text="Работим **По $x$ / По $y$**: оси, разлагане, две сметки, после големина и посока с проверка на квадранта." /></li></ul>
