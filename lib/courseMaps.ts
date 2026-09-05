@@ -34,7 +34,7 @@ const physics11: CourseSection[] = [
      */
     title: "Механика · Кинематика",
     lessons: [
-      { number: "1.1", title: "Вектори (упражнение)", href: "/physics/kinematika/vektori" },
+      { number: "1.1", title: "Вектори (упражнение)", href: "/physics/kinematika/vektori", publishedAt: "2026-09-05" },
       {
         number: "1.2",
         title: "Движение на материална точка в една равнина",

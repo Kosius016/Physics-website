@@ -66,6 +66,8 @@ export default function GuidedProblem({ index, data }: { index: number; data: Gu
       <svg
         viewBox={`0 0 480 ${data.figureHeight ?? 300}`}
         className={STAGE_CLASS + " mt-4 select-none"}
+        role="img"
+        aria-label={data.title}
       >
         <rect width={480} height={data.figureHeight ?? 300} fill={STAGE_BG} />
         {data.figure(phase)}
