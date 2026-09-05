@@ -124,17 +124,29 @@ export function scaler(box: Box, xMax: number, yMax: number, yMin = -yMax): Scal
 /* --------------------------------------------------------------- сцена */
 
 /** Фон на сцената с мека мрежа и надпис в горния ляв ъгъл. */
-export function Stage({ w, h, title }: { w: number; h: number; title?: string }) {
+export function Stage({
+  w,
+  h,
+  title,
+  grid = true,
+}: {
+  w: number;
+  h: number;
+  title?: string;
+  grid?: boolean;
+}) {
   const step = 25;
   return (
     <>
       <rect width={w} height={h} fill={STAGE_BG} />
-      {Array.from({ length: Math.ceil(w / step) }, (_, i) => (
-        <line key={`v${i}`} x1={i * step} y1={0} x2={i * step} y2={h} stroke={C.faint} opacity={0.1} />
-      ))}
-      {Array.from({ length: Math.ceil(h / step) }, (_, i) => (
-        <line key={`h${i}`} x1={0} y1={i * step} x2={w} y2={i * step} stroke={C.faint} opacity={0.1} />
-      ))}
+      {grid &&
+        Array.from({ length: Math.ceil(w / step) }, (_, i) => (
+          <line key={`v${i}`} x1={i * step} y1={0} x2={i * step} y2={h} stroke={C.faint} opacity={0.1} />
+        ))}
+      {grid &&
+        Array.from({ length: Math.ceil(h / step) }, (_, i) => (
+          <line key={`h${i}`} x1={0} y1={i * step} x2={w} y2={i * step} stroke={C.faint} opacity={0.1} />
+        ))}
       {title && (
         <text
           x={20}

@@ -802,88 +802,176 @@ export function RadiusVectorLab() {
 /* =============================== §5 · преместването не зависи от началото */
 
 const DI_W = 620;
-const DI_H = 270;
+const DI_H = 326;
+const DI_U = 50;
+const DI_P1 = { x: 205, y: 105 };
+const DI_P2 = { x: 455, y: 155 };
+const DI_ORIGIN = { x: 155, y: 255 };
+const DI_GRID_OFFSETS = Array.from({ length: 25 }, (_, i) => (i - 12) * DI_U);
+
+function displacementLabel(
+  from: { x: number; y: number },
+  to: { x: number; y: number },
+  distance: number,
+) {
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  const length = Math.hypot(dx, dy) || 1;
+  return {
+    x: (from.x + to.x) / 2 - (dy / length) * distance,
+    y: (from.y + to.y) / 2 + (dx / length) * distance,
+  };
+}
 
 /**
- * Една и съща двойка положения в две успоредни координатни системи.
- * Радиус-векторите се сменят при преместването на началото, но стрелката
- * между положения 1 и 2 остава една и съща.
+ * Потребителят мести началото на координатната система. Мрежата, осите и
+ * радиус-векторите се пречертават спрямо него, докато положенията и
+ * преместването между тях остават неподвижни.
  */
 export function DisplacementInvarianceDiagram() {
-  const left = {
-    origin: { x: 70, y: 210 },
-    p1: { x: 118, y: 94 },
-    p2: { x: 244, y: 144 },
+  const [origin, setOrigin] = useState(DI_ORIGIN);
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const dragging = useRef(false);
+
+  const moveOrigin = (clientX: number, clientY: number) => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const [x, y] = svgPoint(svg, clientX, clientY, DI_W, DI_H);
+    setOrigin({
+      x: Math.min(545, Math.max(75, x)),
+      y: Math.min(260, Math.max(185, y)),
+    });
   };
-  const right = {
-    origin: { x: 470, y: 210 },
-    p1: { x: 384, y: 94 },
-    p2: { x: 510, y: 144 },
+
+  const r1 = {
+    x: (DI_P1.x - origin.x) / DI_U,
+    y: (origin.y - DI_P1.y) / DI_U,
   };
+  const r2 = {
+    x: (DI_P2.x - origin.x) / DI_U,
+    y: (origin.y - DI_P2.y) / DI_U,
+  };
+  const r1Label = displacementLabel(origin, DI_P1, 17);
+  const r2Label = displacementLabel(origin, DI_P2, -17);
+  const drLabel = displacementLabel(DI_P1, DI_P2, -20);
 
   return (
     <div className={PANEL_CLASS}>
-      <StageScroll minWidth={540}>
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <p className="text-[13px] leading-relaxed text-muted">
+          Плъзнете началото <RichText text="$O$" /> на координатната система.
+        </p>
+        <button type="button" className={BTN_SEC} onClick={() => setOrigin(DI_ORIGIN)}>
+          Начално положение
+        </button>
+      </div>
+
+      <StageScroll minWidth={540} maxWidth={760}>
         <svg
+          ref={svgRef}
           viewBox={`0 0 ${DI_W} ${DI_H}`}
-          className={STAGE_CLASS + " select-none"}
+          className={STAGE_CLASS + " touch-none select-none"}
           role="img"
-          aria-label="Преместването между положения 1 и 2 при координатни системи с различни начала O и O прим"
+          aria-label="Интерактивна координатна система. Плъзнете началото O или го преместете със стрелките на клавиатурата."
+          tabIndex={0}
+          onKeyDown={(event) => {
+            const step = event.shiftKey ? 25 : 10;
+            const delta =
+              event.key === "ArrowLeft"
+                ? { x: -step, y: 0 }
+                : event.key === "ArrowRight"
+                  ? { x: step, y: 0 }
+                  : event.key === "ArrowUp"
+                    ? { x: 0, y: -step }
+                    : event.key === "ArrowDown"
+                      ? { x: 0, y: step }
+                      : null;
+            if (event.key === "Home") {
+              event.preventDefault();
+              setOrigin(DI_ORIGIN);
+            } else if (delta) {
+              event.preventDefault();
+              setOrigin((current) => ({
+                x: Math.min(545, Math.max(75, current.x + delta.x)),
+                y: Math.min(260, Math.max(185, current.y + delta.y)),
+              }));
+            }
+          }}
         >
-          <Stage w={DI_W} h={DI_H} title="ПРЕМЕСТВАНЕ ПРИ РАЗЛИЧЕН ИЗБОР НА НАЧАЛО" />
-          <line x1={310} y1={44} x2={310} y2={226} stroke={C.faint} strokeWidth={1} opacity={0.55} />
+          <Stage w={DI_W} h={DI_H} title="ПРЕМЕСТВАНЕТО НЕ ЗАВИСИ ОТ НАЧАЛОТО" grid={false} />
 
-          {/* Първа координатна система. */}
-          <Arrow x1={28} y1={left.origin.y} x2={286} y2={left.origin.y} color={C.faint} width={1.3} />
-          <Arrow x1={left.origin.x} y1={226} x2={left.origin.x} y2={48} color={C.faint} width={1.3} />
-          <SvgTex x={281} y={left.origin.y + 19} tex="x" color={C.mut} fontSize={11.5} width={18} anchor="end" />
-          <SvgTex x={left.origin.x + 10} y={51} tex="y" color={C.mut} fontSize={11.5} width={18} />
-          <SvgTex x={left.origin.x - 10} y={left.origin.y + 18} tex="O" color={C.mut} fontSize={12.5} width={20} anchor="middle" />
+          {/* Мрежата принадлежи на подвижната координатна система. */}
+          {DI_GRID_OFFSETS.map((offset) => {
+            const x = origin.x + offset;
+            if (x < 35 || x > 585) return null;
+            return <line key={`v${offset}`} x1={q(x)} y1={48} x2={q(x)} y2={282} stroke={C.faint} opacity={0.12} />;
+          })}
+          {DI_GRID_OFFSETS.map((offset) => {
+            const y = origin.y + offset;
+            if (y < 48 || y > 282) return null;
+            return <line key={`h${offset}`} x1={35} y1={q(y)} x2={585} y2={q(y)} stroke={C.faint} opacity={0.12} />;
+          })}
 
-          <Arrow x1={left.origin.x} y1={left.origin.y} x2={left.p1.x} y2={left.p1.y} color={C.minus} width={1.6} dashed />
-          <Arrow x1={left.origin.x} y1={left.origin.y} x2={left.p2.x} y2={left.p2.y} color={C.minus} width={1.6} dashed />
-          <TexChip x={78} y={146} tex={String.raw`\vec r_1`} color={C.minus} fontSize={12.5} width={30} anchor="middle" padX={4} padY={3} />
-          <TexChip x={169} y={184} tex={String.raw`\vec r_2`} color={C.minus} fontSize={12.5} width={30} anchor="middle" padX={4} padY={3} />
+          <Arrow x1={35} y1={q(origin.y)} x2={585} y2={q(origin.y)} color={C.mut} width={1.5} />
+          <Arrow x1={q(origin.x)} y1={282} x2={q(origin.x)} y2={48} color={C.mut} width={1.5} />
+          <SvgTex x={581} y={origin.y + 20} tex="x" color={C.mut} fontSize={12} width={18} anchor="end" />
+          <SvgTex x={origin.x + 11} y={52} tex="y" color={C.mut} fontSize={12} width={18} />
 
-          <Arrow x1={left.p1.x} y1={left.p1.y} x2={left.p2.x} y2={left.p2.y} color={C.ok} width={3} />
-          <TexChip x={181} y={108} tex={String.raw`\Delta\vec r`} color={C.ok} fontSize={13} width={42} anchor="middle" padX={4} padY={3} />
-          <circle cx={left.p1.x} cy={left.p1.y} r={5.5} fill={C.wire} stroke={C.minus} strokeWidth={1.8} />
-          <circle cx={left.p2.x} cy={left.p2.y} r={5.5} fill={C.wire} stroke={C.minus} strokeWidth={1.8} />
-          <SvgTex x={left.p1.x - 8} y={left.p1.y - 15} tex="1" color={C.wire} fontSize={11.5} width={16} anchor="middle" />
-          <SvgTex x={left.p2.x + 10} y={left.p2.y - 12} tex="2" color={C.wire} fontSize={11.5} width={16} anchor="middle" />
+          {/* Радиус-векторите се менят с началото; преместването не се мени. */}
+          <Arrow x1={q(origin.x)} y1={q(origin.y)} x2={DI_P1.x} y2={DI_P1.y} color={C.minus} width={1.8} dashed />
+          <Arrow x1={q(origin.x)} y1={q(origin.y)} x2={DI_P2.x} y2={DI_P2.y} color={C.minus} width={1.8} dashed />
+          <TexChip x={q(r1Label.x)} y={q(r1Label.y)} tex={String.raw`\vec r_1`} color={C.minus} fontSize={12.5} width={30} anchor="middle" padX={4} padY={3} />
+          <TexChip x={q(r2Label.x)} y={q(r2Label.y)} tex={String.raw`\vec r_2`} color={C.minus} fontSize={12.5} width={30} anchor="middle" padX={4} padY={3} />
 
-          {/* Втората система има изместено начало, но същите две положения. */}
-          <Arrow x1={334} y1={right.origin.y} x2={594} y2={right.origin.y} color={C.faint} width={1.3} />
-          <Arrow x1={right.origin.x} y1={226} x2={right.origin.x} y2={48} color={C.faint} width={1.3} />
-          <SvgTex x={589} y={right.origin.y + 19} tex="x'" color={C.mut} fontSize={11.5} width={22} anchor="end" />
-          <SvgTex x={right.origin.x + 10} y={51} tex="y'" color={C.mut} fontSize={11.5} width={22} />
-          <SvgTex x={right.origin.x - 11} y={right.origin.y + 18} tex="O'" color={C.mut} fontSize={12.5} width={24} anchor="middle" />
+          <Arrow x1={DI_P1.x} y1={DI_P1.y} x2={DI_P2.x} y2={DI_P2.y} color={C.ok} width={3.2} />
+          <TexChip x={q(drLabel.x)} y={q(drLabel.y)} tex={String.raw`\Delta\vec r`} color={C.ok} fontSize={13} width={42} anchor="middle" padX={4} padY={3} />
+          <circle cx={DI_P1.x} cy={DI_P1.y} r={5.8} fill={C.wire} stroke={C.minus} strokeWidth={1.8} />
+          <circle cx={DI_P2.x} cy={DI_P2.y} r={5.8} fill={C.wire} stroke={C.minus} strokeWidth={1.8} />
+          <SvgTex x={DI_P1.x - 10} y={DI_P1.y - 15} tex="1" color={C.wire} fontSize={12} width={16} anchor="middle" />
+          <SvgTex x={DI_P2.x + 10} y={DI_P2.y - 13} tex="2" color={C.wire} fontSize={12} width={16} anchor="middle" />
 
-          <Arrow x1={right.origin.x} y1={right.origin.y} x2={right.p1.x} y2={right.p1.y} color={C.minus} width={1.6} dashed />
-          <Arrow x1={right.origin.x} y1={right.origin.y} x2={right.p2.x} y2={right.p2.y} color={C.minus} width={1.6} dashed />
-          <TexChip x={410} y={165} tex={String.raw`\vec r_1\,'`} color={C.minus} fontSize={12.5} width={34} anchor="middle" padX={4} padY={3} />
-          <TexChip x={512} y={184} tex={String.raw`\vec r_2\,'`} color={C.minus} fontSize={12.5} width={34} anchor="middle" padX={4} padY={3} />
+          <circle cx={q(origin.x)} cy={q(origin.y)} r={7} fill={C.wire} stroke={C.warn} strokeWidth={2.5} pointerEvents="none" />
+          <SvgTex x={origin.x - 14} y={origin.y + 21} tex="O" color={C.warn} fontSize={13.5} width={22} anchor="middle" />
 
-          <Arrow x1={right.p1.x} y1={right.p1.y} x2={right.p2.x} y2={right.p2.y} color={C.ok} width={3} />
-          <TexChip x={447} y={108} tex={String.raw`\Delta\vec r`} color={C.ok} fontSize={13} width={42} anchor="middle" padX={4} padY={3} />
-          <circle cx={right.p1.x} cy={right.p1.y} r={5.5} fill={C.wire} stroke={C.minus} strokeWidth={1.8} />
-          <circle cx={right.p2.x} cy={right.p2.y} r={5.5} fill={C.wire} stroke={C.minus} strokeWidth={1.8} />
-          <SvgTex x={right.p1.x - 9} y={right.p1.y - 15} tex="1" color={C.wire} fontSize={11.5} width={16} anchor="middle" />
-          <SvgTex x={right.p2.x + 10} y={right.p2.y - 12} tex="2" color={C.wire} fontSize={11.5} width={16} anchor="middle" />
+          {/* Голям невидим захват прави началото удобно и на телефон. */}
+          <circle
+            cx={q(origin.x)}
+            cy={q(origin.y)}
+            r={24}
+            fill="transparent"
+            className="cursor-grab active:cursor-grabbing"
+            onPointerDown={(event) => {
+              dragging.current = true;
+              event.currentTarget.setPointerCapture(event.pointerId);
+              moveOrigin(event.clientX, event.clientY);
+            }}
+            onPointerMove={(event) => dragging.current && moveOrigin(event.clientX, event.clientY)}
+            onPointerUp={() => (dragging.current = false)}
+            onPointerCancel={() => (dragging.current = false)}
+          />
 
           <SvgTex
             x={DI_W / 2}
-            y={251}
-            tex={String.raw`\vec r_2-\vec r_1=\vec r_2\,'-\vec r_1\,'=\Delta\vec r`}
+            y={309}
+            tex={String.raw`\vec r_2-\vec r_1=\Delta\vec r`}
             color={C.ok}
             fontSize={13}
-            width={330}
+            width={190}
             anchor="middle"
           />
         </svg>
       </StageScroll>
+
+      <Readouts
+        cols={3}
+        cells={[
+          { label: "Положение 1", tex: `\\vec r_1=(${dec(r1.x, 1)};${dec(r1.y, 1)})`, color: C.minus },
+          { label: "Положение 2", tex: `\\vec r_2=(${dec(r2.x, 1)};${dec(r2.y, 1)})`, color: C.minus },
+          { label: "Преместване", tex: String.raw`\Delta\vec r=(5;-1)`, color: C.ok },
+        ]}
+      />
       <p className="mt-3 text-[13.5px] leading-relaxed text-muted">
-        <RichText text="Сините радиус-вектори зависят от избраното начало. Зелената стрелка свързва същите две положения и не се променя." />
+        <RichText text="Когато местите началото, координатната мрежа и сините радиус-вектори се пречертават спрямо него. Положенията 1 и 2 и зеленото преместване остават неподвижни." />
       </p>
     </div>
   );
