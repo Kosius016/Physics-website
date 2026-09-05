@@ -3,6 +3,7 @@ import Formula from "@/components/Formula";
 import RichText from "@/components/RichText";
 import ProgressiveSolution from "@/components/materiali/ProgressiveSolution";
 import { ChallengeFigureView, challengeFigures } from "./appliedVectorFigures";
+import PredictionQuestion, { type PredictionOption } from "./PredictionQuestion";
 import { TeacherNote } from "./TeacherMode";
 
 interface ChallengeStep {
@@ -14,7 +15,8 @@ interface ChallengeStep {
 interface Challenge {
   title: string;
   statement: string;
-  prediction: string;
+  /** Въпрос преди сметките: ученикът залага посоката, вместо да я прочете наготово. */
+  prediction: { prompt: string; options: PredictionOption[]; explanation: string };
   hint: string;
   steps: ChallengeStep[];
   teacherNote: string;
@@ -24,12 +26,20 @@ const CHALLENGES: Challenge[] = [
   {
     title: "Спасителна лодка в речно течение",
     statement: String.raw`Река е широка $180\,\mathrm{m}$ и тече на изток със скорост $2{,}4\,\mathrm{m/s}$. Лодка се движи спрямо водата с $4{,}0\,\mathrm{m/s}$. Под какъв ъгъл западно от север трябва да бъде насочена, за да достигне точката точно срещу старта? Колко време трае пресичането?`,
-    prediction: "Равнодействащата скорост трябва да сочи точно на север. Следователно лодката трябва предварително да създаде западна компонента, която отменя течението.",
+    prediction: {
+      prompt: "Накъде трябва да е насочен носът на лодката, за да стигне точно срещу старта?",
+      options: [
+        { text: "Западно от север", correct: true, why: "Течението носи на изток. Единственият начин резултантната да сочи право на север е лодката сама да създаде равна по големина западна компонента." },
+        { text: "Право на север, а течението ще се компенсира само", correct: false, why: "При нос право на север лодката няма западна компонента и течението я отнася на изток през цялото пресичане." },
+        { text: "Източно от север, по посоката на течението", correct: false, why: "Това добавя още към отнасянето. Компенсира се с компонента срещу течението, не с такава по него." },
+      ],
+      explanation: "Условието за пресичане напряко е едно: сумарната хоризонтална компонента да е нула.",
+    },
     hint: String.raw`Започнете от условието за липса на хоризонтално отклонение: $v_x=0$. Едва после използвайте известната големина на скоростта на лодката.`,
     steps: [
       { lead: "Избираме осите.", text: "Положителната хоризонтална посока е на изток, а положителната вертикална е на север. Течението има само хоризонтална компонента.", latex: String.raw`\vec v_{\text{теч}}=(2{,}4\hat i+0\hat j)\,\mathrm{m/s}` },
       { lead: "По $x$:", text: "За да няма отнасяне по реката, хоризонталната компонента на резултата трябва да е нула.", latex: String.raw`v_x=v_{\text{лод},x}+v_{\text{теч},x}=0\quad\Rightarrow\quad v_{\text{лод},x}=-2{,}4\,\mathrm{m/s}` },
-      { lead: "Разлагаме скоростта на лодката.", text: "Големината ѝ е известна, затова намираме северната компонента с Питагоровата теорема.", latex: String.raw`v_{\text{лод},y}=\sqrt{4{,}0^2-2{,}4^2}=3{,}2\,\mathrm{m/s},\qquad \beta=\arctan\frac{2{,}4}{3{,}2}=36{,}9^\circ` },
+      { lead: "Разлагаме скоростта на лодката.", text: "Големината ѝ е известна, затова намираме северната компонента с Питагоровата теорема.", latex: String.raw`v_{\text{лод},y}=\sqrt{4{,}0^2-2{,}4^2}=3{,}2\,\mathrm{m/s},\qquad \theta=\arctan\frac{2{,}4}{3{,}2}=36{,}9^\circ` },
       { lead: "По $y$:", text: "Течението не помага и не пречи на пресичането напряко.", latex: String.raw`v_y=v_{\text{лод},y}+v_{\text{теч},y}=3{,}2+0=3{,}2\,\mathrm{m/s}` },
       { lead: "Намираме времето.", latex: String.raw`t=\frac{180\,\mathrm{m}}{3{,}2\,\mathrm{m/s}}=56{,}25\,\mathrm{s}` },
     ],
@@ -38,7 +48,15 @@ const CHALLENGES: Challenge[] = [
   {
     title: "Доставка с дрон при насрещен вятър",
     statement: String.raw`Дрон трябва да достигне площадка на $1{,}20\,\mathrm{km}$ изток и $0{,}80\,\mathrm{km}$ север за точно $100\,\mathrm{s}$. Вятърът е $5{,}0\,\mathrm{m/s}$ в посока $210^\circ$, измерена обратно на часовниковата стрелка от изток. Каква скорост спрямо въздуха трябва да зададе автопилотът?`,
-    prediction: "Вятърът духа към югозапад. Командата на дрона трябва да сочи по-силно към североизток от желаната скорост спрямо земята.",
+    prediction: {
+      prompt: "Как се сравнява търсената скорост спрямо въздуха с исканата скорост спрямо земята?",
+      options: [
+        { text: "По-голяма е, защото вятърът е почти насрещен", correct: true, why: "Маршрутът сочи към североизток, а вятър при $210^\\circ$ духа към югозапад. Дронът трябва първо да покрие загубата от вятъра и чак тогава да остане исканата скорост спрямо земята." },
+        { text: "По-малка е, защото вятърът помага", correct: false, why: "Вятърът щеше да помага, ако духаше към североизток, тоест около $34^\\circ$. При $210^\\circ$ той духа почти точно срещу маршрута." },
+        { text: "Еднаква е, защото разстоянието и времето са фиксирани", correct: false, why: "Фиксирани са разстоянието и времето, тоест скоростта спрямо **земята**. Скоростта спрямо въздуха е друга величина и се получава след изваждане на вятъра." },
+      ],
+      explanation: "Първо намерете нужната скорост спрямо земята, после я разложете и извадете вятъра по компоненти.",
+    },
     hint: String.raw`Първо намерете необходимата скорост спрямо земята от $\Delta\vec r/t$. После използвайте $\vec v_{\text{въздух}}=\vec v_{\text{земя}}-\vec v_{\text{вятър}}$.`,
     steps: [
       { lead: "Намираме целевата скорост спрямо земята.", latex: String.raw`\vec v_{\text{земя}}=\frac{(1200\hat i+800\hat j)\,\mathrm{m}}{100\,\mathrm{s}}=(12\hat i+8\hat j)\,\mathrm{m/s}` },
@@ -52,12 +70,20 @@ const CHALLENGES: Challenge[] = [
   {
     title: "Самолет в страничен вятър",
     statement: String.raw`Самолет лети със скорост $80\,\mathrm{m/s}$ спрямо въздуха. Вятърът е $18\,\mathrm{m/s}$ право на север. Пилотът трябва да поддържа път точно на изток до летище на $48\,\mathrm{km}$. Намерете корекционния ъгъл, скоростта спрямо земята и времето на полета.`,
-    prediction: "Носът трябва да бъде насочен южно от изток. Северната компонента на въздушната скорост трябва точно да отмени вятъра.",
+    prediction: {
+      prompt: "Накъде трябва да сочи носът на самолета, за да е пътят точно на изток?",
+      options: [
+        { text: "Южно от изток", correct: true, why: "Вятърът носи на север, затова въздушната скорост трябва да има южна компонента, която точно го отменя." },
+        { text: "Право на изток, по посоката на летището", correct: false, why: "Тогава вятърът добавя цялата си северна компонента и самолетът се отклонява наляво от желания път." },
+        { text: "Северно от изток, за да използва вятъра", correct: false, why: "Вятърът тук не помага по маршрута: той е перпендикулярен на него. Насочване на север само усилва отклонението." },
+      ],
+      explanation: "Условието е същото като при лодката, само че сега нулевата компонента е северната.",
+    },
     hint: String.raw`Желаната резултантна няма северна компонента. Използвайте първо това условие, а после известната големина $80\,\mathrm{m/s}$.`,
     steps: [
       { lead: "Избираме осите.", text: "Изток е положителната хоризонтална посока, север е положителната вертикална." },
       { lead: "По $y$:", latex: String.raw`v_y=v_{\text{сам},y}+v_{\text{вятър},y}=0\quad\Rightarrow\quad v_{\text{сам},y}=-18\,\mathrm{m/s}` },
-      { lead: "Намираме корекционния ъгъл.", latex: String.raw`\sin\beta=\frac{18}{80}\quad\Rightarrow\quad\beta\approx13{,}0^\circ\ \text{южно от изток}` },
+      { lead: "Намираме корекционния ъгъл.", latex: String.raw`\sin\theta=\frac{18}{80}\quad\Rightarrow\quad\theta\approx13{,}0^\circ\ \text{южно от изток}` },
       { lead: "По $x$:", latex: String.raw`v_x=v_{\text{сам},x}+v_{\text{вятър},x}=\sqrt{80^2-18^2}+0=77{,}95\,\mathrm{m/s}` },
       { lead: "Намираме времето на полета.", latex: String.raw`t=\frac{48\,000\,\mathrm{m}}{77{,}95\,\mathrm{m/s}}\approx616\,\mathrm{s}\approx10{,}26\,\mathrm{min}` },
     ],
@@ -66,7 +92,15 @@ const CHALLENGES: Challenge[] = [
   {
     title: "Затваряне на маршрут на геодезически робот",
     statement: String.raw`Робот измерва терен с три последователни премествания: $120\,\mathrm{m}$ при $25^\circ$, $85\,\mathrm{m}$ при $140^\circ$ и $70\,\mathrm{m}$ право на юг. Какъв единствен коригиращ вектор трябва да изпълни, за да се върне точно в началото?`,
-    prediction: "Първо трябва да намерим къде е роботът след трите отсечки. Коригиращият вектор има същата големина и противоположна посока на общото преместване.",
+    prediction: {
+      prompt: "В коя посока сочи коригиращият вектор?",
+      options: [
+        { text: "На запад и на юг, тоест в трети квадрант", correct: true, why: "Трите премествания оставят робота на североизток от началото, затова връщането е точно в обратната посока." },
+        { text: "На изток и на север, тоест в първи квадрант", correct: false, why: "Това е посоката на общото преместване $\\vec R$. Корекцията е $-\\vec R$ и сочи обратно." },
+        { text: "Право на юг, защото последното преместване беше на юг", correct: false, why: "Корекцията зависи от сбора на трите премествания, а не само от последното. Първите две изместват робота и по хоризонтала." },
+      ],
+      explanation: "Не събирайте дължините: разложете всяко преместване и вижте къде се озовава роботът.",
+    },
     hint: String.raw`Не събирайте дължините. Разложете всяко преместване, намерете $\vec R$, после използвайте $\vec c=-\vec R$.`,
     steps: [
       { lead: "Разлагаме трите премествания.", latex: String.raw`\begin{aligned}\vec a&=120(\cos25^\circ\,\hat i+\sin25^\circ\,\hat j)\,\mathrm{m}\\\vec b&=85(\cos140^\circ\,\hat i+\sin140^\circ\,\hat j)\,\mathrm{m}\\\vec d&=(0\hat i-70\hat j)\,\mathrm{m}\end{aligned}` },
@@ -94,11 +128,7 @@ function Step({ step, index, children }: { step: ChallengeStep; index: number; c
 
 export default function AppliedVectorChallenges() {
   return (
-    <div className="mt-10 space-y-7">
-      <div className="border-b-2 border-ink pb-2">
-        <h3 className="font-serif text-[23px] font-bold text-ink">Приложни предизвикателства</h3>
-        <p className="mt-1 text-[15px] text-muted">Четири задачи за самостоятелна работа с постепенно разкриване на решенията.</p>
-      </div>
+    <div className="mt-6 space-y-6">
       {CHALLENGES.map((challenge, index) => {
         const figure = challengeFigures[challenge.title];
         const lastStep = challenge.steps.length - 1;
@@ -110,8 +140,13 @@ export default function AppliedVectorChallenges() {
             <p className="mt-3 text-[16px] leading-relaxed text-ink/90"><RichText text={challenge.statement} /></p>
             {/* Чертежът под условието показва само даденото. */}
             {figure ? <ChallengeFigureView fig={figure} /> : null}
-            <div className="mt-4 rounded-r-lg border-l-4 border-warn bg-hl px-4 py-3 text-[14.5px] leading-relaxed text-ink/90">
-              <strong className="text-ink">Преди смятане:</strong> {challenge.prediction}
+            {/* Първо предположение, чак после решението. */}
+            <div className="mt-5">
+              <PredictionQuestion
+                prompt={challenge.prediction.prompt}
+                options={challenge.prediction.options}
+                explanation={challenge.prediction.explanation}
+              />
             </div>
             <ProgressiveSolution hint={<RichText text={challenge.hint} />}>
               {challenge.steps.map((step, stepIndex) => (

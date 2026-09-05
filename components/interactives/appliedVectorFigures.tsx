@@ -178,7 +178,7 @@ const boatFigure: ChallengeFigure = {
             <Arrow x1={tip.x} y1={tip.y} x2={q(tip.x + 2.4 * ppv)} y2={tip.y} color={C.warn} width={2.8} />
             <Arrow x1={s.x} y1={s.y} x2={res.x} y2={res.y} color={C.ok} width={3.4} />
             <AngleArc cx={s.x} cy={s.y} a1={rad(270)} a2={Math.atan2(vb.y, vb.x)} r={44} color={C.mut} />
-            <SvgTex x={187} y={199} tex={String.raw`\beta`} color={C.mut} fontSize={13} width={20} anchor="middle" />
+            <SvgTex x={187} y={199} tex={String.raw`\theta`} color={C.mut} fontSize={13} width={20} anchor="middle" />
             <SvgTex x={156} y={196} tex={String.raw`\vec v_{\text{лод}}`} color={C.minus} fontSize={13} width={52} anchor="end" />
             <SvgTex x={170} y={146} tex={String.raw`\vec v_{\text{теч}}`} color={C.warn} fontSize={13} width={54} anchor="middle" />
             <SvgTex x={216} y={208} tex={String.raw`\vec v`} color={C.ok} fontSize={13} width={24} />
@@ -264,8 +264,8 @@ const planeFigure: ChallengeFigure = {
   title: "ПОЛЕТ ПРИ СТРАНИЧЕН ВЯТЪР",
   draw: (final) => {
     const { o, ppv } = PLANE;
-    const beta = Math.asin(18 / 80);
-    const tip = { x: q(o.x + 80 * ppv * Math.cos(beta)), y: q(o.y + 80 * ppv * Math.sin(beta)) };
+    const theta = Math.asin(18 / 80);
+    const tip = { x: q(o.x + 80 * ppv * Math.cos(theta)), y: q(o.y + 80 * ppv * Math.sin(theta)) };
     const res = { x: q(o.x + 77.95 * ppv), y: o.y };
     return (
       <g>
@@ -303,9 +303,9 @@ const planeFigure: ChallengeFigure = {
             <Arrow x1={o.x} y1={o.y} x2={tip.x} y2={tip.y} color={C.minus} width={3} />
             <Arrow x1={tip.x} y1={tip.y} x2={tip.x} y2={q(tip.y - 18 * ppv)} color={C.warn} width={2.8} />
             <Arrow x1={o.x} y1={o.y} x2={res.x} y2={res.y} color={C.ok} width={3.4} />
-            <AngleArc cx={o.x} cy={o.y} a1={0} a2={beta} r={46} color={C.mut} />
+            <AngleArc cx={o.x} cy={o.y} a1={0} a2={theta} r={46} color={C.mut} />
             <line x1={128} y1={192} x2={122} y2={176} stroke={C.faint} strokeWidth={1.2} />
-            <SvgTex x={120} y={168} tex={String.raw`\beta`} color={C.mut} fontSize={13} width={20} anchor="middle" />
+            <SvgTex x={120} y={168} tex={String.raw`\theta`} color={C.mut} fontSize={13} width={20} anchor="middle" />
             <SvgTex x={152} y={240} tex={String.raw`\vec v_{\text{сам}}`} color={C.minus} fontSize={13} width={54} anchor="middle" />
             <SvgTex x={206} y={216} tex={String.raw`\vec v_{\text{вятър}}`} color={C.warn} fontSize={13} width={62} />
             <SvgTex x={150} y={176} tex={String.raw`\vec v`} color={C.ok} fontSize={13} width={24} anchor="middle" />
