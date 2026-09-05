@@ -11,7 +11,7 @@ import { TeacherModeProvider, TeacherModeToggle, TeacherNote } from "@/component
 
 export const metadata = {
   title: "Вектори (упражнение) · SingularityLab",
-  description: "Интерактивен урок за 11. клас: посока и големина, събиране и изваждане на вектори, компоненти и три водени задачи по метода По x / По y.",
+  description: "Интерактивен урок за 11. клас: посока и големина, събиране и изваждане на вектори, компоненти и водени задачи по метода По x / По y.",
 };
 const SECTION_NAV = [
   { id: "idea", n: "§1", label: "Защо посока" },

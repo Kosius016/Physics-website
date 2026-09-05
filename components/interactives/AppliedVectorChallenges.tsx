@@ -50,20 +50,6 @@ const CHALLENGES: Challenge[] = [
     teacherNote: "Попитайте защо вятърът се изважда, въпреки че физически скоростите се събират. Ученикът трябва да обясни, че неизвестното събираемо се намира чрез прехвърляне на известното.",
   },
   {
-    title: "Окачване на светофар",
-    statement: String.raw`Светофар с тегло $240\,\mathrm{N}$ виси неподвижно на два кабела. Левият кабел сключва $35^\circ$ с хоризонталата, а десният $50^\circ$. Намерете силите на опън $T_1$ и $T_2$. Масата на кабелите се пренебрегва.`,
-    prediction: "Хоризонталните компоненти на двата опъна трябва да се компенсират, а вертикалните им компоненти заедно трябва да уравновесят теглото.",
-    hint: String.raw`Не приемайте, че опъните са равни. Ъглите са различни, затова равни хоризонтални проекции изискват различни големини.`,
-    steps: [
-      { lead: "Избираме осите и знаците.", text: "Надясно и нагоре са положителни. Левият опън има отрицателна хоризонтална компонента, десният положителна, а теглото сочи надолу." },
-      { lead: "По $x$:", latex: String.raw`-T_1\cos35^\circ+T_2\cos50^\circ=0\quad\Rightarrow\quad T_2=T_1\frac{\cos35^\circ}{\cos50^\circ}` },
-      { lead: "По $y$:", latex: String.raw`T_1\sin35^\circ+T_2\sin50^\circ-240\,\mathrm{N}=0` },
-      { lead: "Решаваме системата.", latex: String.raw`T_1\left(\sin35^\circ+\frac{\cos35^\circ\sin50^\circ}{\cos50^\circ}\right)=240\,\mathrm{N}` },
-      { lead: "Получаваме двата опъна и проверяваме равновесието.", latex: String.raw`T_1\approx154{,}9\,\mathrm{N},\qquad T_2\approx197{,}3\,\mathrm{N},\qquad \vec T_1+\vec T_2+\vec G=\vec0` },
-    ],
-    teacherNote: "Честа грешка е да се използват синуси за хоризонталните проекции, без да се отчете спрямо коя ос са дадени ъглите. Поискайте проверка: по-стръмният десен кабел трябва ли непременно да има по-малък опън?",
-  },
-  {
     title: "Самолет в страничен вятър",
     statement: String.raw`Самолет лети със скорост $80\,\mathrm{m/s}$ спрямо въздуха. Вятърът е $18\,\mathrm{m/s}$ право на север. Пилотът трябва да поддържа път точно на изток до летище на $48\,\mathrm{km}$. Намерете корекционния ъгъл, скоростта спрямо земята и времето на полета.`,
     prediction: "Носът трябва да бъде насочен южно от изток. Северната компонента на въздушната скорост трябва точно да отмени вятъра.",
@@ -91,20 +77,6 @@ const CHALLENGES: Challenge[] = [
     ],
     teacherNote: "Ако ученикът получи посока около 39 градуса, попитайте в кой квадрант сочи корекцията. Това разкрива сляпо използване на аркустангенса без квадрант.",
   },
-  {
-    title: "Втори задвижващ модул на индустриален робот",
-    statement: String.raw`Манипулатор трябва да приложи върху детайл резултантна сила $500\,\mathrm{N}$ право нагоре. Първият модул вече действа със сила $320\,\mathrm{N}$ под ъгъл $25^\circ$ източно от вертикалата. Каква сила трябва да създаде вторият модул?`,
-    prediction: "Вторият модул трябва едновременно да премахне източната компонента на първия и да допълни недостигащата вертикална компонента.",
-    hint: String.raw`Търсената сила е неизвестното събираемо: $\vec F_2=\vec R-\vec F_1$. Внимавайте, че ъгълът на $\vec F_1$ е даден спрямо вертикалата.`,
-    steps: [
-      { lead: "Записваме целта и разлагаме първата сила.", latex: String.raw`\vec R=(0\hat i+500\hat j)\,\mathrm{N},\qquad\vec F_1=(320\sin25^\circ\,\hat i+320\cos25^\circ\,\hat j)\,\mathrm{N}` },
-      { lead: "По $x$:", latex: String.raw`F_{2x}=R_x-F_{1x}=0-320\sin25^\circ\approx-135{,}24\,\mathrm{N}` },
-      { lead: "По $y$:", latex: String.raw`F_{2y}=R_y-F_{1y}=500-320\cos25^\circ\approx209{,}98\,\mathrm{N}` },
-      { lead: "Възстановяваме търсения вектор.", latex: String.raw`\vec F_2=(-135{,}24\hat i+209{,}98\hat j)\,\mathrm{N},\qquad F_2\approx249{,}76\,\mathrm{N}` },
-      { lead: "Определяме посоката и проверяваме сумата.", latex: String.raw`\alpha=\operatorname{atan2}(209{,}98,-135{,}24)\approx122{,}8^\circ,\qquad\vec F_1+\vec F_2=(0\hat i+500\hat j)\,\mathrm{N}` },
-    ],
-    teacherNote: "Проверете дали ученикът разменя синус и косинус, защото ъгълът е спрямо вертикалата. Поискайте и качествена проверка: защо търсената сила трябва да сочи наляво и нагоре?",
-  },
 ];
 
 function Step({ step, index, children }: { step: ChallengeStep; index: number; children?: ReactNode }) {
@@ -125,14 +97,15 @@ export default function AppliedVectorChallenges() {
     <div className="mt-10 space-y-7">
       <div className="border-b-2 border-ink pb-2">
         <h3 className="font-serif text-[23px] font-bold text-ink">Приложни предизвикателства</h3>
-        <p className="mt-1 text-[15px] text-muted">Шест задачи за самостоятелна работа с постепенно разкриване на решенията.</p>
+        <p className="mt-1 text-[15px] text-muted">Четири задачи за самостоятелна работа с постепенно разкриване на решенията.</p>
       </div>
       {CHALLENGES.map((challenge, index) => {
         const figure = challengeFigures[challenge.title];
         const lastStep = challenge.steps.length - 1;
         return (
           <article key={challenge.title} className="rounded-[10px] border-[1.5px] border-ink bg-surface px-5 py-5 shadow-hard-sm">
-            <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-plus">Задача {index + 4}</p>
+            {/* Номерацията продължава след водените задачи в §7. */}
+            <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-plus">Задача {index + 3}</p>
             <h4 className="mt-1 font-serif text-[21px] font-bold text-ink">{challenge.title}</h4>
             <p className="mt-3 text-[16px] leading-relaxed text-ink/90"><RichText text={challenge.statement} /></p>
             {/* Чертежът под условието показва само даденото. */}

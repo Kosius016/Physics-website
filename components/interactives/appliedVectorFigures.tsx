@@ -73,12 +73,6 @@ function Sweep({
   return <path d={`M ${p(from)} A ${r} ${r} 0 ${large} 0 ${p(to)}`} fill="none" stroke={color} strokeWidth={1.6} />;
 }
 
-/** Позиция на етикет на ъглова дъга (математически градуси). */
-function sweepLabel(cx: number, cy: number, r: number, from: number, to: number) {
-  const mid = rad((from + to) / 2);
-  return { x: q(cx + r * Math.cos(mid)), y: q(cy - r * Math.sin(mid)) };
-}
-
 /** Прави оси с върхове-стрелки. */
 function Axes({
   ox,
@@ -112,7 +106,7 @@ export interface ChallengeFigure {
   caption: (final: boolean) => string;
 }
 
-/* ---------------------------------------------- 4 · Пресичане на река */
+/* ---------------------------------------------- 3 · Пресичане на река */
 
 const BOAT = { s: { x: 206, y: 256 }, north: 96, ppv: 30 };
 
@@ -199,7 +193,7 @@ const boatFigure: ChallengeFigure = {
       : "Дадени са ширината на реката, течението и **големината** на скоростта на лодката. Посоката ѝ още не е известна: тя лежи някъде по пунктираната дъга.",
 };
 
-/* ------------------------------------------------- 5 · Доставка с дрон */
+/* ------------------------------------------------- 4 · Доставка с дрон */
 
 const DRONE = { q: { x: 306, y: 246 }, ppv: 8 };
 
@@ -261,86 +255,7 @@ const droneFigure: ChallengeFigure = {
       : "Вляво е маршрутът, вдясно са скоростите. От условието е известен само вятърът; скоростта спрямо земята следва от $\\Delta\\vec r$ и времето.",
 };
 
-/* --------------------------------------------- 6 · Окачване на светофар */
-
-const LIGHT = { k: { x: 215, y: 176 }, ceiling: 60, ppn: 0.38 };
-
-const trafficLightFigure: ChallengeFigure = {
-  height: 350,
-  title: "СВЕТОФАР НА ДВА КАБЕЛА",
-  draw: (final) => {
-    const { k, ceiling, ppn } = LIGHT;
-    const dy = k.y - ceiling;
-    const ax = q(k.x - dy / Math.tan(rad(35)));
-    const bx = q(k.x + dy / Math.tan(rad(50)));
-    const t1 = 154.9 * ppn;
-    const t2 = 197.3 * ppn;
-    const t1Tip = { x: q(k.x - t1 * Math.cos(rad(35))), y: q(k.y - t1 * Math.sin(rad(35))) };
-    const t2Tip = { x: q(k.x + t2 * Math.cos(rad(50))), y: q(k.y - t2 * Math.sin(rad(50))) };
-    return (
-      <g>
-        {/* таван */}
-        <line x1={20} y1={ceiling} x2={460} y2={ceiling} stroke={C.wire} strokeWidth={2.6} />
-        {Array.from({ length: 15 }, (_, i) => 26 + i * 31).map((x) => (
-          <line key={x} x1={x} y1={ceiling} x2={x - 9} y2={ceiling - 10} stroke={C.faint} strokeWidth={1.3} />
-        ))}
-
-        {/* кабелите */}
-        <line x1={ax} y1={ceiling} x2={k.x} y2={k.y} stroke={C.wire} strokeWidth={2} />
-        <line x1={bx} y1={ceiling} x2={k.x} y2={k.y} stroke={C.wire} strokeWidth={2} />
-        <line x1={130} y1={k.y} x2={300} y2={k.y} stroke={C.faint} strokeWidth={1.3} strokeDasharray="5 5" />
-        {/* Ъглите стоят в чертежа на ситуацията; в силовата диаграма мястото е за силите. */}
-        {!final && (
-          <g>
-            <AngleArc cx={k.x} cy={k.y} a1={rad(180)} a2={Math.atan2(ceiling - k.y, ax - k.x)} r={44} color={C.mut} />
-            <SvgTex x={158} y={172} tex={String.raw`35^\circ`} color={C.mut} fontSize={12.5} width={34} anchor="middle" />
-            <AngleArc cx={k.x} cy={k.y} a1={0} a2={Math.atan2(ceiling - k.y, bx - k.x)} r={44} color={C.mut} />
-            <SvgTex x={272} y={166} tex={String.raw`50^\circ`} color={C.mut} fontSize={12.5} width={34} anchor="middle" />
-          </g>
-        )}
-        <circle cx={k.x} cy={k.y} r={4.5} fill={C.wire} />
-
-        {/* светофарът стои в чертежа на ситуацията; силовата диаграма е без него */}
-        {!final && (
-          <g>
-            <rect x={197} y={182} width={36} height={58} rx={5} fill={C.mut} fillOpacity={0.25} stroke={C.wire} strokeWidth={1.8} />
-            <circle cx={215} cy={196} r={6} fill={C.plus} />
-            <circle cx={215} cy={211} r={6} fill={C.warn} />
-            <circle cx={215} cy={226} r={6} fill={C.ok} />
-            <Arrow x1={215} y1={240} x2={215} y2={q(240 + 240 * ppn)} color={C.plus} width={3} />
-            <SvgTex x={224} y={288} tex={String.raw`\vec G`} color={C.plus} fontSize={13} width={26} />
-            <SvgTex x={116} y={128} tex={String.raw`\vec T_1`} color={C.minus} fontSize={13} width={30} anchor="end" />
-            <SvgTex x={292} y={122} tex={String.raw`\vec T_2`} color={C.ok} fontSize={13} width={30} />
-          </g>
-        )}
-
-        {final && (
-          <g>
-            {/* хоризонталните компоненти са равни и противоположни */}
-            <line x1={k.x} y1={k.y} x2={t1Tip.x} y2={k.y} stroke={C.warn} strokeWidth={2.4} strokeDasharray="6 4" />
-            <line x1={k.x} y1={k.y} x2={t2Tip.x} y2={k.y} stroke={C.warn} strokeWidth={2.4} strokeDasharray="6 4" />
-            <line x1={t1Tip.x} y1={t1Tip.y} x2={t1Tip.x} y2={k.y} stroke={C.faint} strokeWidth={1.4} strokeDasharray="5 4" />
-            <line x1={t2Tip.x} y1={t2Tip.y} x2={t2Tip.x} y2={k.y} stroke={C.faint} strokeWidth={1.4} strokeDasharray="5 4" />
-            <Arrow x1={k.x} y1={k.y} x2={t1Tip.x} y2={t1Tip.y} color={C.minus} width={3} />
-            <Arrow x1={k.x} y1={k.y} x2={t2Tip.x} y2={t2Tip.y} color={C.ok} width={3} />
-            <Arrow x1={k.x} y1={k.y} x2={215} y2={q(k.y + 240 * ppn)} color={C.plus} width={3} />
-            <SvgTex x={150} y={160} tex={String.raw`\vec T_1`} color={C.minus} fontSize={13} width={30} anchor="end" />
-            <SvgTex x={278} y={128} tex={String.raw`\vec T_2`} color={C.ok} fontSize={13} width={30} />
-            <SvgTex x={224} y={248} tex={String.raw`\vec G`} color={C.plus} fontSize={13} width={26} />
-            <SvgTex x={186} y={200} tex={String.raw`T_{1x}`} color={C.warn} fontSize={12} width={36} anchor="middle" />
-            <SvgTex x={246} y={200} tex={String.raw`T_{2x}`} color={C.warn} fontSize={12} width={36} anchor="middle" />
-          </g>
-        )}
-      </g>
-    );
-  },
-  caption: (final) =>
-    final
-      ? "Двете жълти отсечки са хоризонталните компоненти: равни по дължина и противоположни. Вертикалните компоненти заедно уравновесяват теглото."
-      : "Дадени са теглото и двата ъгъла спрямо хоризонталата. Опъните $\\vec T_1$ и $\\vec T_2$ имат известни посоки, но неизвестни големини.",
-};
-
-/* ------------------------------------------ 7 · Самолет в страничен вятър */
+/* ------------------------------------------ 5 · Самолет в страничен вятър */
 
 const PLANE = { o: { x: 70, y: 190 }, ppv: 1.6 };
 
@@ -405,7 +320,7 @@ const planeFigure: ChallengeFigure = {
       : "Известни са вятърът и **големината** на скоростта спрямо въздуха. Курсът още не е избран: върхът лежи по пунктираната дъга.",
 };
 
-/* --------------------------------------- 8 · Маршрут на геодезически робот */
+/* --------------------------------------- 6 · Маршрут на геодезически робот */
 
 const ROBOT = { o: { x: 140, y: 306 }, ppm: 2.2 };
 
@@ -478,62 +393,11 @@ const robotFigure: ChallengeFigure = {
       : "Трите последователни премествания водят до точка $K$. Търси се едно-единствено преместване, което връща робота в $O$.",
 };
 
-/* --------------------------------------- 9 · Втори модул на манипулатор */
-
-const ARM = { o: { x: 200, y: 280 }, ppn: 0.42 };
-
-const armFigure: ChallengeFigure = {
-  height: 330,
-  title: "ДВА МОДУЛА ВЪРХУ ЕДИН ДЕТАЙЛ",
-  draw: (final) => {
-    const { o, ppn } = ARM;
-    const rTip = { x: o.x, y: q(o.y - 500 * ppn) };
-    const f1Tip = { x: q(o.x + 320 * Math.sin(rad(25)) * ppn), y: q(o.y - 320 * Math.cos(rad(25)) * ppn) };
-    return (
-      <g>
-        <line x1={40} y1={o.y} x2={460} y2={o.y} stroke={C.faint} strokeWidth={1.3} strokeDasharray="5 5" />
-        <line x1={o.x} y1={o.y} x2={o.x} y2={62} stroke={C.faint} strokeWidth={1.3} strokeDasharray="5 5" />
-        <Caps x={54} y={272}>ХОРИЗОНТАЛА</Caps>
-        <rect x={166} y={280} width={68} height={26} rx={4} fill={C.mut} fillOpacity={0.25} stroke={C.wire} strokeWidth={1.8} />
-        <Caps x={200} y={324} anchor="middle">ДЕТАЙЛ</Caps>
-        <circle cx={o.x} cy={o.y} r={4.5} fill={C.wire} />
-
-        <Arrow x1={o.x} y1={o.y} x2={rTip.x} y2={rTip.y} color={C.minus} width={3} />
-        <SvgTex x={190} y={116} tex={String.raw`\vec R`} color={C.minus} fontSize={13} width={26} anchor="end" />
-        <Arrow x1={o.x} y1={o.y} x2={f1Tip.x} y2={f1Tip.y} color={C.warn} width={3} />
-        <SvgTex x={244} y={236} tex={String.raw`\vec F_1`} color={C.warn} fontSize={13} width={30} />
-        <AngleArc cx={o.x} cy={o.y} a1={rad(-90)} a2={Math.atan2(f1Tip.y - o.y, f1Tip.x - o.x)} r={88} color={C.mut} />
-        <SvgTex x={223} y={178} tex={String.raw`25^\circ`} color={C.mut} fontSize={12.5} width={30} anchor="middle" />
-
-        {!final && (
-          <g>
-            <Arrow x1={f1Tip.x} y1={f1Tip.y} x2={rTip.x} y2={rTip.y} color={C.faint} width={2} dashed />
-            <SvgTex x={286} y={132} tex={String.raw`\vec F_2=?`} color={C.faint} fontSize={13} width={52} anchor="middle" />
-          </g>
-        )}
-
-        {final && (
-          <g>
-            <Arrow x1={f1Tip.x} y1={f1Tip.y} x2={rTip.x} y2={rTip.y} color={C.ok} width={3.2} />
-            <SvgTex x={286} y={132} tex={String.raw`\vec F_2`} color={C.ok} fontSize={13} width={30} anchor="middle" />
-          </g>
-        )}
-      </g>
-    );
-  },
-  caption: (final) =>
-    final
-      ? "Вторият модул затваря триъгълника: той тегли наляво и нагоре, за да премахне източния принос на първия и да допълни вертикалния."
-      : "Целта $\\vec R$ и първата сила $\\vec F_1$ са известни. Търсената сила е страната, която затваря триъгълника между върха на $\\vec F_1$ и върха на $\\vec R$.",
-};
-
 export const challengeFigures: Record<string, ChallengeFigure> = {
   "Спасителна лодка в речно течение": boatFigure,
   "Доставка с дрон при насрещен вятър": droneFigure,
-  "Окачване на светофар": trafficLightFigure,
   "Самолет в страничен вятър": planeFigure,
   "Затваряне на маршрут на геодезически робот": robotFigure,
-  "Втори задвижващ модул на индустриален робот": armFigure,
 };
 
 /**
