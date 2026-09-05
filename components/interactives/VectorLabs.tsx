@@ -150,7 +150,7 @@ export function DroneWindSimulation() {
         <Arrow x1={ORIGIN[0]} y1={ORIGIN[1]} x2={airEnd[0]} y2={airEnd[1]} color={C.minus} />
         <Arrow x1={airEnd[0]} y1={airEnd[1]} x2={resultEnd[0]} y2={resultEnd[1]} color={C.warn} />
         <Arrow x1={ORIGIN[0]} y1={ORIGIN[1]} x2={resultEnd[0]} y2={resultEnd[1]} color={C.ok} />
-        <g transform={`translate(${droneX} ${droneY}) rotate(${-(direction ?? 0)})`} aria-hidden="true">
+        <g transform={`translate(${droneX} ${droneY}) rotate(${direction === null ? 0 : 90 - direction})`} aria-hidden="true">
           <path d="M 0 -9 L 7 7 L 0 4 L -7 7 Z" fill={C.wire} stroke={C.minus} strokeWidth={1.5} />
           <circle cx={0} cy={0} r={3} fill={C.minus} />
         </g>
