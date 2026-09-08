@@ -51,6 +51,18 @@ const publishedMaterials: readonly MaterialCatalogItem[] = [
     href: "/zadachi/rezistorni-verigi",
   },
   {
+    id: "dc-verigi-s-arduino",
+    kind: "praktikum",
+    title: "DC вериги с Arduino: от делителя до диода",
+    summary:
+      "Шест измерими експеримента със схеми, breadboard свързване, теория, Arduino код и автоматични графики.",
+    subject: "Физика",
+    level: "university",
+    topic: "Електрични вериги",
+    meta: ["6 експеримента", "Arduino и мултицет", "Автоматични графики"],
+    href: "/praktikum/dc-verigi-s-arduino",
+  },
+  {
     id: "elektrichestvo-i-magnetizam",
     kind: "pregovor",
     title: "Електричество и магнетизъм: голям справочник",
