@@ -151,7 +151,12 @@ const physicsUni: CourseSection[] = [
         href: "/physics/promenliv-tok/transformator",
         publishedAt: "2026-08-31",
       },
-      { number: "4.3", title: "Изправители и филтри: от мрежовото AC до гладко DC" },
+      {
+        number: "4.3",
+        title: "Изправители и филтри: от мрежовото AC до гладко DC",
+        href: "/physics/promenliv-tok/izpraviteli",
+        publishedAt: "2026-09-11",
+      },
     ],
   },
 ];
