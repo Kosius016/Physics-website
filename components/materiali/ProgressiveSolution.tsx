@@ -1,6 +1,6 @@
 "use client";
 
-import { Children, useState, type ReactNode } from "react";
+import { Children, useId, useState, type ReactNode } from "react";
 
 export default function ProgressiveSolution({
   hint,
@@ -16,6 +16,7 @@ export default function ProgressiveSolution({
   children: ReactNode;
 }) {
   const steps = Children.toArray(children);
+  const panelId = useId();
   const [hintOpen, setHintOpen] = useState(false);
   const [solutionOpen, setSolutionOpen] = useState(false);
   const [visibleSteps, setVisibleSteps] = useState(0);
@@ -34,6 +35,7 @@ export default function ProgressiveSolution({
         <button
           type="button"
           aria-expanded={hintOpen}
+          aria-controls={`${panelId}-hint`}
           onClick={() => setHintOpen((open) => !open)}
           className="flex w-full cursor-pointer items-center gap-2 px-4 py-3 text-left text-[15px] font-bold text-ink"
         >
@@ -43,7 +45,7 @@ export default function ProgressiveSolution({
           {hintOpen ? "Скрий указанието" : "Покажи указание"}
         </button>
         {hintOpen ? (
-          <div className="border-t-[1.5px] border-rule bg-surface px-4 py-3 text-[14.5px] leading-relaxed text-ink/90 animate-rise">
+          <div id={`${panelId}-hint`} className="border-t-[1.5px] border-rule bg-surface px-4 py-3 text-[14.5px] leading-relaxed text-ink/90 animate-rise">
             {hint}
           </div>
         ) : null}
@@ -53,6 +55,7 @@ export default function ProgressiveSolution({
         <button
           type="button"
           aria-expanded={solutionOpen}
+          aria-controls={`${panelId}-solution`}
           onClick={toggleSolution}
           className="flex w-full cursor-pointer items-center gap-2 px-4 py-3 text-left text-[15px] font-bold text-minus"
         >
@@ -63,7 +66,7 @@ export default function ProgressiveSolution({
         </button>
 
         {solutionOpen ? (
-          <div className="border-t-[1.5px] border-ink px-4 py-5 sm:px-5 animate-rise">
+          <div id={`${panelId}-solution`} className="border-t-[1.5px] border-ink px-4 py-5 sm:px-5 animate-rise">
             <div className="mb-5 flex flex-wrap items-center justify-between gap-2 border-b-[1.5px] border-dashed border-rule pb-2">
               <p className="text-[11px] font-bold uppercase tracking-[.17em] text-minus">
                 Решение стъпка по стъпка

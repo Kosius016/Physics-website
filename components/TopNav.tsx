@@ -142,6 +142,7 @@ function TopNavView({
   onCloseMenu,
 }: TopNavViewProps) {
   const articlesCurrent = pathname.startsWith("/statii");
+  const solutionsCurrent = pathname === "/reshenia" || pathname.startsWith("/reshenia/");
   const menuLevel = currentSurface ? activeLevel : "university";
   const navItem =
     "relative -mb-0.5 whitespace-nowrap px-1.5 py-3 text-[13.5px] font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-minus sm:px-3 sm:py-4 sm:text-[15px]";
@@ -177,7 +178,7 @@ function TopNavView({
 
         <nav
           aria-label="Основна навигация"
-          className="order-3 flex w-full min-w-0 justify-between overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:order-2 lg:w-auto lg:flex-1 lg:justify-start"
+          className="order-3 flex w-full min-w-0 flex-wrap justify-between lg:order-2 lg:w-auto lg:flex-1 lg:justify-start"
         >
           {(["lessons", "materials"] as const).map((surface) => {
             const label = surface === "lessons" ? "Уроци" : "Материали";
@@ -201,6 +202,15 @@ function TopNavView({
             );
           })}
 
+          <Link
+            href="/reshenia/11-klas"
+            onClick={onCloseMenu}
+            aria-current={solutionsCurrent ? "page" : undefined}
+            className={`${navItem} ${solutionsCurrent ? currentText : idleText}`}
+          >
+            Решения от учебника
+            <ThreadMarks current={solutionsCurrent} targeted={false} />
+          </Link>
           <Link
             href="/statii"
             onClick={onCloseMenu}

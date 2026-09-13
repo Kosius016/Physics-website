@@ -1,0 +1,205 @@
+/** Original solutions. Only lesson/task numbering follows the supplied textbook pages. */
+export type XY = readonly [number, number];
+export interface TextbookDiagram {
+  caption: string;
+  bounds: readonly [number, number, number, number];
+  axes?: boolean;
+  arrows: { from: XY; to: XY; color: "minus" | "ok" | "warn"; label?: string; labelAt?: XY }[];
+  paths?: { points: XY[]; color: "faint" | "warn" }[];
+  labels?: { at: XY; text: string }[];
+}
+export interface TextbookStep {
+  title: string;
+  text: string;
+  formulas?: string[];
+  part?: string;
+  diagram?: TextbookDiagram;
+}
+export interface TextbookProblem { number: number; hint: string; steps: TextbookStep[] }
+export interface TextbookLesson {
+  slug: string;
+  number: number;
+  title: string;
+  theoryHref: string;
+  problems: TextbookProblem[];
+}
+const s = String.raw;
+const origin: XY = [0, 0];
+
+function sumDiagram(a: XY, b: XY): TextbookDiagram {
+  if (Math.abs(a[1]) < 1e-8 && Math.abs(b[1]) < 1e-8) {
+    const end = a[0] + b[0];
+    return {
+      caption: end === 0
+        ? s`Двата еднакво дълги вектора са противоположни. Краят на втория съвпада с началото на първия и $\vec c=\vec0$. Стрелките са раздалечени вертикално за четимост.`
+        : s`Векторите са с еднаква посока. Зелената стрелка е сумата им, изместена надолу за четимост.`,
+      bounds: [-1, Math.max(a[0], end) + 1, -2, 2],
+      arrows: [
+        { from: origin, to: a, color: "minus", label: s`\vec a`, labelAt: [a[0] / 2, 0.7] },
+        { from: [a[0], -0.6], to: [end, -0.6], color: "warn", label: s`\vec b`, labelAt: [a[0] + b[0] / 2, -1.2] },
+        ...(end === 0 ? [] : [{ from: [0, -1.8] as XY, to: [end, -1.8] as XY, color: "ok" as const }]),
+      ],
+    };
+  }
+  const c: XY = [a[0] + b[0], a[1] + b[1]];
+  const xs = [0, a[0], b[0], c[0]], ys = [0, a[1], b[1], c[1]];
+  return {
+    caption: s`Векторът $\vec b$ е пренесен с начало в края на $\vec a$. Зелената стрелка е сумата $\vec c$.`,
+    bounds: [Math.min(...xs) - 1, Math.max(...xs) + 1, Math.min(...ys) - 1, Math.max(...ys) + 1],
+    arrows: [
+      { from: origin, to: a, color: "minus", label: s`\vec a`, labelAt: [a[0] / 2, a[1] / 2 - 0.5] },
+      { from: a, to: c, color: "warn", label: s`\vec b`, labelAt: [a[0] + b[0] / 2 + 0.6, a[1] + b[1] / 2] },
+      { from: origin, to: c, color: "ok", label: s`\vec c`, labelAt: [c[0] / 2 - 0.5, c[1] / 2 + 0.5] },
+    ],
+  };
+}
+
+function coordinateDiagram(start: XY, end: XY, caption: string, endLabel = "2"): TextbookDiagram {
+  return {
+    caption,
+    bounds: [Math.min(0, start[0], end[0]) - 2, Math.max(0, start[0], end[0]) + 2,
+      Math.min(0, start[1], end[1]) - 2, Math.max(0, start[1], end[1]) + 2],
+    axes: true,
+    arrows: [{ from: start, to: end, color: "ok" }],
+    paths: [{ points: [start, [end[0], start[1]], end], color: "faint" }],
+    labels: [
+      { at: [start[0] - 0.7, start[1] - 0.7], text: start[0] === 0 && start[1] === 0 ? "" : "1" },
+      { at: [end[0] + 0.7, end[1] + 0.7], text: endLabel },
+    ],
+  };
+}
+
+function circleDiagram(turn: number, clock = false): TextbookDiagram {
+  const radius = 3;
+  const angle = (t: number) => clock ? Math.PI / 2 - turn * t : Math.PI - turn * t;
+  const at = (t: number): XY => [radius * Math.cos(angle(t)), radius * Math.sin(angle(t))];
+  return {
+    caption: clock
+      ? s`Жълтата дъга е пътят на върха. Зелената стрелка свързва началното положение $1$ с крайното $2$.`
+      : s`Пътят следва полуокръжността. Преместването е по диаметъра от положение $1$ до положение $2$.`,
+    bounds: [-4.2, 4.2, -4.2, 4.2],
+    paths: [
+      { points: Array.from({ length: 65 }, (_, i): XY => [radius * Math.cos(i * Math.PI / 32), radius * Math.sin(i * Math.PI / 32)]), color: "faint" },
+      { points: Array.from({ length: 41 }, (_, i) => at(i / 40)), color: "warn" },
+      { points: [at(0), origin, at(1)], color: "faint" },
+    ],
+    arrows: [{ from: at(0), to: at(1), color: "ok" }],
+    labels: [{ at: [-0.35, -0.4], text: "O" }, { at: [at(0)[0] * 1.22, at(0)[1] * 1.22], text: "1" }, { at: [at(1)[0] * 1.22, at(1)[1] * 1.22], text: "2" }],
+  };
+}
+
+const vectors: TextbookLesson = {
+  slug: "vektori", number: 2, title: "Вектори (упражнение)", theoryHref: "/physics/kinematika/vektori",
+  problems: [
+    { number: 1, hint: "Помислете дали числена стойност и мерна единица са достатъчни, за да опишете величината.", steps: [
+      { title: "Скаларни величини", text: s`Масата, времето и температурата са скалари: задаваме ги с числена стойност и мерна единица. Например $m=2\,\mathrm{kg}$. Скаларът може да има знак; отрицателната температура не го прави вектор.` },
+      { title: "Векторни величини", text: s`За силата, скоростта и преместването са нужни големина и посока. Записът $F=5\,\mathrm{N}$ определя само големината на силата. За $\vec F$ трябва да знаем и накъде е насочена.` },
+    ] },
+    { number: 2, hint: "Сравнете едновременно дължините и посоките на стрелките.", steps: [
+      { title: "Равни вектори", text: s`Два вектора са равни, когато имат еднакви големини и еднакви посоки. При геометричните операции можем да пренасяме свободен вектор успоредно на себе си; мястото на стрелката не променя вектора.`, formulas: [s`\vec a=\vec b`] },
+      { title: "Противоположни вектори", text: s`Два ненулеви вектора са противоположни, когато имат еднакви големини и противоположни посоки. Сумата им е нулевият вектор. Нулевият вектор е противоположен на себе си, но няма определена посока.`, formulas: [s`\vec b=-\vec a,\qquad \vec a+\vec b=\vec 0`] },
+    ] },
+    { number: 3, hint: "Проверете двата крайни случая: еднакви посоки и противоположни посоки.", steps: [
+      { title: "Най-голяма сума", text: s`При еднакви посоки дължините се събират.`, formulas: [s`c_{\max}=a+b=3+5=8\,\mathrm{cm}`], diagram: {
+        caption: s`При еднакви посоки $\vec a$ и $\vec b$ дават най-дългата резултантна. Зелената стрелка е изместена надолу за четимост.`, bounds: [-1, 9, -2, 2], arrows: [
+          { from: [0, 0], to: [3, 0], color: "minus", label: s`\vec a`, labelAt: [1.5, 0.7] },
+          { from: [3, 0], to: [8, 0], color: "warn", label: s`\vec b`, labelAt: [5.5, 0.7] },
+          { from: [0, -1], to: [8, -1], color: "ok", label: s`\vec c`, labelAt: [4, -1.7] },
+        ] } },
+      { title: "Най-малка сума", text: s`При противоположни посоки по-късият вектор компенсира част от по-дългия. Резултатът сочи по посоката на $\vec b$.`, formulas: [s`c_{\min}=|b-a|=|5-3|=2\,\mathrm{cm}`, s`2\,\mathrm{cm}\le c\le8\,\mathrm{cm}`], diagram: {
+        caption: s`След $\vec a$ пренасяме $\vec b$ в обратната посока. Сумата сочи наляво. Зелената стрелка е изместена надолу за четимост.`, bounds: [-3, 4, -2, 2], arrows: [
+          { from: [0, 0], to: [3, 0], color: "minus", label: s`\vec a`, labelAt: [1.5, 0.6] },
+          { from: [3, -0.5], to: [-2, -0.5], color: "warn", label: s`\vec b`, labelAt: [2, -1.2] },
+          { from: [0, -1.5], to: [-2, -1.5], color: "ok", label: s`\vec c`, labelAt: [-1, -2] },
+        ] } },
+    ] },
+    { number: 4, hint: "Постройте успоредник. При равни страни диагоналът разполовява ъгъла между векторите.", steps: [
+      { title: "Обща зависимост", text: s`Нека ъгълът между двата вектора е $\alpha$. Проекциите им по ъглополовящата са равни, а напречните компоненти се компенсират. За $0^\circ\le\alpha\le180^\circ$:`, formulas: [s`c=2a\cos\frac{\alpha}{2}`], diagram: sumDiagram([3, 0], [1.5, 3 * Math.sqrt(3) / 2]) },
+      ...([ ["а", 0, "2a"], ["б", 60, s`a\sqrt3`], ["в", 90, s`a\sqrt2`], ["г", 120, "a"], ["д", 180, "0"] ] as const).map(([part, angle, result]): TextbookStep => ({
+        part, title: s`Ъгъл $${angle}^\circ$`, text: angle === 180 ? "Векторите се компенсират напълно. Резултатът няма определена посока." : "Сумата е по ъглополовящата между двата вектора.",
+        formulas: [s`c=2a\cos ${angle / 2}^\circ=${result}`],
+        diagram: sumDiagram([3, 0], [3 * Math.cos(angle * Math.PI / 180), 3 * Math.sin(angle * Math.PI / 180)]),
+      })),
+    ] },
+    { number: 5, hint: "Двете компоненти са катети на правоъгълен триъгълник.", steps: [
+      { title: "Модул от компонентите", text: s`При перпендикулярни оси използваме Питагоровата теорема.`, formulas: [s`a=\sqrt{a_x^2+a_y^2}`, s`a=\sqrt{3^2+4^2}\,\mathrm{cm}=5\,\mathrm{cm}`], diagram: coordinateDiagram(origin, [3, 4], s`Зелената стрелка е $\vec a$. Пунктираните отсечки показват компонентите по двете оси.`, "") },
+    ] },
+    { number: 6, hint: "Абсолютните стойности на компонентите са равни. Определете квадранта по знаците им.", steps: [
+      { title: "Отчитане на ъгъла", text: s`Измерваме $\alpha$ обратно на часовниковата стрелка от положителната посока на $Ox$, между $0^\circ$ и $360^\circ$. Понеже $|a_x|=|a_y|$, острият ъгъл към най-близката хоризонтална полуос е $45^\circ$. Знаците определят квадранта.` },
+      ...([ ["а", 2, 2, 45, "първия"], ["б", -2, 2, 135, "втория"], ["в", -2, -2, 225, "третия"], ["г", 2, -2, 315, "четвъртия"] ] as const).map(([part, x, y, angle, quadrant]): TextbookStep => ({
+        part, title: s`$\alpha=${angle}^\circ$`, text: s`При $a_x=${x}\,\mathrm{cm}$ и $a_y=${y}\,\mathrm{cm}$ векторът е в ${quadrant} квадрант.`,
+        diagram: coordinateDiagram(origin, [x, y], s`Посоката на $\vec a$ се определя от знаците на двете компоненти.`, ""),
+      })),
+    ] },
+    { number: 7, hint: "Съберете компонентите със знаците им. Определете квадранта преди да пресмятате ъгъла.", steps: [
+      { title: s`По $x$`, text: "Хоризонталните компоненти са отрицателни и се усилват.", formulas: [s`c_x=a_x+b_x=-3-2=-5\,\mathrm{cm}`] },
+      { title: s`По $y$`, text: "Вертикалните компоненти са с противоположни знаци и частично се компенсират.", formulas: [s`c_y=a_y+b_y=7-2=5\,\mathrm{cm}`, s`\vec c=(-5\,\hat i+5\,\hat j)\,\mathrm{cm}`], diagram: sumDiagram([-3, 7], [-2, -2]) },
+      { title: "Големина и посока", text: s`Резултатът е във втория квадрант. Равните абсолютни стойности на компонентите дават ъгъл $45^\circ$ над отрицателната полуос $Ox$, тоест $135^\circ$ от положителната.`, formulas: [s`c=\sqrt{(-5)^2+5^2}=5\sqrt2\,\mathrm{cm}\approx7{,}07\,\mathrm{cm}`, s`\alpha=135^\circ`] },
+    ] },
+  ],
+};
+
+const motion: TextbookLesson = {
+  slug: "dvizhenie-v-ravnina", number: 3, title: "Движение на материална точка в една равнина", theoryHref: "/physics/kinematika/dvizhenie-v-ravnina",
+  problems: [
+    { number: 1, hint: "Решението зависи от това какво движение изучаваме и дали размерите на тялото имат значение.", steps: [
+      { title: "Моделът материална точка", text: "Представяме тялото като точка, в която е съсредоточена масата му, когато размерите и формата му не влияят съществено на разглежданото движение." },
+      { title: "Примери и граници", text: "Самолет по маршрут между две държави може да се разглежда като материална точка. При прибирането му в хангар размерите вече са важни. Земята е приблизително материална точка при изучаване на орбитата ѝ около Слънцето, но този модел не описва собственото ѝ въртене." },
+    ] },
+    { number: 2, hint: "Сравнете положението на един и същ предмет спрямо две различни тела.", steps: [
+      { title: "Движение спрямо избрано тяло", text: "Покой и движение се определят спрямо избрана отправна система. Пътник, седнал в движещ се автобус, е в покой спрямо седалката и се движи спрямо спирката. Двете описания се отнасят за един и същ пътник." },
+      { title: "Още един пример", text: "Куфар върху багажна лента е в покой спрямо участъка от лентата под него, ако не се плъзга, но се движи спрямо пода на залата." },
+    ] },
+    { number: 3, hint: "Разграничете тялото, спрямо което отчитаме, от целия набор средства за описание.", steps: [
+      { title: "Отправно тяло и отправна система", text: "Отправното тяло е избраното тяло, спрямо което определяме положението. Отправната система включва това тяло, свързана с него координатна система и часовник." },
+      { part: "а", title: "Спрямо земната повърхност", text: "За движение на асансьор, автомобил по улица или хвърлена топка е удобно да изберем отправно тяло, неподвижно спрямо земната повърхност, например сградата или пътя." },
+      { part: "б", title: "Спрямо Слънцето", text: "За орбитите на планетите и междупланетните полети е удобно начало, свързано със Слънцето, с подходящо избрани оси и часовник." },
+    ] },
+    { number: 4, hint: "Броят на необходимите координати е броят на независимите посоки, в които може да се мени положението.", steps: [
+      { part: "а", title: "Една координата", text: s`За идеализирано вертикално падане е достатъчна една ос, например $Oy$. Останалите координати са постоянни.` },
+      { part: "б", title: "Две координати", text: s`За движение по равен под са нужни две оси $Ox$ и $Oy$. Положението се задава с $x$ и $y$.` },
+      { part: "в", title: "Три координати", text: s`За свободен полет в пространството са нужни $x$, $y$ и $z$, защото се мени и височината.` },
+    ] },
+    { number: 5, hint: "Сравнете дължината на траекторията с правата отсечка между началното и крайното положение.", steps: [
+      { title: "Какво измерват двете величини", text: s`Пътят $s$ е дължината на изминатата траектория и е скалар. Преместването $\Delta\vec r$ е векторът от началното към крайното положение. То не определя през кои междинни точки е минало тялото.` },
+      { title: "Сравнение", text: s`Правата отсечка е най-късата връзка между две точки, затова модулът на преместването не може да надвишава пътя. При праволинейно движение без обръщане на посоката има равенство. При липса на движение и двете величини са нула.`, formulas: [s`|\Delta\vec r|\le s`] },
+    ] },
+    { number: 6, hint: "Извадете началната координата от крайната по всяка ос, после приложете Питагоровата теорема.", steps: [
+      { title: s`По $x$`, text: "Хоризонталната промяна е положителна.", formulas: [s`\Delta x=x_2-x_1=8-2=6\,\mathrm{m}`] },
+      { title: s`По $y$`, text: "Вертикалната промяна също е положителна.", formulas: [s`\Delta y=y_2-y_1=11-3=8\,\mathrm{m}`, s`\Delta\vec r=(6\,\hat i+8\,\hat j)\,\mathrm{m}`], diagram: coordinateDiagram([2, 3], [8, 11], s`Началното положение $1$ съответства на $M'$, а крайното $2$ на $M''$ от учебника. Катетите са $\Delta x$ и $\Delta y$.`) },
+      { title: "Големина на преместването", text: "Компонентите са взаимно перпендикулярни.", formulas: [s`|\Delta\vec r|=\sqrt{6^2+8^2}\,\mathrm{m}=10\,\mathrm{m}`] },
+    ] },
+    { number: 7, hint: "Начертайте двата участъка последователно. Общото преместване свързва първата с последната точка.", steps: [
+      { part: "а", title: "Изминат път", text: "За пътя събираме дължините на двата участъка.", formulas: [s`\Delta s=300+400=700\,\mathrm{m}`] },
+      { part: "б", title: "Преместване", text: s`Избираме $Ox$ на изток и $Oy$ на север. По $x$: $\Delta x=400\,\mathrm{m}$. По $y$: $\Delta y=300\,\mathrm{m}$.`, formulas: [s`\Delta\vec r=(400\,\hat i+300\,\hat j)\,\mathrm{m}`, s`|\Delta\vec r|=\sqrt{400^2+300^2}\,\mathrm{m}=500\,\mathrm{m}`], diagram: {
+        caption: "Жълтата линия показва маршрута: първо на север, после на изток. Зелената стрелка е общото преместване.", bounds: [-1, 5, -1, 4], axes: true, arrows: [{ from: [0, 0], to: [4, 3], color: "ok" }], paths: [{ points: [[0, 0], [0, 3], [4, 3]], color: "warn" }],
+      } },
+      { title: "Посока", text: s`Преместването сочи на североизток. Ъгълът му спрямо изток е:`, formulas: [s`\tan\alpha=\frac{300}{400}=\frac34`, s`\alpha\approx36{,}9^\circ\ \text{на север от изток}`] },
+    ] },
+    { number: 8, hint: "При половин обиколка пътят е половината от обиколката, а преместването е диаметърът.", steps: [
+      { title: "Дължина на пътя", text: s`Нека радиусът е $R$.`, formulas: [s`s=\frac{2\pi R}{2}=\pi R`], diagram: circleDiagram(Math.PI) },
+      { title: "Сравнение с преместването", text: "Крайните положения са диаметрално противоположни. Следователно пътят е приблизително 1,57 пъти модула на преместването.", formulas: [s`|\Delta\vec r|=2R`, s`\frac{s}{|\Delta\vec r|}=\frac{\pi R}{2R}=\frac\pi2\approx1{,}57`] },
+    ] },
+    { number: 9, hint: "Преместването сочи от началния към крайния връх на стрелката, а не по дъгата.", steps: [
+      { title: "Начално и крайно положение", text: s`В $12{:}00$ минутната стрелка сочи нагоре, а в $12{:}30$ сочи надолу. Върхът е преминал половин окръжност.`, diagram: circleDiagram(Math.PI, true) },
+      { title: "Посока на преместването", text: "Векторът е по вертикалния диаметър, от горния към долния край на циферблата. Преместването е насочено вертикално надолу." },
+    ] },
+    { number: 10, hint: "За четвърт оборот пътят е дъга, а преместването е хипотенуза на триъгълник с два катета, равни на дължината на стрелката.", steps: [
+      { title: "Ъгъл на завъртане", text: s`За $15\,\mathrm{min}$ минутната стрелка извършва четвърт оборот. На чертежа избираме начало при горния край на циферблата; търсените дължини не зависят от началния час.`, formulas: [s`\varphi=\frac{15}{60}\cdot2\pi=\frac\pi2`], diagram: circleDiagram(Math.PI / 2, true) },
+      { title: "Големина на преместването", text: s`Двата радиуса са перпендикулярни и имат дължина $r=10\,\mathrm{cm}$.`, formulas: [s`|\Delta\vec r|=\sqrt{r^2+r^2}=10\sqrt2\,\mathrm{cm}\approx14{,}14\,\mathrm{cm}`] },
+      { title: "Изминат път", text: "Дължината на дъгата е радиусът по ъгъла в радиани.", formulas: [s`\Delta s=r\varphi=10\cdot\frac\pi2=5\pi\,\mathrm{cm}\approx15{,}71\,\mathrm{cm}`] },
+    ] },
+    { number: 11, hint: "Първо определете знаците: при този ъгъл точката е във втория квадрант.", steps: [
+      { title: s`По $x$`, text: s`Проекцията по $Ox$ е отрицателна, защото $\cos150^\circ=-\sqrt3/2$.`, formulas: [s`x=r\cos150^\circ=6\left(-\frac{\sqrt3}{2}\right)=-3\sqrt3\,\mathrm{cm}`] },
+      { title: s`По $y$`, text: s`Проекцията по $Oy$ е положителна, защото $\sin150^\circ=1/2$. Координатите на $P$ са $x\approx-5{,}20\,\mathrm{cm}$ и $y=3\,\mathrm{cm}$.`, formulas: [s`y=r\sin150^\circ=6\cdot\frac12=3\,\mathrm{cm}`], diagram: coordinateDiagram(origin, [-3 * Math.sqrt(3), 3], s`Зелената стрелка е радиус-векторът на $P$. Точката е вляво и над началото.`, "P") },
+    ] },
+    { number: 12, hint: "Извадете координатите поотделно и проверете дали самолетът се премества на изток или на запад.", steps: [
+      { title: s`По $x$`, text: "Отрицателната промяна означава преместване на запад.", formulas: [s`\Delta x=x_2-x_1=-10-10=-20\,\mathrm{km}`] },
+      { title: s`По $y$`, text: "Положителната промяна означава преместване на север.", formulas: [s`\Delta y=y_2-y_1=40-20=20\,\mathrm{km}`, s`\Delta\vec r=(-20\,\hat i+20\,\hat j)\,\mathrm{km}`], diagram: coordinateDiagram([10, 20], [-10, 40], s`По $Ox$ положителната посока е изток, по $Oy$ е север. Преместването свързва положения $1$ и $2$.`) },
+      { title: "Големина и посока", text: s`Двете компоненти имат равни абсолютни стойности. Преместването е на северозапад, под $45^\circ$ на север от запад, или $135^\circ$ обратно на часовниковата стрелка от изток.`, formulas: [s`|\Delta\vec r|=\sqrt{(-20)^2+20^2}=20\sqrt2\,\mathrm{km}\approx28{,}28\,\mathrm{km}`] },
+    ] },
+  ],
+};
+
+export const textbook11Lessons: readonly TextbookLesson[] = [vectors, motion];
+export const textbook11ProblemCount = textbook11Lessons.reduce((total, lesson) => total + lesson.problems.length, 0);
