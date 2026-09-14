@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "katex/dist/katex.min.css";
 import "./globals.css";
 import TopNav from "@/components/TopNav";
+import { Analytics } from "@vercel/analytics/next";
 
 const rubik = Rubik({
   subsets: ["cyrillic", "latin"],
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen font-sans antialiased">
         <TopNav />
         {children}
+        <Analytics />
       </body>
     </html>
   );
