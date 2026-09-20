@@ -40,6 +40,12 @@ near(Math.hypot(3, 4), 5);
 near(Math.atan2(4, 3) * 180 / Math.PI, 53.13010235415598);
 near(Math.hypot(-3, 3), 3 * Math.sqrt(2));
 near(-2 + -1 * 3, -5);
+near((5 - 6) / 0.5, -2);
+near((2.5 - 4) / 0.5, -3);
+near(Math.hypot(-2, -3), Math.sqrt(13));
+near(velocityComponents(10, 150).x, -5 * Math.sqrt(3));
+near(velocityComponents(10, 150).y, 5);
+near(Math.hypot((1 - 4) / 2, (5 - 1) / 2), 2.5);
 
 // Inspect authored math, including options and unopened solution steps.
 let formulas = 0;
@@ -47,9 +53,12 @@ for (const file of [
   "app/physics/kinematika/skorost-i-uskorenie/page.tsx",
   "components/interactives/SpeedAccelerationLabs.tsx",
   "components/interactives/speedAccelerationProblems.tsx",
+  "components/interactives/speedAccelerationExtraProblems.tsx",
+  "components/interactives/SpeedAccelerationFigures.tsx",
 ]) {
   const source = readFileSync(file, "utf8");
   assert.ok(!source.includes("—"), `${file}: long dash`);
+  assert.ok(!/бързин/iu.test(source), `${file}: terminology`);
   assert.ok(!/\\vec\s*[ijk]\b/.test(source), `${file}: basis notation`);
   const tree = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
   const check = value => { katex.renderToString(value, {throwOnError: true, strict: "error"}); formulas++; };

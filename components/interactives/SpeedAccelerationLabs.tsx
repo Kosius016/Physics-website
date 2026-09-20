@@ -32,7 +32,7 @@ export function AverageVelocityLab() {
   const state = returnTrip(t);
   const x = 70 + state.x * 40;
   return <Panel title="Отиване и връщане по права">
-    <p className="mb-4 text-sm text-muted">Тялото се движи равномерно до края на отсечката, обръща посоката и се връща със същата бързина. Моментът на обръщане е идеализиран.</p>
+    <p className="mb-4 text-sm text-muted">Тялото се движи равномерно до края на отсечката, обръща посоката и се връща със същата големина на скоростта. Моментът на обръщане е идеализиран.</p>
     <Scene title="Положението на тялото при отиване и връщане" height={190}>
       <Arrow x1={45} y1={130} x2={445} y2={130} color={C.faint} width={1.5} />
       <Label x={449} y={154} tex="x" /><Label x={70} y={154} tex="O" />
@@ -47,10 +47,10 @@ export function AverageVelocityLab() {
     <Readouts cells={[
       { label: "Път", tex: `s=${dec(state.path, 0)}\\,\\mathrm{m}` },
       { label: "Преместване по оста", tex: `\\Delta x=${dec(state.x, 0)}\\,\\mathrm{m}` },
-      { label: "Средна бързина", tex: String.raw`2\,\mathrm{m/s}` },
+      { label: "Средна скорост по пътя", tex: String.raw`2\,\mathrm{m/s}` },
       { label: "Средна скорост по оста", tex: `${dec(state.average)}\\,\\mathrm{m/s}` },
     ]} />
-    <p className="mt-3 text-sm"><RichText text={t === 8 ? String.raw`Тялото се върна в $O$: $\Delta\vec r=0$, но $s=16\,\mathrm{m}$. Затова средната векторна скорост е нула, а средната бързина не е.` : "Преместете плъзгача до края и сравнете двете средни величини."} /></p>
+    <p className="mt-3 text-sm"><RichText text={t === 8 ? String.raw`Тялото се върна в $O$: $\Delta\vec r=0$, но $s=16\,\mathrm{m}$. Затова средната векторна скорост е нула, а средната скорост по изминатия път не е.` : "Преместете плъзгача до края и сравнете двете средни величини."} /></p>
   </Panel>;
 }
 
@@ -60,7 +60,7 @@ export function InstantVelocityLab() {
   const px = q(95 + 72 * d.dx);
   const py = q(223 - 72 * d.dy);
   return <Panel title="Скоростта при скъсяване на интервала">
-    <p className="mb-4 text-sm text-muted"><RichText text={String.raw`Първото положение е фиксирано. Приближете второто, като намалите $\Delta t$. Тялото се движи по окръжност с постоянна бързина $2\,\mathrm{m/s}$.`} /></p>
+    <p className="mb-4 text-sm text-muted"><RichText text={String.raw`Първото положение е фиксирано. Приближете второто, като намалите $\Delta t$. Тялото се движи по окръжност с постоянна големина на скоростта $2\,\mathrm{m/s}$.`} /></p>
     <Scene title="Хорда и допирателна към траекторията" height={290}>
       <path d="M 95 223 A 288 288 0 0 0 363.43 39.36" fill="none" stroke={C.faint} strokeWidth={2} />
       <line x1={45} y1={223} x2={440} y2={223} stroke={C.mut} strokeDasharray="6 6" />
@@ -112,7 +112,7 @@ export function VelocityComponentsLab() {
 }
 
 const motions: { kind: MotionKind; label: string }[] = [
-  {kind: "faster", label: "Ускоряване по права"}, {kind: "slower", label: "Забавяне по права"}, {kind: "turn", label: "Завой с постоянна бързина"},
+  {kind: "faster", label: "Ускоряване по права"}, {kind: "slower", label: "Забавяне по права"}, {kind: "turn", label: "Равномерно движение в завой"},
 ];
 
 export function AccelerationMotionLab() {
@@ -141,8 +141,8 @@ export function AccelerationMotionLab() {
     <p className="mt-2 text-xs text-muted">Двете величини са с различни мащаби. Сравнявайте посоките им, не дължината на синята спрямо червената стрелка.</p>
     <div className="mt-4"><RangeControl label="Момент от движението" value={t} min={0} max={4} step={0.05} onChange={value => {setPlaying(false); setTurns(value);}} valueTex={`${dec(t)}\\,\\mathrm{s}`} /></div>
     <div className="mt-3 flex gap-2"><button type="button" className={BTN_SEC} onClick={() => setPlaying(p => !p)}>{playing ? "Пауза" : "Пуснете движението"}</button><button type="button" className={BTN_SEC} onClick={() => {setPlaying(false); setTurns(0);}}>Отначало</button></div>
-    <Readouts cols={3} cells={[{label: "Бързина", tex: `${dec(Math.hypot(s.vx, s.vy))}\\,\\mathrm{m/s}`}, {label: "Ускорение по x", tex: `${dec(s.ax)}\\,\\mathrm{m/s^2}`}, {label: "Ускорение по y", tex: `${dec(s.ay)}\\,\\mathrm{m/s^2}`}]} />
-    <p className="mt-3 text-sm">{kind === "turn" ? "Бързината не се променя. Скоростта е по допирателната, а ускорението е към центъра на окръжността." : kind === "faster" ? "Скоростта и ускорението са еднопосочни. За еднакви времена тялото изминава все по-голям път." : "Скоростта е надясно, а ускорението наляво. В показания интервал тялото се забавя, без да обръща посоката."}</p>
+    <Readouts cols={3} cells={[{label: "Големина на скоростта", tex: `${dec(Math.hypot(s.vx, s.vy))}\\,\\mathrm{m/s}`}, {label: "Ускорение по x", tex: `${dec(s.ax)}\\,\\mathrm{m/s^2}`}, {label: "Ускорение по y", tex: `${dec(s.ay)}\\,\\mathrm{m/s^2}`}]} />
+    <p className="mt-3 text-sm">{kind === "turn" ? "Големината на скоростта не се променя. Скоростта е по допирателната, а ускорението е към центъра на окръжността." : kind === "faster" ? "Скоростта и ускорението са еднопосочни. За еднакви времена тялото изминава все по-голям път." : "Скоростта е надясно, а ускорението наляво. В показания интервал тялото се забавя, без да обръща посоката."}</p>
   </Panel>;
 }
 
