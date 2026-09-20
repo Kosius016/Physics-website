@@ -41,7 +41,7 @@ const physics11: CourseSection[] = [
         href: "/physics/kinematika/dvizhenie-v-ravnina",
         publishedAt: "2026-09-03",
       },
-      { number: "1.3", title: "Скорост и ускорение" },
+      { number: "1.3", title: "Скорост и ускорение", href: "/physics/kinematika/skorost-i-uskorenie", publishedAt: "2026-09-13" },
       { number: "1.4", title: "Праволинейно движение (преговор и обобщение)" },
       { number: "1.5", title: "Праволинейно равнопроменливо движение (задачи)" },
       { number: "1.6", title: "Графики на праволинейно движение (задачи)" },

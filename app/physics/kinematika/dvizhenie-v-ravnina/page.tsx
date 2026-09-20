@@ -653,7 +653,7 @@ export default function PlaneMotionLessonPage() {
 
           <div className="mt-7 rounded-[10px] border-[1.5px] border-ink bg-surface px-5 py-4 shadow-hard">
             <p className="text-[11px] font-bold uppercase tracking-[0.15em] text-minus">Следващ урок</p>
-            <p className="mt-1.5 font-serif text-[20px] font-bold text-ink">Скорост и ускорение</p>
+            <Link href="/physics/kinematika/skorost-i-uskorenie" className="mt-1.5 block font-serif text-[20px] font-bold text-minus underline">Скорост и ускорение →</Link>
             <p className="mt-1.5 text-[16px] leading-relaxed text-ink/90">
               Дотук описахме <strong>къде</strong> е тялото. Следващият въпрос е{" "}
               <strong>колко бързо</strong> се мени това „къде“: средна и мигновена скорост като
