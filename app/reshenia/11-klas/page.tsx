@@ -3,7 +3,7 @@ import { textbook11Lessons, textbook11ProblemCount } from "@/lib/textbook11";
 
 export const metadata = {
   title: "Решения по учебника за 11. клас · SingularityLab",
-  description: "Решения по физика за 11. клас, подредени по урок и номер на задача. Вектори и движение в равнина, с указания и собствени чертежи.",
+  description: "Решения по физика за 11. клас, подредени по урок и номер на задача. Вектори, движение в равнина, скорост и ускорение, с указания и собствени чертежи.",
 };
 
 export default function TextbookSolutionsPage() {
