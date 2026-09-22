@@ -27,6 +27,18 @@ export const MATERIAL_FILTERS: readonly {
 
 const publishedMaterials: readonly MaterialCatalogItem[] = [
   {
+    id: "pregovor-elektrichestvo-magnetizam-emv",
+    kind: "pregovor",
+    title: "Електричество, магнетизъм и ЕМВ: работен лист",
+    summary:
+      "Голям преговор преди оптиката: диагностика, смесени задачи, указания и решения стъпка по стъпка от електростатиката до електромагнитните вълни.",
+    subject: "Физика",
+    level: "university",
+    topic: "Електричество и магнетизъм",
+    meta: ["12 въпроса", "13 задачи", "Решения стъпка по стъпка"],
+    href: "/materiali/pregovor-elektrichestvo-magnetizam-emv",
+  },
+  {
     id: "kod-na-rezistorite",
     kind: "pregovor",
     title: "Цветен код и стойности на резисторите",
