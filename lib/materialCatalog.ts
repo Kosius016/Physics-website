@@ -35,7 +35,7 @@ const publishedMaterials: readonly MaterialCatalogItem[] = [
     subject: "Физика",
     level: "university",
     topic: "Електричество и магнетизъм",
-    meta: ["12 въпроса", "13 задачи", "Решения стъпка по стъпка"],
+    meta: ["12 въпроса", "14 задачи", "Решения стъпка по стъпка"],
     href: "/materiali/pregovor-elektrichestvo-magnetizam-emv",
   },
   {

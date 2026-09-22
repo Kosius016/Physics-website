@@ -4,6 +4,7 @@ import Formula from "@/components/Formula";
 import LessonNav from "@/components/LessonNav";
 import RichText from "@/components/RichText";
 import Section from "@/components/Section";
+import KirchhoffReviewFigure from "@/components/problem-sets/KirchhoffReviewFigure";
 import {
   TeacherModeProvider,
   TeacherModeToggle,
@@ -27,7 +28,7 @@ import {
 export const metadata: Metadata = {
   title: "Електричество, магнетизъм и ЕМВ: работен лист с решения · SingularityLab",
   description:
-    "Голям преговор преди оптиката: 12 диагностични въпроса и 13 задачи с указания и решения стъпка по стъпка. Електростатика, вериги, магнетизъм, индукция, променлив ток и ЕМВ.",
+    "Голям преговор преди оптиката: 12 диагностични въпроса и 14 задачи с указания и решения стъпка по стъпка. Електростатика, закони на Кирхоф, магнетизъм, индукция, променлив ток и ЕМВ.",
 };
 
 const MATERIALS_HREF = "/materiali?subject=physics&level=university&type=pregovor";
@@ -79,6 +80,7 @@ function ReviewExercise({ problem }: { problem: ReviewProblem }) {
           <p key={index}><RichText text={paragraph} /></p>
         ))}
       </ProblemStatement>
+      {problem.figure === "kirchhoff" ? <KirchhoffReviewFigure /> : null}
       <Solution hint={<RichText text={problem.hint} />}>
         {problem.steps.map((step) => (
           <SolutionPart key={step.label} label={step.label} title={step.title}>
