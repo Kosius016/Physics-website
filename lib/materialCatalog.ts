@@ -27,6 +27,18 @@ export const MATERIAL_FILTERS: readonly {
 
 const publishedMaterials: readonly MaterialCatalogItem[] = [
   {
+    id: "limesi",
+    kind: "zadachi",
+    title: "Лимеси: от първа стъпка до доказателство",
+    summary:
+      "Граници, редици, физически приложения и оценки за грешката. От заместване до вложени корени и олимпиадни идеи, с указания и решения стъпка по стъпка.",
+    subject: "Математика",
+    level: "university",
+    topic: "Математически анализ",
+    meta: ["30 задачи", "6 нива", "Водени решения"],
+    href: "/zadachi/limesi",
+  },
+  {
     id: "pregovor-elektrichestvo-magnetizam-emv",
     kind: "pregovor",
     title: "Електричество, магнетизъм и ЕМВ: работен лист",

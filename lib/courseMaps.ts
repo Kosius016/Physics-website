@@ -183,6 +183,17 @@ const mathUni: CourseSection[] = [
       },
     ],
   },
+  {
+    title: "Математически анализ",
+    lessons: [
+      {
+        number: "2.1",
+        title: "Лимеси: от приближение към точност",
+        href: "/math/analiz/limesi",
+        publishedAt: "2026-09-30",
+      },
+    ],
+  },
 ];
 
 const courseMaps: Partial<Record<Subject, Partial<Record<Level, CourseSection[]>>>> = {

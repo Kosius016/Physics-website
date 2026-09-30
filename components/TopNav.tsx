@@ -104,6 +104,7 @@ function lessonLevel(pathname: string, level: string | null): NavLevel {
 
 function materialSubject(pathname: string, subject: string | null): NavSubject {
   if (
+    pathname.startsWith("/zadachi/limesi") ||
     pathname.startsWith("/zadachi/redove-na-teylar") ||
     pathname.startsWith("/zadachi/lineina-algebra-tazhdestva") ||
     subject === "math"
