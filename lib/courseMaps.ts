@@ -159,6 +159,12 @@ const physicsUni: CourseSection[] = [
       },
     ],
   },
+  {
+    title: "Термодинамика",
+    lessons: [
+      { number: "5.1", title: "От молекулното движение към първия принцип на термодинамиката", href: "/physics/termodinamika/parvi-printsip", publishedAt: "2026-10-11" },
+    ],
+  },
 ];
 
 const mathUni: CourseSection[] = [
