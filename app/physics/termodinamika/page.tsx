@@ -6,7 +6,7 @@ export default function Page() {
   return <main className="mx-auto max-w-3xl px-5 pt-11 pb-24">
     <Link href="/physics?level=12" className="text-sm text-minus">Физика · <RichText text="$12.$" /> клас</Link>
     <h1 className="mt-3 font-serif text-4xl font-bold">Термодинамика</h1>
-    <p className="mt-5 text-lg leading-relaxed">От молекулното движение към енергийния баланс, ентропията и топлинните машини. Редът следва предоставеното съдържание на учебника. Основните извеждания използват алгебра и геометрия.</p>
+    <p className="mt-5 text-lg leading-relaxed">Молекулно движение, вътрешна енергия, първи принцип и процеси с идеален газ. Материалът от записките е разделен по темите на учебника. Разработваме курса постепенно; следващите теми са отбелязани със „Скоро“.</p>
     {thermodynamicsCourse.map(section => <section key={section.title} className="mt-10">
       <h2 className="mb-4 border-b-2 border-ink pb-2 font-serif text-2xl font-bold">{section.title.replace("Термодинамика · ", "")}</h2>
       <ol className="divide-y divide-rule rounded-lg border border-ink bg-surface">

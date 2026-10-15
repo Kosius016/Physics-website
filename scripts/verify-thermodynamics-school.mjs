@@ -41,101 +41,80 @@ async function audit(label) {
   assert.deepEqual(result.rawMath,[],label+" raw math");
   assert.equal(result.invalid,false,label+" invalid SVG");
 }
-async function range(locator,value){await locator.fill(String(value));await locator.dispatchEvent("input");}
+async function range(locator,value){const step=Number(await locator.getAttribute('step'))||1;const adjusted=Math.round(Number(value)/step)*step;await locator.fill(String(Number(adjusted.toFixed(6))));await locator.dispatchEvent("input");}
+
+async function extremes(lab,label){
+  const sliders=await lab.locator('input[type="range"]').all();
+  for(let mask=0;mask<2**sliders.length;mask++){
+    for(let i=0;i<sliders.length;i++)await range(sliders[i],await sliders[i].getAttribute(mask&(1<<i)?"max":"min"));
+    await audit(label+" extrema "+mask);
+  }
+}
 try{
   await page.goto(base+"/physics?level=12");
-  assert.equal(await page.locator("main").count(),0); // shared catalog uses its own container
-  const courseLinks=await page.locator('a[href^="/physics/termodinamika/"],a[href="/zadachi/termodinamika/kpd"]').count();
-  assert.ok(courseLinks>=9);
-  await page.goto(base+"/physics?level=university");
-  assert.equal(await page.locator('a[href="/physics/termodinamika/parvi-printsip"]').count(),0);
+  assert.ok(await page.locator('a[href^="/physics/termodinamika/"]').count()>=4);
+  assert.equal(await page.locator('a[href="/physics/termodinamika/entropiya-vtori-printsip"]').count(),0);
   await page.goto(base+"/physics/termodinamika");
-  assert.equal(await page.getByText("Скоро",{exact:true}).count(),4);
+  assert.equal(await page.getByText("Скоро",{exact:true}).count(),9);
   await audit("course");
   for(const entry of thermodynamicsCourse.flatMap(s=>s.lessons).filter(l=>l.href)){
     assert.equal((await page.goto(base+entry.href)).status(),200);
     await page.locator("main h1").waitFor();
     assert.equal(await page.locator("main h1").innerText(),entry.title);
-    assert.equal(await page.getByText("Пътеводител за преподаване и самостоятелна работа",{exact:true}).count(),0);
     await audit(entry.href);
-    // Every main lesson is readable before answering anything.
-    assert.ok(await page.locator("main section .katex").count()>5);
-    for(const lab of await page.locator("[data-thermo-lab]").all()){
-      const sliders=await lab.locator('input[type="range"]').all();
-      // Every combination of slider extrema, including phase and physical parameters.
-      for(let mask=0;mask<2**sliders.length;mask++){
-        for(let i=0;i<sliders.length;i++)await range(sliders[i],await sliders[i].getAttribute(mask&(1<<i)?"max":"min"));
-        await audit(entry.href+" extrema "+mask);
-      }
+    for(const lab of await page.locator('[data-thermo-lab]').all()){
+      await extremes(lab,entry.href);
+      const buttons=await lab.locator('button[aria-pressed]').all();
+      for(const button of buttons){await button.click();await extremes(lab,await button.innerText());}
+      // Intermediate phases catch projected atoms crossing labels.
+      const phase=lab.locator('input[min="0"][max="1"]');
+      if(await phase.count())for(const v of [.125,.25,.375,.5,.625,.75,.875]){await range(phase,v);await audit("intermediate phase");}
     }
-    if(entry.href.endsWith("osnovni-ponyatiya")){
-      const lab=page.locator("#freedom [data-thermo-lab]");
-      for(let molecule=0;molecule<4;molecule++){
-        await lab.getByRole("group",{name:"Молекула",exact:true}).getByRole("button").nth(molecule).click();
-        const buttons=lab.locator('button[aria-pressed]').filter({hasNot:page.locator('input')});
-        const count=await buttons.count();
-        for(let b=4;b<count;b++){
-          await buttons.nth(b).click();
-          for(const phase of [0,.25,.5,.75,1]){await range(lab.locator('input[type="range"]'),phase);await audit("molecule "+molecule+" mode "+b);}
-        }
-        if(await lab.getByRole("checkbox").count())await lab.getByRole("checkbox").check();
-        await audit("active vibrations "+molecule);
-      }
-      await lab.getByRole("group",{name:"Молекула",exact:true}).getByRole("button").nth(1).click();
+    if(entry.href.endsWith('osnovni-ponyatiya')){
+      const lab=page.locator('#freedom [data-thermo-lab]');
       await range(lab.locator('input[type="range"]'),0);
-      const atom=lab.locator("[data-molecule-atom]").first(), before=await atom.getAttribute("transform");
-      await lab.getByRole("button",{name:"Пуснете движението",exact:true}).focus();await page.keyboard.press("Enter");
-      await page.waitForTimeout(180);assert.notEqual(await atom.getAttribute("transform"),before);
-      await lab.getByRole("button",{name:"Пауза",exact:true}).click();
-      const paused=await atom.getAttribute("transform");await page.waitForTimeout(120);assert.equal(await atom.getAttribute("transform"),paused);
-      await lab.screenshot({path:"tmp/thermodynamics-course/molecule-desktop.png"});
+      const atom=lab.locator('[data-molecule-atom]').nth(2),before=await atom.getAttribute('transform');
+      await lab.getByRole('button',{name:'Пуснете движението',exact:true}).focus();await page.keyboard.press('Enter');
+      await page.waitForTimeout(250);assert.notEqual(await atom.getAttribute('transform'),before);
+      await lab.getByRole('button',{name:'Пауза',exact:true}).click();
+      const paused=await atom.getAttribute('transform');await page.waitForTimeout(150);assert.equal(await atom.getAttribute('transform'),paused);
+      const vibration=page.locator('#vibration [data-thermo-lab]');
+      await vibration.getByRole('button',{name:'Равновесна дължина',exact:true}).click();
+      assert.ok((await vibration.locator('dd annotation').allTextContents()).includes('E_k/E=1{,}00'));
+      assert.ok((await vibration.locator('dd annotation').allTextContents()).includes('E_p/E=0{,}00'));
     }
-    if(entry.href.endsWith("protsesi-idealen-gaz")){
-      const lab=page.locator("#graphs [data-thermo-lab]");
-      for(let process=0;process<4;process++)for(let axis=0;axis<3;axis++){
-        await lab.locator('button[aria-pressed]').nth(process).click();
-        await lab.locator('button[aria-pressed]').nth(4+axis).click();
-        for(const phase of [0,.5,1]){await range(lab.locator('input[type="range"]'),phase);await audit("process "+process+" axis "+axis);}
+    // Numeric exercises no longer have generic decorative diagrams.
+    assert.equal(await page.locator('[data-school-problem] svg').count(),0);
+    for(const problem of await page.locator('[data-school-problem]').all()){
+      for(let gate=0;gate<2;gate++){await problem.locator('button:not([disabled])').first().click();await audit('problem gate');}
+      while(await problem.getByRole('button',{name:/Първа стъпка|Следваща стъпка/}).count()){
+        await problem.getByRole('button',{name:/Първа стъпка|Следваща стъпка/}).click();await audit('solution step');
       }
     }
-    if(entry.href.endsWith("parvi-printsip")){
-      const work=page.locator("#work [data-thermo-lab]");
-      await work.getByRole("checkbox").check();
-      const sliders=await work.locator('input[type="range"]').all();
-      for(const v of [1,2,2.1,6])for(const p of [50,100,300]){await range(sliders[0],v);await range(sliders[1],p);await audit("work");}
-      const paths=page.locator("#paths [data-thermo-lab]");
-      for(const button of await paths.locator('button[aria-pressed]').all()){
-        await button.click();for(const phase of [0,.5,1]){await range(paths.locator('input[type="range"]'),phase);await audit("paths");}
+    await page.getByRole('button',{name:'Режим преподавател',exact:false}).click();
+    assert.ok(await page.getByText('Методически бележки',{exact:true}).count()>0);
+    for(const width of [375,900,1280,1536,1920]){
+      await page.setViewportSize({width,height:1000});await audit(entry.href+' width '+width);
+    }
+    // Capture each actual figure for visual inspection, with the sticky lesson nav out of the crop.
+    await page.addStyleTag({content:'.sticky {position:static!important}'});
+    for(const width of [375,1280]){
+      await page.setViewportSize({width,height:1000});
+      for(const lab of await page.locator('[data-thermo-lab]').all()){
+        const section=await lab.evaluate(el=>el.closest('section').id);
+        await lab.screenshot({path:'tmp/thermodynamics-course/pdf-'+section+'-'+width+'.png'});
       }
     }
-    // Each guided problem: both gates, all solution phases, and final caption.
-    for(const problem of await page.locator("[data-school-problem]").all()){
-      for(let gate=0;gate<2;gate++){
-        await problem.locator("button:not([disabled])").first().click();
-        await audit("problem gate "+gate);
-      }
-      while(await problem.getByRole("button",{name:/Първа стъпка|Следваща стъпка/}).count()){
-        await problem.getByRole("button",{name:/Първа стъпка|Следваща стъпка/}).click();await audit("problem step");
-      }
-    }
-    for(const buttons of await page.locator("#check > div > div").all()){
-      const option=buttons.locator("button:not([disabled])").first();if(await option.count())await option.click();
-    }
-    await page.getByRole("button",{name:"Режим преподавател",exact:false}).click();
-    assert.ok(await page.getByText("Методически бележки",{exact:true}).count()>0);
-    for(const width of [375,1280,1536,1920]){
-      await page.setViewportSize({width,height:900});await audit(entry.href+" width "+width);
-    }
-    if(entry.href.endsWith("osnovni-ponyatiya")){
-      await page.setViewportSize({width:375,height:900});
-      await page.locator("#freedom [data-thermo-lab]").screenshot({path:"tmp/thermodynamics-course/molecule-mobile.png"});
-    }
-    await page.setViewportSize({width:1280,height:900});
-    report.push({route:entry.href,status:"passed"});
+    report.push({route:entry.href,status:'passed'});
+    await page.setViewportSize({width:1280,height:1000});
   }
-  await page.goto(base+"/physics/termodinamika/za-naprednali");await audit("advanced");
-  assert.equal(await page.locator("main section").count(),4);
-  assert.deepEqual(errors,[]);
-  writeFileSync("tmp/thermodynamics-course/browser-report.json",JSON.stringify(report,null,2));
-  console.log("PASS: 9 lessons, 4 forthcoming topics, grade navigation, all slider extrema, molecular modes, keyboard animation/pause, process coordinates, work/path variants, all guided phases, teacher notes, KaTeX, no raw math, no SVG overlaps, widths 375/1280/1536/1920; console clean.");
+  await page.goto(base+'/physics/termodinamika/za-naprednali');await audit('advanced');
+  // Unwritten chapters must not remain available as full old lessons.
+  for(const slug of ['entropiya-vtori-printsip','toplinni-dvigateli','hladilni-mashini','proverka']){
+    const response=await page.goto(base+'/physics/termodinamika/'+slug);assert.equal(response.status(),404);
+  }
+  // Expected 404 navigation logs are not runtime failures.
+  assert.deepEqual(errors.filter(e=>!e.includes('404')),[]);
+  writeFileSync('tmp/thermodynamics-course/browser-report.json',JSON.stringify(report,null,2));
+  console.log('PASS: 4 source-based lessons, 9 forthcoming topics; figure variants, slider extrema and phases; animation/pause; no decorative task diagrams; all guided steps; KaTeX, SVG labels, responsive widths 375/900/1280/1536/1920.');
 }finally{await browser.close();}

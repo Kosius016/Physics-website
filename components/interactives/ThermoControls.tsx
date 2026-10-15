@@ -9,8 +9,8 @@ export function ThermoPanel({ title, children }: { title: string; children: Reac
     <figcaption className="mb-4 font-serif text-xl font-semibold">{title}</figcaption>{children}
   </figure>;
 }
-export function ThermoScene({ title, children, height = 250 }: { title: string; children: ReactNode; height?: number }) {
-  return <svg viewBox={"0 0 400 " + height} className={STAGE_CLASS} style={{ fontFamily: DRAWING_FONT_FAMILY }} role="img" aria-label={title}>
+export function ThermoScene({ title, children, height = 250, viewBox }: { title: string; children: ReactNode; height?: number; viewBox?: string }) {
+  return <svg viewBox={viewBox ?? "0 0 400 " + height} className={STAGE_CLASS} style={{ fontFamily: DRAWING_FONT_FAMILY }} role="img" aria-label={title}>
     <title>{title}</title><rect width={400} height={height} fill={STAGE_BG} />{children}
   </svg>;
 }

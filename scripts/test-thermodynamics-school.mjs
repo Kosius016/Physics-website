@@ -6,8 +6,8 @@ import { thermoLessons } from "../lib/thermodynamicsContent.ts";
 import { thermodynamicsCourse } from "../lib/thermodynamicsCourse.ts";
 const near=(a,b,tolerance=1e-7)=>assert.ok(Math.abs(a-b)<tolerance, a+" != "+b);
 const entries=thermodynamicsCourse.flatMap(s=>s.lessons);
-assert.equal(entries.length,13);assert.equal(entries.filter(e=>!e.href).length,4);
-assert.equal(Object.keys(thermoLessons).length,9);
+assert.equal(entries.length,13);assert.equal(entries.filter(e=>!e.href).length,9);
+assert.equal(Object.keys(thermoLessons).length,4);
 let mathCount=0;
 function checkStrings(value, key="") {
   if (typeof value==="string") {
@@ -64,9 +64,9 @@ for(const [kind,model] of Object.entries(moleculeModels)){
     }
   }
 }
-for(const file of ["components/interactives/ThermodynamicsCourseLabs.tsx","components/interactives/MolecularFreedom.tsx"]){
+for(const file of ["components/interactives/ThermodynamicsPdfLabs.tsx","components/interactives/PdfMoleculeDiagrams.tsx"]){
   const source=readFileSync(file,"utf8");
   assert.ok(!/#(?:[0-9a-f]{3}){1,2}\b/i.test(source),"Local color literal");
-  assert.ok(!source.includes(String.fromCharCode(164))&&!source.includes("«{")&&!source.includes(".raw"+String.fromCharCode(96)),"Unexpanded authoring marker");
+  assert.ok(!source.includes(String.fromCharCode(164))&&!source.includes("«{")&&!/[а-я]\.?raw`/i.test(source),"Unexpanded authoring marker");
 }
 console.log("PASS: textbook map, "+mathCount+" LaTeX expressions, all answer explanations, ideal-gas law, first law, Mayer, Poisson, path dependence, collision energy, molecular centers of mass and rigid bond lengths.");

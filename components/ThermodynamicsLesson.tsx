@@ -5,7 +5,7 @@ import RichText from "./RichText";
 import Quiz from "./Quiz";
 import PredictionQuestion from "./interactives/PredictionQuestion";
 import { TeacherModeProvider, TeacherModeToggle, TeacherNote } from "./interactives/TeacherMode";
-import ThermodynamicsCourseLab from "./interactives/ThermodynamicsCourseLabs";
+import ThermodynamicsCourseLab from "./interactives/ThermodynamicsPdfLabs";
 import SchoolThermoProblems from "./interactives/SchoolThermoProblems";
 import { thermoEntries, thermoEntry } from "@/lib/thermodynamicsCourse";
 import { thermoLessons, type Block } from "@/lib/thermodynamicsContent";

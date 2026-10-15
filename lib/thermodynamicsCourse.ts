@@ -15,13 +15,13 @@ export const thermodynamicsCourse: CourseSection[] = [
     { number: "6", title: "Основни понятия в термодинамиката", href: "/physics/termodinamika/osnovni-ponyatiya", publishedAt: "2026-10-15" },
     { number: "7", title: "Първи принцип на термодинамиката", href: "/physics/termodinamika/parvi-printsip", publishedAt: "2026-10-15" },
     { number: "8", title: "Енергетични превръщания при процеси с идеален газ", href: "/physics/termodinamika/protsesi-idealen-gaz", publishedAt: "2026-10-15" },
-    { number: "9", title: "Ентропия. Втори принцип на термодинамиката", href: "/physics/termodinamika/entropiya-vtori-printsip", publishedAt: "2026-10-15" },
+    { number: "9", title: "Ентропия. Втори принцип на термодинамиката" },
   ] },
   { title: "Термодинамика · Топлинни машини", lessons: [
-    { number: "10", title: "Енергетични превръщания в топлинните двигатели", href: "/physics/termodinamika/toplinni-dvigateli", publishedAt: "2026-10-15" },
-    { number: "11", title: "КПД на топлинни двигатели (решаване на задачи)", href: "/zadachi/termodinamika/kpd", publishedAt: "2026-10-15" },
-    { number: "12", title: "Хладилни машини и топлинни помпи", href: "/physics/termodinamika/hladilni-mashini", publishedAt: "2026-10-15" },
-    { number: "13", title: "Молекулен строеж на веществата (проверете знанията си)", href: "/physics/termodinamika/proverka", publishedAt: "2026-10-15" },
+    { number: "10", title: "Енергетични превръщания в топлинните двигатели" },
+    { number: "11", title: "КПД на топлинни двигатели (решаване на задачи)" },
+    { number: "12", title: "Хладилни машини и топлинни помпи" },
+    { number: "13", title: "Молекулен строеж на веществата (проверете знанията си)" },
   ] },
 ];
 export const thermoEntries = thermodynamicsCourse.flatMap(section => section.lessons);

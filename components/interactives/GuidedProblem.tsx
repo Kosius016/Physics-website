@@ -33,7 +33,7 @@ export interface GuidedProblemData {
   title: string;
   statement: RichTextString;
   /** Фигурата по фаза: 0 геометрия, 1 след Q1 (dB), 2 след Q2 (резултат), 3 след всички стъпки. */
-  figure: (phase: number) => ReactNode;
+  figure?: (phase: number) => ReactNode;
   /** Кратко обяснение под фигурата; прозата остава извън SVG сцената. */
   figureCaption?: (phase: number) => RichTextString | undefined;
   /** viewBox височина на фигурата (ширината е винаги 480). */
@@ -63,7 +63,7 @@ export default function GuidedProblem({ index, data }: { index: number; data: Gu
       </p>
 
       {/* Интерактивната фигура (тъмна сцена, достроява се по фазите) */}
-      <svg
+      {data.figure && <svg
         viewBox={`0 0 480 ${data.figureHeight ?? 300}`}
         className={STAGE_CLASS + " mt-4 select-none"}
         role="img"
@@ -71,7 +71,7 @@ export default function GuidedProblem({ index, data }: { index: number; data: Gu
       >
         <rect width={480} height={data.figureHeight ?? 300} fill={STAGE_BG} />
         {data.figure(phase)}
-      </svg>
+      </svg>}
       {data.figureCaption?.(phase) && (
         <p aria-live="polite" className="mt-2 text-[13.5px] leading-relaxed text-muted">
           <RichText text={data.figureCaption(phase) ?? ""} />

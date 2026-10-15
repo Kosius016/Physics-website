@@ -21,23 +21,12 @@ function figure(kind: ProblemInput["diagram"], phase: number) {
     {phase >= 1 && <><Arrow x1={190} y1={75} x2={300} y2={75} color={C.minus} /><Arrow x1={300} y1={185} x2={190} y2={185} color={C.minus} /></>}
     {[[140,185],[140,75],[350,75],[350,185]].map(([x,y], i) => <SvgTex key={i} x={x} y={y + (i === 0 || i === 3 ? 22 : -22)} tex={String(i+1)} color={C.wire} width={24} anchor="middle" fontSize={18}/>)}
   </g>;
-  if (kind === "gas") return <g>
-    <path d="M370 65H110V200H370" fill="none" stroke={C.wire} strokeWidth={2} />
-    <line x1={335} x2={335} y1={65} y2={200} stroke={C.warn} strokeWidth={7} />
-    {Array.from({length:18},(_,i)=><circle key={i} cx={135+(i%6)*32} cy={95+Math.floor(i/6)*35} r={4} fill={C.minus}/>)}
-    {phase >= 1 && <Arrow x1={190} y1={135} x2={245} y2={110} color={C.warn}/>}
-    {phase >= 2 && <SvgTex x={240} y={235} tex="U=N\overline E" color={C.ok} width={170} anchor="middle" fontSize={18}/>}
-  </g>;
-  return <g>
-    <rect x={165} y={75} width={150} height={125} fill="none" stroke={C.wire} strokeWidth={2}/>
-    <SvgTex x={240} y={135} tex="\Delta U" color={C.wire} width={85} anchor="middle" fontSize={22}/>
-    {phase >= 1 && <><Arrow x1={55} y1={135} x2={150} y2={135} color={C.plus}/><SvgTex x={100} y={100} tex="Q" color={C.plus} width={30} anchor="middle" fontSize={18}/></>}
-    {phase >= 2 && <><Arrow x1={330} y1={135} x2={425} y2={135} color={C.ok}/><SvgTex x={380} y={100} tex="A" color={C.ok} width={30} anchor="middle" fontSize={18}/></>}
-  </g>;
+  return null;
 }
+
 function problem(data: ProblemInput): GuidedProblemData {
-  return { title: data.title, statement: data.statement, figure: phase => figure(data.diagram, phase), figureHeight: 270,
-    figureCaption: phase => phase === 0 ? "Схемата показва модела, без да налага числен мащаб." : phase === 3 ? data.result : data.diagram === "energy" || !data.diagram ? "Стрелките задават положителните посоки на топлината и работата. Отрицателна стойност означава обратен пренос." : "Фигурата се достроява след избора. Проверете условията, преди да заместите числа.",
+  return { title: data.title, statement: data.statement, figure: data.diagram === "cycle" ? phase => figure("cycle", phase) : undefined, figureHeight: 270,
+    figureCaption: phase => phase === 3 ? data.result : undefined,
     directionQuestion: choice(data.first), additionQuestion: choice(data.second), hints: [data.hint], steps: data.steps, teacherNotes: [data.note] };
 }
 export const schoolThermoProblems: Record<string, GuidedProblemData> = {
