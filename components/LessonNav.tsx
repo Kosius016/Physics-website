@@ -3,6 +3,7 @@
  * Извадена като споделен компонент (LessonRenderer + самостоятелните глави);
  * `right` е опционален слот в десния край (напр. превключвател за режим).
  */
+import RichText from "./RichText";
 export interface LessonNavItem {
   id: string;
   n: string;
@@ -30,7 +31,7 @@ export default function LessonNav({
                 href={`#${s.id}`}
                 className="whitespace-nowrap rounded-md px-2.5 py-1.5 text-[13.5px] font-medium text-muted transition-colors hover:bg-hl hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-minus"
               >
-                <span className="mr-1 text-[11.5px] text-rule">{s.n}</span>
+                <span className="mr-1 text-[11.5px] text-muted"><RichText text={/^\u00a7\d+$/.test(s.n) ? "$\\S " + s.n.slice(1) + "$" : s.n} /></span>
                 {s.label}
               </a>
             ))}

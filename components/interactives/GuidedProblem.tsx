@@ -56,7 +56,7 @@ export default function GuidedProblem({ index, data }: { index: number; data: Gu
   return (
     <div className="rounded-[10px] border-[1.5px] border-ink bg-surface px-5 py-4">
       <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-plus">
-        Задача {index}
+        Задача <RichText text={"$" + index + "$"} />
       </span>
       <p className="mt-1.5 text-ink/90">
         <RichText text={data.statement} />
@@ -84,7 +84,7 @@ export default function GuidedProblem({ index, data }: { index: number; data: Gu
           {data.hints.map((h, i) => (
             <details key={i} className="rounded-[8px] border-[1.5px] border-rule px-4 py-2.5 open:border-ink">
               <summary className="cursor-pointer text-[14.5px] font-semibold text-ink select-none">
-                Подсказка {data.hints.length > 1 ? i + 1 : ""}
+                Подсказка {data.hints.length > 1 ? <RichText text={"$" + (i + 1) + "$"} /> : ""}
               </summary>
               <p className="mt-2 border-t-[1.5px] border-dashed border-rule pt-2 text-[15px] text-ink/90">
                 <RichText text={h} />
@@ -126,7 +126,7 @@ export default function GuidedProblem({ index, data }: { index: number; data: Gu
             <div key={i} className="space-y-2 animate-rise">
               <p className="text-[15.5px] text-ink/90">
                 <span className="mr-2 text-[12px] font-bold uppercase tracking-wide text-muted">
-                  Стъпка {i + 1}
+                  Стъпка <RichText text={"$" + (i + 1) + "$"} />
                 </span>
                 <RichText text={s.text} />
               </p>

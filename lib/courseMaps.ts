@@ -3,6 +3,7 @@
  * (предмет + ниво). По-късно ще идват от истински източник на данни.
  */
 
+import { thermodynamicsCourse } from "./thermodynamicsCourse";
 export const SUBJECTS = ["Физика", "Математика"] as const;
 export const LEVELS = ["11. клас", "12. клас", "Университетско"] as const;
 
@@ -159,12 +160,6 @@ const physicsUni: CourseSection[] = [
       },
     ],
   },
-  {
-    title: "Термодинамика",
-    lessons: [
-      { number: "5.1", title: "От молекулното движение към първия принцип на термодинамиката", href: "/physics/termodinamika/parvi-printsip", publishedAt: "2026-10-11" },
-    ],
-  },
 ];
 
 const mathUni: CourseSection[] = [
@@ -200,11 +195,22 @@ const mathUni: CourseSection[] = [
       },
     ],
   },
+  {
+    title: "Комплексни числа",
+    lessons: [
+      { number: "3.1", title: "Комплексни числа: пълен курс за физици", href: "/math/kompleksni-chisla", publishedAt: "2026-10-03" },
+      { number: "3.2", title: "Комплексното число като точка и действие", href: "/math/kompleksni-chisla/osnovi", publishedAt: "2026-10-03" },
+      { number: "3.3", title: "От декартови координати до формулата на Ойлер", href: "/math/kompleksni-chisla/oyler", publishedAt: "2026-10-03" },
+      { number: "3.4", title: "Степени, корени и комплексни уравнения", href: "/math/kompleksni-chisla/stepeni-i-koreni", publishedAt: "2026-10-03" },
+      { number: "3.5", title: "Комплексните числа във физиката", href: "/math/kompleksni-chisla/fizika", publishedAt: "2026-10-03" },
+    ],
+  },
 ];
 
 const courseMaps: Partial<Record<Subject, Partial<Record<Level, CourseSection[]>>>> = {
   Физика: {
     "11. клас": physics11,
+    "12. клас": thermodynamicsCourse,
     Университетско: physicsUni,
   },
   Математика: {

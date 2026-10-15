@@ -54,7 +54,7 @@ export default function Quiz({ questions }: { questions: QuizQuestion[] }) {
         return (
           <div key={qi}>
             <p className="mb-3 font-semibold text-ink">
-              {qi + 1}. <RichText text={q.question} />
+              <RichText text={"$" + (qi + 1) + ".$"} /> <RichText text={q.question} />
             </p>
             <div className="flex flex-col gap-2.5">
               {q.options.map((opt, oi) => {
@@ -118,9 +118,9 @@ export default function Quiz({ questions }: { questions: QuizQuestion[] }) {
         <p className="rounded-r-lg border-l-4 border-minus bg-hl px-4 py-2.5 text-[15px]">
           Резултат:{" "}
           <span className="font-bold tabular-nums text-ink">
-            {correctCount} / {answered}
+            <RichText text={"$" + correctCount + "/" + answered + "$"} />
           </span>{" "}
-          верни от отговорените ({questions.length} общо въпроса).
+          верни от отговорените (<RichText text={"$" + questions.length + "$"} /> общо въпроса).
         </p>
       )}
     </div>

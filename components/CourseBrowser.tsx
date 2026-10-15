@@ -1,4 +1,5 @@
 import Link from "next/link";
+import RichText from "./RichText";
 import { getCourseMap, type Level, type Subject } from "@/lib/courseMaps";
 
 /**
@@ -41,7 +42,7 @@ export default function CourseBrowser({
             >
               <h2 className="mb-4 border-b-2 border-ink pb-1.5 font-serif text-[24px] font-bold text-ink">
                 <span className="mr-2 align-[0.15em] text-[0.65em] tracking-[0.1em] text-muted">
-                  §{si + 1}
+                  <RichText text={"$\\S " + (si + 1) + "$"} />
                 </span>
                 {section.title}
               </h2>
@@ -54,7 +55,7 @@ export default function CourseBrowser({
                         className="group flex items-center gap-4 px-5 py-4 transition-colors hover:bg-hl"
                       >
                         <span className="w-9 shrink-0 text-[15px] font-bold tabular-nums text-minus">
-                          {lesson.number}
+                          <RichText text={"$" + lesson.number + "$"} />
                         </span>
                         <span className="flex-1 text-[16px] font-semibold text-ink">
                           {lesson.title}
@@ -66,7 +67,7 @@ export default function CourseBrowser({
                     ) : (
                       <div className="flex items-center gap-4 px-5 py-4">
                         <span className="w-9 shrink-0 text-[15px] font-bold tabular-nums text-rule">
-                          {lesson.number}
+                          <RichText text={"$" + lesson.number + "$"} />
                         </span>
                         <span className="flex-1 text-[16px] text-muted">{lesson.title}</span>
                         <span className="rounded-full border-[1.5px] border-rule px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-muted">
