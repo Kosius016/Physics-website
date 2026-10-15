@@ -103,7 +103,7 @@ export default function Quiz({ questions }: { questions: QuizQuestion[] }) {
                     <RichText text={q.options.find((o) => o.correct)!.why!} />
                   </p>
                 )}
-                {q.explanation && (
+                {q.explanation && ![q.options[pickedIdx].why, !pickedCorrect ? q.options.find(o => o.correct)?.why : undefined].some(why => why?.trim() === q.explanation?.trim()) && (
                   <p className="mt-2">
                     <RichText text={q.explanation} />
                   </p>

@@ -1,5 +1,13 @@
 /** School examples consistently use R = 8.31 J/(mol K). p[kPa] V[L] = E[J]. */
 export const SCHOOL_R = 8.31;
+
+/** Rz(phi) Ry(theta) Rz(psi): axis direction, then rotation about that axis. */
+export function orientMolecule([x, y, z]: [number, number, number], theta: number, phi: number, psi: number): [number, number, number] {
+  const a = x * Math.cos(psi) - y * Math.sin(psi);
+  const b = x * Math.sin(psi) + y * Math.cos(psi);
+  const c = a * Math.cos(theta) + z * Math.sin(theta);
+  return [c * Math.cos(phi) - b * Math.sin(phi), c * Math.sin(phi) + b * Math.cos(phi), -a * Math.sin(theta) + z * Math.cos(theta)];
+}
 export type ProcessKind = "isochoric" | "isobaric" | "isothermal" | "adiabatic";
 export function processState(kind: ProcessKind, progress: number, s = 3) {
   const r = 1 + progress, gamma = (s + 2) / s;

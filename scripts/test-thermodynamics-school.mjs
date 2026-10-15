@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import katex from "katex";
 import { readFileSync } from "node:fs";
-import { SCHOOL_R, equalHeating, processState, pathState, rectangleCycle, reflection, moleculeModels, moleculeCoordinates } from "../lib/thermodynamicsSchool.ts";
+import { SCHOOL_R, equalHeating, processState, pathState, rectangleCycle, reflection, moleculeModels, moleculeCoordinates, orientMolecule } from "../lib/thermodynamicsSchool.ts";
 import { thermoLessons } from "../lib/thermodynamicsContent.ts";
 import { thermodynamicsCourse } from "../lib/thermodynamicsCourse.ts";
 const near=(a,b,tolerance=1e-7)=>assert.ok(Math.abs(a-b)<tolerance, a+" != "+b);
@@ -64,6 +64,16 @@ for(const [kind,model] of Object.entries(moleculeModels)){
     }
   }
 }
+// Changing orientation preserves a rigid molecule and its mass center.
+const bent=[[0,0,7.25],[-64,0,-58],[64,0,-58]],masses=[16,1,1];
+for(const theta of [0,.7,Math.PI])for(const phi of [0,1.2,2*Math.PI])for(const psi of [0,.9,Math.PI,2*Math.PI]){
+  const points=bent.map(p=>orientMolecule(p,theta,phi,psi));
+  for(let axis=0;axis<3;axis++)near(points.reduce((sum,p,i)=>sum+p[axis]*masses[i],0),0);
+  for(const [a,b] of [[0,1],[0,2],[1,2]])near(Math.hypot(...points[a].map((v,i)=>v-points[b][i])),Math.hypot(...bent[a].map((v,i)=>v-bent[b][i])));
+  const axis=orientMolecule([0,0,1],theta,phi,psi);
+  [Math.sin(theta)*Math.cos(phi),Math.sin(theta)*Math.sin(phi),Math.cos(theta)].forEach((v,i)=>near(axis[i],v));
+}
+assert.notDeepEqual(orientMolecule(bent[1],.7,.4,0),orientMolecule(bent[1],.7,.4,.9));
 for(const file of ["components/interactives/ThermodynamicsPdfLabs.tsx","components/interactives/PdfMoleculeDiagrams.tsx"]){
   const source=readFileSync(file,"utf8");
   assert.ok(!/#(?:[0-9a-f]{3}){1,2}\b/i.test(source),"Local color literal");

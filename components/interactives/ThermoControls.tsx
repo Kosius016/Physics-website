@@ -46,6 +46,5 @@ export function useThermoMotion(duration = 8) {
 export function MotionControls({ motion }: { motion: ReturnType<typeof useThermoMotion> }) {
   return <div className="mt-4">
     <button type="button" className={BTN_PRI} onClick={motion.toggle}>{motion.playing ? "Пауза" : "Пуснете движението"}</button>
-    <ThermoSlider label={"Фаза на движението: $" + formatThermo(motion.phase * 100, 0) + "\\%$"} value={motion.phase} min={0} max={1} step={0.005} onChange={motion.seek} />
   </div>;
 }

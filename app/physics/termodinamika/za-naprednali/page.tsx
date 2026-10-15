@@ -25,13 +25,13 @@ export default function Page() {
     </section>
     <section id="isotherm" className="scroll-mt-20 pt-12 space-y-4">
       <h2 className="font-serif text-2xl font-bold"><RichText text="$\S 2$"/> Защо при изотерма се появява логаритъм</h2>
-      <P text={raw`При постоянно количество идеален газ и постоянна температура $p(V)=\nu RT/V$. Налягането намалява при разширение; лицето под кривата не е правоъгълник.`}/>
-      <Formula latex={raw`A=\nu RT\int_{V_1}^{V_2}\frac{dV'}{V'}`}/>
+      <P text={raw`При постоянно количество идеален газ и постоянна температура $p(V)=n RT/V$. Налягането намалява при разширение; лицето под кривата не е правоъгълник.`}/>
+      <Formula latex={raw`A=n RT\int_{V_1}^{V_2}\frac{dV'}{V'}`}/>
       <P text={raw`Използваме математическия факт $d(\ln x)/dx=1/x$ за $x>0$. Получаваме:`}/>
-      <Formula latex={raw`\boxed{A=\nu RT\ln\frac{V_2}{V_1}}`}/>
+      <Formula latex={raw`\boxed{A=n RT\ln\frac{V_2}{V_1}}`}/>
       <P text={raw`Аргументът $V_2/V_1$ е безразмерен. При разширение логаритъмът е положителен, при свиване отрицателен. Нулевата работа при $V_2=V_1$ следва от $\ln1=0$. За идеален газ $\Delta U=0$, следователно $Q=A$.`}/>
       <P text="Можем да проверим резултата и с производна, както в записките. Търсим функция, чиято производна дава налягането и която е нула при началния обем."/>
-      <Formula latex={raw`\frac{d}{dV}\left(\nu RT\ln\frac{V}{V_1}\right)=\frac{\nu RT}{V}`}/>
+      <Formula latex={raw`\frac{d}{dV}\left(n RT\ln\frac{V}{V_1}\right)=\frac{n RT}{V}`}/>
       <P text={raw`При $1\,\mathrm{mol}$ газ, $T=300\,\mathrm K$ и удвояване на обема:`}/>
       <Formula latex={raw`A=1\cdot8{,}31\cdot300\ln2\approx1728\,\mathrm J`}/>
       <TeacherNote>Еднакво относително разширение дава еднаква работа при еднаква температура. Това обяснява логаритмичния характер по-добре от запомняне на интеграл.</TeacherNote>
@@ -39,18 +39,18 @@ export default function Page() {
     <section id="poisson" className="scroll-mt-20 pt-12 space-y-4">
       <h2 className="font-serif text-2xl font-bold"><RichText text="$\S 3$"/> Извеждане на закона на Поасон</h2>
       <P text="При адиабатно разширение положителната работа намалява вътрешната енергия. Приемаме идеален газ, обратим процес, постоянни моларни топлинни капацитети и само обемна работа."/>
-      <Formula latex={raw`dU+\delta A=0,\qquad \nu C_V\,dT+p\,dV=0`}/>
-      <P text={raw`Символът $\delta A$ напомня, че работата зависи от процеса. Замествайки $p=\nu RT/V$ и разделяйки на $\nu C_VT$, получаваме връзка между относителните изменения:`}/>
+      <Formula latex={raw`dU+\delta A=0,\qquad n C_V\,dT+p\,dV=0`}/>
+      <P text={raw`Символът $\delta A$ напомня, че работата зависи от процеса. Замествайки $p=n RT/V$ и разделяйки на $n C_VT$, получаваме връзка между относителните изменения:`}/>
       <Formula latex={raw`\frac{dT}{T}=-\frac R{C_V}\frac{dV}{V}=-(\gamma-1)\frac{dV}{V}`}/>
       <P text={raw`Използваме $\gamma=C_p/C_V$ и $C_p-C_V=R$. Интегрираме между крайните състояния:`}/>
       <Formula latex={raw`\int_{T_1}^{T_2}\frac{dT'}{T'}=-(\gamma-1)\int_{V_1}^{V_2}\frac{dV'}{V'}`}/>
       <Formula latex={raw`\ln\frac{T_2}{T_1}=-(\gamma-1)\ln\frac{V_2}{V_1}`}/>
       <P text="Преминаваме от равенство на логаритми към равенство на положителните им аргументи:"/>
       <Formula latex={raw`T_1V_1^{\gamma-1}=T_2V_2^{\gamma-1}`}/>
-      <P text={raw`Накрая заместваме $T=pV/(\nu R)$ и съкращаваме постоянния множител:`}/>
+      <P text={raw`Накрая заместваме $T=pV/(n R)$ и съкращаваме постоянния множител:`}/>
       <Formula latex={raw`\boxed{p_1V_1^\gamma=p_2V_2^\gamma}`}/>
       <P text="Работата може да се намери от крайното изменение на вътрешната енергия, без нов интеграл:"/>
-      <Formula latex={raw`A=\nu C_V(T_1-T_2)=\frac{p_1V_1-p_2V_2}{\gamma-1}`}/>
+      <Formula latex={raw`A=n C_V(T_1-T_2)=\frac{p_1V_1-p_2V_2}{\gamma-1}`}/>
       <TeacherNote>Равенството за работата от крайните температури изисква адиабатен процес и постоянен капацитет. Обратимост е нужна за използването на закона на Поасон между обемите и наляганията.</TeacherNote>
     </section>
     <section id="recap" className="scroll-mt-20 pt-12">

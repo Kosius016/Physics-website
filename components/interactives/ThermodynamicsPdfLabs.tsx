@@ -99,7 +99,7 @@ function HeatingLab(){
     })}</div>
     <ThermoSlider label={raw`Еднакво повишение на температурата: $\Delta T=${dt}\,\mathrm K$`} value={dt} min={0} max={150} step={5} onChange={setDt}/>
     <ThermoReadout items={[["Вътрешна енергия и в двата съда",raw`\Delta U=${energy(du)}`],["Работа при разширението",`A_p=${energy(a)}`],["Топлина в твърдия съд",`Q_V=${energy(du)}`],["Топлина под буталото",`Q_p=${energy(du+a)}`]]}/>
-    <p className="mt-4 text-sm"><RichText text={raw`Порциите са еднакви: $\nu=0{,}10\,\mathrm{mol}$, първоначално при $T_1=300\,\mathrm K$ и $p_1=100\,\mathrm{kPa}$. До една и съща крайна температура промяната на $U$ е еднаква. Под буталото е нужна допълнителна топлина за работата: $Q_p-Q_V=p\Delta V=\nu R\Delta T$. Капацитетът на съдовете и топлинните загуби са пренебрегнати.`}/></p>
+    <p className="mt-4 text-sm"><RichText text={raw`Порциите са еднакви: $n=0{,}10\,\mathrm{mol}$, първоначално при $T_1=300\,\mathrm K$ и $p_1=100\,\mathrm{kPa}$. До една и съща крайна температура промяната на $U$ е еднаква. Под буталото е нужна допълнителна топлина за работата: $Q_p-Q_V=p\Delta V=n R\Delta T$. Капацитетът на съдовете и топлинните загуби са пренебрегнати.`}/></p>
   </ThermoPanel>;
 }
 export default function ThermodynamicsPdfLab({kind}:{kind:ThermoLab}) {

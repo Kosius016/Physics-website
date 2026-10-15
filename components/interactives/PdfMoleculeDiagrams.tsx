@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { orientMolecule } from "@/lib/thermodynamicsSchool";
 import RichText from "@/components/RichText";
 import SvgTex from "./SvgTex";
 import { Arrow, C, STAGE_BG, BTN_PRI, BTN_SEC } from "./svg";
@@ -11,8 +12,8 @@ const project = ([x,y,z]: V3, cx=200, cy=145): [number,number] => [cx+Math.sqrt(
 const sphere = (theta: number, phi: number, r: number): V3 => [r*Math.sin(theta)*Math.cos(phi),r*Math.sin(theta)*Math.sin(phi),r*Math.cos(theta)];
 const curve = (points: V3[], cx=200, cy=145) => points.map(p=>project(p,cx,cy).join(",")).join(" ");
 const samples = (f: (t: number)=>V3, steps=90) => Array.from({length:steps+1},(_,i)=>f(i/steps));
-function Atom({x,y,label,r=14,muted=false}:{x:number;y:number;label?:string;r?:number;muted?:boolean}) {
-  return <g data-molecule-atom transform={`translate(${x} ${y})`} opacity={muted?.25:1}><circle r={r} fill={STAGE_BG} stroke={C.wire} strokeWidth={1.5}/>{label ? <SvgTex x={0} y={0} tex={label} width={2*r} anchor="middle" color={C.wire} fontSize={16}/> : <circle r={r-3} fill={C.minus}/>}</g>;
+function Atom({x,y,label,r=14,muted=false,hideLabel=false}:{x:number;y:number;label?:string;r?:number;muted?:boolean;hideLabel?:boolean}) {
+  return <g data-molecule-atom transform={`translate(${x} ${y})`} opacity={muted?.25:1}><circle r={r} fill={STAGE_BG} stroke={C.wire} strokeWidth={1.5}/>{label ? !hideLabel&&<SvgTex x={0} y={0} tex={label} width={2*r} anchor="middle" color={C.wire} fontSize={16}/> : <circle r={r-3} fill={C.minus}/>}</g>;
 }
 const cross = (x:number,y:number) => <path d={`M${x-4} ${y}h8M${x} ${y-4}v8`} stroke={C.warn} strokeWidth={1.5}/>;
 
@@ -69,28 +70,46 @@ export function MolecularOrientation() {
   </ThermoPanel>;
 }
 
-/** Figures 3–4: fixed axis, visibly different effect of rotation about it. */
+/** Figures 3–4: two angles orient the axis; the third rotates the molecular plane. */
 export function ThirdMolecularAngle() {
-  const motion=useThermoMotion(8),[endOn,setEndOn]=useState(false),psi=2*Math.PI*motion.phase;
+  const motion=useThermoMotion(8),[endOn,setEndOn]=useState(false);
+  const [theta,setTheta]=useState(55),[phi,setPhi]=useState(120);
+  const th=theta*Math.PI/180,ph=phi*Math.PI/180,psi=2*Math.PI*motion.phase;
   const draw=(kind:"linear"|"bent")=>{
     const pts:V3[]=kind==="linear"?[[0,0,75],[0,0,0],[0,0,-75]]:[[0,0,7.25],[-64,0,-58],[64,0,-58]];
-    const rotate=([x,y,z]:V3):V3=>[x*Math.cos(psi)-y*Math.sin(psi),x*Math.sin(psi)+y*Math.cos(psi),z];
-    const toScreen=(p:V3):[number,number]=>endOn?[200+p[0],130-p[1]]:project(p,200,130);
-    const screen=pts.map(p=>toScreen(rotate(p))),labels=kind==="linear"?["\\mathrm O","\\mathrm C","\\mathrm O"]:["\\mathrm O","\\mathrm H","\\mathrm H"];
-    return <ThermoScene title={(kind==="linear"?"Линейна":"Огъната")+" молекула при въртене около собствената ос"} height={260} viewBox="90 5 220 250">
-      {endOn ? <circle cx={200} cy={130} r={64} fill="none" stroke={C.faint} strokeDasharray="5 5"/> : <Arrow x1={200} y1={238} x2={200} y2={20} color={C.mut} width={1}/>}
-      {!endOn&&<SvgTex x={218} y={26} tex="z" width={22} color={C.mut} fontSize={18}/>}
-      <g opacity={.25}>{pts.map((p,i)=>{const [x,y]=toScreen(p);return <circle key={i} cx={x} cy={y} r={18} fill="none" stroke={C.wire} strokeDasharray="4 4"/>;})}</g>
+    const rotated=pts.map(p=>orientMolecule(p,endOn?0:th,endOn?0:ph,psi));
+    const screen=rotated.map(p=>endOn?[200+p[0],130-p[1]]:project(p,200,130));
+    const labels=kind==="linear"?["\\mathrm O","\\mathrm C","\\mathrm O"]:["\\mathrm O","\\mathrm H","\\mathrm H"];
+    const order=[0,1,2].sort((a,b)=>{
+      const depth=(p:V3)=>endOn?p[2]:Math.sqrt(3)/4*p[0]+.75*p[1]+.5*p[2];
+      return depth(rotated[a])-depth(rotated[b]);
+    });
+    const axisStart=project(sphere(th,ph,-108),200,130),axisEnd=project(sphere(th,ph,108),200,130);
+    return <ThermoScene title={(kind==="linear"?"Линейна":"Огъната")+" молекула с независимо управление на ориентацията"} height={260} viewBox="70 0 260 260">
+      {endOn ? <circle cx={200} cy={130} r={64} fill="none" stroke={C.faint} strokeDasharray="5 5"/> : <>
+        <circle cx={200} cy={130} r={100} fill="none" stroke={C.faint}/>
+        <polyline points={curve(samples(t=>sphere(Math.PI/2,t*2*Math.PI,100)),200,130)} fill="none" stroke={C.faint}/>
+        <polyline points={curve(samples(t=>sphere(t*2*Math.PI,ph,100)),200,130)} fill="none" stroke={C.minus} strokeOpacity={.3}/>
+        <Arrow x1={axisStart[0]} y1={axisStart[1]} x2={axisEnd[0]} y2={axisEnd[1]} color={C.warn} width={1}/>
+      </>}
       {(kind==="linear"?[[0,1],[1,2]]:[[0,1],[0,2]]).map(([a,b])=><line key={a+":"+b} x1={screen[a][0]} y1={screen[a][1]} x2={screen[b][0]} y2={screen[b][1]} stroke={C.minus} strokeWidth={3}/>)}
-      {screen.map(([x,y],i)=>endOn&&kind==="linear"&&i!==1?null:<Atom key={i} x={x} y={y} r={18} label={labels[i]}/>)}
+      {order.map((i,rank)=>{
+        const [x,y]=screen[i];
+        const covered=order.slice(rank+1).some(j=>Math.hypot(x-screen[j][0],y-screen[j][1])<28);
+        return <Atom key={i} x={x} y={y} r={18} label={labels[i]} hideLabel={covered}/>;
+      })}
     </ThermoScene>;
   };
   return <ThermoPanel title="Кога е необходим трети ъгъл">
     <div className="mb-4 flex flex-wrap gap-2">{[false,true].map(value=><button type="button" key={String(value)} className={endOn===value?BTN_PRI:BTN_SEC} aria-pressed={endOn===value} onClick={()=>setEndOn(value)}>{value?"Поглед по оста":"Поглед отстрани"}</button>)}</div>
     <div className="grid gap-4 sm:grid-cols-2"><div><h3 className="mb-2 text-center font-serif"><RichText text={String.raw`$\mathrm{CO_2}$ · линейна`}/></h3>{draw("linear")}</div><div><h3 className="mb-2 text-center font-serif"><RichText text={String.raw`$\mathrm{H_2O}$ · огъната`}/></h3>{draw("bent")}</div></div>
+    <ThermoSlider label={`Наклон на оста: $\\theta=${theta}^\\circ$`} value={theta} min={0} max={180} onChange={setTheta}/>
+    <ThermoSlider label={`Меридиан на оста: $\\varphi=${phi}^\\circ$`} value={phi} min={0} max={360} onChange={setPhi}/>
+    <ThermoSlider label={`Завъртане около собствената ос: $\\psi=${fmt(360*motion.phase,0)}^\\circ$`} value={360*motion.phase} min={0} max={360} onChange={value=>motion.seek(value/360)}/>
     <MotionControls motion={motion}/>
     <ThermoReadout items={[["Трети ъгъл",`\\psi=${fmt(360*motion.phase,0)}^\\circ`],["Без активни трептения",String.raw`s_{\mathrm{CO_2}}=5,\quad s_{\mathrm{H_2O}}=6`]]}/>
-    <p className="mt-4 text-sm"><RichText text={String.raw`При $\mathrm{CO_2}$ всички ядра са върху оста и не сменят положението си. При $\mathrm{H_2O}$ водородните ядра са извън нея: завърта се равнината на цялата молекула. Дължините на връзките и ъгълът между тях остават постоянни. Погледът по оста показва тази промяна най-ясно; при линейната молекула ядрата се застъпват в проекцията.`}/></p>
+    <p className="mt-4 text-sm"><RichText text={String.raw`Променяйте по един ъгъл. $\theta$ накланя жълтата ос, $\varphi$ избира нейния меридиан, а $\psi$ завърта молекулата около нея. Бутонът пуска изменение само на $\psi$. При това ядрата на $\mathrm{CO_2}$ остават на място, а при $\mathrm{H_2O}$ се завърта молекулната равнина. Връзките не се разтягат и вътрешният ъгъл не се изменя.`}/></p>
+    <p className="mt-3 text-sm text-muted">В погледа по оста камерата следва оста, затова се вижда само завъртането около нея. За да сравните наклона и меридиана спрямо помощния глобус, използвайте погледа отстрани.</p>
   </ThermoPanel>;
 }
 
@@ -109,7 +128,6 @@ export function MolecularVibration() {
       <line x1={200-half} y1={132} x2={200+half} y2={132} stroke={C.mut}/><SvgTex x={200} y={148} tex="\ell" anchor="middle" color={C.wire} width={25} fontSize={18}/>
       {[{y:195,tex:"E_k",v:u*u,c:C.minus},{y:235,tex:"E_p",v:q*q,c:C.warn},{y:275,tex:"E",v:1,c:C.wire}].map(({y,tex,v,c})=><g key={tex}><SvgTex x={43} y={y} tex={tex} color={c} width={40} fontSize={18}/><rect x={100} y={y-8} width={245} height={16} fill="none" stroke={C.faint}/><rect x={100} y={y-8} width={245*v} height={16} fill={c} opacity={.65}/></g>)}
     </ThermoScene>
-    <div className="mt-4 flex flex-wrap gap-2">{[[0,"Разтегната"],[.25,"Равновесна дължина"],[.5,"Свита"]].map(([v,label])=><button type="button" key={v} className={BTN_SEC} onClick={()=>motion.seek(Number(v))}>{label}</button>)}</div>
     <MotionControls motion={motion}/>
     <ThermoReadout items={[["Деформация",`q/q_{\\max}=${fmt(q,2)}`],["Относителна скорост",`u/u_{\\max}=${fmt(u,2)}`],["Кинетична част",`E_k/E=${fmt(u*u,2)}`],["Потенциална част",`E_p/E=${fmt(q*q,2)}`]]}/>
     <p className="mt-4 text-sm"><RichText text={String.raw`Пунктирът показва равновесните положения на ядрата. При максимална деформация скоростта е нула; при равновесната дължина тя е максимална. Общата трептителна енергия $E=E_k+E_p$ е постоянна. Пружината е модел на връзката при малки деформации.`}/></p>

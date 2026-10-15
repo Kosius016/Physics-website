@@ -135,7 +135,7 @@ export default function PredictionQuestion({
               <RichText text={correctOption.why} />
             </p>
           )}
-          {explanation && (
+          {explanation && ![pickedOption?.why, !isCorrect ? correctOption?.why : undefined].some(why => why?.trim() === explanation.trim()) && (
             <p className={pickedOption?.why || (!isCorrect && correctOption?.why) ? "mt-2" : ""}>
               <RichText text={explanation} />
             </p>

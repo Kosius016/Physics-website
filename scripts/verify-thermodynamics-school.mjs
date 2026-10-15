@@ -62,6 +62,8 @@ try{
     await page.locator("main h1").waitFor();
     assert.equal(await page.locator("main h1").innerText(),entry.title);
     await audit(entry.href);
+    assert.equal(await page.getByText(/Фаза на движението|Избираме нулата на енергията/).count(),0);
+    assert.ok(!(await page.locator('annotation').allTextContents()).some(tex=>/\\nu\b/.test(tex)));
     for(const lab of await page.locator('[data-thermo-lab]').all()){
       await extremes(lab,entry.href);
       const buttons=await lab.locator('button[aria-pressed]').all();
@@ -72,16 +74,33 @@ try{
     }
     if(entry.href.endsWith('osnovni-ponyatiya')){
       const lab=page.locator('#freedom [data-thermo-lab]');
-      await range(lab.locator('input[type="range"]'),0);
+      assert.equal(await lab.locator('input[type="range"]').count(),0);
       const atom=lab.locator('[data-molecule-atom]').nth(2),before=await atom.getAttribute('transform');
       await lab.getByRole('button',{name:'Пуснете движението',exact:true}).focus();await page.keyboard.press('Enter');
       await page.waitForTimeout(250);assert.notEqual(await atom.getAttribute('transform'),before);
       await lab.getByRole('button',{name:'Пауза',exact:true}).click();
       const paused=await atom.getAttribute('transform');await page.waitForTimeout(150);assert.equal(await atom.getAttribute('transform'),paused);
       const vibration=page.locator('#vibration [data-thermo-lab]');
-      await vibration.getByRole('button',{name:'Равновесна дължина',exact:true}).click();
-      assert.ok((await vibration.locator('dd annotation').allTextContents()).includes('E_k/E=1{,}00'));
-      assert.ok((await vibration.locator('dd annotation').allTextContents()).includes('E_p/E=0{,}00'));
+      assert.equal(await vibration.locator('input[type="range"]').count(),0);
+      assert.equal(await vibration.getByRole('button').count(),1);
+      const vibrationAtom=vibration.locator('[data-molecule-atom]').first(),initial=await vibrationAtom.getAttribute('transform');
+      await vibration.getByRole('button',{name:'Пуснете движението',exact:true}).click();
+      await page.waitForTimeout(250);assert.notEqual(await vibrationAtom.getAttribute('transform'),initial);
+      await vibration.getByRole('button',{name:'Пауза',exact:true}).click();
+      const frozen=await vibrationAtom.getAttribute('transform');await page.waitForTimeout(150);assert.equal(await vibrationAtom.getAttribute('transform'),frozen);
+      const ratios=(await vibration.locator('dd annotation').allTextContents()).slice(2).map(s=>Number(s.split('=')[1].replace('{,}','.')));
+      assert.ok(Math.abs(ratios[0]+ratios[1]-1)<.011);
+      const nonlinear=page.locator('#nonlinear [data-thermo-lab]');
+      await nonlinear.getByRole('button',{name:'Поглед отстрани',exact:true}).click();
+      const angles=await nonlinear.locator('input[type="range"]').all();assert.equal(angles.length,3);
+      for(let i=0;i<3;i++)await range(angles[i],[45,30,0][i]);
+      const positions=()=>nonlinear.locator('svg').nth(1).locator('[data-molecule-atom]').evaluateAll(atoms=>atoms.map(el=>el.getAttribute('transform')));
+      for(let i=0;i<3;i++){
+        const before=await positions();await range(angles[i],[75,90,90][i]);assert.notDeepEqual(await positions(),before);
+        await audit('independent molecular angle '+i);
+      }
+      for(const psi of [45,135,225,315]){await range(angles[2],psi);await audit('molecular plane '+psi);}
+      for(let i=0;i<3;i++)await range(angles[i],[55,120,0][i]);
     }
     // Numeric exercises no longer have generic decorative diagrams.
     assert.equal(await page.locator('[data-school-problem] svg').count(),0);
@@ -109,6 +128,19 @@ try{
     await page.setViewportSize({width:1280,height:1000});
   }
   await page.goto(base+'/physics/termodinamika/za-naprednali');await audit('advanced');
+  assert.ok(!(await page.locator('annotation').allTextContents()).some(tex=>/\\nu\b/.test(tex)));
+  // Both feedback components show a repeated common explanation only once,
+  // whether the selected answer is correct or incorrect.
+  for(const correct of [true,false]){
+    await page.goto(base+'/physics/termodinamika/osnovni-ponyatiya');
+    const prediction=page.locator('#internal-start');
+    await prediction.getByRole('button',{name:correct?'Не.':'Да.',exact:true}).click();
+    const status=prediction.getByRole('status');
+    assert.equal((await status.innerText()).split('Вътрешната енергия описва микроскопичните движения и взаимодействия в системата.').length-1,1);
+    const quiz=page.locator('#check');
+    await quiz.getByRole('button',{name:correct?'Ориентацията.':'Дължините на връзките.',exact:true}).click();
+    assert.equal((await quiz.getByRole('status').innerText()).split('Разстоянията между ядрата се запазват.').length-1,1);
+  }
   // Unwritten chapters must not remain available as full old lessons.
   for(const slug of ['entropiya-vtori-printsip','toplinni-dvigateli','hladilni-mashini','proverka']){
     const response=await page.goto(base+'/physics/termodinamika/'+slug);assert.equal(response.status(),404);
