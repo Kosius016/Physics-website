@@ -27,6 +27,12 @@ export const MATERIAL_FILTERS: readonly {
 
 const publishedMaterials: readonly MaterialCatalogItem[] = [
   {
+    id: "kompleksni-chisla", kind: "zadachi", title: "Комплексни числа: 32 задачи с решения",
+    summary: "Алгебра, геометрия, доказателство на Ойлер, комплексни корени и приложения във физиката. Указания и постепенно разкриване на решенията.",
+    subject: "Математика", level: "university", topic: "Комплексни числа",
+    meta: ["32 задачи", "4 части", "Решения стъпка по стъпка"], href: "/zadachi/kompleksni-chisla",
+  },
+  {
     id: "limesi",
     kind: "zadachi",
     title: "Лимеси: от първа стъпка до доказателство",
