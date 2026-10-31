@@ -39,6 +39,18 @@ const publishedMaterials: readonly MaterialCatalogItem[] = [
     href: "/zadachi/limesi",
   },
   {
+    id: "termodinamika-realen-gaz",
+    kind: "zadachi",
+    title: "Термодинамика на реалния газ: 12 задачи с решения",
+    summary:
+      "От разширителния съд на отоплението и гумения ластик през реликтовото лъчение до машината на Линде, термопомпата и хладилника в кухнята. Указания и решения стъпка по стъпка.",
+    subject: "Физика",
+    level: "university",
+    topic: "Термодинамика",
+    meta: ["12 задачи", "5 упражнения", "Решения стъпка по стъпка"],
+    href: "/zadachi/termodinamika-realen-gaz",
+  },
+  {
     id: "pregovor-elektrichestvo-magnetizam-emv",
     kind: "pregovor",
     title: "Електричество, магнетизъм и ЕМВ: работен лист",

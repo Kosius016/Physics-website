@@ -34,9 +34,11 @@ export default function CourseBrowser({
                       ? "magnetism"
                       : section.title === "Променлив ток"
                         ? "ac"
-                        : section.title === "Линейна алгебра"
-                          ? "linear-algebra"
-                          : undefined
+                        : section.title === "Термодинамика"
+                          ? "thermodynamics"
+                          : section.title === "Линейна алгебра"
+                            ? "linear-algebra"
+                            : undefined
               }
               className="mb-10 scroll-mt-24"
             >

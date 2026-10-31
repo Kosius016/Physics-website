@@ -160,6 +160,35 @@ const physicsUni: CourseSection[] = [
       },
     ],
   },
+  {
+    title: "Термодинамика",
+    lessons: [
+      {
+        number: "5.1",
+        title: "Математическият апарат и термодинамичните потенциали",
+        href: "/physics/termodinamika-universitet/matematichen-aparat",
+        publishedAt: "2026-10-31",
+      },
+      {
+        number: "5.2",
+        title: "Главните връзки: уравнението на състоянието определя всичко",
+        href: "/physics/termodinamika-universitet/glavnite-vrazki",
+        publishedAt: "2026-10-31",
+      },
+      {
+        number: "5.3",
+        title: "Газът на Ван дер Ваалс докрай",
+        href: "/physics/termodinamika-universitet/van-der-vaals",
+        publishedAt: "2026-10-31",
+      },
+      {
+        number: "5.4",
+        title: "Топлинни и хладилни машини",
+        href: "/physics/termodinamika-universitet/mashini",
+        publishedAt: "2026-10-31",
+      },
+    ],
+  },
 ];
 
 const mathUni: CourseSection[] = [
